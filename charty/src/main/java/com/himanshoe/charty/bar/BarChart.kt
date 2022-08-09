@@ -22,10 +22,10 @@ import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.maxYValue
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.dimens.ChartDimens
-import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 import com.himanshoe.charty.common.axis.xAxis
 import com.himanshoe.charty.common.axis.yAxis
+import com.himanshoe.charty.common.dimens.ChartDimens
+import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 
 @Composable
 fun BarChart(
@@ -93,9 +93,7 @@ fun BarChart(
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
 
-    val maxYValueState = rememberSaveable {
-        mutableStateOf(barData.maxYValue())
-    }
+    val maxYValueState = rememberSaveable { mutableStateOf(barData.maxYValue()) }
     val clickedBar = remember {
         mutableStateOf(Offset(-10F, -10F))
     }
@@ -131,7 +129,7 @@ fun BarChart(
             drawRoundRect(
                 cornerRadius = CornerRadius(if (barConfig.hasRoundedCorner) barHeight else 0F),
                 topLeft = topLeft,
-                brush = Brush.verticalGradient(colors),
+                brush = Brush.linearGradient(colors),
                 size = Size(barWidth.value, barHeight)
             )
         }

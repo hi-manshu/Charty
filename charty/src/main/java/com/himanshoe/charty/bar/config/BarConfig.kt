@@ -8,6 +8,6 @@ data class BarConfig(
 internal object BarConfigDefaults {
 
     fun barConfigDimesDefaults() = BarConfig(
-        hasRoundedCorner = true
+        hasRoundedCorner = false
     )
 }
