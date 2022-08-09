@@ -24,8 +24,8 @@ import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
-import com.himanshoe.charty.common.xAxis
-import com.himanshoe.charty.common.yAxis
+import com.himanshoe.charty.common.axis.xAxis
+import com.himanshoe.charty.common.axis.yAxis
 
 @Composable
 fun BarChart(

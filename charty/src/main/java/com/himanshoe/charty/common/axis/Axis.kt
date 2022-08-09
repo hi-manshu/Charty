@@ -1,4 +1,4 @@
-package com.himanshoe.charty.common
+package com.himanshoe.charty.common.axis
 
 import android.graphics.Paint
 import androidx.compose.ui.geometry.Offset
@@ -6,7 +6,6 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
-import com.himanshoe.charty.common.axis.AxisConfig
 import java.text.DecimalFormat
 
 internal fun DrawScope.xAxis(axisConfig: AxisConfig, maxValue: Float) {
