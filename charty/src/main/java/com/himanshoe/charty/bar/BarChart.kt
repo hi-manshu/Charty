@@ -1,5 +1,6 @@
 package com.himanshoe.charty.bar
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.padding
@@ -39,6 +40,9 @@ fun BarChart(
     val maxYValueState = rememberSaveable {
         mutableStateOf(barData.maxYValue())
     }
+    val clickedBar = remember {
+        mutableStateOf(Offset.Zero)
+    }
 
     val maxYValue = maxYValueState.value
     val barWidth = remember { mutableStateOf(0F) }
@@ -52,14 +56,13 @@ fun BarChart(
         }
         .padding(horizontal = barDimens.horizontalPadding)
         .pointerInput(Unit) {
-            detectTapGestures(onPress = {
-
+            detectTapGestures(onPress = { offset ->
+                clickedBar.value = offset
             })
         }
     ) {
         barWidth.value = size.width.div(barData.count().times(1.2F))
         val yChunck = size.height.div(maxYValue)
-
         barData.forEachIndexed { index, data ->
             val topLeft = getTopLeft(index, barWidth, size, data, yChunck)
             val barHeight = data.yValue.times(yChunck)
@@ -127,3 +130,4 @@ private fun getTopLeft(
     x = index.times(barWidth.value.times(1.2F)),
     y = size.height.minus(barData.yValue.times(yChunck))
 )
+

@@ -19,24 +19,11 @@ class MainActivity : ComponentActivity() {
             ChartylibraryTheme {
                 BarChart(
                     modifier = Modifier
-                        .size(500.dp)
+                        .size(width = 500.dp, height = 300.dp)
                         .padding(20.dp),
-                    color =  Color.Cyan,
+                    color = Color.Green,
                     barData = listOf(
                         BarData(10F, 5F),
-                        BarData(100F, 10F),
-                        BarData(10F, 15F),
-                        BarData(50F, 20F),
-                        BarData(20F, 25F),
-                        BarData(10F, 5F),
-                        BarData(100F, 10F),
-                        BarData(10F, 15F),
-                        BarData(50F, 20F),
-                        BarData(20F, 25F),
-                        BarData(10F, 5F),
-                        BarData(100F, 10F),
-                        BarData(10F, 15F),
-                        BarData(50F, 20F),
                         BarData(20F, 25F),
                         BarData(10F, 5F),
                         BarData(100F, 10F),
