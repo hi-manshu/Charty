@@ -12,8 +12,8 @@ data class AxisConfig(
 internal object AxisConfigDefaults {
 
     fun axisConfigDefaults() = AxisConfig(
-        xAxisColor = Color.Gray,
-        showAxes = false,
+        xAxisColor = Color.LightGray,
+        showAxes = true,
         showUnitLabels = true,
         yAxisColor = Color.LightGray,
     )

@@ -1,6 +1,5 @@
 package com.himanshoe.charty.bar
 
-import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.padding
@@ -30,7 +29,9 @@ import com.himanshoe.charty.common.yAxis
 
 @Composable
 fun BarChart(
-    barData: List<BarData>, color: Color,
+    barData: List<BarData>,
+    color: Color,
+    onBarClick: (BarData) -> Unit,
     modifier: Modifier = Modifier,
     barDimens: ChartDimens = ChartDimensDefaults.chartDimensDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
@@ -65,8 +66,12 @@ fun BarChart(
         val yChunck = size.height.div(maxYValue)
         barData.forEachIndexed { index, data ->
             val topLeft = getTopLeft(index, barWidth, size, data, yChunck)
+            val topRight = getTopRight(index, barWidth, size, data, yChunck)
             val barHeight = data.yValue.times(yChunck)
 
+            if (clickedBar.value.x in (topLeft.x..topRight.x)) {
+                onBarClick(data)
+            }
             drawRoundRect(
                 cornerRadius = CornerRadius(if (barConfig.hasRoundedCorner) barHeight else 5F),
                 topLeft = topLeft,
@@ -81,6 +86,7 @@ fun BarChart(
 fun BarChart(
     barData: List<BarData>,
     colors: List<Color>,
+    onBarClick: (BarData) -> Unit,
     modifier: Modifier = Modifier,
     barDimens: ChartDimens = ChartDimensDefaults.chartDimensDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
@@ -89,6 +95,9 @@ fun BarChart(
 
     val maxYValueState = rememberSaveable {
         mutableStateOf(barData.maxYValue())
+    }
+    val clickedBar = remember {
+        mutableStateOf(Offset(-10F, -10F))
     }
 
     val maxYValue = maxYValueState.value
@@ -102,14 +111,23 @@ fun BarChart(
             }
         }
         .padding(horizontal = barDimens.horizontalPadding)
+        .pointerInput(Unit) {
+            detectTapGestures(onPress = { offset ->
+                clickedBar.value = offset
+            })
+        }
     ) {
         barWidth.value = size.width.div(barData.count().times(1.2F))
         val yChunck = size.height.div(maxYValue)
 
         barData.forEachIndexed { index, data ->
             val topLeft = getTopLeft(index, barWidth, size, data, yChunck)
+            val topRight = getTopRight(index, barWidth, size, data, yChunck)
             val barHeight = data.yValue.times(yChunck)
 
+            if (clickedBar.value.x in (topLeft.x..topRight.x)) {
+                onBarClick(data)
+            }
             drawRoundRect(
                 cornerRadius = CornerRadius(if (barConfig.hasRoundedCorner) barHeight else 0F),
                 topLeft = topLeft,
@@ -128,6 +146,17 @@ private fun getTopLeft(
     yChunck: Float
 ) = Offset(
     x = index.times(barWidth.value.times(1.2F)),
+    y = size.height.minus(barData.yValue.times(yChunck))
+)
+
+private fun getTopRight(
+    index: Int,
+    barWidth: MutableState<Float>,
+    size: Size,
+    barData: BarData,
+    yChunck: Float
+) = Offset(
+    x = index.plus(1).times(barWidth.value.times(1.2F)),
     y = size.height.minus(barData.yValue.times(yChunck))
 )
 

@@ -1,6 +1,7 @@
 package com.himanshoe.charty
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .size(width = 500.dp, height = 300.dp)
                         .padding(20.dp),
+                    onBarClick = {
+                    },
                     color = Color.Green,
                     barData = listOf(
                         BarData(10F, 5F),

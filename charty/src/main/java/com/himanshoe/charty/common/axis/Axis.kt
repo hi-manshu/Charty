@@ -57,5 +57,3 @@ internal fun DrawScope.yAxis(axisConfig: AxisConfig) {
 }
 
 private fun getLabelText(value: Float) = DecimalFormat("#.##").format(value).toString()
-
-
