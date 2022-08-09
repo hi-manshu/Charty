@@ -37,49 +37,15 @@ fun BarChart(
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
-
-    val maxYValueState = rememberSaveable {
-        mutableStateOf(barData.maxYValue())
-    }
-    val clickedBar = remember {
-        mutableStateOf(Offset.Zero)
-    }
-
-    val maxYValue = maxYValueState.value
-    val barWidth = remember { mutableStateOf(0F) }
-
-    Canvas(modifier = modifier
-        .drawBehind {
-            if (axisConfig.showAxes) {
-                xAxis(axisConfig, maxYValue)
-                yAxis(axisConfig)
-            }
-        }
-        .padding(horizontal = barDimens.horizontalPadding)
-        .pointerInput(Unit) {
-            detectTapGestures(onPress = { offset ->
-                clickedBar.value = offset
-            })
-        }
-    ) {
-        barWidth.value = size.width.div(barData.count().times(1.2F))
-        val yChunck = size.height.div(maxYValue)
-        barData.forEachIndexed { index, data ->
-            val topLeft = getTopLeft(index, barWidth, size, data, yChunck)
-            val topRight = getTopRight(index, barWidth, size, data, yChunck)
-            val barHeight = data.yValue.times(yChunck)
-
-            if (clickedBar.value.x in (topLeft.x..topRight.x)) {
-                onBarClick(data)
-            }
-            drawRoundRect(
-                cornerRadius = CornerRadius(if (barConfig.hasRoundedCorner) barHeight else 5F),
-                topLeft = topLeft,
-                color = color,
-                size = Size(barWidth.value, barHeight)
-            )
-        }
-    }
+    BarChart(
+        barData = barData,
+        colors = listOf(color, color),
+        onBarClick = onBarClick,
+        modifier = modifier,
+        barDimens = barDimens,
+        axisConfig = axisConfig,
+        barConfig = barConfig
+    )
 }
 
 @Composable

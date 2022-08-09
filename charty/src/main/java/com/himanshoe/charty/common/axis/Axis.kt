@@ -20,7 +20,7 @@ internal fun DrawScope.xAxis(axisConfig: AxisConfig, maxValue: Float) {
                 it.nativeCanvas.apply {
                     drawText(
                         getLabelText(labelChunck.times(4.minus(index))),
-                        0F,
+                        0F.minus(25),
                         yAxisEndPoint.minus(10),
                         Paint().apply {
                             textSize = size.width.div(30)

@@ -35,48 +35,14 @@ fun LineChart(
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
     lineConfig: LineConfig = LineConfigDefaults.lineConfigDefaults()
 ) {
-    val maxYValueState = rememberSaveable { mutableStateOf(lineData.maxYValue()) }
-    val maxYValue = maxYValueState.value
-    val lineBound = remember { mutableStateOf(0F) }
-
-    Canvas(modifier = modifier
-        .drawBehind {
-            if (axisConfig.showAxes) {
-                xAxis(axisConfig, maxYValue)
-                yAxis(axisConfig)
-            }
-        }
-        .padding(horizontal = chartDimens.horizontalPadding)
-
-    ) {
-        lineBound.value = size.width.div(lineData.count().times(1.2F))
-        val yChunck = size.height.div(maxYValue)
-
-        val path = Path()
-        lineData.forEachIndexed { index, data ->
-            val centerOffset = dataToOffSet(index, lineBound.value, size, data, yChunck)
-            when (index) {
-                0 -> path.moveTo(centerOffset.x, centerOffset.y)
-                else -> path.lineTo(centerOffset.x, centerOffset.y)
-            }
-            if (lineConfig.hasDotMarker) {
-                drawCircle(center = centerOffset, radius = size.width.div(70), color = color)
-            }
-        }
-        val stroke = if (lineConfig.hasSmoothCurve) {
-            Stroke(
-                width = size.width.div(100),
-                pathEffect = PathEffect.cornerPathEffect(size.width.div(100))
-            )
-        } else {
-            Stroke(width = size.width.div(100))
-        }
-        drawPath(
-            path = path,
-            color = color,
-            style = stroke
-        )
-    }
+    LineChart(
+        lineData = lineData,
+        colors = listOf(color, color),
+        modifier = modifier,
+        chartDimens = chartDimens,
+        axisConfig = axisConfig,
+        lineConfig = lineConfig
+    )
 }
 
 @Composable

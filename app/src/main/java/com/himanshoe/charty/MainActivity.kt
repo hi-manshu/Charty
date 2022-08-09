@@ -14,6 +14,8 @@ import com.himanshoe.charty.bar.BarChart
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.line.LineChart
 import com.himanshoe.charty.line.model.LineData
+import com.himanshoe.charty.point.PointChart
+import com.himanshoe.charty.point.model.PointData
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +56,24 @@ class MainActivity : ComponentActivity() {
                             LineData(10F, 15F),
                             LineData(50F, 100F),
                             LineData(20F, 25F),
+                        )
+                    )
+                }
+                item {
+                    PointChart(
+                        modifier = Modifier
+                            .padding(top = 100.dp)
+                            .size(width = 500.dp, height = 300.dp)
+                            .padding(20.dp),
+                        colors = listOf(Color.Green, Color.Black),
+                        pointData = listOf(
+                            PointData(10F, 35F),
+                            PointData(20F, 25F),
+                            PointData(10F, 50F),
+                            PointData(100F, 10F),
+                            PointData(10F, 15F),
+                            PointData(50F, 100F),
+                            PointData(20F, 25F),
                         )
                     )
                 }
