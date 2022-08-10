@@ -82,12 +82,12 @@ fun BarChart(
         }
     ) {
         barWidth.value = size.width.div(barData.count().times(1.2F))
-        val yChunck = size.height.div(maxYValue)
+        val yScalableFactor = size.height.div(maxYValue)
 
         barData.forEachIndexed { index, data ->
-            val topLeft = getTopLeft(index, barWidth, size, data, yChunck)
-            val topRight = getTopRight(index, barWidth, size, data, yChunck)
-            val barHeight = data.yValue.times(yChunck)
+            val topLeft = getTopLeft(index, barWidth, size, data, yScalableFactor)
+            val topRight = getTopRight(index, barWidth, size, data, yScalableFactor)
+            val barHeight = data.yValue.times(yScalableFactor)
 
             if (clickedBar.value.x in (topLeft.x..topRight.x)) {
                 onBarClick(data)
