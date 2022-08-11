@@ -1,5 +1,6 @@
 package com.himanshoe.charty.line
 
+import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -10,11 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
 import com.himanshoe.charty.common.axis.xAxis
@@ -72,6 +72,7 @@ fun LineChart(
         val yChunck = size.height.div(maxYValue)
         val brush = Brush.linearGradient(colors)
         val path = Path()
+        val radius = size.width.div(70)
         lineData.forEachIndexed { index, data ->
             val centerOffset = dataToOffSet(index, lineBound.value, size, data, yChunck)
             when (index) {
@@ -81,10 +82,11 @@ fun LineChart(
             if (lineConfig.hasDotMarker) {
                 drawCircle(
                     center = centerOffset,
-                    radius = size.width.div(70),
+                    radius = radius,
                     brush = brush
                 )
             }
+            drawXLabel(data, centerOffset, radius)
         }
         val stroke = if (lineConfig.hasSmoothCurve) {
             Stroke(
@@ -100,6 +102,23 @@ fun LineChart(
             style = stroke
         )
     }
+}
+
+private fun DrawScope.drawXLabel(data: LineData, centerOffset: Offset, radius: Float) {
+    drawIntoCanvas {
+        it.nativeCanvas.apply {
+            drawText(
+                data.xValue.toString(),
+                centerOffset.x,
+                size.height.plus(radius.times(4)),
+                Paint().apply {
+                    textSize = size.width.div(30)
+                    textAlign = Paint.Align.CENTER
+                }
+            )
+        }
+    }
+
 }
 
 private fun dataToOffSet(

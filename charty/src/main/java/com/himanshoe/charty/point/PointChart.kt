@@ -1,5 +1,6 @@
 package com.himanshoe.charty.point
 
+import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -12,8 +13,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
 import com.himanshoe.charty.common.axis.xAxis
@@ -52,7 +56,7 @@ fun PointChart(
         pointBound.value = size.width.div(pointData.count().times(1.2F))
         val yChunck = size.height.div(maxYValue)
         val brush = Brush.linearGradient(colors)
-
+        val radius = size.width.div(70)
         pointData.forEachIndexed { index, data ->
             val centerOffset = dataToOffSet(index, pointBound.value, size, data, yChunck)
             val style = when (pointConfig.pointType) {
@@ -63,11 +67,30 @@ fun PointChart(
             drawCircle(
                 center = centerOffset,
                 style = style,
-                radius = size.width.div(70),
+                radius = radius,
                 brush = brush
+            )
+            // draw label
+            drawXLabel(data, centerOffset, radius)
+        }
+    }
+}
+
+private fun DrawScope.drawXLabel(data: PointData, centerOffset: Offset, radius: Float) {
+    drawIntoCanvas {
+        it.nativeCanvas.apply {
+            drawText(
+                data.xValue.toString(),
+                centerOffset.x,
+                size.height.plus(radius.times(4)),
+                Paint().apply {
+                    textSize = size.width.div(30)
+                    textAlign = Paint.Align.CENTER
+                }
             )
         }
     }
+
 }
 
 @Composable

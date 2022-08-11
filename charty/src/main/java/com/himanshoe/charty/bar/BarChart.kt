@@ -1,5 +1,6 @@
 package com.himanshoe.charty.bar
 
+import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import com.himanshoe.charty.bar.config.BarConfig
 import com.himanshoe.charty.bar.config.BarConfigDefaults
@@ -97,6 +101,29 @@ fun BarChart(
                 topLeft = topLeft,
                 brush = Brush.linearGradient(colors),
                 size = Size(barWidth.value, barHeight)
+            )
+            // draw label
+            drawBarLabel(data,barWidth,barHeight,topLeft)
+        }
+    }
+}
+
+private fun DrawScope.drawBarLabel(
+    data: BarData,
+    barWidth: MutableState<Float>,
+    barHeight: Float,
+    topLeft: Offset
+) {
+    drawIntoCanvas {
+        it.nativeCanvas.apply {
+            drawText(
+                data.xValue.toString(),
+                topLeft.x.plus(barWidth.value.div(2)),
+                topLeft.y.plus(barHeight.plus(barWidth.value.div(2))),
+                Paint().apply {
+                    textSize = size.width.div(30)
+                    textAlign = Paint.Align.CENTER
+                }
             )
         }
     }

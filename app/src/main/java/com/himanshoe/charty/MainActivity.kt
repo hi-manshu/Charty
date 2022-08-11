@@ -17,6 +17,7 @@ import com.himanshoe.charty.circle.CircleChart
 import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.line.LineChart
 import com.himanshoe.charty.line.model.LineData
+import com.himanshoe.charty.pie.PieChart
 import com.himanshoe.charty.point.PointChart
 import com.himanshoe.charty.point.model.PointData
 
@@ -25,6 +26,28 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LazyColumn(Modifier.fillMaxSize()) {
+                item {
+                    PieChart(
+                        modifier = Modifier
+                            .scale(1f)
+                            .size(400.dp)
+                            .padding(20.dp),
+                        data = listOf(
+                            20F,
+                            50F,
+                            100F,
+                            70F
+                        ),
+                        colors = listOf(
+                            Color(0xFFbf95d4),
+                            Color(0xFFf4ac1a),
+                            Color(0xFF8b0a50),
+                            Color(0xFF3a0a55),
+                        ),
+                        isDonut = false,
+                        percentColor = Color.Black
+                    )
+                }
                 item {
                     CircleChart(
                         modifier = Modifier
