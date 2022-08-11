@@ -16,6 +16,9 @@ import com.himanshoe.charty.circle.config.CircleConfigDefaults
 import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.circle.model.maxYValue
 
+private const val PeriodTextDivider = 4
+private const val PeriodTextMultiplier = 3.9
+
 @Composable
 fun CircleChart(
     circleData: List<CircleData>,
