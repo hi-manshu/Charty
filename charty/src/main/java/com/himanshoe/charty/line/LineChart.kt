@@ -69,12 +69,14 @@ fun LineChart(
 
     ) {
         lineBound.value = size.width.div(lineData.count().times(1.2F))
-        val yChunck = size.height.div(maxYValue)
+        val scaleFactor = size.height.div(maxYValue)
         val brush = Brush.linearGradient(colors)
-        val path = Path()
         val radius = size.width.div(70)
+        val strokeWidth = size.width.div(100)
+        val path = Path()
+
         lineData.forEachIndexed { index, data ->
-            val centerOffset = dataToOffSet(index, lineBound.value, size, data, yChunck)
+            val centerOffset = dataToOffSet(index, lineBound.value, size, data, scaleFactor)
             when (index) {
                 0 -> path.moveTo(centerOffset.x, centerOffset.y)
                 else -> path.lineTo(centerOffset.x, centerOffset.y)
@@ -90,11 +92,11 @@ fun LineChart(
         }
         val stroke = if (lineConfig.hasSmoothCurve) {
             Stroke(
-                width = size.width.div(100),
-                pathEffect = PathEffect.cornerPathEffect(size.width.div(100))
+                width = strokeWidth,
+                pathEffect = PathEffect.cornerPathEffect(strokeWidth)
             )
         } else {
-            Stroke(width = size.width.div(100))
+            Stroke(width = strokeWidth)
         }
         drawPath(
             path = path,
@@ -118,7 +120,6 @@ private fun DrawScope.drawXLabel(data: LineData, centerOffset: Offset, radius: F
             )
         }
     }
-
 }
 
 private fun dataToOffSet(

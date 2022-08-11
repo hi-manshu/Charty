@@ -134,10 +134,10 @@ private fun getTopLeft(
     barWidth: MutableState<Float>,
     size: Size,
     barData: BarData,
-    yChunck: Float
+    yScalableFactor: Float
 ) = Offset(
     x = index.times(barWidth.value.times(1.2F)),
-    y = size.height.minus(barData.yValue.times(yChunck))
+    y = size.height.minus(barData.yValue.times(yScalableFactor))
 )
 
 private fun getTopRight(
