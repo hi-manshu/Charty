@@ -9,11 +9,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
@@ -118,7 +114,7 @@ fun DrawScope.drawPieSection(
     sideSize: Int
 ) {
     drawContext.canvas.nativeCanvas.apply {
-        val fontSize = size.width.div(10).toDp().toPx()
+        val fontSize = size.width.div(20).toDp().toPx()
 
         drawText(
             "${proportions[currentPieValue].roundToInt()}%",
