@@ -1,8 +1,12 @@
 package com.himanshoe.charty.circle
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -16,21 +20,21 @@ import com.himanshoe.charty.circle.config.CircleConfigDefaults
 import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.circle.model.maxYValue
 
-private const val PeriodTextDivider = 4
-private const val PeriodTextMultiplier = 3.9
 
 @Composable
 fun CircleChart(
     circleData: List<CircleData>,
     modifier: Modifier = Modifier,
     color: Color,
+    isAnimated: Boolean = true,
     config: CircleConfig = CircleConfigDefaults.circleConfigDefaults()
 ) {
     CircleChart(
         circleData = circleData,
-        colors = listOf(Color.Red, Color.Black),
+        colors = listOf(color, color),
         modifier = modifier,
-        config = config
+        config = config,
+        isAnimated = isAnimated,
     )
 }
 
@@ -39,11 +43,23 @@ fun CircleChart(
     circleData: List<CircleData>,
     modifier: Modifier = Modifier,
     colors: List<Color>,
-    config: CircleConfig = CircleConfigDefaults.circleConfigDefaults()
+    config: CircleConfig = CircleConfigDefaults.circleConfigDefaults(),
+    isAnimated: Boolean
 ) {
     val maxYValueState = rememberSaveable { mutableStateOf(circleData.maxYValue()) }
     val maxYValue = maxYValueState.value
     val angleFactor = if (config.maxValue != null) 360.div(config.maxValue) else 360.div(maxYValue)
+
+    val animatedFactor = remember {
+        Animatable(initialValue = 0f)
+    }
+
+    LaunchedEffect(key1 = true) {
+        animatedFactor.animateTo(
+            targetValue = angleFactor,
+            animationSpec = tween(1000)
+        )
+    }
 
     Canvas(modifier = modifier) {
         val scaleFactor = size.width.div(circleData.count())
@@ -54,11 +70,12 @@ fun CircleChart(
                 if (circleData.color != null) listOf(circleData.color, circleData.color) else colors
             val arcWidth = sizeArc.width.plus(index.times(scaleFactor))
             val arcHeight = sizeArc.height.plus(index.times(scaleFactor))
+            val factor = if (isAnimated) animatedFactor.value else angleFactor
 
             drawArc(
                 brush = Brush.linearGradient(circleColor),
                 startAngle = config.startPosition.angle,
-                sweepAngle = angleFactor.times(circleData.yValue),
+                sweepAngle = factor.times(circleData.yValue),
                 topLeft = Offset(
                     (size.width - arcWidth).div(2f),
                     (size.height - arcHeight).div(2f)

@@ -32,20 +32,11 @@ class MainActivity : ComponentActivity() {
                             .scale(1f)
                             .size(400.dp)
                             .padding(20.dp),
-                        data = listOf(
-                            20F,
-                            50F,
-                            100F,
-                            70F
-                        ),
-                        colors = listOf(
-                            Color(0xFFbf95d4),
-                            Color(0xFFf4ac1a),
-                            Color(0xFF8b0a50),
-                            Color(0xFF3a0a55),
-                        ),
-                        isDonut = false,
-                        percentColor = Color.Black
+                        data = listOf(20F, 50F, 100F, 70F, 20F, 50F, 100F, 70F),
+                        isDonut = true,
+                        valueTextColor = Color.Black,
+                        onSectionClicked = { percent, value ->
+                        }
                     )
                 }
                 item {
@@ -55,17 +46,10 @@ class MainActivity : ComponentActivity() {
                             .size(400.dp)
                             .padding(20.dp),
                         circleData = listOf(
-                            CircleData(100F, 100F, Color.Green),
-                            CircleData(1F, 30F, Color.Green),
-                            CircleData(20F, 35F, Color.Green),
-                            CircleData(10F, 350F, Color.Green),
-                            CircleData(10F, 95F, Color.Green),
-                            CircleData(10F, 75F, Color.Green),
-                            CircleData(10F, 335F, Color.Green),
                             CircleData(10F, 235F, Color.Green),
                             CircleData(10F, 135F, Color.Green),
                             CircleData(10F, 315F, Color.Green),
-                            CircleData(20F, 5F, Color.Green),
+                            CircleData(20F, 50F, Color.Green),
                             CircleData(30F, 315F)
                         ),
                         color = Color.Yellow
