@@ -11,10 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
 import com.himanshoe.charty.common.axis.xAxis
@@ -58,14 +62,15 @@ fun LineChart(
     val maxYValue = maxYValueState.value
     val lineBound = remember { mutableStateOf(0F) }
 
-    Canvas(modifier = modifier
-        .drawBehind {
-            if (axisConfig.showAxes) {
-                xAxis(axisConfig, maxYValue)
-                yAxis(axisConfig)
+    Canvas(
+        modifier = modifier
+            .drawBehind {
+                if (axisConfig.showAxes) {
+                    xAxis(axisConfig, maxYValue)
+                    yAxis(axisConfig)
+                }
             }
-        }
-        .padding(horizontal = chartDimens.horizontalPadding)
+            .padding(horizontal = chartDimens.horizontalPadding)
 
     ) {
         lineBound.value = size.width.div(lineData.count().times(1.2F))

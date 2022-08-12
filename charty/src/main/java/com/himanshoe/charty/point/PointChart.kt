@@ -43,14 +43,15 @@ fun PointChart(
     val maxYValue = maxYValueState.value
     val pointBound = remember { mutableStateOf(0F) }
 
-    Canvas(modifier = modifier
-        .drawBehind {
-            if (axisConfig.showAxes) {
-                xAxis(axisConfig, maxYValue)
-                yAxis(axisConfig)
+    Canvas(
+        modifier = modifier
+            .drawBehind {
+                if (axisConfig.showAxes) {
+                    xAxis(axisConfig, maxYValue)
+                    yAxis(axisConfig)
+                }
             }
-        }
-        .padding(horizontal = chartDimens.horizontalPadding)
+            .padding(horizontal = chartDimens.horizontalPadding)
 
     ) {
         pointBound.value = size.width.div(pointData.count().times(1.2F))
@@ -90,7 +91,6 @@ private fun DrawScope.drawXLabel(data: PointData, centerOffset: Offset, radius: 
             )
         }
     }
-
 }
 
 @Composable

@@ -9,7 +9,11 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
@@ -103,10 +107,8 @@ fun PieChart(
             if (currentPie.value != -1 && isDonut) {
                 drawPieSection(proportions, currentPie.value, valueTextColor, sideSize)
             }
-
         }
     }
-
 }
 
 fun DrawScope.drawPieSection(

@@ -1,7 +1,6 @@
 package com.himanshoe.charty.bar.common.component
 
 import android.graphics.Paint
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas

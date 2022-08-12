@@ -5,7 +5,6 @@ data class CircleConfig(
     val maxValue: Float?
 )
 
-
 internal object CircleConfigDefaults {
 
     fun circleConfigDefaults() = CircleConfig(

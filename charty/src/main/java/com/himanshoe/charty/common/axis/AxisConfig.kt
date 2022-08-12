@@ -18,4 +18,3 @@ internal object AxisConfigDefaults {
         yAxisColor = Color.LightGray,
     )
 }
-

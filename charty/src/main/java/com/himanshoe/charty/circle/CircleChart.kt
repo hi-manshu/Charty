@@ -20,7 +20,6 @@ import com.himanshoe.charty.circle.config.CircleConfigDefaults
 import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.circle.model.maxYValue
 
-
 @Composable
 fun CircleChart(
     circleData: List<CircleData>,

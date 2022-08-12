@@ -3,7 +3,6 @@ package com.himanshoe.charty.pie.config
 import androidx.compose.ui.graphics.Color
 import kotlin.random.Random
 
-
 data class PieConfig(
     val colors: List<Color>,
 )

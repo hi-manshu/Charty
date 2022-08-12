@@ -1,6 +1,5 @@
 package com.himanshoe.charty.circle.config
 
-
 sealed class StartPosition(val angle: Float) {
     object Top : StartPosition(270F)
     object Right : StartPosition(0F)
