@@ -1,11 +1,10 @@
 package com.himanshoe.charty.bar
 
-import android.graphics.Paint
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -16,9 +15,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import com.himanshoe.charty.bar.common.calculations.getTopLeft
 import com.himanshoe.charty.bar.common.calculations.getTopRight
@@ -26,7 +22,9 @@ import com.himanshoe.charty.bar.common.component.drawBarLabel
 import com.himanshoe.charty.bar.config.BarConfig
 import com.himanshoe.charty.bar.config.BarConfigDefaults
 import com.himanshoe.charty.bar.model.BarData
+import com.himanshoe.charty.bar.model.GroupedBarData
 import com.himanshoe.charty.bar.model.maxYValue
+import com.himanshoe.charty.bar.model.totalItems
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
 import com.himanshoe.charty.common.axis.xAxis
@@ -35,45 +33,22 @@ import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 
 @Composable
-fun BarChart(
-    barData: List<BarData>,
-    color: Color,
-    onBarClick: (BarData) -> Unit,
+fun GroupedBarChart(
+    groupedBarData: List<GroupedBarData>,
     modifier: Modifier = Modifier,
+    onBarClick: (BarData) -> Unit = {},
     barDimens: ChartDimens = ChartDimensDefaults.chartDimensDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
-    BarChart(
-        barData = barData,
-        colors = listOf(color, color),
-        onBarClick = onBarClick,
-        modifier = modifier,
-        barDimens = barDimens,
-        axisConfig = axisConfig,
-        barConfig = barConfig
-    )
-}
-
-@Composable
-fun BarChart(
-    barData: List<BarData>,
-    colors: List<Color>,
-    onBarClick: (BarData) -> Unit,
-    modifier: Modifier = Modifier,
-    barDimens: ChartDimens = ChartDimensDefaults.chartDimensDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
-    barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
-) {
-
-    val maxYValueState = rememberSaveable { mutableStateOf(barData.maxYValue()) }
+    val barWidth = remember { mutableStateOf(0F) }
+    val maxYValueState = rememberSaveable { mutableStateOf(groupedBarData.maxYValue()) }
     val clickedBar = remember {
         mutableStateOf(Offset(-10F, -10F))
     }
-
     val maxYValue = maxYValueState.value
-    val barWidth = remember { mutableStateOf(0F) }
 
+    val totalItems: Int = groupedBarData.totalItems()
     Canvas(modifier = modifier
         .drawBehind {
             if (axisConfig.showAxes) {
@@ -88,26 +63,30 @@ fun BarChart(
             })
         }
     ) {
-        barWidth.value = size.width.div(barData.count().times(1.2F))
+        barWidth.value = size.width.div(totalItems.times(1.2F))
         val yScalableFactor = size.height.div(maxYValue)
+        val groupedBarDataColor: List<Color> = groupedBarData.flatMap { it.colors }
+        val groupedBarDataCount = groupedBarData.flatMap { it.barData }.count()
 
-        barData.forEachIndexed { index, data ->
-            val topLeft = getTopLeft(index, barWidth, size, data, yScalableFactor)
-            val topRight = getTopRight(index, barWidth, size, data, yScalableFactor)
-            val barHeight = data.yValue.times(yScalableFactor)
+        if (groupedBarDataColor.count() != groupedBarDataCount) throw Exception("Total colors cannot be more then $groupedBarDataCount")
 
-            if (clickedBar.value.x in (topLeft.x..topRight.x)) {
-                onBarClick(data)
+        groupedBarData.flatMap { it.barData }
+            .forEachIndexed { index, data ->
+                val topLeft = getTopLeft(index, barWidth, size, data, yScalableFactor)
+                val topRight = getTopRight(index, barWidth, size, data, yScalableFactor)
+                val barHeight = data.yValue.times(yScalableFactor)
+
+                if (clickedBar.value.x in (topLeft.x..topRight.x)) {
+                    onBarClick(data)
+                }
+                drawRoundRect(
+                    cornerRadius = CornerRadius(if (barConfig.hasRoundedCorner) barHeight else 0F),
+                    topLeft = topLeft,
+                    color = groupedBarDataColor[index],
+                    size = Size(barWidth.value, barHeight)
+                )
+                // draw label
+                drawBarLabel(data, barWidth.value, barHeight, topLeft)
             }
-            drawRoundRect(
-                cornerRadius = CornerRadius(if (barConfig.hasRoundedCorner) barHeight else 0F),
-                topLeft = topLeft,
-                brush = Brush.linearGradient(colors),
-                size = Size(barWidth.value, barHeight)
-            )
-            // draw label
-            drawBarLabel(data,barWidth.value,barHeight,topLeft)
-        }
     }
 }
-
