@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "charty-library"
-include ':app'
-include ':charty'
+include(":app")
+include(":charty")
