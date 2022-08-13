@@ -5,4 +5,5 @@
 Chart Library built using Jetpack Compose and is highly customizable. Updates coming soon!
 
 You can find the detail implementation of the following:
-![Charty](docs/BarChart.md)
+
+- ![BarChart](docs/BarChart.md)
