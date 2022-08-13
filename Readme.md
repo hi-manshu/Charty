@@ -3,3 +3,6 @@
 ![Charty](img/banner.png)
 
 Chart Library built using Jetpack Compose and is highly customizable. Updates coming soon!
+
+You can find the detail implementation of the following:
+![Charty](docs/BarChart.md)
