@@ -55,7 +55,3 @@ object Deps {
         val detektGradlePlugin by lazy { "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${Versions.detekt}" }
     }
 }
-
-object ProjectPath {
-    const val kalendar = ":kalendar"
-}
