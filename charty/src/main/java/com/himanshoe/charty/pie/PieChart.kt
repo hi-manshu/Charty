@@ -1,6 +1,5 @@
 package com.himanshoe.charty.pie
 
-import android.annotation.SuppressLint
 import android.graphics.Paint
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -9,13 +8,8 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -46,41 +40,32 @@ fun PieChart(
 
     val total = data.sum()
     val proportions = data.map {
-        it.times(100) / total
+        it.times(100).div(total)
     }
     val angleProgress = proportions.map {
-        360.times(it) / 100
+        360.times(it).div(100)
     }
 
     val currentProgressSize = mutableListOf<Float>().apply {
         add(angleProgress.first())
+    }.also {
+        (1.until(angleProgress.size)).forEach { x ->
+            it.add(angleProgress[x].plus(it[x.minus(1)]))
+        }
     }
 
-    (1 until angleProgress.size).forEach { x ->
-        currentProgressSize.add(angleProgress[x].plus(currentProgressSize[x.minus(1)]))
-    }
-
-    val currentPie = remember {
-        mutableStateOf(-1)
-    }
-
+    val currentPie = remember { mutableStateOf(-1) }
     var startAngle = 270f
 
     BoxWithConstraints(modifier = modifier) {
 
         val sideSize = min(constraints.maxWidth, constraints.maxHeight)
-        val padding = (sideSize * if (isDonut) 30 else 20) / 100f
+        val padding = (sideSize.times(if (isDonut) 30 else 20)).div(100f)
 
-        val pathPortion = remember {
-            Animatable(initialValue = 0f)
-        }
-        LaunchedEffect(key1 = true) {
-            pathPortion.animateTo(
-                1f, animationSpec = tween(1000)
-            )
-        }
+        val pathPortion = remember { Animatable(initialValue = 0f) }
+        LaunchedEffect(true) { pathPortion.animateTo(1f, animationSpec = tween(1000)) }
 
-        val size = Size(sideSize.toFloat() - padding, sideSize.toFloat() - padding)
+        val size = Size(sideSize.toFloat().minus(padding), sideSize.toFloat().minus(padding))
 
         Canvas(
             modifier = Modifier
@@ -93,10 +78,10 @@ fun PieChart(
 
             angleProgress.forEachIndexed { index, arcProgress ->
                 drawPie(
-                    config.colors[index],
-                    startAngle,
-                    arcProgress * pathPortion.value,
-                    size,
+                    color = config.colors[index],
+                    startAngle = startAngle,
+                    arcProgress = arcProgress.times(pathPortion.value),
+                    size = size,
                     padding = padding,
                     isDonut = isDonut,
                     isActive = currentPie.value == index
@@ -132,30 +117,27 @@ fun DrawScope.drawPieSection(
     }
 }
 
-@SuppressLint("UnnecessaryComposedModifier")
 private fun Modifier.handlePiePortionClick(
     sideSize: Int,
     currentProgressSize: MutableList<Float>,
     currentPie: MutableState<Int>,
     onIndexSelected: (Int) -> Unit
-): Modifier = composed {
-    pointerInput(true) {
-        detectTapGestures { offset ->
-            val clickedAngle = convertTouchEventPointToAngle(
-                sideSize.toFloat(),
-                sideSize.toFloat(),
-                offset.x,
-                offset.y
-            )
-            currentProgressSize.forEachIndexed { index, item ->
-                if (clickedAngle <= item) {
-                    if (currentPie.value != index) {
-                        currentPie.value = index
-                    }
-                    onIndexSelected(currentPie.value)
-
-                    return@detectTapGestures
+): Modifier = pointerInput(true) {
+    detectTapGestures { offset ->
+        val clickedAngle = convertTouchEventPointToAngle(
+            sideSize.toFloat(),
+            sideSize.toFloat(),
+            offset.x,
+            offset.y
+        )
+        currentProgressSize.forEachIndexed { index, item ->
+            if (clickedAngle <= item) {
+                if (currentPie.value != index) {
+                    currentPie.value = index
                 }
+                onIndexSelected(currentPie.value)
+
+                return@detectTapGestures
             }
         }
     }

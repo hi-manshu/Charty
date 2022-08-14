@@ -23,3 +23,7 @@ to create a data set you need to pass List of `Float`, where it will draw the va
 ### Additional Configuration (Optional)
 - To add your color set  use `PieConfig` to pass on your set of color, make sure you use colors of total size of data.
 - To make the chart looks a donut make `isDonut` as `true`
+
+
+### Mention:
+- Muñoz : For base work inspiration for PieChart library
