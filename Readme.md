@@ -8,3 +8,6 @@ You can find the detail implementation of the following:
 
 - [BarChart](docs/BarChart.md)
 - [GroupedBarChart](docs/GroupedBarChart.md)
+- [CircleChart](docs/CircleChart.md)
+- [PointChart](docs/PointChart.md)
+- [LineChart](docs/LineChart.md)

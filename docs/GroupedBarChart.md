@@ -25,5 +25,5 @@ Here, `barData` will be used as Creating group of bar and `colors` will represen
 
 ### Additional Configuration (Optional)
 - To add padding the the chart, you can also use `ChartDimens`
-- To edit Config of the Axix, to suit your need to use `AxisConfig`
+- To edit Config of the Axis, to suit your need to use `AxisConfig`
 - To edit Individual Bar config of it having corner radius you need to use `BarConfig`

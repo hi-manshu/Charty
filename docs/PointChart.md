@@ -1,40 +1,38 @@
-## BarChart
+## PointChart
 
 > A bar chart or bar graph is a chart or graph that presents categorical data with rectangular bars with heights or lengths proportional to the values that they represent
 
-### Using BarChart in your project:
+### Using PointChart in your project:
 
 1. When you want a gradient shade
 
 ```kotlin
-  BarChart(
+  PointChart(
     modifier = Modifier,
-    onBarClick = { // handle Click for individual bar}
     colors = // colors
-    barData = // list of BarData
-        )
+    pointData = // list of PointData 
+  )
 ```
 
 2. When you want a solid shade:
 
 ```kotlin
-  BarChart(
+  PointChart(
     modifier = Modifier,
-    onBarClick = { // handle Click for individual bar},
     color = // colors
-    barData = // list of BarData
-        )
+    pointData = // list of PointData 
+  )
 ```
 
 ### Creating Data Set:
 
-to create a data set you need to pass List of `BarData`, where `BarData` looks like:
+to create a data set you need to pass List of `PointData`, where `PointData` looks like:
 ```kotlin
-data class BarData(val xValue: Any, val yValue: Float)
+data class PointData(val xValue: Any, val yValue: Float)
 ```
-Here, `xValue` will be used as Labels and `yValue` will represent the bars.
+Here, `xValue` will be used as Labels and `yValue` will represent the progress.
 
 ### Additional Configuration (Optional)
 - To add padding the the chart, you can also use `ChartDimens`
 - To edit Config of the Axis, to suit your need to use `AxisConfig`
-- To edit Individual Bar config of it having corner radius you need to use `BarConfig`
+- To edit the point representation use `PointConfig`

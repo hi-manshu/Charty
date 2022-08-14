@@ -1,40 +1,38 @@
-## BarChart
+## LineChart
 
 > A bar chart or bar graph is a chart or graph that presents categorical data with rectangular bars with heights or lengths proportional to the values that they represent
 
-### Using BarChart in your project:
+### Using LineChart in your project:
 
 1. When you want a gradient shade
 
 ```kotlin
-  BarChart(
+  LineChart(
     modifier = Modifier,
-    onBarClick = { // handle Click for individual bar}
     colors = // colors
-    barData = // list of BarData
-        )
+    lineData = // list of LineData 
+  )
 ```
 
 2. When you want a solid shade:
 
 ```kotlin
-  BarChart(
+  LineChart(
     modifier = Modifier,
-    onBarClick = { // handle Click for individual bar},
     color = // colors
-    barData = // list of BarData
-        )
+    lineData = // list of LineData 
+  )
 ```
 
 ### Creating Data Set:
 
-to create a data set you need to pass List of `BarData`, where `BarData` looks like:
+to create a data set you need to pass List of `LineData`, where `LineData` looks like:
 ```kotlin
-data class BarData(val xValue: Any, val yValue: Float)
+data class LineData(val xValue: Any, val yValue: Float)
 ```
-Here, `xValue` will be used as Labels and `yValue` will represent the bars.
+Here, `xValue` will be used as Labels and `yValue` will represent the progress.
 
 ### Additional Configuration (Optional)
 - To add padding the the chart, you can also use `ChartDimens`
 - To edit Config of the Axis, to suit your need to use `AxisConfig`
-- To edit Individual Bar config of it having corner radius you need to use `BarConfig`
+- To edit the line representation like `smooth curve` or having additional view of `dot market`  use `LineConfig`
