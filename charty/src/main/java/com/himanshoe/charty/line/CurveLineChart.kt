@@ -122,7 +122,7 @@ fun CurveLineChart(
             pointsPath.apply {
                 reset()
                 moveTo(offsetItems.first().x, offsetItems.first().y)
-                (0.until(offsetItems.size - 1)).forEach { index ->
+                (0.until(offsetItems.size .minus(1))).forEach { index ->
                     cubicTo(
                         graphPathPoints[index].x, graphPathPoints[index].y,
                         backgroundPathPoints[index].x, backgroundPathPoints[index].y,
