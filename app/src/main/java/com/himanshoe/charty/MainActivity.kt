@@ -17,6 +17,7 @@ import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.GroupedBarData
 import com.himanshoe.charty.circle.CircleChart
 import com.himanshoe.charty.circle.model.CircleData
+import com.himanshoe.charty.line.CurveLineChart
 import com.himanshoe.charty.line.LineChart
 import com.himanshoe.charty.line.model.LineData
 import com.himanshoe.charty.pie.PieChart
@@ -28,6 +29,46 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LazyColumn(Modifier.fillMaxSize()) {
+                item {
+                    CurveLineChart(
+                        modifier = Modifier
+                            .padding(top = 100.dp)
+                            .size(width = 500.dp, height = 300.dp)
+                            .padding(20.dp),
+                        colors = listOf(
+                            Color.Green,
+                            Color.Black,
+                        ),
+                        lineData = listOf(
+                            LineData(10F, 35F),
+                            LineData(20F, 25F),
+                            LineData(50F, 100F),
+                            LineData(20F, 25F),
+
+                        )
+                    )
+                }
+                item {
+                    BarChart(
+                        modifier = Modifier
+                            .padding(top = 100.dp)
+                            .size(width = 500.dp, height = 300.dp)
+                            .padding(20.dp),
+                        onBarClick = {
+                        },
+                        colors = listOf(Color.Green, Color.Black),
+                        barData = listOf(
+                            BarData(10F, 35F),
+                            BarData(20F, 25F),
+                            BarData(10F, 50F),
+                            BarData(100F, 10F),
+                            BarData(10F, 15F),
+                            BarData(50F, 100F),
+                            BarData(20F, 25F),
+                        )
+                    )
+                }
+
                 item {
                     GroupedBarChart(
                         modifier = Modifier
@@ -92,26 +133,6 @@ class MainActivity : ComponentActivity() {
                 }
 
                 item {
-                    BarChart(
-                        modifier = Modifier
-                            .padding(top = 100.dp)
-                            .size(width = 500.dp, height = 300.dp)
-                            .padding(20.dp),
-                        onBarClick = {
-                        },
-                        colors = listOf(Color.Green, Color.Black),
-                        barData = listOf(
-                            BarData(10F, 35F),
-                            BarData(20F, 25F),
-                            BarData(10F, 50F),
-                            BarData(100F, 10F),
-                            BarData(10F, 15F),
-                            BarData(50F, 100F),
-                            BarData(20F, 25F),
-                        )
-                    )
-                }
-                item {
                     LineChart(
                         modifier = Modifier
                             .padding(top = 100.dp)
@@ -129,6 +150,7 @@ class MainActivity : ComponentActivity() {
                         )
                     )
                 }
+
                 item {
                     PointChart(
                         modifier = Modifier
