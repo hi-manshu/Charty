@@ -4,6 +4,8 @@
 
 Chart Library built using Jetpack Compose and is highly customizable. Updates coming soon!
 
+## Documentation:
+
 You can find the detail implementation of the following:
 
 - [BarChart](docs/BarChart.md)
@@ -11,3 +13,4 @@ You can find the detail implementation of the following:
 - [CircleChart](docs/CircleChart.md)
 - [PointChart](docs/PointChart.md)
 - [LineChart](docs/LineChart.md)
+- [PieChart](docs/PieChart.md)
