@@ -1,38 +1,27 @@
-## BarChart
+## GroupedBarChart
 
 > A bar chart or bar graph is a chart or graph that presents categorical data with rectangular bars with heights or lengths proportional to the values that they represent
 
-### Using BarChart in your project:
+### Using GroupedBarChart in your project:
 
 1. When you want a gradient shade
 
 ```kotlin
-  BarChart(
-    modifier = Modifier,
-    onBarClick = { // handle Click for individual bar}
-    colors = // colors
-    barData = // list of BarData
-        )
-```
-
-2. When you want a solid shade:
-
-```kotlin
-  BarChart(
+  GroupedBarChart(
     modifier = Modifier,
     onBarClick = { // handle Click for individual bar},
-    color = // colors
-    barData = // list of BarData
-        )
+    colors = // colors
+    groupedBarData = // list of GroupedBarData
+    )
 ```
 
 ### Creating Data Set:
 
-to create a data set you need to pass List of `BarData`, where `BarData` looks like:
+to create a data set you need to pass List of `GroupedBarData`, where `GroupedBarData` looks like:
 ```kotlin
-data class BarData(val xValue: Any, val yValue: Float)
+data class GroupedBarData(val barData: List<BarData>, val colors: List<Color>)
 ```
-Here, `xValue` will be used as Labels and `yValue` will represent the bars.
+Here, `barData` will be used as Creating group of bar and `colors` will represent the colors of the individual bar.
 
 ### Additional Configuration (Optional)
 - To add padding the the chart, you can also use `ChartDimens`
