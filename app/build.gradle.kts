@@ -49,7 +49,7 @@ android {
 }
 
 dependencies {
-//    implementation(project(":charty"))
+   //implementation(project(":charty"))
     implementation("com.himanshoe:charty:1.0.0-alpha01")
     implementation(Deps.Compose.ui)
     implementation(Deps.Compose.material)
