@@ -1,6 +1,6 @@
 ## GroupedBarChart
 
-> A bar chart or bar graph is a chart or graph that presents categorical data with rectangular bars with heights or lengths proportional to the values that they represent
+> grouped bar charts are Bar charts in which multiple sets of data items are compared, with a single color used to denote a specific series across all sets.
 
 ### Using GroupedBarChart in your project:
 

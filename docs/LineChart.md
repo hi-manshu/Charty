@@ -1,6 +1,6 @@
 ## LineChart
 
-> A bar chart or bar graph is a chart or graph that presents categorical data with rectangular bars with heights or lengths proportional to the values that they represent
+> A line chart chart or graph that presents categorical data with line progress views with heights proportional to the values that they represent
 
 ### Using LineChart in your project:
 
