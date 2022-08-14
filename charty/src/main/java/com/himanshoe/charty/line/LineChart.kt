@@ -11,14 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
 import com.himanshoe.charty.common.axis.xAxis
@@ -78,13 +74,19 @@ fun LineChart(
         val brush = Brush.linearGradient(colors)
         val radius = size.width.div(70)
         val strokeWidth = size.width.div(100)
-        val path = Path()
+        val path = Path().apply {
+            moveTo(0f, size.height)
+        }
 
+        val lastIndex = lineData.size - 1
         lineData.forEachIndexed { index, data ->
             val centerOffset = dataToOffSet(index, lineBound.value, size, data, scaleFactor)
+            val drawnPath = path.lineTo(centerOffset.x, centerOffset.y)
             when (index) {
-                0 -> path.moveTo(centerOffset.x, centerOffset.y)
-                else -> path.lineTo(centerOffset.x, centerOffset.y)
+                lastIndex -> drawnPath.also {
+                    path.lineTo(size.width, size.height)
+                }
+                else -> drawnPath
             }
             if (lineConfig.hasDotMarker) {
                 drawCircle(
@@ -106,7 +108,7 @@ fun LineChart(
         drawPath(
             path = path,
             brush = brush,
-            style = stroke
+            style = stroke,
         )
     }
 }
