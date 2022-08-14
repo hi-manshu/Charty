@@ -1,5 +1,7 @@
 ## Charty : Elementary Chart library for Compose
 
+> Work In Progress.
+
 ![Charty](img/charty-banner.png)
 
 Chart Library built using Jetpack Compose and is highly customizable. Updates coming soon!
