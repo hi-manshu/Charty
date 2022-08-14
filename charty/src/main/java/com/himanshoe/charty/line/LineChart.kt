@@ -35,7 +35,7 @@ fun LineChart(
     lineData: List<LineData>,
     color: Color,
     modifier: Modifier = Modifier,
-    chartDimens: ChartDimens = ChartDimensDefaults.chartDimensDimesDefaults(),
+    chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
     lineConfig: LineConfig = LineConfigDefaults.lineConfigDefaults()
 ) {
@@ -54,7 +54,7 @@ fun LineChart(
     lineData: List<LineData>,
     colors: List<Color>,
     modifier: Modifier = Modifier,
-    chartDimens: ChartDimens = ChartDimensDefaults.chartDimensDimesDefaults(),
+    chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
     lineConfig: LineConfig = LineConfigDefaults.lineConfigDefaults()
 ) {

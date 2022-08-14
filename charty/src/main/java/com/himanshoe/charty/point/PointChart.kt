@@ -35,7 +35,7 @@ fun PointChart(
     pointData: List<PointData>,
     colors: List<Color>,
     modifier: Modifier = Modifier,
-    chartDimens: ChartDimens = ChartDimensDefaults.chartDimensDimesDefaults(),
+    chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
     pointConfig: PointConfig = PointConfigDefaults.pointConfigDefaults()
 ) {
@@ -98,7 +98,7 @@ fun PointChart(
     pointData: List<PointData>,
     color: Color,
     modifier: Modifier = Modifier,
-    chartDimens: ChartDimens = ChartDimensDefaults.chartDimensDimesDefaults(),
+    chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
     pointConfig: PointConfig = PointConfigDefaults.pointConfigDefaults()
 ) {

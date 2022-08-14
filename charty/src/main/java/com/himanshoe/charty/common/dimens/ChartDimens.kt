@@ -9,7 +9,7 @@ data class ChartDimens(
 
 internal object ChartDimensDefaults {
 
-    fun chartDimensDimesDefaults() = ChartDimens(
+    fun chartDimesDefaults() = ChartDimens(
         horizontalPadding = 4.dp
     )
 }

@@ -35,7 +35,7 @@ fun GroupedBarChart(
     groupedBarData: List<GroupedBarData>,
     modifier: Modifier = Modifier,
     onBarClick: (BarData) -> Unit = {},
-    barDimens: ChartDimens = ChartDimensDefaults.chartDimensDimesDefaults(),
+    barDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {

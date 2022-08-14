@@ -35,7 +35,7 @@ fun BarChart(
     color: Color,
     onBarClick: (BarData) -> Unit,
     modifier: Modifier = Modifier,
-    barDimens: ChartDimens = ChartDimensDefaults.chartDimensDimesDefaults(),
+    barDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
@@ -56,7 +56,7 @@ fun BarChart(
     colors: List<Color>,
     onBarClick: (BarData) -> Unit,
     modifier: Modifier = Modifier,
-    barDimens: ChartDimens = ChartDimensDefaults.chartDimensDimesDefaults(),
+    barDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
