@@ -17,6 +17,8 @@ import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.GroupedBarData
 import com.himanshoe.charty.circle.CircleChart
 import com.himanshoe.charty.circle.model.CircleData
+import com.himanshoe.charty.horizontalbar.HorizontalBarChart
+import com.himanshoe.charty.horizontalbar.model.HorizontalBarData
 import com.himanshoe.charty.line.CurveLineChart
 import com.himanshoe.charty.line.LineChart
 import com.himanshoe.charty.line.model.LineData
@@ -29,6 +31,26 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LazyColumn(Modifier.fillMaxSize()) {
+                item {
+                    HorizontalBarChart(
+                        modifier = Modifier
+                            .size(width = 500.dp, height = 300.dp)
+                            .padding(20.dp),
+                        colors = listOf(
+                            Color.Green,
+                            Color.Black,
+                        ),
+                        horizontalBarData = listOf(
+                            HorizontalBarData(10F, 10F),
+                            HorizontalBarData(20F, "25F"),
+                            HorizontalBarData(75F, "100F"),
+                            HorizontalBarData(40F, "Himan"),
+                            HorizontalBarData(10F, "100F"),
+                            HorizontalBarData(20F, "25F"),
+                        ),
+                        onBarClick = {}
+                    )
+                }
                 item {
                     CurveLineChart(
                         modifier = Modifier
@@ -45,7 +67,7 @@ class MainActivity : ComponentActivity() {
                             LineData(50F, 100F),
                             LineData(20F, 25F),
 
-                        )
+                            )
                     )
                 }
                 item {
@@ -60,7 +82,7 @@ class MainActivity : ComponentActivity() {
                         barData = listOf(
                             BarData(10F, 35F),
                             BarData(20F, 25F),
-                            BarData(10F, 50F),
+                            BarData(10F, 500F),
                             BarData(100F, 10F),
                             BarData(10F, 15F),
                             BarData(50F, 100F),

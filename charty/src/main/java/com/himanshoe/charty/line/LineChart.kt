@@ -70,7 +70,7 @@ fun LineChart(
                     yAxis(axisConfig)
                 }
             }
-            .padding(horizontal = chartDimens.horizontalPadding)
+            .padding(horizontal = chartDimens.padding)
 
     ) {
         lineBound.value = size.width.div(lineData.count().times(1.2F))

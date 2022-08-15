@@ -51,7 +51,7 @@ fun PointChart(
                     yAxis(axisConfig)
                 }
             }
-            .padding(horizontal = chartDimens.horizontalPadding)
+            .padding(horizontal = chartDimens.padding)
 
     ) {
         pointBound.value = size.width.div(pointData.count().times(1.2F))

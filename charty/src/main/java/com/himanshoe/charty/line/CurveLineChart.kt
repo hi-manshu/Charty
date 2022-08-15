@@ -67,7 +67,7 @@ fun CurveLineChart(
     Canvas(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = chartDimens.horizontalPadding)
+            .padding(horizontal = chartDimens.padding)
             .drawBehind {
                 if (axisConfig.showAxes) {
                     xAxis(axisConfig, maxYValue)

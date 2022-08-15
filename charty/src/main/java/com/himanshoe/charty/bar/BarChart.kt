@@ -77,7 +77,7 @@ fun BarChart(
                     yAxis(axisConfig)
                 }
             }
-            .padding(horizontal = barDimens.horizontalPadding)
+            .padding(horizontal = barDimens.padding)
             .pointerInput(Unit) {
                 detectTapGestures(onPress = { offset ->
                     clickedBar.value = offset
