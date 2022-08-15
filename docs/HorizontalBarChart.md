@@ -11,8 +11,8 @@
     modifier = Modifier,
     onBarClick = { // handle Click for individual bar}
     colors = // colors
-    horizontalBarData = // list of HorizontalBarData
-        )
+    horizontalBarData = // list of HorizontalBarData,
+ )
 ```
 
 2. When you want a solid shade:
@@ -20,10 +20,10 @@
 ```kotlin
   HorizontalBarChart(
     modifier = Modifier,
-    onBarClick = { // handle Click for individual bar},
-    color = // colors
-    horizontalBarData = // list of HorizontalBarData
-        )
+    onBarClick = { // handle Click for individual bar} 
+    colors = // colors
+    horizontalBarData = // list of HorizontalBarData,
+)
 ```
 
 ### Creating Data Set:
@@ -36,5 +36,5 @@ Here, `yValue` will be used as Labels and `xValue` will represent the bars.
 
 ### Additional Configuration (Optional)
 - To add padding the the chart, you can also use `ChartDimens`
-- To edit Config of the Axis, to suit your need to use `AxisConfig`
-- To edit Individual Bar config of it having corner radius you need to use `BarConfig`
+- To edit Config of the Axis, to suit your need to use `HorizontalAxisConfig`
+- To edit Individual Bar config of it having labels use `HorizontalBarConfig`

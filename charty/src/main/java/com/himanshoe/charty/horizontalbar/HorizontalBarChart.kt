@@ -36,13 +36,17 @@ fun HorizontalBarChart(
     onBarClick: (HorizontalBarData) -> Unit,
     modifier: Modifier = Modifier,
     barDimens: ChartDimens = ChartDimensDefaults.horizontalChartDimesDefaults(),
+    horizontalAxisConfig: HorizontalAxisConfig = HorizontalAxisConfigDefaults.axisConfigDefaults(),
+    horizontalBarConfig: HorizontalBarConfig = HorizontalBarConfigDefaults.horizontalBarConfig()
 ) {
     HorizontalBarChart(
         horizontalBarData = horizontalBarData,
         colors = listOf(color, color),
         onBarClick = onBarClick,
         modifier = modifier,
-        barDimens = barDimens
+        barDimens = barDimens,
+        horizontalAxisConfig = horizontalAxisConfig,
+        horizontalBarConfig = horizontalBarConfig
     )
 }
 
