@@ -26,6 +26,7 @@ You can find the detail implementation of the following:
 - [BarChart](docs/BarChart.md)
 - [HorizontalBarChart](docs/HorizontalBarChart.md)
 - [GroupedBarChart](docs/GroupedBarChart.md)
+- [GroupedHorizontalBarChart](docs/GroupedHorizontalBarChart.md)
 - [CircleChart](docs/CircleChart.md)
 - [PointChart](docs/PointChart.md)
 - [LineChart](docs/LineChart.md)

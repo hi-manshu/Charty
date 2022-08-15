@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.pointerInput
@@ -26,46 +25,27 @@ import com.himanshoe.charty.horizontalbar.common.getTopLeft
 import com.himanshoe.charty.horizontalbar.config.HorizontalBarConfig
 import com.himanshoe.charty.horizontalbar.config.HorizontalBarConfigDefaults
 import com.himanshoe.charty.horizontalbar.config.StartDirection
+import com.himanshoe.charty.horizontalbar.model.GroupedHorizontalBarData
 import com.himanshoe.charty.horizontalbar.model.HorizontalBarData
 import com.himanshoe.charty.horizontalbar.model.maxXValue
+import com.himanshoe.charty.horizontalbar.model.totalItems
 
 @Composable
-fun HorizontalBarChart(
-    horizontalBarData: List<HorizontalBarData>,
-    color: Color,
-    onBarClick: (HorizontalBarData) -> Unit,
+fun GroupedHorizontalBarChart(
+    groupedBarData: List<GroupedHorizontalBarData>,
     modifier: Modifier = Modifier,
-    barDimens: ChartDimens = ChartDimensDefaults.horizontalChartDimesDefaults(),
-    horizontalAxisConfig: HorizontalAxisConfig = HorizontalAxisConfigDefaults.axisConfigDefaults(),
-    horizontalBarConfig: HorizontalBarConfig = HorizontalBarConfigDefaults.horizontalBarConfig()
-) {
-    HorizontalBarChart(
-        horizontalBarData = horizontalBarData,
-        colors = listOf(color, color),
-        onBarClick = onBarClick,
-        modifier = modifier,
-        barDimens = barDimens,
-        horizontalAxisConfig = horizontalAxisConfig,
-        horizontalBarConfig = horizontalBarConfig
-    )
-}
-
-@Composable
-fun HorizontalBarChart(
-    horizontalBarData: List<HorizontalBarData>,
-    colors: List<Color>,
-    onBarClick: (HorizontalBarData) -> Unit,
-    modifier: Modifier = Modifier,
+    onBarClick: (HorizontalBarData) -> Unit = {},
     barDimens: ChartDimens = ChartDimensDefaults.horizontalChartDimesDefaults(),
     horizontalAxisConfig: HorizontalAxisConfig = HorizontalAxisConfigDefaults.axisConfigDefaults(),
     horizontalBarConfig: HorizontalBarConfig = HorizontalBarConfigDefaults.horizontalBarConfig()
 ) {
 
     val startAngle = if (horizontalBarConfig.startDirection == StartDirection.Left) 180F else 0F
-    val maxXValueState = rememberSaveable { mutableStateOf(horizontalBarData.maxXValue()) }
+    val maxXValueState = rememberSaveable { mutableStateOf(groupedBarData.maxXValue()) }
     val clickedBar = remember { mutableStateOf(Offset(-10F, -10F)) }
     val maxXValue = maxXValueState.value
     val barHeight = remember { mutableStateOf(0F) }
+    val totalItems: Int = groupedBarData.totalItems()
 
     Canvas(
         modifier = modifier
@@ -81,70 +61,74 @@ fun HorizontalBarChart(
                 })
             }
     ) {
-        barHeight.value = size.height.div(horizontalBarData.count().times(1.2F))
+        barHeight.value = size.height.div(totalItems.times(1.2F))
         val xScalableFactor = size.width.div(maxXValue)
+        val groupedHorizontalBarDataColor: List<Color> = groupedBarData.flatMap { it.colors }
+        val groupedBarDataCount = groupedBarData.flatMap { it.horizontalBarData }.count()
+        if (groupedHorizontalBarDataColor.count() != groupedBarDataCount) throw Exception("Total colors cannot be more then $groupedBarDataCount")
 
-        when (horizontalBarConfig.startDirection) {
-            StartDirection.Right -> {
-                horizontalBarData.forEachIndexed { index, data ->
-                    val topLeft = getTopLeft(index, barHeight, size, data, xScalableFactor)
-                    val bottomLeft = getBottomLeft(index, barHeight, size, data, xScalableFactor)
-                    val barWidth = data.xValue.times(xScalableFactor)
+        groupedBarData.flatMap { it.horizontalBarData }
+            .forEachIndexed { index, data ->
+                when (horizontalBarConfig.startDirection) {
+                    StartDirection.Right -> {
+                        val topLeft = getTopLeft(index, barHeight, size, data, xScalableFactor)
+                        val bottomLeft =
+                            getBottomLeft(index, barHeight, size, data, xScalableFactor)
+                        val barWidth = data.xValue.times(xScalableFactor)
 
-                    if (clickedBar.value.y in (topLeft.y..bottomLeft.y)) {
-                        onBarClick(data)
+                        if (clickedBar.value.y in (topLeft.y..bottomLeft.y)) {
+                            onBarClick(data)
+                        }
+                        drawBars(
+                            data,
+                            barHeight.value,
+                            color = groupedHorizontalBarDataColor[index],
+                            horizontalBarConfig.showLabels,
+                            topLeft,
+                            barWidth,
+                        )
                     }
-                    drawBars(
-                        data,
-                        barHeight.value,
-                        colors,
-                        horizontalBarConfig.showLabels,
-                        topLeft,
-                        barWidth
-                    )
+                    else -> {
+                        val barWidth = data.xValue.times(xScalableFactor)
+                        val topLeft = Offset(0F, barHeight.value.times(index).times(1.2F))
+                        val bottomLeft =
+                            getBottomLeft(index, barHeight, size, data, xScalableFactor)
+
+                        if (clickedBar.value.y in (topLeft.y..bottomLeft.y)) {
+                            onBarClick(data)
+                        }
+                        drawBars(
+                            data,
+                            barHeight.value,
+                            color = groupedHorizontalBarDataColor[index],
+                            horizontalBarConfig.showLabels,
+                            topLeft = topLeft,
+                            barWidth = barWidth,
+                        )
+                    }
                 }
             }
-            else -> {
-                horizontalBarData.forEachIndexed { index, data ->
-                    val barWidth = data.xValue.times(xScalableFactor)
-                    val topLeft = Offset(0F, barHeight.value.times(index).times(1.2F))
-                    val bottomLeft = getBottomLeft(index, barHeight, size, data, xScalableFactor)
-
-                    if (clickedBar.value.y in (topLeft.y..bottomLeft.y)) {
-                        onBarClick(data)
-                    }
-                    drawBars(
-                        data,
-                        barHeight.value,
-                        colors,
-                        horizontalBarConfig.showLabels,
-                        topLeft,
-                        barWidth
-                    )
-                }
-            }
-        }
     }
 }
 
 private fun DrawScope.drawBars(
     horizontalBarData: HorizontalBarData,
     barHeight: Float,
-    colors: List<Color>,
+    color: Color,
     showLabels: Boolean,
     topLeft: Offset,
-    barWidth: Float
+    barWidth: Float,
 ) {
     drawRoundRect(
         topLeft = topLeft,
-        brush = Brush.linearGradient(colors),
+        color = color,
         size = Size(barWidth, barHeight)
     )
     if (showLabels) {
         drawHorizontalBarLabel(
             horizontalBarData = horizontalBarData,
             barHeight = barHeight,
-            topLeft = topLeft,
+            topLeft = topLeft
         )
     }
 }

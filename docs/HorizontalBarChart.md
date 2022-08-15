@@ -1,6 +1,6 @@
 ## HorizontalBarChart
 
-> A bar chart or bar graph is a chart or graph that presents categorical data with rectangular bars with heights or lengths proportional to the values that they represent
+> A bar chart or bar graph is a chart or graph that presents categorical data with rectangular bars with width proportional to the values that they represent
 
 ### Using HorizontalBarChart in your project:
 

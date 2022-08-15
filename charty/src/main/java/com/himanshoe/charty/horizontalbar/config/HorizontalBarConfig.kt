@@ -9,7 +9,7 @@ internal object HorizontalBarConfigDefaults {
 
     fun horizontalBarConfig() = HorizontalBarConfig(
         showLabels = true,
-        startDirection = StartDirection.Left
+        startDirection = StartDirection.Right
     )
 }
 

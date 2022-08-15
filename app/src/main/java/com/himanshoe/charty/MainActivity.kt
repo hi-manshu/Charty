@@ -1,7 +1,6 @@
 package com.himanshoe.charty
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +17,9 @@ import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.GroupedBarData
 import com.himanshoe.charty.circle.CircleChart
 import com.himanshoe.charty.circle.model.CircleData
+import com.himanshoe.charty.horizontalbar.GroupedHorizontalBarChart
 import com.himanshoe.charty.horizontalbar.HorizontalBarChart
+import com.himanshoe.charty.horizontalbar.model.GroupedHorizontalBarData
 import com.himanshoe.charty.horizontalbar.model.HorizontalBarData
 import com.himanshoe.charty.line.CurveLineChart
 import com.himanshoe.charty.line.LineChart
@@ -32,6 +33,41 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LazyColumn(Modifier.fillMaxSize()) {
+                item {
+                    GroupedHorizontalBarChart(
+                        modifier = Modifier
+                            .size(width = 500.dp, height = 300.dp)
+                            .padding(20.dp),
+                        groupedBarData = listOf(
+                            GroupedHorizontalBarData(
+                                listOf(
+                                    HorizontalBarData(10F, 35F),
+                                    HorizontalBarData(20F, 25F),
+                                    HorizontalBarData(10F, 50F),
+                                ),
+                                colors = listOf(Color.Black, Color.Green, Color.Yellow)
+                            ),
+                            GroupedHorizontalBarData(
+                                listOf(
+                                    HorizontalBarData(10F, 35F),
+                                    HorizontalBarData(20F, 25F),
+                                    HorizontalBarData(10F, 50F),
+                                ),
+                                colors = listOf(Color.Black, Color.Green, Color.Yellow)
+                            ),
+                            GroupedHorizontalBarData(
+                                listOf(
+                                    HorizontalBarData(10F, 35F),
+                                    HorizontalBarData(20F, 25F),
+                                    HorizontalBarData(10F, 50F),
+                                ),
+                                colors = listOf(Color.Black, Color.Green, Color.Yellow)
+                            ),
+                        ),
+                        onBarClick = {
+                        }
+                    )
+                }
                 item {
                     HorizontalBarChart(
                         modifier = Modifier
@@ -50,7 +86,6 @@ class MainActivity : ComponentActivity() {
                             HorizontalBarData(20F, "25F"),
                         ),
                         onBarClick = {
-                            Log.d("DSfdsfdsfsfds", it.toString())
                         }
                     )
                 }
