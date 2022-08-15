@@ -16,6 +16,9 @@ fun RegisterNavigation(
     onLineChartClicked: () -> Unit,
     onCurveChartClicked: () -> Unit,
     onPointChartClicked: () -> Unit,
+    onPieChartClicked: () -> Unit,
+    onGroupHorizontalClicked: () -> Unit,
+    onGroupBarClicked: () -> Unit,
 ) {
     NavHost(navController = navigator, startDestination = "main") {
         composable("barchart") { BarChartDemo() }
@@ -26,7 +29,10 @@ fun RegisterNavigation(
                 onCircleChartClicked,
                 onLineChartClicked,
                 onCurveChartClicked,
-                onPointChartClicked
+                onPointChartClicked,
+                onPieChartClicked,
+                onGroupHorizontalClicked,
+                onGroupBarClicked
             )
         }
         composable("horizontalBarChartDemo") { HorizontalBarChartDemo() }
@@ -34,5 +40,8 @@ fun RegisterNavigation(
         composable("linechart") { LineChartDemo() }
         composable("curvelinechart") { CurveLineChartDemo() }
         composable("pointchart") { PointChartDemo() }
+        composable("piechart") { PieChartDemo() }
+        composable("grouphorizontalbar") { GroupedHorizontalBarChartDemo() }
+        composable("groupbar") { GroupBarChartDemo() }
     }
 }

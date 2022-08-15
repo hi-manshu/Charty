@@ -1,7 +1,7 @@
 package com.himanshoe.charty.horizontalbar.config
 
 data class HorizontalBarConfig(
-    val showLabels: Boolean,
+    val showLabels: Boolean = true,
     val startDirection: StartDirection
 )
 

@@ -191,6 +191,7 @@ class MainActivity : ComponentActivity() {
 //                            PointData(10F, 35F),
 //                            PointData(20F, 25F),
 //                            PointData(10F, 50F),
+//                            PointData(10F, 50F),
 //                            PointData(100F, 10F),
 //                            PointData(10F, 15F),
 //                            PointData(50F, 100F),
@@ -213,7 +214,14 @@ class MainActivity : ComponentActivity() {
                     navigator.navigate("curvelinechart")
                 }, onPointChartClicked = {
                     navigator.navigate("pointchart")
-                })
+                }, onPieChartClicked = {
+                    navigator.navigate("piechart")
+                }, onGroupHorizontalClicked = {
+                    navigator.navigate("grouphorizontalbar")
+                }, onGroupBarClicked = {
+                    navigator.navigate("groupbar")
+                }
+            )
         }
     }
 }
@@ -225,7 +233,10 @@ fun MainApp(
     onCircleChartClicked: () -> Unit,
     onLineChartClicked: () -> Unit,
     onCurveChartClicked: () -> Unit,
-    onPointChartClicked: () -> Unit
+    onPointChartClicked: () -> Unit,
+    onPieChartClicked: () -> Unit,
+    onGroupHorizontalClicked: () -> Unit,
+    onGroupBarClicked: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -273,7 +284,7 @@ fun MainApp(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                onClick = { /*TODO*/ }) {
+                onClick = { onGroupBarClicked() }) {
                 Text(text = "Grouped bar Chart")
             }
         }
@@ -282,7 +293,7 @@ fun MainApp(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                onClick = { /*TODO*/ }) {
+                onClick = { onGroupHorizontalClicked() }) {
                 Text(text = "Grouped HorizontalBar Chart")
             }
         }
@@ -300,7 +311,7 @@ fun MainApp(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                onClick = { /*TODO*/ }) {
+                onClick = { onPieChartClicked() }) {
                 Text(text = "Pie Chart")
             }
         }
