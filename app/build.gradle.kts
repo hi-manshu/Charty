@@ -50,6 +50,10 @@ android {
 
 dependencies {
     implementation(project(":charty"))
+<<<<<<< Updated upstream
+=======
+//    implementation("com.himanshoe:charty:1.0.0-alpha01")
+>>>>>>> Stashed changes
     implementation(Deps.Compose.ui)
     implementation(Deps.Compose.material)
     implementation(Deps.Compose.activity)
