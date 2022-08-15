@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 data class CurveLineConfig(
     val hasDotMarker: Boolean,
-    val dotColor: Color,
+    val dotColor: Color = Color.Transparent,
 )
 
 internal object CurveLineConfigDefaults {

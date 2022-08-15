@@ -1,8 +1,8 @@
 package com.himanshoe.charty.line.config
 
 data class LineConfig(
-    val hasSmoothCurve: Boolean = true,
-    val hasDotMarker: Boolean
+    val hasSmoothCurve: Boolean = false,
+    val hasDotMarker: Boolean = false
 )
 
 internal object LineConfigDefaults {
