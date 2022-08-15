@@ -1,6 +1,7 @@
 package com.himanshoe.charty
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,7 +49,9 @@ class MainActivity : ComponentActivity() {
                             HorizontalBarData(10F, "100F"),
                             HorizontalBarData(20F, "25F"),
                         ),
-                        onBarClick = {}
+                        onBarClick = {
+                            Log.d("DSfdsfdsfsfds", it.toString())
+                        }
                     )
                 }
                 item {

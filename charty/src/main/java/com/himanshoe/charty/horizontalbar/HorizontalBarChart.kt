@@ -13,6 +13,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.pointerInput
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
@@ -58,9 +59,7 @@ fun HorizontalBarChart(
 
     val startAngle = if (horizontalBarConfig.startDirection == StartDirection.Left) 180F else 0F
     val maxXValueState = rememberSaveable { mutableStateOf(horizontalBarData.maxXValue()) }
-    val clickedBar = remember {
-        mutableStateOf(Offset(-10F, -10F))
-    }
+    val clickedBar = remember { mutableStateOf(Offset(-10F, -10F)) }
     val maxXValue = maxXValueState.value
     val barHeight = remember { mutableStateOf(0F) }
 
@@ -81,46 +80,67 @@ fun HorizontalBarChart(
         barHeight.value = size.height.div(horizontalBarData.count().times(1.2F))
         val xScalableFactor = size.width.div(maxXValue)
 
-        if (horizontalBarConfig.startDirection == StartDirection.Right) {
-            horizontalBarData.forEachIndexed { index, data ->
-                val topLeft = getTopLeft(index, barHeight, size, data, xScalableFactor)
-                val bottomLeft = getBottomLeft(index, barHeight, size, data, xScalableFactor)
-                val barWidth = data.xValue.times(xScalableFactor)
+        when (horizontalBarConfig.startDirection) {
+            StartDirection.Right -> {
+                horizontalBarData.forEachIndexed { index, data ->
+                    val topLeft = getTopLeft(index, barHeight, size, data, xScalableFactor)
+                    val bottomLeft = getBottomLeft(index, barHeight, size, data, xScalableFactor)
+                    val barWidth = data.xValue.times(xScalableFactor)
 
-                if (clickedBar.value.y in (topLeft.y..bottomLeft.y)) {
-                    onBarClick(data)
-                }
-                drawRoundRect(
-                    topLeft = topLeft,
-                    brush = Brush.linearGradient(colors),
-                    size = Size(barWidth, barHeight.value)
-                )
-                if (horizontalBarConfig.showLabels) {
-                    drawBarLabel(
-                        horizontalBarData = data,
-                        barWidth = barHeight.value,
-                        topLeft = topLeft,
+                    if (clickedBar.value.y in (topLeft.y..bottomLeft.y)) {
+                        onBarClick(data)
+                    }
+                    drawBars(
+                        data,
+                        barHeight.value,
+                        colors,
+                        horizontalBarConfig.showLabels,
+                        topLeft,
+                        barWidth
                     )
                 }
             }
-        } else {
-            horizontalBarData.forEachIndexed { index, data ->
-                val barWidth = data.xValue.times(xScalableFactor)
-                val topLeft = Offset(0F, barHeight.value.times(index).times(1.2F))
+            else -> {
+                horizontalBarData.forEachIndexed { index, data ->
+                    val barWidth = data.xValue.times(xScalableFactor)
+                    val topLeft = Offset(0F, barHeight.value.times(index).times(1.2F))
+                    val bottomLeft = getBottomLeft(index, barHeight, size, data, xScalableFactor)
 
-                drawRoundRect(
-                    topLeft = topLeft,
-                    brush = Brush.linearGradient(colors),
-                    size = Size(barWidth, barHeight.value)
-                )
-                if (horizontalBarConfig.showLabels) {
-                    drawBarLabel(
-                        horizontalBarData = data,
-                        barWidth = barHeight.value,
-                        topLeft = topLeft,
+                    if (clickedBar.value.y in (topLeft.y..bottomLeft.y)) {
+                        onBarClick(data)
+                    }
+                    drawBars(
+                        data,
+                        barHeight.value,
+                        colors,
+                        horizontalBarConfig.showLabels,
+                        topLeft,
+                        barWidth
                     )
                 }
             }
         }
+    }
+}
+
+private fun DrawScope.drawBars(
+    horizontalBarData: HorizontalBarData,
+    barHeight: Float,
+    colors: List<Color>,
+    showLabels: Boolean,
+    topLeft: Offset,
+    barWidth: Float
+) {
+    drawRoundRect(
+        topLeft = topLeft,
+        brush = Brush.linearGradient(colors),
+        size = Size(barWidth, barHeight)
+    )
+    if (showLabels) {
+        drawBarLabel(
+            horizontalBarData = horizontalBarData,
+            barWidth = barHeight,
+            topLeft = topLeft,
+        )
     }
 }
