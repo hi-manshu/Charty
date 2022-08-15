@@ -68,9 +68,7 @@ fun HorizontalBarChart(
         modifier = modifier
             .drawBehind {
                 if (horizontalAxisConfig.showAxes) {
-                    horizontalYAxis(horizontalAxisConfig, maxXValue,startAngle)
-
-
+                    horizontalYAxis(horizontalAxisConfig, maxXValue, startAngle)
                 }
             }
             .padding(horizontal = barDimens.padding)

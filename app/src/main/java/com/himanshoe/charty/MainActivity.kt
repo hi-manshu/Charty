@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
                             LineData(50F, 100F),
                             LineData(20F, 25F),
 
-                            )
+                        )
                     )
                 }
                 item {

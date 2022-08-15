@@ -20,14 +20,13 @@ internal fun DrawScope.horizontalYAxis(
     val list: List<String> = (0..5).toList().map {
         getLabelText(axisScaleFactor.times(it))
     }
-
     list.forEachIndexed { index, text ->
         if (axisConfig.showUnitLabels) {
             drawIntoCanvas {
                 it.nativeCanvas.apply {
                     drawText(
                         text,
-                        xScaleFactor.times(index),
+                        getXValue(startAngle, xScaleFactor, index),
                         graphHeight.plus(50F),
                         Paint().apply {
                             textSize = size.width.div(30)
@@ -37,6 +36,14 @@ internal fun DrawScope.horizontalYAxis(
                 }
             }
         }
+    }
+}
+
+fun getXValue(startAngle: Float, xScaleFactor: Float, index: Int): Float {
+    return if (startAngle == 180F) {
+        xScaleFactor.times(index)
+    } else {
+        xScaleFactor.times(4.minus(index))
     }
 }
 

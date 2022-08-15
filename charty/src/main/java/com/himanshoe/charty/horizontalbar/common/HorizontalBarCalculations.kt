@@ -4,7 +4,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import com.himanshoe.charty.horizontalbar.model.HorizontalBarData
-import kotlinx.coroutines.yield
 
 internal fun getTopLeft(
     index: Int,
