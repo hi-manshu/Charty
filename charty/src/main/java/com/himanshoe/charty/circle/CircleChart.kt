@@ -41,9 +41,9 @@ fun CircleChart(
 fun CircleChart(
     circleData: List<CircleData>,
     modifier: Modifier = Modifier,
-    colors: List<Color>,
+    colors: List<Color> = listOf(Color.Transparent,Color.Transparent),
     config: CircleConfig = CircleConfigDefaults.circleConfigDefaults(),
-    isAnimated: Boolean
+    isAnimated: Boolean = true,
 ) {
     val maxYValueState = rememberSaveable { mutableStateOf(circleData.maxYValue()) }
     val maxYValue = maxYValueState.value
