@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Build APK ⚙️🛠
+      run: ./gradlew assembleDebug
+      
+    - name: Get release
+      id: get_release
+      uses: bruceadams/get-release@v1.2.3
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        
+    - name: Upload Charty Sample App 🚀
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.get_release.outputs.upload_url }}
+        asset_path: app/build/outputs/apk/debug/app-debug.apk
+        asset_name: charty-sample.apk
+        asset_content_type: application/apk
+      
+      
