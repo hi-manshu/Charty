@@ -7,7 +7,7 @@ _Made with ❤️ for Android Developers by Himanshu_
 
 [![Github Followers](https://img.shields.io/github/followers/hi-manshu?label=Follow&style=social)](https://github.com/hi-manshu)
 [![Twitter Follow](https://img.shields.io/twitter/follow/hi_man_shoe?label=Follow&style=social)](https://twitter.com/hi_man_shoe)
-[![Sample App](https://img.shields.io/github/v/release/yogeshpaliyal/Charty?color=7885FF&label=Sample%20App&logo=android&style=for-the-badge)](https://github.com/yogeshpaliyal/Charty/releases/latest/download/charty-sample.apk)
+[![Sample App](https://img.shields.io/github/v/release/hi-manshu/Charty?color=7885FF&label=Sample%20App&logo=android&style=for-the-badge)](https://github.com/hi-manshu/Charty/releases/latest/download/charty-sample.apk)
 
 ## Implementation
 
