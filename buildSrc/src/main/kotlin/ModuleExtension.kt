@@ -12,7 +12,7 @@ object ModuleExtension {
     }
 
     object App {
-        const val applicationId = "com.himanshoe.sample"
+        const val applicationId = "com.himanshoe.charty"
     }
 
     object FilePath {
