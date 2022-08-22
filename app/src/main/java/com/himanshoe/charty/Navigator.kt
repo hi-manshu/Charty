@@ -4,8 +4,15 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.himanshoe.charty.ui.*
-
+import com.himanshoe.charty.ui.BarChartDemo
+import com.himanshoe.charty.ui.CircleChartDemo
+import com.himanshoe.charty.ui.CurveLineChartDemo
+import com.himanshoe.charty.ui.GroupBarChartDemo
+import com.himanshoe.charty.ui.GroupedHorizontalBarChartDemo
+import com.himanshoe.charty.ui.HorizontalBarChartDemo
+import com.himanshoe.charty.ui.LineChartDemo
+import com.himanshoe.charty.ui.PieChartDemo
+import com.himanshoe.charty.ui.PointChartDemo
 
 @Composable
 fun RegisterNavigation(

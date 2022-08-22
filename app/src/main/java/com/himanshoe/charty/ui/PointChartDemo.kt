@@ -109,6 +109,5 @@ fun PointChartDemo() {
                 textAlign = TextAlign.Center
             )
         }
-
     }
 }

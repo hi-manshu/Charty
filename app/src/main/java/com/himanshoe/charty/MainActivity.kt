@@ -202,26 +202,27 @@ class MainActivity : ComponentActivity() {
 //                }
 //            }
             val navigator = rememberNavController()
-            RegisterNavigation(navigator = navigator,
+            RegisterNavigation(
+                navigator = navigator,
                 onBarChartClicked = {
                     navigator.navigate("barchart")
                 }, onHorizontalBarChartClicked = {
-                    navigator.navigate("horizontalBarChartDemo")
-                }, onCircleChartClicked = {
-                    navigator.navigate("circlechart")
-                }, onLineChartClicked = {
-                    navigator.navigate("linechart")
-                }, onCurveChartClicked = {
-                    navigator.navigate("curvelinechart")
-                }, onPointChartClicked = {
-                    navigator.navigate("pointchart")
-                }, onPieChartClicked = {
-                    navigator.navigate("piechart")
-                }, onGroupHorizontalClicked = {
-                    navigator.navigate("grouphorizontalbar")
-                }, onGroupBarClicked = {
-                    navigator.navigate("groupbar")
-                }
+                navigator.navigate("horizontalBarChartDemo")
+            }, onCircleChartClicked = {
+                navigator.navigate("circlechart")
+            }, onLineChartClicked = {
+                navigator.navigate("linechart")
+            }, onCurveChartClicked = {
+                navigator.navigate("curvelinechart")
+            }, onPointChartClicked = {
+                navigator.navigate("pointchart")
+            }, onPieChartClicked = {
+                navigator.navigate("piechart")
+            }, onGroupHorizontalClicked = {
+                navigator.navigate("grouphorizontalbar")
+            }, onGroupBarClicked = {
+                navigator.navigate("groupbar")
+            }
             )
         }
     }
@@ -264,7 +265,8 @@ fun MainApp(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 5.dp),
-                onClick = item.second) {
+                onClick = item.second
+            ) {
                 Text(item.first)
             }
         }

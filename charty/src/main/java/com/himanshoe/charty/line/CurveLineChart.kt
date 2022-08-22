@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
 import com.himanshoe.charty.common.axis.xAxis
-import com.himanshoe.charty.common.axis.yAxis
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 import com.himanshoe.charty.line.config.CurveLineConfig
@@ -69,9 +68,8 @@ fun CurveLineChart(
             .fillMaxSize()
             .padding(horizontal = chartDimens.padding)
             .drawBehind {
-                if (axisConfig.showAxes) {
+                if (axisConfig.showAxis) {
                     xAxis(axisConfig, maxYValue)
-                    yAxis(axisConfig)
                 }
             },
         onDraw = {
