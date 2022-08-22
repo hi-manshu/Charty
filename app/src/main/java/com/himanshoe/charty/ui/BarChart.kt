@@ -80,6 +80,5 @@ fun BarChartDemo() {
                 textAlign = TextAlign.Center
             )
         }
-
     }
 }

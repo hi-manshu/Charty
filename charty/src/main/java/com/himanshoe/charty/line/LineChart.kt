@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.nativeCanvas
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
 import com.himanshoe.charty.common.axis.xAxis
-import com.himanshoe.charty.common.axis.yAxis
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 import com.himanshoe.charty.line.config.LineConfig
@@ -65,9 +64,8 @@ fun LineChart(
     Canvas(
         modifier = modifier
             .drawBehind {
-                if (axisConfig.showAxes) {
+                if (axisConfig.showAxis) {
                     xAxis(axisConfig, maxYValue)
-                    yAxis(axisConfig)
                 }
             }
             .padding(horizontal = chartDimens.padding)

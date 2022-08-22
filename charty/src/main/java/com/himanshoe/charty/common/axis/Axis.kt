@@ -35,24 +35,12 @@ internal fun DrawScope.xAxis(axisConfig: AxisConfig, maxValue: Float) {
                 start = Offset(x = 0f, y = yAxisEndPoint),
                 end = Offset(x = size.width, y = yAxisEndPoint),
                 color = axisConfig.xAxisColor,
-                pathEffect = pathEffect,
-                alpha = 0.2F,
+                pathEffect = if (axisConfig.isAxisDashed) pathEffect else null,
+                alpha = 0.1F,
                 strokeWidth = size.width.div(200)
             )
         }
     }
-}
-
-internal fun DrawScope.yAxis(axisConfig: AxisConfig) {
-    val pathEffect = PathEffect.dashPathEffect(floatArrayOf(40f, 20f), 0f)
-    drawLine(
-        start = Offset(x = 0f, y = 0F),
-        end = Offset(x = 0F, y = size.height),
-        color = axisConfig.yAxisColor,
-        pathEffect = pathEffect,
-        alpha = 0.2F,
-        strokeWidth = size.width.div(200)
-    )
 }
 
 private fun getLabelText(value: Float) = DecimalFormat("#.##").format(value).toString()

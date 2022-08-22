@@ -15,7 +15,6 @@ import com.himanshoe.charty.line.LineChart
 import com.himanshoe.charty.line.config.LineConfig
 import com.himanshoe.charty.line.model.LineData
 
-
 @Composable
 fun LineChartDemo() {
     LazyColumn(

@@ -41,7 +41,7 @@ fun CircleChart(
 fun CircleChart(
     circleData: List<CircleData>,
     modifier: Modifier = Modifier,
-    colors: List<Color> = listOf(Color.Transparent,Color.Transparent),
+    colors: List<Color> = listOf(Color.Transparent, Color.Transparent),
     config: CircleConfig = CircleConfigDefaults.circleConfigDefaults(),
     isAnimated: Boolean = true,
 ) {
