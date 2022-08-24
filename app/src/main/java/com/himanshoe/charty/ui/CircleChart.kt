@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import com.himanshoe.charty.circle.CircleChart
 import com.himanshoe.charty.circle.model.CircleData
 
-val colors = listOf(Color(0xFFFDC830), Color(0xFFF37335))
+internal val colors = listOf(Color(0xFFFDC830), Color(0xFFF37335))
 
 @Composable
 fun CircleChartDemo() {

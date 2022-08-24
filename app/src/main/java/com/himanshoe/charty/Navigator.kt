@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.himanshoe.charty.ui.BarChartDemo
 import com.himanshoe.charty.ui.CircleChartDemo
+import com.himanshoe.charty.ui.CombinedBarChartDemo
 import com.himanshoe.charty.ui.CurveLineChartDemo
 import com.himanshoe.charty.ui.GroupBarChartDemo
 import com.himanshoe.charty.ui.GroupedHorizontalBarChartDemo
@@ -13,6 +14,7 @@ import com.himanshoe.charty.ui.HorizontalBarChartDemo
 import com.himanshoe.charty.ui.LineChartDemo
 import com.himanshoe.charty.ui.PieChartDemo
 import com.himanshoe.charty.ui.PointChartDemo
+import com.himanshoe.charty.ui.pcolors
 
 @Composable
 fun RegisterNavigation(
@@ -26,20 +28,22 @@ fun RegisterNavigation(
     onPieChartClicked: () -> Unit,
     onGroupHorizontalClicked: () -> Unit,
     onGroupBarClicked: () -> Unit,
+    onCombinedBarChartClicked: () -> Unit,
 ) {
     NavHost(navController = navigator, startDestination = "main") {
         composable("barchart") { BarChartDemo() }
         composable("main") {
             MainApp(
-                onBarChartClicked,
-                onHorizontalBarChartClicked,
-                onCircleChartClicked,
-                onLineChartClicked,
-                onCurveChartClicked,
-                onPointChartClicked,
-                onPieChartClicked,
-                onGroupHorizontalClicked,
-                onGroupBarClicked
+                onBarChartClicked = onBarChartClicked,
+                onGroupBarClicked = onGroupBarClicked,
+                onHorizontalBarChartClicked = onHorizontalBarChartClicked,
+                onCircleChartClicked = onCircleChartClicked,
+                onLineChartClicked = onLineChartClicked,
+                onCurveChartClicked = onCurveChartClicked,
+                onPointChartClicked = onPointChartClicked,
+                onPieChartClicked = onPieChartClicked,
+                onGroupHorizontalClicked = onGroupHorizontalClicked,
+                onCombinedBarChartClicked = onCombinedBarChartClicked
             )
         }
         composable("horizontalBarChartDemo") { HorizontalBarChartDemo() }
@@ -50,5 +54,6 @@ fun RegisterNavigation(
         composable("piechart") { PieChartDemo() }
         composable("grouphorizontalbar") { GroupedHorizontalBarChartDemo() }
         composable("groupbar") { GroupBarChartDemo() }
+        composable("combinedBar") { CombinedBarChartDemo() }
     }
 }
