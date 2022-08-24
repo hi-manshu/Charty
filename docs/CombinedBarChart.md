@@ -1,4 +1,5 @@
-## BarChart
+## CombinedBarChart
+
 
 > The combination chart is a visualization that combines the features of the bar chart and the line chart. The combination chart displays the data using a number of bars and/or lines, each of which represent a particular category.
 
