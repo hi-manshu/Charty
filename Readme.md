@@ -18,7 +18,7 @@ In `build.gradle` of app module, include this dependency
 
 ```gradle
 dependencies {
-  implementation("com.himanshoe:charty:1.0.0-alpha01")
+  implementation("com.himanshoe:charty:1.0.0-alpha02")
 }
 ```
 
@@ -26,6 +26,7 @@ dependencies {
 You can find the detail implementation of the following:
 
 - [BarChart](docs/BarChart.md)
+- [CombinedBarChart](docs/CombinedBarChart.md)
 - [HorizontalBarChart](docs/HorizontalBarChart.md)
 - [GroupedBarChart](docs/GroupedBarChart.md)
 - [GroupedHorizontalBarChart](docs/GroupedHorizontalBarChart.md)
