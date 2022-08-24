@@ -80,7 +80,7 @@ fun LineChart(
             moveTo(0f, size.height)
         }
 
-        val lastIndex = lineData.size - 1
+        val lastIndex = lineData.size.minus(1)
         lineData.forEachIndexed { index, data ->
             val centerOffset = dataToOffSet(index, lineBound.value, size, data, scaleFactor)
             val drawnPath = path.lineTo(centerOffset.x, centerOffset.y)
