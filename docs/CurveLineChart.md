@@ -4,22 +4,35 @@
 
 ### Using CurveLineChart in your project:
 
-1. When you want a gradient shade
+1. When you want a gradient shade in both line and chart
 
 ```kotlin
   CurveLineChart(
     modifier = Modifier,
-    colors = // colors
+    chartColors = // colors
+    lineColors = // colors
     lineData = // list of LineData 
   )
 ```
 
-2. When you want a solid shade:
+2. When you want a solid shade in both line and chart
 
 ```kotlin
   CurveLineChart(
     modifier = Modifier,
-    color = // colors
+    chartColor = // colors
+    lineColor = // colors
+    lineData = // list of LineData 
+  )
+```
+
+3. When you want a solid shade in any one of line and chart then pass list of colors in one and one in another,
+
+```kotlin
+  CurveLineChart(
+    modifier = Modifier,
+    chartColor = // colors
+    lineColor = // colors
     lineData = // list of LineData 
   )
 ```
