@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.axis.xAxis
+import com.himanshoe.charty.common.axis.yAxis
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 import com.himanshoe.charty.line.config.LineConfig
@@ -65,7 +65,7 @@ fun LineChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    xAxis(axisConfig, maxYValue)
+                    yAxis(axisConfig, maxYValue)
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -80,15 +80,11 @@ fun LineChart(
             moveTo(0f, size.height)
         }
 
-        val lastIndex = lineData.size.minus(1)
         lineData.forEachIndexed { index, data ->
             val centerOffset = dataToOffSet(index, lineBound.value, size, data, scaleFactor)
-            val drawnPath = path.lineTo(centerOffset.x, centerOffset.y)
             when (index) {
-                lastIndex -> drawnPath.also {
-                    path.lineTo(size.width, size.height)
-                }
-                else -> drawnPath
+                0 -> path.moveTo(centerOffset.x, centerOffset.y)
+                else -> path.lineTo(centerOffset.x, centerOffset.y)
             }
             if (lineConfig.hasDotMarker) {
                 drawCircle(
@@ -97,25 +93,21 @@ fun LineChart(
                     brush = brush
                 )
             }
-            drawXLabel(data, centerOffset, radius)
+            drawXLabel(data, centerOffset, radius, lineData.count())
         }
-        val stroke = if (lineConfig.hasSmoothCurve) {
-            Stroke(
-                width = strokeWidth,
-                pathEffect = PathEffect.cornerPathEffect(strokeWidth)
-            )
-        } else {
-            Stroke(width = strokeWidth)
-        }
+        val pathEffect =
+            if (lineConfig.hasSmoothCurve) PathEffect.cornerPathEffect(strokeWidth) else null
         drawPath(
             path = path,
             brush = brush,
-            style = stroke,
+            style = Stroke(width = strokeWidth, pathEffect = pathEffect),
         )
     }
 }
 
-private fun DrawScope.drawXLabel(data: LineData, centerOffset: Offset, radius: Float) {
+private fun DrawScope.drawXLabel(data: LineData, centerOffset: Offset, radius: Float, count: Int) {
+    val divisibleFactor = if (count > 10) count else 1
+    val textSizeFactor = if (count > 10) 3 else 30
     drawIntoCanvas {
         it.nativeCanvas.apply {
             drawText(
@@ -123,7 +115,7 @@ private fun DrawScope.drawXLabel(data: LineData, centerOffset: Offset, radius: F
                 centerOffset.x,
                 size.height.plus(radius.times(4)),
                 Paint().apply {
-                    textSize = size.width.div(30)
+                    textSize = size.width.div(textSizeFactor).div(divisibleFactor)
                     textAlign = Paint.Align.CENTER
                 }
             )
@@ -136,10 +128,10 @@ private fun dataToOffSet(
     bound: Float,
     size: Size,
     data: LineData,
-    yChunck: Float
+    yScaleFactor: Float
 ): Offset {
     val startX = index.times(bound.times(1.2F))
     val endX = index.plus(1).times(bound.times(1.2F))
-    val y = size.height.minus(data.yValue.times(yChunck))
+    val y = size.height.minus(data.yValue.times(yScaleFactor))
     return Offset(((startX.plus(endX)).div(2F)), y)
 }

@@ -14,7 +14,6 @@ import com.himanshoe.charty.ui.HorizontalBarChartDemo
 import com.himanshoe.charty.ui.LineChartDemo
 import com.himanshoe.charty.ui.PieChartDemo
 import com.himanshoe.charty.ui.PointChartDemo
-import com.himanshoe.charty.ui.pcolors
 
 @Composable
 fun RegisterNavigation(

@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,12 +27,23 @@ fun BarChartDemo() {
                     .height(220.dp)
                     .padding(32.dp),
                 onBarClick = {},
-                colors = listOf(Color(0xFFFDC830), Color(0xFFF37335)),
+                colors = colors,
                 barData = listOf(
                     BarData(10F, 35F),
                     BarData(20F, 25F),
                     BarData(10F, 50F),
                     BarData(60F, 10F),
+                    BarData(10F, 15F),
+                    BarData(10F, 15F),
+                    BarData(10F, 15F),
+                    BarData(10F, 15F),
+                    BarData(10F, 15F),
+                    BarData(10F, 15F),
+                    BarData(10F, 15F),
+                    BarData(10F, 15F),
+                    BarData(10F, 15F),
+                    BarData(10F, 15F),
+                    BarData(10F, 15F),
                     BarData(10F, 15F),
                     BarData(50F, 100F),
                     BarData(20F, 25F),
@@ -58,7 +68,7 @@ fun BarChartDemo() {
                     .height(220.dp)
                     .padding(32.dp),
                 onBarClick = {},
-                color = Color(0xFFD2827A),
+                color = colors.first(),
                 barData = listOf(
                     BarData(10F, 35F),
                     BarData(20F, 25F),

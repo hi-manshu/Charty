@@ -46,7 +46,6 @@ fun GroupedHorizontalBarChart(
     val maxXValue = maxXValueState.value
     val barHeight = remember { mutableStateOf(0F) }
     val totalItems: Int = groupedBarData.totalItems()
-
     Canvas(
         modifier = modifier
             .drawBehind {

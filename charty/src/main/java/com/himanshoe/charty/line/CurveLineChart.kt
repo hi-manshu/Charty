@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.Stroke
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.axis.xAxis
+import com.himanshoe.charty.common.axis.yAxis
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 import com.himanshoe.charty.line.config.CurveLineConfig
@@ -32,7 +32,8 @@ import com.himanshoe.charty.line.model.maxYValue
 @Composable
 fun CurveLineChart(
     lineData: List<LineData>,
-    color: Color,
+    chartColor: Color,
+    lineColor: Color,
     modifier: Modifier = Modifier,
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
@@ -41,7 +42,8 @@ fun CurveLineChart(
     CurveLineChart(
         modifier = modifier,
         lineData = lineData,
-        colors = listOf(color, color),
+        chartColors = listOf(chartColor, chartColor),
+        lineColors = listOf(lineColor, lineColor),
         chartDimens = chartDimens,
         axisConfig = axisConfig,
         curveLineConfig = curveLineConfig
@@ -51,7 +53,50 @@ fun CurveLineChart(
 @Composable
 fun CurveLineChart(
     lineData: List<LineData>,
-    colors: List<Color>,
+    chartColor: Color,
+    lineColor: List<Color>,
+    modifier: Modifier = Modifier,
+    chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    curveLineConfig: CurveLineConfig = CurveLineConfigDefaults.curveLineConfigDefaults()
+) {
+    CurveLineChart(
+        modifier = modifier,
+        lineData = lineData,
+        chartColors = listOf(chartColor, chartColor),
+        lineColors = lineColor,
+        chartDimens = chartDimens,
+        axisConfig = axisConfig,
+        curveLineConfig = curveLineConfig
+    )
+}
+
+@Composable
+fun CurveLineChart(
+    lineData: List<LineData>,
+    chartColors: List<Color>,
+    lineColor: Color,
+    modifier: Modifier = Modifier,
+    chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    curveLineConfig: CurveLineConfig = CurveLineConfigDefaults.curveLineConfigDefaults()
+) {
+    CurveLineChart(
+        modifier = modifier,
+        lineData = lineData,
+        chartColors = chartColors,
+        lineColors = listOf(lineColor, lineColor),
+        chartDimens = chartDimens,
+        axisConfig = axisConfig,
+        curveLineConfig = curveLineConfig
+    )
+}
+
+@Composable
+fun CurveLineChart(
+    lineData: List<LineData>,
+    chartColors: List<Color>,
+    lineColors: List<Color>,
     modifier: Modifier = Modifier,
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
@@ -69,7 +114,7 @@ fun CurveLineChart(
             .padding(horizontal = chartDimens.padding)
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    xAxis(axisConfig, maxYValue)
+                    yAxis(axisConfig, maxYValue)
                 }
             },
         onDraw = {
@@ -99,7 +144,8 @@ fun CurveLineChart(
             val xValues = offsetItems.map { it.x }
             val pointsPath = Path()
             offsetItems.forEachIndexed { index, offset ->
-                val canDrawCircle = curveLineConfig.hasDotMarker && index != 0 && index != offsetItems.size.minus(1)
+                val canDrawCircle =
+                    curveLineConfig.hasDotMarker && index != 0 && index != offsetItems.size.minus(1)
                 if (canDrawCircle) {
                     drawCircle(
                         color = curveLineConfig.dotColor,
@@ -139,13 +185,15 @@ fun CurveLineChart(
             drawPath(
                 path = backgroundPath,
                 brush = Brush.verticalGradient(
-                    colors = colors,
+                    colors = chartColors,
                     endY = size.height - yScaleFactor
                 ),
             )
             drawPath(
                 path = pointsPath,
-                color = Color.Black,
+                brush = Brush.verticalGradient(
+                    colors = lineColors,
+                ),
                 style = Stroke(
                     width = 5F,
                     cap = StrokeCap.Round

@@ -18,7 +18,7 @@ import com.himanshoe.charty.horizontalbar.config.StartDirection
 import com.himanshoe.charty.horizontalbar.model.GroupedHorizontalBarData
 import com.himanshoe.charty.horizontalbar.model.HorizontalBarData
 
-internal val pcolors = listOf(Color(0xFFFDC830), Color(0xFFF37335), Color.LightGray)
+internal val pcolors = listOf(Color(0xFF9DB39A), Color(0xFFADBA9A), Color(0xFFBEC196))
 
 @Composable
 fun GroupedHorizontalBarChartDemo() {
