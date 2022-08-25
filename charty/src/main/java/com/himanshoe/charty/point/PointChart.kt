@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.axis.xAxis
+import com.himanshoe.charty.common.axis.yAxis
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 import com.himanshoe.charty.point.cofig.PointConfig
@@ -46,18 +46,18 @@ fun PointChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    xAxis(axisConfig, maxYValue)
+                    yAxis(axisConfig, maxYValue)
                 }
             }
             .padding(horizontal = chartDimens.padding)
 
     ) {
         pointBound.value = size.width.div(pointData.count().times(1.2F))
-        val yChunck = size.height.div(maxYValue)
+        val yScaleFactor = size.height.div(maxYValue)
         val brush = Brush.linearGradient(colors)
         val radius = size.width.div(70)
         pointData.forEachIndexed { index, data ->
-            val centerOffset = dataToOffSet(index, pointBound.value, size, data, yChunck)
+            val centerOffset = dataToOffSet(index, pointBound.value, size, data, yScaleFactor)
             val style = when (pointConfig.pointType) {
                 is PointType.Stroke -> Stroke(width = size.width.div(100))
                 else -> Fill
@@ -70,12 +70,14 @@ fun PointChart(
                 brush = brush
             )
             // draw label
-            drawXLabel(data, centerOffset, radius)
+            drawXLabel(data, centerOffset, radius, pointData.count())
         }
     }
 }
 
-private fun DrawScope.drawXLabel(data: PointData, centerOffset: Offset, radius: Float) {
+private fun DrawScope.drawXLabel(data: PointData, centerOffset: Offset, radius: Float, count: Int) {
+    val divisibleFactor = if (count > 10) count else 1
+    val textSizeFactor = if (count > 10) 3 else 30
     drawIntoCanvas {
         it.nativeCanvas.apply {
             drawText(
@@ -83,7 +85,7 @@ private fun DrawScope.drawXLabel(data: PointData, centerOffset: Offset, radius: 
                 centerOffset.x,
                 size.height.plus(radius.times(4)),
                 Paint().apply {
-                    textSize = size.width.div(30)
+                    textSize = size.width.div(textSizeFactor).div(divisibleFactor)
                     textAlign = Paint.Align.CENTER
                 }
             )
@@ -115,10 +117,10 @@ private fun dataToOffSet(
     bound: Float,
     size: Size,
     data: PointData,
-    yChunck: Float
+    yScaleFactor: Float
 ): Offset {
     val startX = index.times(bound.times(1.2F))
     val endX = index.plus(1).times(bound.times(1.2F))
-    val y = size.height.minus(data.yValue.times(yChunck))
+    val y = size.height.minus(data.yValue.times(yScaleFactor))
     return Offset(((startX.plus(endX)).div(2F)), y)
 }

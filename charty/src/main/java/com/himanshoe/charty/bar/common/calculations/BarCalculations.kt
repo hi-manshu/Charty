@@ -21,8 +21,8 @@ internal fun getTopRight(
     barWidth: MutableState<Float>,
     size: Size,
     barData: BarData,
-    yChunck: Float
+    yScaleFactor: Float
 ) = Offset(
     x = index.plus(1).times(barWidth.value.times(1.2F)),
-    y = size.height.minus(barData.yValue.times(yChunck))
+    y = size.height.minus(barData.yValue.times(yScaleFactor))
 )

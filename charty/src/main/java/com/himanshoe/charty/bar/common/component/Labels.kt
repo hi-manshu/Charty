@@ -11,8 +11,11 @@ internal fun DrawScope.drawBarLabel(
     data: BarData,
     barWidth: Float,
     barHeight: Float,
-    topLeft: Offset
+    topLeft: Offset,
+    count: Int
 ) {
+    val divisibleFactor = if (count > 10) count else 1
+    val textSizeFactor = if (count > 10) 3 else 30
     drawIntoCanvas {
         it.nativeCanvas.apply {
             drawText(
@@ -20,7 +23,7 @@ internal fun DrawScope.drawBarLabel(
                 topLeft.x.plus(barWidth.div(2)),
                 topLeft.y.plus(barHeight.plus(barWidth.div(2))),
                 Paint().apply {
-                    textSize = size.width.div(30)
+                    textSize = size.width.div(textSizeFactor).div(divisibleFactor)
                     textAlign = Paint.Align.CENTER
                 }
             )

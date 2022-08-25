@@ -27,7 +27,8 @@ fun CurveLineChartDemo() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(height = 300.dp),
-                colors = colors,
+                chartColors = colors,
+                lineColors = pcolors,
                 lineData = listOf(
                     LineData(10F, 35F),
                     LineData(20F, 25F),
@@ -52,7 +53,8 @@ fun CurveLineChartDemo() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(height = 300.dp),
-                colors = colors,
+                chartColors = colors,
+                lineColors = pcolors,
                 lineData = listOf(
                     LineData(10F, 35F),
                     LineData(20F, 25F),

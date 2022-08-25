@@ -28,7 +28,7 @@ import com.himanshoe.charty.combined.model.CombinedBarData
 import com.himanshoe.charty.combined.model.maxYValue
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.axis.xAxis
+import com.himanshoe.charty.common.axis.yAxis
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 
@@ -53,7 +53,7 @@ fun CombinedBarChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    xAxis(axisConfig, maxYValue)
+                    yAxis(axisConfig, maxYValue)
                 }
             }
             .padding(horizontal = chartDimens.padding)

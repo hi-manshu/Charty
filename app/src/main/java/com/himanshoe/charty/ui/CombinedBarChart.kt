@@ -28,7 +28,7 @@ fun CombinedBarChartDemo() {
                     .height(300.dp)
                     .padding(32.dp),
                 onClick = {},
-                barColors = listOf(Color(0xFFFDC830), Color(0xFFF37335)),
+                barColors = colors,
                 combinedBarData = listOf(
                     CombinedBarData(10F, 80F, 5F),
                     CombinedBarData(10F, 45F, 40F),
