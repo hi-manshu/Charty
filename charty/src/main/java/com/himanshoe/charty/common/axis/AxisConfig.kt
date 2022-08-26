@@ -6,6 +6,7 @@ data class AxisConfig(
     val showAxis: Boolean,
     val isAxisDashed: Boolean,
     val showUnitLabels: Boolean,
+    val showXLabels: Boolean,
     val xAxisColor: Color = Color.LightGray,
     val yAxisColor: Color = Color.LightGray,
 )
@@ -17,6 +18,7 @@ internal object AxisConfigDefaults {
         showAxis = true,
         isAxisDashed = false,
         showUnitLabels = true,
+        showXLabels = false,
         yAxisColor = Color.LightGray,
     )
 }

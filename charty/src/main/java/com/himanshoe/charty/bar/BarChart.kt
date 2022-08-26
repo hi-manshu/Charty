@@ -100,7 +100,9 @@ fun BarChart(
                 size = Size(barWidth.value, barHeight)
             )
             // draw label
-            drawBarLabel(data, barWidth.value, barHeight, topLeft, barData.count())
+            if (axisConfig.showXLabels) {
+                drawBarLabel(data, barWidth.value, barHeight, topLeft, barData.count())
+            }
         }
     }
 }

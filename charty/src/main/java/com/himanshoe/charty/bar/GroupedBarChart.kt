@@ -83,7 +83,9 @@ fun GroupedBarChart(
                     size = Size(barWidth.value, barHeight)
                 )
                 // draw label
-                drawBarLabel(data, barWidth.value, barHeight, topLeft, groupedBarData.count())
+                if (axisConfig.showXLabels) {
+                    drawBarLabel(data, barWidth.value, barHeight, topLeft, groupedBarData.count())
+                }
             }
     }
 }
