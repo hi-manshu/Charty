@@ -89,7 +89,9 @@ fun CombinedBarChart(
             )
             val centerOffset = dataToOffSet(index, chartBound.value, size, data, scaleFactor)
             val drawnPath = path.lineTo(centerOffset.x, centerOffset.y)
-            if (combinedBarConfig.hasLineLabel) { drawLineLabels(centerOffset, data, combinedBarConfig.lineLabelColor) }
+            if (combinedBarConfig.hasLineLabel) {
+                drawLineLabels(centerOffset, data, combinedBarConfig.lineLabelColor)
+            }
 
             when (index) {
                 lastIndex -> drawnPath.also {
@@ -106,7 +108,9 @@ fun CombinedBarChart(
             }
 
             // draw label
-            drawCombinedBarLabel(data, chartBound.value, barHeight, topLeft)
+            if (axisConfig.showXLabels) {
+                drawCombinedBarLabel(data, chartBound.value, barHeight, topLeft)
+            }
             val pathEffect =
                 if (combinedBarConfig.hasSmoothCurve) PathEffect.cornerPathEffect(strokeWidth) else null
 

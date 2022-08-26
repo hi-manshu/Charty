@@ -70,7 +70,9 @@ fun PointChart(
                 brush = brush
             )
             // draw label
-            drawXLabel(data, centerOffset, radius, pointData.count())
+            if (axisConfig.showXLabels) {
+                drawXLabel(data, centerOffset, radius, pointData.count())
+            }
         }
     }
 }

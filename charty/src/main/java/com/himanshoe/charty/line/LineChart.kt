@@ -93,7 +93,9 @@ fun LineChart(
                     brush = brush
                 )
             }
-            drawXLabel(data, centerOffset, radius, lineData.count())
+            if (axisConfig.showXLabels) {
+                drawXLabel(data, centerOffset, radius, lineData.count())
+            }
         }
         val pathEffect =
             if (lineConfig.hasSmoothCurve) PathEffect.cornerPathEffect(strokeWidth) else null
