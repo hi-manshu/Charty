@@ -14,6 +14,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.himanshoe.charty.pie.PieChart
+import com.himanshoe.charty.pie.config.PieConfig
+import com.himanshoe.charty.pie.config.PieData
 
 @Composable
 fun PieChartDemo() {
@@ -21,15 +23,28 @@ fun PieChartDemo() {
         modifier = Modifier
             .fillMaxSize()
     ) {
+
+        val pieData = listOf(
+            PieData(20F),
+            PieData(50F),
+            PieData(100F),
+            PieData(70F),
+            PieData(20F),
+            PieData(50F),
+            PieData(100F),
+            PieData(20F)
+        )
+        val pieDataWithCustomColors =
+            listOf(PieData(20F, Color(0xFFfafa6e)), PieData(50F, Color(0xFFc4ec74)))
+
         item {
             PieChart(
                 modifier = Modifier
                     .scale(1f)
                     .size(400.dp)
                     .padding(20.dp),
-                data = listOf(20F, 50F, 100F, 70F, 20F, 50F, 100F, 70F),
-                isDonut = true,
-                valueTextColor = Color.Black,
+                pieData = pieData,
+                config = PieConfig(isDonut = true, expandDonutOnClick = true),
                 onSectionClicked = { percent, value ->
                 }
             )
@@ -44,15 +59,37 @@ fun PieChartDemo() {
                 textAlign = TextAlign.Center
             )
         }
+
         item {
             PieChart(
                 modifier = Modifier
                     .scale(1f)
                     .size(400.dp)
                     .padding(20.dp),
-                data = listOf(20F, 50F, 100F, 70F, 20F, 50F, 100F, 70F),
-                isDonut = false,
-                valueTextColor = Color.Black,
+                pieData = pieDataWithCustomColors,
+                config = PieConfig(isDonut = true, expandDonutOnClick = false),
+                onSectionClicked = { percent, value ->
+                }
+            )
+        }
+        item {
+            Text(
+                text = "Donut Chart custom colors, no expand",
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                textAlign = TextAlign.Center
+            )
+        }
+        item {
+            PieChart(
+                modifier = Modifier
+                    .scale(1f)
+                    .size(400.dp)
+                    .padding(20.dp),
+                pieData = pieData,
+                config = PieConfig(false),
                 onSectionClicked = { percent, value ->
                 }
             )
