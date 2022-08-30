@@ -13,7 +13,7 @@ data class PieConfig(
     val expandDonutOnClick: Boolean = true,
 )
 
- internal object PieConfigDefaults {
+internal object PieConfigDefaults {
     fun pieConfigDefaults() = PieConfig(
         isDonut = true,
         expandDonutOnClick = true
@@ -21,5 +21,5 @@ data class PieConfig(
 }
 
 private fun generateRandomColor(): Color {
-        return Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+    return Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
 }

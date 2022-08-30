@@ -140,7 +140,7 @@ private fun Modifier.handlePiePortionClick(
     currentPie: MutableState<Int>,
     onIndexSelected: (Int) -> Unit
 ): Modifier = composed {
-    if(isExpandable) {
+    if (isExpandable) {
         pointerInput(true) {
             detectTapGestures { offset ->
                 val clickedAngle = convertTouchEventPointToAngle(
@@ -154,13 +154,13 @@ private fun Modifier.handlePiePortionClick(
                         if (currentPie.value != index) {
                             currentPie.value = index
                         }
-                            onIndexSelected(currentPie.value)
+                        onIndexSelected(currentPie.value)
                         return@detectTapGestures
                     }
                 }
             }
         }
-    }else{
+    } else {
         Modifier
     }
 }

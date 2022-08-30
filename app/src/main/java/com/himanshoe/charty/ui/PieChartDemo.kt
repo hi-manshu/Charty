@@ -24,8 +24,8 @@ fun PieChartDemo() {
             .fillMaxSize()
     ) {
 
-        val pieData = listOf(PieData(20F),PieData(50F),PieData(100F),PieData(70F),PieData(20F),PieData(50F),PieData(100F),PieData(20F))
-        val pieDataWithCustomColors = listOf(PieData(20F,Color(0xFFfafa6e)),PieData(50F,Color(0xFFc4ec74)))
+        val pieData = listOf(PieData(20F), PieData(50F), PieData(100F), PieData(70F), PieData(20F), PieData(50F), PieData(100F), PieData(20F))
+        val pieDataWithCustomColors = listOf(PieData(20F, Color(0xFFfafa6e)), PieData(50F, Color(0xFFc4ec74)))
 
         item {
             PieChart(
