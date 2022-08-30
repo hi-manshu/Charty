@@ -2,12 +2,12 @@
 
 ![Charty](img/charty-banner.png)
 
-Chart Library built using Jetpack Compose and is highly customizable. Updates coming soon!  
+Chart Library built using Jetpack Compose and is highly customizable. Updates coming soon!
 _Made with ❤️ for Android Developers by Himanshu_
 
-[![Github Followers](https://img.shields.io/github/followers/hi-manshu?label=Follow&style=social)](https://github.com/hi-manshu)  
-[![Twitter Follow](https://img.shields.io/twitter/follow/hi_man_shoe?label=Follow&style=social)](https://twitter.com/hi_man_shoe)  
-[![Twitter Follow](https://img.shields.io/badge/Featured%20in%20androidweekly.net-%23532-orange)](https://androidweekly.net/issues/issue-532)  
+[![Github Followers](https://img.shields.io/github/followers/hi-manshu?label=Follow&style=social)](https://github.com/hi-manshu)
+[![Twitter Follow](https://img.shields.io/twitter/follow/hi_man_shoe?label=Follow&style=social)](https://twitter.com/hi_man_shoe)
+[![Twitter Follow](https://img.shields.io/badge/Featured%20in%20androidweekly.net-%23532-orange)](https://androidweekly.net/issues/issue-532)
 [![Sample App](https://img.shields.io/github/v/release/hi-manshu/Charty?color=7885FF&label=Sample%20App&logo=android&style=for-the-badge)](https://github.com/hi-manshu/Charty/releases/latest/download/charty-sample.apk)
 
 ## Implementation
@@ -16,29 +16,28 @@ _Made with ❤️ for Android Developers by Himanshu_
 
 In `build.gradle` of app module, include this dependency
 
-```gradle  
-dependencies {  
- implementation("com.himanshoe:charty:1.1.2-alpha02")}  
-```  
+```gradle
+dependencies {
+  implementation("com.himanshoe:charty:1.1.1-alpha02")
+}
+```
 
 ## Documentation
+You can find the detail implementation of the following:
 
-You can find the detail implementation of the following:  
-| | | | |---|---|---|--- |[BarChart](docs/BarChart.md)     | ![BarChart](img/demo/barchart-demo.png)
-| |   
-| [HorizontalBarChart](docs/HorizontalBarChart.md)
-|![HorizontalBarChart](img/demo/horizonatalbar-demo.png)    | |  
-|[GroupedBarChart](docs/GroupedBarChart.md)     |  ![GroupedBarChart](img/demo/groupbar-demo.png)  |
-|  
-|[GroupedHorizontalBarChart](docs/GroupedHorizontalBarChart.md)
-|![GroupedHorizontalBarChart](img/demo/horizontalgroupbar-demo.png)
-| [CircleChart](docs/CircleChart.md)     |  ![CircleChart](img/demo/circle-demo.png)  |  
-| [PointChart](docs/PointChart.md)    |  ![PointChart](img/demo/pointchart-demo.png)  | |  
-| [LineChart](docs/LineChart.md)    |   ![LineChart](img/demo/linechart-demo.png) | |  
-| [CurveLineChart](docs/CurveLineChart.md)    | ![CurveLineChart](img/demo/curvedline-demo.png)   |
-|  
-|  [PieChart](docs/PieChart.md)    |  ![PieChart](img/demo/piechart-demo)  | |
+- [BarChart](docs/BarChart.md)
+- [CombinedBarChart](docs/CombinedBarChart.md)
+- [HorizontalBarChart](docs/HorizontalBarChart.md)
+- [GroupedBarChart](docs/GroupedBarChart.md)
+- [GroupedHorizontalBarChart](docs/GroupedHorizontalBarChart.md)
+- [CircleChart](docs/CircleChart.md)
+- [PointChart](docs/PointChart.md)
+- [LineChart](docs/LineChart.md)
+- [CurveLineChart](docs/CurveLineChart.md)
+- [PieChart](docs/PieChart.md)
+
 
 ### Contribution
-
 Please feel free to fork it and open a PR.
+
+
