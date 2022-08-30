@@ -18,12 +18,15 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.asComposePath
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
 import com.himanshoe.charty.common.axis.yAxis
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
+import com.himanshoe.charty.line.common.drawLineLabel
+import com.himanshoe.charty.line.common.getLineTopLeft
 import com.himanshoe.charty.line.config.CurveLineConfig
 import com.himanshoe.charty.line.config.CurveLineConfigDefaults
 import com.himanshoe.charty.line.model.LineData
@@ -133,26 +136,16 @@ fun CurveLineChart(
                     data = data,
                     scaleFactor = yScaleFactor
                 )
-            }.toMutableList().also {
-                it.add(Offset(canvasSize.width, canvasSize.height))
             }
-            val offsetItems: List<Offset> = mutableListOf<Offset>().apply {
+            val offsetItems = buildList {
                 add(Offset(0f, canvasSize.height))
                 addAll(lineDataItems)
+                add(Offset(canvasSize.width, canvasSize.height))
             }
 
-            val xValues = offsetItems.map { it.x }
+            val xValues: List<Float> = offsetItems.map { it.x }
             val pointsPath = Path()
-            offsetItems.forEachIndexed { index, offset ->
-                val canDrawCircle =
-                    curveLineConfig.hasDotMarker && index != 0 && index != offsetItems.size.minus(1)
-                if (canDrawCircle) {
-                    drawCircle(
-                        color = curveLineConfig.dotColor,
-                        radius = radius,
-                        center = Offset(offset.x, offset.y)
-                    )
-                }
+            offsetItems.forEachIndexed { index, offset -> // draw label
                 if (index > 0) {
                     storePoints(
                         graphPathPoints,
@@ -191,16 +184,53 @@ fun CurveLineChart(
             )
             drawPath(
                 path = pointsPath,
-                brush = Brush.verticalGradient(
-                    colors = lineColors,
-                ),
+                brush = Brush.verticalGradient(colors = lineColors),
                 style = Stroke(
                     width = 5F,
                     cap = StrokeCap.Round
                 )
             )
+            lineData.forEachIndexed { index, data ->
+                val height = data.yValue.times(yScaleFactor)
+                drawLabels(
+                    index,
+                    data,
+                    height,
+                    lineBound.value,
+                    yScaleFactor,
+                    axisConfig,
+                    lineData.count()
+                )
+            }
         }
     )
+}
+
+private fun DrawScope.drawLabels(
+    index: Int,
+    data: LineData,
+    height: Float,
+    lineBound: Float,
+    yScaleFactor: Float,
+    axisConfig: AxisConfig,
+    count: Int
+) {
+    if (axisConfig.showXLabels) {
+        val topLeft = getLineTopLeft(
+            index = index,
+            barWidth = lineBound,
+            size = size,
+            lineData = data,
+            yScalableFactor = yScaleFactor
+        )
+        drawLineLabel(
+            data = data,
+            lineWidth = lineBound,
+            lineHeight = height,
+            topLeft = topLeft,
+            count = count
+        )
+    }
 }
 
 private fun storePoints(

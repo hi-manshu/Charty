@@ -1,21 +1,22 @@
-package com.himanshoe.charty.bar.common.calculations
+package com.himanshoe.charty.line.common
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import com.himanshoe.charty.bar.model.BarData
+import com.himanshoe.charty.line.model.LineData
 
-internal fun getBarTopLeft(
+internal fun getLineTopLeft(
     index: Int,
     barWidth: Float,
     size: Size,
-    barData: BarData,
+    lineData: LineData,
     yScalableFactor: Float
 ) = Offset(
     x = index.times(barWidth.times(1.2F)),
-    y = size.height.minus(barData.yValue.times(yScalableFactor))
+    y = size.height.minus(lineData.yValue.times(yScalableFactor))
 )
 
-internal fun getBarTopRight(
+internal fun getLineTopRight(
     index: Int,
     barWidth: Float,
     size: Size,

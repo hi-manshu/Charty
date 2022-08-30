@@ -15,8 +15,8 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import com.himanshoe.charty.bar.common.calculations.getTopLeft
-import com.himanshoe.charty.bar.common.calculations.getTopRight
+import com.himanshoe.charty.bar.common.calculations.getBarTopLeft
+import com.himanshoe.charty.bar.common.calculations.getBarTopRight
 import com.himanshoe.charty.bar.common.component.drawBarLabel
 import com.himanshoe.charty.bar.config.BarConfig
 import com.himanshoe.charty.bar.config.BarConfigDefaults
@@ -86,8 +86,8 @@ fun BarChart(
         val yScalableFactor = size.height.div(maxYValue)
 
         barData.forEachIndexed { index, data ->
-            val topLeft = getTopLeft(index, barWidth, size, data, yScalableFactor)
-            val topRight = getTopRight(index, barWidth, size, data, yScalableFactor)
+            val topLeft = getBarTopLeft(index, barWidth.value, size, data, yScalableFactor)
+            val topRight = getBarTopRight(index, barWidth.value, size, data, yScalableFactor)
             val barHeight = data.yValue.times(yScalableFactor)
 
             if (clickedBar.value.x in (topLeft.x..topRight.x)) {

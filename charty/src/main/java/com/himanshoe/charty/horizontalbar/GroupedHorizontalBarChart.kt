@@ -70,9 +70,9 @@ fun GroupedHorizontalBarChart(
             .forEachIndexed { index, data ->
                 when (horizontalBarConfig.startDirection) {
                     StartDirection.Right -> {
-                        val topLeft = getTopLeft(index, barHeight, size, data, xScalableFactor)
+                        val topLeft = getTopLeft(index, barHeight.value, size, data, xScalableFactor)
                         val bottomLeft =
-                            getBottomLeft(index, barHeight, size, data, xScalableFactor)
+                            getBottomLeft(index, barHeight.value, size, data, xScalableFactor)
                         val barWidth = data.xValue.times(xScalableFactor)
 
                         if (clickedBar.value.y in (topLeft.y..bottomLeft.y)) {
@@ -91,7 +91,7 @@ fun GroupedHorizontalBarChart(
                         val barWidth = data.xValue.times(xScalableFactor)
                         val topLeft = Offset(0F, barHeight.value.times(index).times(1.2F))
                         val bottomLeft =
-                            getBottomLeft(index, barHeight, size, data, xScalableFactor)
+                            getBottomLeft(index, barHeight.value, size, data, xScalableFactor)
 
                         if (clickedBar.value.y in (topLeft.y..bottomLeft.y)) {
                             onBarClick(data)

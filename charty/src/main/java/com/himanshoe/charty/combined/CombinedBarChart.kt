@@ -74,8 +74,8 @@ fun CombinedBarChart(
         val lastIndex = combinedBarData.size.minus(1)
 
         combinedBarData.forEachIndexed { index, data ->
-            val topLeft = getTopLeft(index, chartBound, size, data, scaleFactor)
-            val topRight = getTopRight(index, chartBound, size, data, scaleFactor)
+            val topLeft = getTopLeft(index, chartBound.value, size, data, scaleFactor)
+            val topRight = getTopRight(index, chartBound.value, size, data, scaleFactor)
             val barHeight = data.yBarValue.times(scaleFactor)
 //
             if (clickedBar.value.x in (topLeft.x..topRight.x)) {
