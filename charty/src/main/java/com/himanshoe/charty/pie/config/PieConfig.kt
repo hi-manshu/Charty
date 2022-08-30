@@ -3,22 +3,23 @@ package com.himanshoe.charty.pie.config
 import androidx.compose.ui.graphics.Color
 import kotlin.random.Random
 
-data class PieConfig(
-    val colors: List<Color>,
+data class PieData(
+    val data: Float,
+    val color: Color = generateRandomColor()
 )
 
-internal object PieConfigDefaults {
+data class PieConfig(
+    val isDonut: Boolean = true,
+    val expandDonutOnClick: Boolean = true,
+)
 
-    fun pieConfigDefaults(count: Int) = PieConfig(
-        colors = generateRandomColor(count),
+ internal object PieConfigDefaults {
+    fun pieConfigDefaults() = PieConfig(
+        isDonut = true,
+        expandDonutOnClick = true
     )
 }
 
-private fun generateRandomColor(count: Int): List<Color> {
-    val colors = mutableListOf<Color>()
-    repeat(count) {
-        val color = Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-        colors.add(color)
-    }
-    return colors.toList()
+private fun generateRandomColor(): Color {
+        return Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
 }

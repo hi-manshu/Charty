@@ -29,21 +29,21 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.himanshoe.charty.pie.config.PieConfig
 import com.himanshoe.charty.pie.config.PieConfigDefaults
+import com.himanshoe.charty.pie.config.PieData
 import kotlin.math.min
 import kotlin.math.roundToInt
 
 @Composable
 fun PieChart(
-    data: List<Float>,
+    pieData: List<PieData>,
     modifier: Modifier = Modifier,
-    config: PieConfig = PieConfigDefaults.pieConfigDefaults(data.count()),
-    isDonut: Boolean = true,
+    config: PieConfig = PieConfigDefaults.pieConfigDefaults(),
     valueTextColor: Color = Color.Black,
     onSectionClicked: (Float, Float) -> Unit = { _, _ -> }
 ) {
 
-    if (data.isEmpty()) return
-
+    if (pieData.isEmpty()) return
+    val data = pieData.map { it.data }
     val total = data.sum()
     val proportions = data.map {
         it.times(100) / total
@@ -69,7 +69,7 @@ fun PieChart(
     BoxWithConstraints(modifier = modifier) {
 
         val sideSize = min(constraints.maxWidth, constraints.maxHeight)
-        val padding = (sideSize * if (isDonut) 30 else 20) / 100f
+        val padding = (sideSize * if (config.isDonut) 30 else 20) / 100f
 
         val pathPortion = remember {
             Animatable(initialValue = 0f)
@@ -86,25 +86,25 @@ fun PieChart(
             modifier = Modifier
                 .width(sideSize.dp)
                 .height(sideSize.dp)
-                .handlePiePortionClick(sideSize, currentProgressSize, currentPie) {
+                .handlePiePortionClick(sideSize, config.expandDonutOnClick, currentProgressSize, currentPie) {
                     onSectionClicked(proportions[it], data[it])
                 }
         ) {
 
             angleProgress.forEachIndexed { index, arcProgress ->
                 drawPie(
-                    config.colors[index],
+                    pieData[index].color,
                     startAngle,
                     arcProgress * pathPortion.value,
                     size,
                     padding = padding,
-                    isDonut = isDonut,
+                    isDonut = config.isDonut,
                     isActive = currentPie.value == index
                 )
                 startAngle += arcProgress
             }
 
-            if (currentPie.value != -1 && isDonut) {
+            if (currentPie.value != -1 && config.isDonut) {
                 drawPieSection(proportions, currentPie.value, valueTextColor, sideSize)
             }
         }
@@ -135,29 +135,33 @@ fun DrawScope.drawPieSection(
 @SuppressLint("UnnecessaryComposedModifier")
 private fun Modifier.handlePiePortionClick(
     sideSize: Int,
+    isExpandable: Boolean,
     currentProgressSize: MutableList<Float>,
     currentPie: MutableState<Int>,
     onIndexSelected: (Int) -> Unit
 ): Modifier = composed {
-    pointerInput(true) {
-        detectTapGestures { offset ->
-            val clickedAngle = convertTouchEventPointToAngle(
-                sideSize.toFloat(),
-                sideSize.toFloat(),
-                offset.x,
-                offset.y
-            )
-            currentProgressSize.forEachIndexed { index, item ->
-                if (clickedAngle <= item) {
-                    if (currentPie.value != index) {
-                        currentPie.value = index
+    if(isExpandable) {
+        pointerInput(true) {
+            detectTapGestures { offset ->
+                val clickedAngle = convertTouchEventPointToAngle(
+                    sideSize.toFloat(),
+                    sideSize.toFloat(),
+                    offset.x,
+                    offset.y
+                )
+                currentProgressSize.forEachIndexed { index, item ->
+                    if (clickedAngle <= item) {
+                        if (currentPie.value != index) {
+                            currentPie.value = index
+                        }
+                            onIndexSelected(currentPie.value)
+                        return@detectTapGestures
                     }
-                    onIndexSelected(currentPie.value)
-
-                    return@detectTapGestures
                 }
             }
         }
+    }else{
+        Modifier
     }
 }
 
