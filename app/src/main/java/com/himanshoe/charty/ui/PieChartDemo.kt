@@ -24,8 +24,18 @@ fun PieChartDemo() {
             .fillMaxSize()
     ) {
 
-        val pieData = listOf(PieData(20F), PieData(50F), PieData(100F), PieData(70F), PieData(20F), PieData(50F), PieData(100F), PieData(20F))
-        val pieDataWithCustomColors = listOf(PieData(20F, Color(0xFFfafa6e)), PieData(50F, Color(0xFFc4ec74)))
+        val pieData = listOf(
+            PieData(20F),
+            PieData(50F),
+            PieData(100F),
+            PieData(70F),
+            PieData(20F),
+            PieData(50F),
+            PieData(100F),
+            PieData(20F)
+        )
+        val pieDataWithCustomColors =
+            listOf(PieData(20F, Color(0xFFfafa6e)), PieData(50F, Color(0xFFc4ec74)))
 
         item {
             PieChart(
@@ -35,7 +45,6 @@ fun PieChartDemo() {
                     .padding(20.dp),
                 pieData = pieData,
                 config = PieConfig(isDonut = true, expandDonutOnClick = true),
-                valueTextColor = Color.Black,
                 onSectionClicked = { percent, value ->
                 }
             )
@@ -51,7 +60,6 @@ fun PieChartDemo() {
             )
         }
 
-
         item {
             PieChart(
                 modifier = Modifier
@@ -60,7 +68,6 @@ fun PieChartDemo() {
                     .padding(20.dp),
                 pieData = pieDataWithCustomColors,
                 config = PieConfig(isDonut = true, expandDonutOnClick = false),
-                valueTextColor = Color.Black,
                 onSectionClicked = { percent, value ->
                 }
             )
@@ -83,7 +90,6 @@ fun PieChartDemo() {
                     .padding(20.dp),
                 pieData = pieData,
                 config = PieConfig(false),
-                valueTextColor = Color.Black,
                 onSectionClicked = { percent, value ->
                 }
             )
