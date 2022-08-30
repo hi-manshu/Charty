@@ -38,7 +38,6 @@ fun PieChart(
     pieData: List<PieData>,
     modifier: Modifier = Modifier,
     config: PieConfig = PieConfigDefaults.pieConfigDefaults(),
-    valueTextColor: Color = Color.Black,
     onSectionClicked: (Float, Float) -> Unit = { _, _ -> }
 ) {
 
@@ -105,7 +104,7 @@ fun PieChart(
             }
 
             if (currentPie.value != -1 && config.isDonut) {
-                drawPieSection(proportions, currentPie.value, valueTextColor, sideSize)
+                drawPieSection(proportions, currentPie.value, config.valueTextColor, sideSize)
             }
         }
     }

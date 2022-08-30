@@ -11,13 +11,11 @@ data class PieData(
 data class PieConfig(
     val isDonut: Boolean = true,
     val expandDonutOnClick: Boolean = true,
+    val valueTextColor: Color = Color.Black,
 )
 
 internal object PieConfigDefaults {
-    fun pieConfigDefaults() = PieConfig(
-        isDonut = true,
-        expandDonutOnClick = true
-    )
+    fun pieConfigDefaults() = PieConfig()
 }
 
 private fun generateRandomColor(): Color {
