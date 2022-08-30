@@ -104,7 +104,7 @@ fun PieChart(
             }
 
             if (currentPie.value != -1 && config.isDonut) {
-                drawPieSection(proportions, currentPie.value, config.valueTextColor, sideSize)
+                drawPieSection(proportions, currentPie.value, config.textColor, sideSize)
             }
         }
     }

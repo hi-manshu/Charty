@@ -11,7 +11,7 @@ data class PieData(
 data class PieConfig(
     val isDonut: Boolean = true,
     val expandDonutOnClick: Boolean = true,
-    val valueTextColor: Color = Color.Black,
+    val textColor: Color = Color.Black,
 )
 
 internal object PieConfigDefaults {
