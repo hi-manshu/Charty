@@ -9,11 +9,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
@@ -33,6 +29,10 @@ import com.himanshoe.charty.pie.config.PieData
 import kotlin.math.min
 import kotlin.math.roundToInt
 
+private const val TotalProgress = 100
+private const val TotalAngle = 360
+private const val ReflexAnge = 270
+
 @Composable
 fun PieChart(
     pieData: List<PieData>,
@@ -44,48 +44,45 @@ fun PieChart(
     if (pieData.isEmpty()) return
     val data = pieData.map { it.data }
     val total = data.sum()
-    val proportions = data.map {
-        it.times(100) / total
-    }
-    val angleProgress = proportions.map {
-        360.times(it) / 100
-    }
+    val proportions = data.map { it.times(TotalProgress).div(total) }
+    val angleProgress = proportions.map { TotalAngle.times(it).div(TotalProgress) }
 
     val currentProgressSize = mutableListOf<Float>().apply {
         add(angleProgress.first())
     }
 
-    (1 until angleProgress.size).forEach { x ->
-        currentProgressSize.add(angleProgress[x].plus(currentProgressSize[x.minus(1)]))
+    (1 until angleProgress.size).forEach { angle ->
+        currentProgressSize.add(angleProgress[angle].plus(currentProgressSize[angle.minus(1)]))
     }
 
-    val currentPie = remember {
-        mutableStateOf(-1)
-    }
+    val currentPie = remember { mutableStateOf(-1) }
 
-    var startAngle = 270f
+    var startAngle = ReflexAnge.toFloat()
 
     BoxWithConstraints(modifier = modifier) {
 
         val sideSize = min(constraints.maxWidth, constraints.maxHeight)
-        val padding = (sideSize * if (config.isDonut) 30 else 20) / 100f
+        val padding = (sideSize.times(if (config.isDonut) 30 else 5)).div(80f)
 
-        val pathPortion = remember {
-            Animatable(initialValue = 0f)
-        }
+        val pathPortion = remember { Animatable(initialValue = 0f) }
         LaunchedEffect(key1 = true) {
             pathPortion.animateTo(
                 1f, animationSpec = tween(1000)
             )
         }
 
-        val size = Size(sideSize.toFloat() - padding, sideSize.toFloat() - padding)
+        val size = Size(sideSize.toFloat().minus(padding), sideSize.toFloat().minus(padding))
 
         Canvas(
             modifier = Modifier
                 .width(sideSize.dp)
                 .height(sideSize.dp)
-                .handlePiePortionClick(sideSize, config.expandDonutOnClick, currentProgressSize, currentPie) {
+                .handlePiePortionClick(
+                    sideSize,
+                    config.expandDonutOnClick,
+                    currentProgressSize,
+                    currentPie
+                ) {
                     onSectionClicked(proportions[it], data[it])
                 }
         ) {
@@ -120,8 +117,8 @@ fun DrawScope.drawPieSection(
         val fontSize = size.width.div(20).toDp().toPx()
 
         drawText(
-            "${proportions[currentPieValue].roundToInt()}%",
-            (sideSize.div(2)) + fontSize.div(4), (sideSize.div(2)) + fontSize.div(3),
+            "${proportions[currentPieValue].roundToInt()}",
+            (sideSize.div(2)).plus(fontSize.div(4)), (sideSize.div(2)).plus(fontSize.div(3)),
             Paint().apply {
                 color = percentColor.toArgb()
                 textSize = fontSize
@@ -186,7 +183,7 @@ private fun DrawScope.drawPie(
                     width = if (isActive) size.width.div(1.5F) else size.width.div(2),
                 ) else Fill,
 
-            topLeft = Offset(padding / 2, padding / 2)
+            topLeft = Offset(padding.div(2), padding.div(2))
         )
     }
 }
@@ -197,10 +194,10 @@ private fun convertTouchEventPointToAngle(
     xPos: Float,
     yPos: Float
 ): Double {
-    val x = xPos - (width * 0.5f)
-    val y = yPos - (height * 0.5f)
+    val x = xPos.minus(width.times(0.5f))
+    val y = yPos.minus(height.times(0.5f))
 
-    var angle = Math.toDegrees(kotlin.math.atan2(y.toDouble(), x.toDouble()) + Math.PI / 2)
-    angle = if (angle < 0) angle + 360 else angle
+    var angle = Math.toDegrees(kotlin.math.atan2(y.toDouble(), x.toDouble()).plus(Math.PI.div(2)))
+    angle = if (angle < 0) angle.plus(TotalAngle) else angle
     return angle
 }
