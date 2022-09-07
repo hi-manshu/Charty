@@ -41,8 +41,7 @@ fun PieChartDemo() {
             PieChart(
                 modifier = Modifier
                     .scale(1f)
-                    .size(400.dp)
-                    .padding(20.dp),
+                    .size(400.dp),
                 pieData = pieData,
                 config = PieConfig(isDonut = true, expandDonutOnClick = true),
                 onSectionClicked = { percent, value ->
@@ -64,8 +63,7 @@ fun PieChartDemo() {
             PieChart(
                 modifier = Modifier
                     .scale(1f)
-                    .size(400.dp)
-                    .padding(20.dp),
+                    .size(400.dp),
                 pieData = pieDataWithCustomColors,
                 config = PieConfig(isDonut = true, expandDonutOnClick = false),
                 onSectionClicked = { percent, value ->
@@ -86,8 +84,7 @@ fun PieChartDemo() {
             PieChart(
                 modifier = Modifier
                     .scale(1f)
-                    .size(400.dp)
-                    .padding(20.dp),
+                    .size(400.dp),
                 pieData = pieData,
                 config = PieConfig(false),
                 onSectionClicked = { percent, value ->
@@ -99,8 +96,7 @@ fun PieChartDemo() {
                 text = "Pie Chart",
                 fontSize = 16.sp,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+                    .fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
         }
