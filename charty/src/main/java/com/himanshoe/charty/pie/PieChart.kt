@@ -51,7 +51,7 @@ fun PieChart(
             add(angleProgress[angle].plus(newAngle))
         }
     }.toList()
-    var currentPie = remember {
+    val currentPie = remember {
         mutableStateOf(-1)
     }
 
