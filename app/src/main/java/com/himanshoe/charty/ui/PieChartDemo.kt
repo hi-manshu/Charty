@@ -55,6 +55,28 @@ fun PieChartDemo() {
                 modifier = Modifier
                     .fillMaxSize(),
                 pieData = pieData,
+                config = PieConfig(isDonut = true, expandDonutOnClick = false),
+                onSectionClicked = { percent, value ->
+                    Log.d("DSfdsfdsf", percent.toString())
+                    Log.d("DSfdsfdsf", value.toString())
+                }
+            )
+        }
+        item {
+            Text(
+                text = "Donut Chart Non Expandable",
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                textAlign = TextAlign.Center
+            )
+        }
+        item {
+            PieChart(
+                modifier = Modifier
+                    .fillMaxSize(),
+                pieData = pieData,
                 config = PieConfig(isDonut = false, expandDonutOnClick = true),
                 onSectionClicked = { percent, value ->
                 }

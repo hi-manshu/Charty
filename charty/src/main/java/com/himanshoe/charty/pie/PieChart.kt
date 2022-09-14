@@ -95,8 +95,8 @@ fun PieChart(
                         useCenter = true,
                     )
                 } else {
-                    val isClicked = currentPie.value != -1 && currentPie.value == index
-                    if (isClicked) {
+                    val isClickedAndEnabled =  config.expandDonutOnClick && currentPie.value != -1 && currentPie.value == index
+                    if (isClickedAndEnabled) {
                         drawPieSection(
                             pieChartPortion[currentPie.value],
                             config.textColor,
@@ -109,7 +109,7 @@ fun PieChart(
                         sweepAngle = individualAngle,
                         useCenter = false,
                         style = Stroke(
-                            width = if (isClicked) size.width.div(4.5F) else size.width.div(
+                            width = if (isClickedAndEnabled) size.width.div(4.5F) else size.width.div(
                                 5
                             )
                         )
