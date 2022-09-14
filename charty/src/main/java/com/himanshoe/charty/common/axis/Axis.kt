@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import java.text.DecimalFormat
 
-internal fun DrawScope.yAxis(axisConfig: AxisConfig, maxValue: Float) {
+internal fun DrawScope.yAxis(axisConfig: AxisConfig, maxValue: Float, isCandleChart: Boolean = false) {
     val graphYAxisEndPoint = size.height.div(4)
     val pathEffect = PathEffect.dashPathEffect(floatArrayOf(40f, 20f), 0f)
     val labelScaleFactor = maxValue.div(4)
@@ -19,7 +19,7 @@ internal fun DrawScope.yAxis(axisConfig: AxisConfig, maxValue: Float) {
             drawIntoCanvas {
                 it.nativeCanvas.apply {
                     drawText(
-                        getLabelText(labelScaleFactor.times(4.minus(index))),
+                        getLabelText(labelScaleFactor.times(4.minus(index)), isCandleChart),
                         0F.minus(25),
                         yAxisEndPoint.minus(10),
                         Paint().apply {
@@ -43,4 +43,7 @@ internal fun DrawScope.yAxis(axisConfig: AxisConfig, maxValue: Float) {
     }
 }
 
-private fun getLabelText(value: Float) = DecimalFormat("#.##").format(value).toString()
+private fun getLabelText(value: Float, isCandleChart: Boolean): String {
+    val pattern = if (isCandleChart) "#" else "#.##"
+    return DecimalFormat(pattern).format(value).toString()
+}

@@ -26,6 +26,7 @@ dependencies {
 You can find the detail implementation of the following:
 
 - [BarChart](docs/BarChart.md)
+- [CandleStickChart](docs/CandleStickChart.md)
 - [CombinedBarChart](docs/CombinedBarChart.md)
 - [HorizontalBarChart](docs/HorizontalBarChart.md)
 - [GroupedBarChart](docs/GroupedBarChart.md)
