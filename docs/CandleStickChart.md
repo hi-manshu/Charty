@@ -25,4 +25,4 @@ data class CandleEntry(
 
 ### Additional Configuration (Optional)
 - To edit Config of the Axis, to suit your need to use `AxisConfig`
-- To edit Individual Bar config of it having corner radius you need to use `BarConfig`
+- To edit config you need to use `CandleStickConfig`
