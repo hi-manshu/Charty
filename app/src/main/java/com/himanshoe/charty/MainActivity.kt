@@ -44,6 +44,8 @@ class MainActivity : ComponentActivity() {
                 navigator.navigate("combinedBar")
             }, onCandleChartClicked = {
                 navigator.navigate("candleChart")
+            }, onStackedBarClicked = {
+                navigator.navigate("stackedBar")
             }
             )
         }
@@ -63,11 +65,13 @@ fun MainApp(
     onGroupHorizontalClicked: () -> Unit,
     onCandleChartClicked: () -> Unit,
     onGroupBarClicked: () -> Unit,
+    onStackedBarClicked: () -> Unit,
 ) {
 
     val list: List<Pair<String, () -> Unit>> =
         listOf(
             "Bar Chart" to onBarChartClicked,
+            "Stack Bar Chart" to onStackedBarClicked,
             "Candle Chart" to onCandleChartClicked,
             "Combined Bar Chart" to onCombinedBarChartClicked,
             "Circle Chart" to onCircleChartClicked,

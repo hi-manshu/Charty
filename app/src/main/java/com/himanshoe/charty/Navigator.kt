@@ -15,6 +15,7 @@ import com.himanshoe.charty.ui.HorizontalBarChartDemo
 import com.himanshoe.charty.ui.LineChartDemo
 import com.himanshoe.charty.ui.PieChartDemo
 import com.himanshoe.charty.ui.PointChartDemo
+import com.himanshoe.charty.ui.StackedBarChartDemo
 
 @Composable
 fun RegisterNavigation(
@@ -30,6 +31,7 @@ fun RegisterNavigation(
     onGroupBarClicked: () -> Unit,
     onCombinedBarChartClicked: () -> Unit,
     onCandleChartClicked: () -> Unit,
+    onStackedBarClicked: () -> Unit,
 ) {
     NavHost(navController = navigator, startDestination = "main") {
         composable("barchart") { BarChartDemo() }
@@ -45,13 +47,15 @@ fun RegisterNavigation(
                 onPieChartClicked = onPieChartClicked,
                 onGroupHorizontalClicked = onGroupHorizontalClicked,
                 onCombinedBarChartClicked = onCombinedBarChartClicked,
-                onCandleChartClicked = onCandleChartClicked
+                onCandleChartClicked = onCandleChartClicked,
+                onStackedBarClicked = onStackedBarClicked
             )
         }
         composable("horizontalBarChartDemo") { HorizontalBarChartDemo() }
         composable("circlechart") { CircleChartDemo() }
         composable("linechart") { LineChartDemo() }
         composable("curvelinechart") { CurveLineChartDemo() }
+        composable("stackedBar") { StackedBarChartDemo() }
         composable("pointchart") { PointChartDemo() }
         composable("piechart") { PieChartDemo() }
         composable("grouphorizontalbar") { GroupedHorizontalBarChartDemo() }

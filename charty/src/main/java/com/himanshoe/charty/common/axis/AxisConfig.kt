@@ -18,7 +18,7 @@ internal object AxisConfigDefaults {
         showAxis = true,
         isAxisDashed = false,
         showUnitLabels = true,
-        showXLabels = false,
+        showXLabels = true,
         yAxisColor = Color.LightGray,
     )
 }

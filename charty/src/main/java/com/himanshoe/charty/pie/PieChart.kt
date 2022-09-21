@@ -95,7 +95,7 @@ fun PieChart(
                         useCenter = true,
                     )
                 } else {
-                    val isClickedAndEnabled =  config.expandDonutOnClick && currentPie.value != -1 && currentPie.value == index
+                    val isClickedAndEnabled = config.expandDonutOnClick && currentPie.value != -1 && currentPie.value == index
                     if (isClickedAndEnabled) {
                         drawPieSection(
                             pieChartPortion[currentPie.value],
