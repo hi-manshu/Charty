@@ -7,7 +7,7 @@ data class StackedBarData(
 
 internal fun List<StackedBarData>.isValid(count: Int) = totalItems() == count
 
-internal fun List<StackedBarData>.totalItems(): Int = this.maxOf {
+private fun List<StackedBarData>.totalItems(): Int = this.maxOf {
     it.yValue.count()
 }
 
