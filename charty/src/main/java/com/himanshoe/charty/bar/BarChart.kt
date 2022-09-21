@@ -34,7 +34,7 @@ fun BarChart(
     color: Color,
     onBarClick: (BarData) -> Unit,
     modifier: Modifier = Modifier,
-    barDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
+    chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
@@ -43,7 +43,7 @@ fun BarChart(
         colors = listOf(color, color),
         onBarClick = onBarClick,
         modifier = modifier,
-        barDimens = barDimens,
+        chartDimens = chartDimens,
         axisConfig = axisConfig,
         barConfig = barConfig
     )
@@ -55,7 +55,7 @@ fun BarChart(
     colors: List<Color>,
     onBarClick: (BarData) -> Unit,
     modifier: Modifier = Modifier,
-    barDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
+    chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
@@ -75,7 +75,7 @@ fun BarChart(
                     yAxis(axisConfig, maxYValue)
                 }
             }
-            .padding(horizontal = barDimens.padding)
+            .padding(horizontal = chartDimens.padding)
             .pointerInput(Unit) {
                 detectTapGestures(onPress = { offset ->
                     clickedBar.value = offset
@@ -86,8 +86,8 @@ fun BarChart(
         val yScalableFactor = size.height.div(maxYValue)
 
         barData.forEachIndexed { index, data ->
-            val topLeft = getTopLeft(index, barWidth, size, data, yScalableFactor)
-            val topRight = getTopRight(index, barWidth, size, data, yScalableFactor)
+            val topLeft = getTopLeft(index, barWidth.value, size, data.yValue, yScalableFactor)
+            val topRight = getTopRight(index, barWidth.value, size, data.yValue, yScalableFactor)
             val barHeight = data.yValue.times(yScalableFactor)
 
             if (clickedBar.value.x in (topLeft.x..topRight.x)) {
@@ -101,7 +101,7 @@ fun BarChart(
             )
             // draw label
             if (axisConfig.showXLabels) {
-                drawBarLabel(data, barWidth.value, barHeight, topLeft, barData.count())
+                drawBarLabel(data.xValue, barWidth.value, barHeight, topLeft, barData.count())
             }
         }
     }

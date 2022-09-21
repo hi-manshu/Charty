@@ -69,8 +69,8 @@ fun GroupedBarChart(
 
         groupedBarData.flatMap { it.barData }
             .forEachIndexed { index, data ->
-                val topLeft = getTopLeft(index, barWidth, size, data, yScalableFactor)
-                val topRight = getTopRight(index, barWidth, size, data, yScalableFactor)
+                val topLeft = getTopLeft(index, barWidth.value, size, data.yValue, yScalableFactor)
+                val topRight = getTopRight(index, barWidth.value, size, data.yValue, yScalableFactor)
                 val barHeight = data.yValue.times(yScalableFactor)
 
                 if (clickedBar.value.x in (topLeft.x..topRight.x)) {
@@ -84,7 +84,7 @@ fun GroupedBarChart(
                 )
                 // draw label
                 if (axisConfig.showXLabels) {
-                    drawBarLabel(data, barWidth.value, barHeight, topLeft, groupedBarData.count())
+                    drawBarLabel(data.xValue, barWidth.value, barHeight, topLeft, groupedBarData.count())
                 }
             }
     }

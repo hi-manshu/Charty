@@ -31,22 +31,7 @@ fun BarChartDemo() {
                 barData = listOf(
                     BarData(10F, 35F),
                     BarData(20F, 25F),
-                    BarData(10F, 50F),
-                    BarData(60F, 10F),
-                    BarData(10F, 15F),
-                    BarData(10F, 15F),
-                    BarData(10F, 15F),
-                    BarData(10F, 15F),
-                    BarData(10F, 15F),
-                    BarData(10F, 15F),
-                    BarData(10F, 15F),
-                    BarData(10F, 15F),
-                    BarData(10F, 15F),
-                    BarData(10F, 15F),
-                    BarData(10F, 15F),
-                    BarData(10F, 15F),
-                    BarData(50F, 100F),
-                    BarData(20F, 25F),
+
                 )
             )
         }
