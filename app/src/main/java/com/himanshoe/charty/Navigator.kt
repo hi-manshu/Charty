@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.himanshoe.charty.ui.BarChartDemo
+import com.himanshoe.charty.ui.BubbleChartDemo
 import com.himanshoe.charty.ui.CandleStickChartDemo
 import com.himanshoe.charty.ui.CircleChartDemo
 import com.himanshoe.charty.ui.CombinedBarChartDemo
@@ -32,12 +33,14 @@ fun RegisterNavigation(
     onCombinedBarChartClicked: () -> Unit,
     onCandleChartClicked: () -> Unit,
     onStackedBarClicked: () -> Unit,
+    onBubbleChartClicked: () -> Unit
 ) {
     NavHost(navController = navigator, startDestination = "main") {
         composable("barchart") { BarChartDemo() }
         composable("main") {
             MainApp(
                 onBarChartClicked = onBarChartClicked,
+                onBubbleChartClicked = onBubbleChartClicked,
                 onGroupBarClicked = onGroupBarClicked,
                 onHorizontalBarChartClicked = onHorizontalBarChartClicked,
                 onCircleChartClicked = onCircleChartClicked,
@@ -62,5 +65,6 @@ fun RegisterNavigation(
         composable("groupbar") { GroupBarChartDemo() }
         composable("combinedBar") { CombinedBarChartDemo() }
         composable("candleChart") { CandleStickChartDemo() }
+        composable("bubbleChart") { BubbleChartDemo() }
     }
 }

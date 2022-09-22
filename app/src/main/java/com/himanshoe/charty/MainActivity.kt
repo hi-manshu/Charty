@@ -46,6 +46,8 @@ class MainActivity : ComponentActivity() {
                 navigator.navigate("candleChart")
             }, onStackedBarClicked = {
                 navigator.navigate("stackedBar")
+            }, onBubbleChartClicked = {
+                navigator.navigate("bubbleChart")
             }
             )
         }
@@ -55,6 +57,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainApp(
     onBarChartClicked: () -> Unit,
+    onBubbleChartClicked: () -> Unit,
     onCombinedBarChartClicked: () -> Unit,
     onHorizontalBarChartClicked: () -> Unit,
     onCircleChartClicked: () -> Unit,
@@ -71,6 +74,7 @@ fun MainApp(
     val list: List<Pair<String, () -> Unit>> =
         listOf(
             "Bar Chart" to onBarChartClicked,
+            "Bubble Chart" to onBubbleChartClicked,
             "Stack Bar Chart" to onStackedBarClicked,
             "Candle Chart" to onCandleChartClicked,
             "Combined Bar Chart" to onCombinedBarChartClicked,
@@ -100,87 +104,5 @@ fun MainApp(
                 Text(item.first)
             }
         }
-
-//        item {
-//            ExtendedFloatingActionButton(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 4.dp),
-//                onClick = { onBarChartClicked() }) {
-//                Text(text = "Bar Chart")
-//            }
-//        }
-//        item {
-//            ExtendedFloatingActionButton(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 4.dp),
-//                onClick = { onCircleChartClicked() }) {
-//                Text(text = "Circle Chart")
-//            }
-//        }
-//        item {
-//            ExtendedFloatingActionButton(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 4.dp),
-//                onClick = { onCurveChartClicked() }) {
-//                Text(text = "Curve Line Chart")
-//            }
-//        }
-//        item {
-//            ExtendedFloatingActionButton(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 4.dp),
-//                onClick = { onLineChartClicked() }) {
-//                Text(text = "Line Chart")
-//            }
-//        }
-//        item {
-//            ExtendedFloatingActionButton(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 4.dp),
-//                onClick = { onGroupBarClicked() }) {
-//                Text(text = "Grouped bar Chart")
-//            }
-//        }
-//        item {
-//            ExtendedFloatingActionButton(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 4.dp),
-//                onClick = { onGroupHorizontalClicked() }) {
-//                Text(text = "Grouped HorizontalBar Chart")
-//            }
-//        }
-//        item {
-//            ExtendedFloatingActionButton(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 4.dp),
-//                onClick = { onHorizontalBarChartClicked() }) {
-//                Text(text = "HorizontalBar Chart")
-//            }
-//        }
-//        item {
-//            ExtendedFloatingActionButton(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 4.dp),
-//                onClick = { onPieChartClicked() }) {
-//                Text(text = "Pie Chart")
-//            }
-//        }
-//        item {
-//            ExtendedFloatingActionButton(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 4.dp),
-//                onClick = { onPointChartClicked() }) {
-//                Text(text = "Point Chart")
-//            }
-//        }
     }
 }
