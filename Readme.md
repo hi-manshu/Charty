@@ -27,6 +27,7 @@ You can find the detail implementation of the following:
 
 - [BarChart](docs/BarChart.md)
 - [CandleStickChart](docs/CandleStickChart.md)
+- [BubbleChart](docs/BubbleChart.md)
 - [StackedBarChart](docs/StackedBarChart.md)
 - [CombinedBarChart](docs/CombinedBarChart.md)
 - [HorizontalBarChart](docs/HorizontalBarChart.md)
