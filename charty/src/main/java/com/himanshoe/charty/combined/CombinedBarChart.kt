@@ -28,7 +28,8 @@ import com.himanshoe.charty.combined.model.CombinedBarData
 import com.himanshoe.charty.combined.model.maxYValue
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.axis.yAxis
+import com.himanshoe.charty.common.axis.drawYAxisWithLabels
+import com.himanshoe.charty.common.calculations.dataToOffSet
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 
@@ -53,7 +54,7 @@ fun CombinedBarChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    yAxis(axisConfig, maxYValue)
+                    drawYAxisWithLabels(axisConfig, maxYValue)
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -87,7 +88,8 @@ fun CombinedBarChart(
                 brush = Brush.linearGradient(barColors),
                 size = Size(chartBound.value, barHeight)
             )
-            val centerOffset = dataToOffSet(index, chartBound.value, size, data, scaleFactor)
+            val centerOffset =
+                dataToOffSet(index, chartBound.value, size, data.yLineValue, scaleFactor)
             val drawnPath = path.lineTo(centerOffset.x, centerOffset.y)
             if (combinedBarConfig.hasLineLabel) {
                 drawLineLabels(centerOffset, data, combinedBarConfig.lineLabelColor)
@@ -107,7 +109,6 @@ fun CombinedBarChart(
                 )
             }
 
-            // draw label
             if (axisConfig.showXLabels) {
                 drawCombinedBarLabel(data, chartBound.value, barHeight, topLeft)
             }
@@ -190,17 +191,4 @@ fun CombinedBarChart(
         chartDimens = chartDimens,
         combinedBarConfig = combinedBarConfig
     )
-}
-
-private fun dataToOffSet(
-    index: Int,
-    bound: Float,
-    size: Size,
-    data: CombinedBarData,
-    yScaleFactor: Float
-): Offset {
-    val startX = index.times(bound.times(1.2F))
-    val endX = index.plus(1).times(bound.times(1.2F))
-    val y = size.height.minus(data.yLineValue.times(yScaleFactor))
-    return Offset(((startX.plus(endX)).div(2F)), y)
 }

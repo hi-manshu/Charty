@@ -24,7 +24,7 @@ import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.maxYValue
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.axis.yAxis
+import com.himanshoe.charty.common.axis.drawYAxisWithLabels
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 
@@ -61,9 +61,7 @@ fun BarChart(
 ) {
 
     val maxYValueState = rememberSaveable { mutableStateOf(barData.maxYValue()) }
-    val clickedBar = remember {
-        mutableStateOf(Offset(-10F, -10F))
-    }
+    val clickedBar = remember { mutableStateOf(Offset(-10F, -10F)) }
 
     val maxYValue = maxYValueState.value
     val barWidth = remember { mutableStateOf(0F) }
@@ -72,7 +70,7 @@ fun BarChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    yAxis(axisConfig, maxYValue)
+                    drawYAxisWithLabels(axisConfig, maxYValue)
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -99,7 +97,7 @@ fun BarChart(
                 brush = Brush.linearGradient(colors),
                 size = Size(barWidth.value, barHeight)
             )
-            // draw label
+
             if (axisConfig.showXLabels) {
                 drawBarLabel(data.xValue, barWidth.value, barHeight, topLeft, barData.count())
             }

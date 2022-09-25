@@ -25,7 +25,7 @@ import com.himanshoe.charty.bar.model.maxYValue
 import com.himanshoe.charty.bar.model.totalItems
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.axis.yAxis
+import com.himanshoe.charty.common.axis.drawYAxisWithLabels
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 
@@ -50,7 +50,7 @@ fun GroupedBarChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    yAxis(axisConfig, maxYValue)
+                    drawYAxisWithLabels(axisConfig, maxYValue)
                 }
             }
             .padding(horizontal = barDimens.padding)
@@ -82,7 +82,7 @@ fun GroupedBarChart(
                     color = groupedBarDataColor[index],
                     size = Size(barWidth.value, barHeight)
                 )
-                // draw label
+
                 if (axisConfig.showXLabels) {
                     drawBarLabel(data.xValue, barWidth.value, barHeight, topLeft, groupedBarData.count())
                 }

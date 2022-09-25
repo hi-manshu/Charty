@@ -1,6 +1,5 @@
 package com.himanshoe.charty.line
 
-import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -9,19 +8,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.axis.yAxis
+import com.himanshoe.charty.common.axis.drawXLabel
+import com.himanshoe.charty.common.axis.drawYAxisWithLabels
+import com.himanshoe.charty.common.calculations.dataToOffSet
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 import com.himanshoe.charty.line.config.LineConfig
@@ -65,7 +61,7 @@ fun LineChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    yAxis(axisConfig, maxYValue)
+                    drawYAxisWithLabels(axisConfig, maxYValue)
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -81,7 +77,7 @@ fun LineChart(
         }
 
         lineData.forEachIndexed { index, data ->
-            val centerOffset = dataToOffSet(index, lineBound.value, size, data, scaleFactor)
+            val centerOffset = dataToOffSet(index, lineBound.value, size, data.yValue, scaleFactor)
             when (index) {
                 0 -> path.moveTo(centerOffset.x, centerOffset.y)
                 else -> path.lineTo(centerOffset.x, centerOffset.y)
@@ -94,7 +90,7 @@ fun LineChart(
                 )
             }
             if (axisConfig.showXLabels) {
-                drawXLabel(data, centerOffset, radius, lineData.count())
+                drawXLabel(data.xValue, centerOffset, radius, lineData.count())
             }
         }
         val pathEffect =
@@ -105,35 +101,4 @@ fun LineChart(
             style = Stroke(width = strokeWidth, pathEffect = pathEffect),
         )
     }
-}
-
-private fun DrawScope.drawXLabel(data: LineData, centerOffset: Offset, radius: Float, count: Int) {
-    val divisibleFactor = if (count > 10) count else 1
-    val textSizeFactor = if (count > 10) 3 else 30
-    drawIntoCanvas {
-        it.nativeCanvas.apply {
-            drawText(
-                data.xValue.toString(),
-                centerOffset.x,
-                size.height.plus(radius.times(4)),
-                Paint().apply {
-                    textSize = size.width.div(textSizeFactor).div(divisibleFactor)
-                    textAlign = Paint.Align.CENTER
-                }
-            )
-        }
-    }
-}
-
-private fun dataToOffSet(
-    index: Int,
-    bound: Float,
-    size: Size,
-    data: LineData,
-    yScaleFactor: Float
-): Offset {
-    val startX = index.times(bound.times(1.2F))
-    val endX = index.plus(1).times(bound.times(1.2F))
-    val y = size.height.minus(data.yValue.times(yScaleFactor))
-    return Offset(((startX.plus(endX)).div(2F)), y)
 }

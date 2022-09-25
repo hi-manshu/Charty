@@ -24,7 +24,7 @@ import com.himanshoe.charty.candle.config.CandleStickDefaults
 import com.himanshoe.charty.candle.model.CandleEntry
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.axis.yAxis
+import com.himanshoe.charty.common.axis.drawYAxisWithLabels
 
 @Composable
 fun CandleStickChart(
@@ -56,7 +56,7 @@ fun CandleStickChart(
             )
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    yAxis(axisConfig, maxYValue, true)
+                    drawYAxisWithLabels(axisConfig, maxYValue, true)
                 }
             }
             .padding(start = if (hasPadding) 20.dp else 0.dp)
