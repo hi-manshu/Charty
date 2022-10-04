@@ -21,11 +21,24 @@ dependencies {
   implementation("com.himanshoe:charty:1.1.3-alpha04")
 }
 ```
+## Integrating it in your project
+
+1. BarChart
+
+```kotlin
+  BarChart(
+    modifier = Modifier,
+    onBarClick = { // handle Click for individual bar}
+    colors = // colors,
+    barData = // list of BarData,
+    )
+```
+
+For more detailed implementation, click [here](docs/BarChart.md)
 
 ## Documentation
 You can find the detail implementation of the following:
 
-- [BarChart](docs/BarChart.md)
 - [CandleStickChart](docs/CandleStickChart.md)
 - [BubbleChart](docs/BubbleChart.md)
 - [StackedBarChart](docs/StackedBarChart.md)
@@ -42,5 +55,21 @@ You can find the detail implementation of the following:
 
 ### Contribution
 Please feel free to fork it and open a PR.
+
+## License
+
+    Copyright 2022 Charty Contributors
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 
 
