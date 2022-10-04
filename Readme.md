@@ -25,7 +25,9 @@ dependencies {
 ## Integrating it in your project
 
 You can find the detail implementation of the following:
-- ![Charty](img/demo/BarChart.png)
+
+  <img src="img/demo/BarChart.png" width=50% height=50%>
+
 - [BarChart](docs/BarChart.md)
 
 
