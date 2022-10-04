@@ -1,6 +1,7 @@
 package com.himanshoe.charty.line
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -56,6 +57,7 @@ fun LineChart(
     val maxYValueState = rememberSaveable { mutableStateOf(lineData.maxYValue()) }
     val maxYValue = maxYValueState.value
     val lineBound = remember { mutableStateOf(0F) }
+    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
     Canvas(
         modifier = modifier
@@ -90,7 +92,13 @@ fun LineChart(
                 )
             }
             if (axisConfig.showXLabels) {
-                drawXLabel(data.xValue, centerOffset, radius, lineData.count())
+                drawXLabel(
+                    data.xValue,
+                    centerOffset,
+                    radius,
+                    lineData.count(),
+                    labelTextColor
+                )
             }
         }
         val pathEffect =

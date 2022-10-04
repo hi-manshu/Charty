@@ -2,6 +2,7 @@ package com.himanshoe.charty.horizontalbar
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +47,8 @@ fun GroupedHorizontalBarChart(
     val maxXValue = maxXValueState.value
     val barHeight = remember { mutableStateOf(0F) }
     val totalItems: Int = groupedBarData.totalItems()
+    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
+
     Canvas(
         modifier = modifier
             .drawBehind {
@@ -85,6 +88,7 @@ fun GroupedHorizontalBarChart(
                             horizontalBarConfig.showLabels,
                             topLeft,
                             barWidth,
+                            labelTextColor
                         )
                     }
                     else -> {
@@ -103,6 +107,7 @@ fun GroupedHorizontalBarChart(
                             horizontalBarConfig.showLabels,
                             topLeft = topLeft,
                             barWidth = barWidth,
+                            labelTextColor=   labelTextColor
                         )
                     }
                 }
@@ -117,6 +122,7 @@ private fun DrawScope.drawBars(
     showLabels: Boolean,
     topLeft: Offset,
     barWidth: Float,
+    labelTextColor: Color,
 ) {
     drawRoundRect(
         topLeft = topLeft,
@@ -127,7 +133,8 @@ private fun DrawScope.drawBars(
         drawHorizontalBarLabel(
             horizontalBarData = horizontalBarData,
             barHeight = barHeight,
-            topLeft = topLeft
+            topLeft = topLeft,
+            labelTextColor =labelTextColor
         )
     }
 }

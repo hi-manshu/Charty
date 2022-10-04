@@ -2,6 +2,7 @@ package com.himanshoe.charty.line
 
 import android.graphics.PointF
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -11,12 +12,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.asAndroidPath
-import androidx.compose.ui.graphics.asComposePath
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
@@ -107,6 +103,7 @@ fun CurveLineChart(
     val lineBound = remember { mutableStateOf(0F) }
     val maxYValueState = rememberSaveable { mutableStateOf(lineData.maxYValue()) }
     val maxYValue = maxYValueState.value
+    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
     Canvas(
         modifier = modifier
@@ -114,7 +111,7 @@ fun CurveLineChart(
             .padding(horizontal = chartDimens.padding)
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    drawYAxisWithLabels(axisConfig, maxYValue)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = labelTextColor)
                 }
             },
         onDraw = {

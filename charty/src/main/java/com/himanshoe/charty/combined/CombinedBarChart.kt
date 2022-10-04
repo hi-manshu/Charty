@@ -2,6 +2,7 @@ package com.himanshoe.charty.combined
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +47,7 @@ fun CombinedBarChart(
 ) {
     val maxYValueState = rememberSaveable { mutableStateOf(combinedBarData.maxYValue()) }
     val clickedBar = remember { mutableStateOf(Offset(-10F, -10F)) }
+    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
     val maxYValue = maxYValueState.value
     val chartBound = remember { mutableStateOf(0F) }
@@ -110,7 +112,7 @@ fun CombinedBarChart(
             }
 
             if (axisConfig.showXLabels) {
-                drawCombinedBarLabel(data, chartBound.value, barHeight, topLeft)
+                drawCombinedBarLabel(data, chartBound.value, barHeight, topLeft,labelTextColor)
             }
             val pathEffect =
                 if (combinedBarConfig.hasSmoothCurve) PathEffect.cornerPathEffect(strokeWidth) else null

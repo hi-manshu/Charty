@@ -2,13 +2,20 @@ package com.himanshoe.charty.common.axis
 
 import android.graphics.Paint
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import java.text.DecimalFormat
 
-internal fun DrawScope.drawYAxisWithLabels(axisConfig: AxisConfig, maxValue: Float, isCandleChart: Boolean = false) {
+internal fun DrawScope.drawYAxisWithLabels(
+    axisConfig: AxisConfig,
+    maxValue: Float,
+    isCandleChart: Boolean = false,
+    textColor: Color = Color.Black
+) {
     val graphYAxisEndPoint = size.height.div(4)
     val pathEffect = PathEffect.dashPathEffect(floatArrayOf(40f, 20f), 0f)
     val labelScaleFactor = maxValue.div(4)
@@ -23,6 +30,7 @@ internal fun DrawScope.drawYAxisWithLabels(axisConfig: AxisConfig, maxValue: Flo
                         0F.minus(25),
                         yAxisEndPoint.minus(10),
                         Paint().apply {
+                            color = textColor.toArgb()
                             textSize = size.width.div(30)
                             textAlign = Paint.Align.CENTER
                         }
@@ -52,7 +60,8 @@ internal fun DrawScope.drawXLabel(
     data: Any,
     centerOffset: Offset,
     radius: Float,
-    count: Int
+    count: Int,
+    textColor: Color = Color.Black
 ) {
     val divisibleFactor = if (count > 10) count else 1
     val textSizeFactor = if (count > 10) 3 else 30
@@ -63,6 +72,7 @@ internal fun DrawScope.drawXLabel(
                 centerOffset.x,
                 size.height.plus(radius.times(4)),
                 Paint().apply {
+                    color = textColor.toArgb()
                     textSize = size.width.div(textSizeFactor).div(divisibleFactor)
                     textAlign = Paint.Align.CENTER
                 }

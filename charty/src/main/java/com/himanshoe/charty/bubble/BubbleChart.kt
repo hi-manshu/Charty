@@ -2,6 +2,7 @@ package com.himanshoe.charty.bubble
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +48,7 @@ fun BubbleChart(
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
 ) {
+    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
     val maxYValueState = rememberSaveable { mutableStateOf(bubbleData.maxYValue()) }
     val maxVolumeState = rememberSaveable { mutableStateOf(bubbleData.maxVolumeSize()) }
 
@@ -92,7 +94,11 @@ fun BubbleChart(
             )
 
             if (axisConfig.showXLabels) {
-                drawXLabel(data.xValue, centerOffset, size.width.div(70), bubbleData.count())
+                drawXLabel(
+                    data.xValue, centerOffset, size.width.div(70),
+                    bubbleData.count(),
+                    labelTextColor
+                )
             }
         }
     }

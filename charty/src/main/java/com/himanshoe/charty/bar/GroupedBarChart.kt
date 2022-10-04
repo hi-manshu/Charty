@@ -2,6 +2,7 @@ package com.himanshoe.charty.bar
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -40,10 +41,9 @@ fun GroupedBarChart(
 ) {
     val barWidth = remember { mutableStateOf(0F) }
     val maxYValueState = rememberSaveable { mutableStateOf(groupedBarData.maxYValue()) }
-    val clickedBar = remember {
-        mutableStateOf(Offset(-10F, -10F))
-    }
+    val clickedBar = remember { mutableStateOf(Offset(-10F, -10F)) }
     val maxYValue = maxYValueState.value
+    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
     val totalItems: Int = groupedBarData.totalItems()
     Canvas(
@@ -70,7 +70,8 @@ fun GroupedBarChart(
         groupedBarData.flatMap { it.barData }
             .forEachIndexed { index, data ->
                 val topLeft = getTopLeft(index, barWidth.value, size, data.yValue, yScalableFactor)
-                val topRight = getTopRight(index, barWidth.value, size, data.yValue, yScalableFactor)
+                val topRight =
+                    getTopRight(index, barWidth.value, size, data.yValue, yScalableFactor)
                 val barHeight = data.yValue.times(yScalableFactor)
 
                 if (clickedBar.value.x in (topLeft.x..topRight.x)) {
@@ -84,7 +85,14 @@ fun GroupedBarChart(
                 )
 
                 if (axisConfig.showXLabels) {
-                    drawBarLabel(data.xValue, barWidth.value, barHeight, topLeft, groupedBarData.count())
+                    drawBarLabel(
+                        data.xValue,
+                        barWidth.value,
+                        barHeight,
+                        topLeft,
+                        groupedBarData.count(),
+                        labelTextColor
+                    )
                 }
             }
     }

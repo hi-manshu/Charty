@@ -2,6 +2,7 @@ package com.himanshoe.charty.bar
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +50,7 @@ fun StackedBarChart(
     val maxYValue = maxYValueState.value
     val barWidth = remember { mutableStateOf(0F) }
     val clickedBar = remember { mutableStateOf(Offset(-10F, -10F)) }
+    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
     Canvas(
         modifier = modifier
@@ -83,7 +85,8 @@ fun StackedBarChart(
             barWidth.value,
             axisConfig,
             clickedBar.value,
-            onBarClick
+            onBarClick,
+            labelTextColor
         )
     }
 }
@@ -95,6 +98,7 @@ private fun DrawScope.drawLabels(
     axisConfig: AxisConfig,
     clickedBarValue: Offset,
     onBarClick: (StackedBarData) -> Unit,
+    labelTextColor: Color,
 ) {
     stackBarData.forEachIndexed { index, stackBarDataIndividual ->
         val barHeight = stackBarDataIndividual.yValue.sum().times(yScalableFactor)
@@ -121,7 +125,8 @@ private fun DrawScope.drawLabels(
                 width.times(1.4F),
                 barHeight,
                 barTopLeft,
-                stackBarData.count()
+                stackBarData.count(),
+                labelTextColor
             )
         }
     }

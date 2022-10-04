@@ -2,6 +2,7 @@ package com.himanshoe.charty.horizontalbar
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -60,7 +61,7 @@ fun HorizontalBarChart(
     horizontalAxisConfig: HorizontalAxisConfig = HorizontalAxisConfigDefaults.axisConfigDefaults(),
     horizontalBarConfig: HorizontalBarConfig = HorizontalBarConfigDefaults.horizontalBarConfig()
 ) {
-
+    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
     val startAngle = if (horizontalBarConfig.startDirection == StartDirection.Left) 180F else 0F
     val maxXValueState = rememberSaveable { mutableStateOf(horizontalBarData.maxXValue()) }
     val clickedBar = remember { mutableStateOf(Offset(-10F, -10F)) }
@@ -100,7 +101,8 @@ fun HorizontalBarChart(
                         colors,
                         horizontalBarConfig.showLabels,
                         topLeft,
-                        barWidth
+                        barWidth,
+                        labelTextColor
                     )
                 }
             }
@@ -119,7 +121,8 @@ fun HorizontalBarChart(
                         colors,
                         horizontalBarConfig.showLabels,
                         topLeft,
-                        barWidth
+                        barWidth,
+                        labelTextColor
                     )
                 }
             }
@@ -133,7 +136,8 @@ private fun DrawScope.drawBars(
     colors: List<Color>,
     showLabels: Boolean,
     topLeft: Offset,
-    barWidth: Float
+    barWidth: Float,
+    labelTextColor :Color,
 ) {
     drawRoundRect(
         topLeft = topLeft,
@@ -145,6 +149,7 @@ private fun DrawScope.drawBars(
             horizontalBarData = horizontalBarData,
             barHeight = barHeight,
             topLeft = topLeft,
+            labelTextColor = labelTextColor,
         )
     }
 }

@@ -2,6 +2,7 @@ package com.himanshoe.charty.bar
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -59,7 +60,7 @@ fun BarChart(
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
-
+    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
     val maxYValueState = rememberSaveable { mutableStateOf(barData.maxYValue()) }
     val clickedBar = remember { mutableStateOf(Offset(-10F, -10F)) }
 
@@ -99,7 +100,14 @@ fun BarChart(
             )
 
             if (axisConfig.showXLabels) {
-                drawBarLabel(data.xValue, barWidth.value, barHeight, topLeft, barData.count())
+                drawBarLabel(
+                    data.xValue,
+                    barWidth.value,
+                    barHeight,
+                    topLeft,
+                    barData.count(),
+                    labelTextColor
+                )
             }
         }
     }
