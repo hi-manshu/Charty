@@ -28,24 +28,17 @@ You can find the detail implementation of the following:
 | Charts        | Preview           | 
 | ------------- |:-------------:| 
 | [BarChart](docs/BarChart.md)      | <img src="img/demo/BarChart.png" width=50% height=50%> | 
-
-
-
-- 
-
-
-- [CandleStickChart](docs/CandleStickChart.md)
-- [BubbleChart](docs/BubbleChart.md)
-- [StackedBarChart](docs/StackedBarChart.md)
-- [CombinedBarChart](docs/CombinedBarChart.md)
-- [HorizontalBarChart](docs/HorizontalBarChart.md)
-- [GroupedBarChart](docs/GroupedBarChart.md)
-- [GroupedHorizontalBarChart](docs/GroupedHorizontalBarChart.md)
-- [CircleChart](docs/CircleChart.md)
-- [PointChart](docs/PointChart.md)
-- [LineChart](docs/LineChart.md)
-- [CurveLineChart](docs/CurveLineChart.md)
-- [PieChart](docs/PieChart.md)
+| [CandleStickChart](docs/CandleStickChart.md)      | <img src="img/demo/CandleChart.png" width=50% height=50%> | 
+| [BubbleChart](docs/BubbleChart.md)     | <img src="img/demo/Bubble.png" width=50% height=50%> | 
+| [StackedBarChart](docs/StackedBarChart.md)     | <img src="img/demo/Stackerbarchart.png" width=50% height=50%> | 
+| [CombinedBarChart](docs/CombinedBarChart.md)     | <img src="img/demo/CombinedBarChart.png" width=50% height=50%> | 
+| [HorizontalBarChart](docs/HorizontalBarChart.md)    | <img src="img/demo/HorizontalBarChart.png" width=50% height=50%> | 
+| [GroupedBarChart](docs/GroupedBarChart.md)    | ------ | 
+| [GroupedHorizontalBarChart](docs/GroupedHorizontalBarChart.md)    | ------ | 
+| [CircleChart](docs/CircleChart.md)    | <img src="img/demo/CircleChart.png" width=50% height=50%> | 
+| [PointChart](docs/PointChart.md)   | <img src="img/demo/PointChart.png" width=50% height=50%> | 
+| [LineChart](docs/LineChart.md)  | <img src="img/demo/LineChart.png" width=50% height=50%> | 
+| [CurveLineChart](docs/CurveLineChart.md) | <img src="img/demo/CurvedLineChart.png" width=50% height=50%> | 
 
 ### Contribution
 
