@@ -15,7 +15,8 @@ internal fun DrawScope.drawCombinedBarLabel(
     combinedBarData: CombinedBarData,
     barWidth: Float,
     barHeight: Float,
-    topLeft: Offset
+    topLeft: Offset,
+    labelTextColor: Color
 ) {
     drawIntoCanvas {
         it.nativeCanvas.apply {
@@ -24,6 +25,7 @@ internal fun DrawScope.drawCombinedBarLabel(
                 topLeft.x.plus(barWidth.div(2)),
                 topLeft.y.plus(barHeight.plus(barWidth.div(2))),
                 Paint().apply {
+                    color = labelTextColor.toArgb()
                     textSize = size.width.div(30)
                     textAlign = Paint.Align.CENTER
                 }

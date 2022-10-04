@@ -5,6 +5,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,13 +25,13 @@ import com.himanshoe.charty.candle.config.CandleStickDefaults
 import com.himanshoe.charty.candle.model.CandleEntry
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.axis.yAxis
+import com.himanshoe.charty.common.axis.drawYAxisWithLabels
 
 @Composable
 fun CandleStickChart(
     candleEntryData: List<CandleEntry>,
     modifier: Modifier = Modifier,
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     candleStickConfig: CandleStickConfig = CandleStickDefaults.candleStickDefaults()
 ) {
     val x = remember { Animatable(0f) }
@@ -56,7 +57,7 @@ fun CandleStickChart(
             )
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    yAxis(axisConfig, maxYValue, true)
+                    drawYAxisWithLabels(axisConfig, maxYValue, true, axisConfig.textColor)
                 }
             }
             .padding(start = if (hasPadding) 20.dp else 0.dp)
@@ -74,13 +75,17 @@ fun CandleStickChart(
             val xPoint = value.times(scaleX)
             val yPointH = (size.height.minus(candleEntryData[value].high.times(scaleY))).plus(yMove)
             val yPointL = (size.height.minus(candleEntryData[value].low.times(scaleY))).plus(yMove)
-            val yPointO = (size.height.minus(candleEntryData[value].opening.times(scaleY))).plus(yMove)
-            val yPointC = (size.height.minus(candleEntryData[value].closing.times(scaleY))).plus(yMove)
+            val yPointO =
+                (size.height.minus(candleEntryData[value].opening.times(scaleY))).plus(yMove)
+            val yPointC =
+                (size.height.minus(candleEntryData[value].closing.times(scaleY))).plus(yMove)
             val path1 = Path()
             val path2 = Path()
             val isPositive = candleEntryData[value].opening <= candleEntryData[value].closing
-            val candleColor = if (isPositive) candleStickConfig.positiveColor else candleStickConfig.negativeColor
-            val candleLineColor = if (isPositive) candleStickConfig.positiveCandleLineColor else candleStickConfig.negativeCandleLineColor
+            val candleColor =
+                if (isPositive) candleStickConfig.positiveColor else candleStickConfig.negativeColor
+            val candleLineColor =
+                if (isPositive) candleStickConfig.positiveCandleLineColor else candleStickConfig.negativeCandleLineColor
 
             path1.moveTo(xPoint, yPointH)
             path1.lineTo(xPoint, yPointL)

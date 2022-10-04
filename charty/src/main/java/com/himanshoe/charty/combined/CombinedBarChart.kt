@@ -2,6 +2,7 @@ package com.himanshoe.charty.combined
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +29,8 @@ import com.himanshoe.charty.combined.model.CombinedBarData
 import com.himanshoe.charty.combined.model.maxYValue
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.axis.yAxis
+import com.himanshoe.charty.common.axis.drawYAxisWithLabels
+import com.himanshoe.charty.common.calculations.dataToOffSet
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 
@@ -39,7 +41,7 @@ fun CombinedBarChart(
     barColors: List<Color>,
     lineColors: List<Color>,
     modifier: Modifier = Modifier,
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     combinedBarConfig: CombinedBarConfig = CombinedBarConfigDefaults.barConfigDimesDefaults()
 ) {
@@ -53,7 +55,7 @@ fun CombinedBarChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    yAxis(axisConfig, maxYValue)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = axisConfig.textColor)
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -87,7 +89,8 @@ fun CombinedBarChart(
                 brush = Brush.linearGradient(barColors),
                 size = Size(chartBound.value, barHeight)
             )
-            val centerOffset = dataToOffSet(index, chartBound.value, size, data, scaleFactor)
+            val centerOffset =
+                dataToOffSet(index, chartBound.value, size, data.yLineValue, scaleFactor)
             val drawnPath = path.lineTo(centerOffset.x, centerOffset.y)
             if (combinedBarConfig.hasLineLabel) {
                 drawLineLabels(centerOffset, data, combinedBarConfig.lineLabelColor)
@@ -101,15 +104,18 @@ fun CombinedBarChart(
             }
             if (combinedBarConfig.hasDotMarker) {
                 drawCircle(
-                    center = centerOffset,
-                    radius = radius,
-                    brush = brush
+                    center = centerOffset, radius = radius, brush = brush
                 )
             }
 
-            // draw label
             if (axisConfig.showXLabels) {
-                drawCombinedBarLabel(data, chartBound.value, barHeight, topLeft)
+                drawCombinedBarLabel(
+                    data,
+                    chartBound.value,
+                    barHeight,
+                    topLeft,
+                    axisConfig.textColor
+                )
             }
             val pathEffect =
                 if (combinedBarConfig.hasSmoothCurve) PathEffect.cornerPathEffect(strokeWidth) else null
@@ -130,7 +136,7 @@ fun CombinedBarChart(
     barColors: List<Color>,
     lineColor: Color,
     modifier: Modifier = Modifier,
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     combinedBarConfig: CombinedBarConfig = CombinedBarConfigDefaults.barConfigDimesDefaults()
 ) {
@@ -153,7 +159,7 @@ fun CombinedBarChart(
     barColor: Color,
     lineColors: List<Color>,
     modifier: Modifier = Modifier,
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     combinedBarConfig: CombinedBarConfig = CombinedBarConfigDefaults.barConfigDimesDefaults()
 ) {
@@ -176,7 +182,7 @@ fun CombinedBarChart(
     barColor: Color,
     lineColor: Color,
     modifier: Modifier = Modifier,
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     combinedBarConfig: CombinedBarConfig = CombinedBarConfigDefaults.barConfigDimesDefaults()
 ) {
@@ -190,17 +196,4 @@ fun CombinedBarChart(
         chartDimens = chartDimens,
         combinedBarConfig = combinedBarConfig
     )
-}
-
-private fun dataToOffSet(
-    index: Int,
-    bound: Float,
-    size: Size,
-    data: CombinedBarData,
-    yScaleFactor: Float
-): Offset {
-    val startX = index.times(bound.times(1.2F))
-    val endX = index.plus(1).times(bound.times(1.2F))
-    val y = size.height.minus(data.yLineValue.times(yScaleFactor))
-    return Offset(((startX.plus(endX)).div(2F)), y)
 }

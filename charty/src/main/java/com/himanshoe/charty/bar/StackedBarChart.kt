@@ -2,6 +2,7 @@ package com.himanshoe.charty.bar
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +28,7 @@ import com.himanshoe.charty.bar.model.isValid
 import com.himanshoe.charty.bar.model.maxYValue
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.axis.yAxis
+import com.himanshoe.charty.common.axis.drawYAxisWithLabels
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 
@@ -38,7 +39,7 @@ fun StackedBarChart(
     modifier: Modifier = Modifier,
     onBarClick: (StackedBarData) -> Unit = {},
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
     if (stackBarData.isValid(colors.count()).not()) {
@@ -54,7 +55,7 @@ fun StackedBarChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    yAxis(axisConfig, maxYValue)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = axisConfig.textColor)
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -69,12 +70,7 @@ fun StackedBarChart(
 
         stackBarData.reversed().forEachIndexed { index, stackBarDataIndividual ->
             drawIndividualStackedBar(
-                index,
-                stackBarDataIndividual,
-                barWidth.value,
-                yScalableFactor,
-                barConfig,
-                colors
+                index, stackBarDataIndividual, barWidth.value, yScalableFactor, barConfig, colors
             )
         }
         drawLabels(
@@ -83,7 +79,8 @@ fun StackedBarChart(
             barWidth.value,
             axisConfig,
             clickedBar.value,
-            onBarClick
+            onBarClick,
+            axisConfig.textColor
         )
     }
 }
@@ -95,22 +92,15 @@ private fun DrawScope.drawLabels(
     axisConfig: AxisConfig,
     clickedBarValue: Offset,
     onBarClick: (StackedBarData) -> Unit,
+    labelTextColor: Color,
 ) {
     stackBarData.forEachIndexed { index, stackBarDataIndividual ->
         val barHeight = stackBarDataIndividual.yValue.sum().times(yScalableFactor)
         val barTopLeft = getTopLeft(
-            index,
-            width,
-            size,
-            stackBarDataIndividual.yValue.sum(),
-            yScalableFactor
+            index, width, size, stackBarDataIndividual.yValue.sum(), yScalableFactor
         )
         val barTopRight = getTopRight(
-            index,
-            width,
-            size,
-            stackBarDataIndividual.yValue.sum(),
-            yScalableFactor
+            index, width, size, stackBarDataIndividual.yValue.sum(), yScalableFactor
         )
         if (clickedBarValue.x in (barTopLeft.x..barTopRight.x)) {
             onBarClick(stackBarDataIndividual)
@@ -121,7 +111,8 @@ private fun DrawScope.drawLabels(
                 width.times(1.4F),
                 barHeight,
                 barTopLeft,
-                stackBarData.count()
+                stackBarData.count(),
+                labelTextColor
             )
         }
     }
