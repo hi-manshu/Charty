@@ -137,7 +137,7 @@ private fun DrawScope.drawBars(
     showLabels: Boolean,
     topLeft: Offset,
     barWidth: Float,
-    labelTextColor :Color,
+    labelTextColor: Color,
 ) {
     drawRoundRect(
         topLeft = topLeft,

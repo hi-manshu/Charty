@@ -1,6 +1,9 @@
 package com.himanshoe.charty
 
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,7 +38,11 @@ fun RegisterNavigation(
     onStackedBarClicked: () -> Unit,
     onBubbleChartClicked: () -> Unit
 ) {
-    NavHost(navController = navigator, startDestination = "main") {
+    NavHost(
+        modifier = Modifier.background(Color.Black),
+        navController = navigator,
+        startDestination = "main"
+    ) {
         composable("barchart") { BarChartDemo() }
         composable("main") {
             MainApp(

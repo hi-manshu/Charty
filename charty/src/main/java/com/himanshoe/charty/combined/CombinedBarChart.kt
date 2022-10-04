@@ -56,7 +56,7 @@ fun CombinedBarChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    drawYAxisWithLabels(axisConfig, maxYValue)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = labelTextColor)
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -112,7 +112,7 @@ fun CombinedBarChart(
             }
 
             if (axisConfig.showXLabels) {
-                drawCombinedBarLabel(data, chartBound.value, barHeight, topLeft,labelTextColor)
+                drawCombinedBarLabel(data, chartBound.value, barHeight, topLeft, labelTextColor)
             }
             val pathEffect =
                 if (combinedBarConfig.hasSmoothCurve) PathEffect.cornerPathEffect(strokeWidth) else null

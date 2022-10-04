@@ -56,7 +56,7 @@ fun StackedBarChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    drawYAxisWithLabels(axisConfig, maxYValue)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = labelTextColor)
                 }
             }
             .padding(horizontal = chartDimens.padding)

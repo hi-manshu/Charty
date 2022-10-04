@@ -1,6 +1,7 @@
 package com.himanshoe.charty.point
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -37,12 +38,13 @@ fun PointChart(
     val maxYValueState = rememberSaveable { mutableStateOf(pointData.maxYValue()) }
     val maxYValue = maxYValueState.value
     val pointBound = remember { mutableStateOf(0F) }
+    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
     Canvas(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    drawYAxisWithLabels(axisConfig, maxYValue)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = labelTextColor)
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -52,8 +54,10 @@ fun PointChart(
         val yScaleFactor = size.height.div(maxYValue)
         val brush = Brush.linearGradient(colors)
         val radius = size.width.div(70)
+
         pointData.forEachIndexed { index, data ->
-            val centerOffset = dataToOffSet(index, pointBound.value, size, data.yValue, yScaleFactor)
+            val centerOffset =
+                dataToOffSet(index, pointBound.value, size, data.yValue, yScaleFactor)
             val style = when (pointConfig.pointType) {
                 is PointType.Stroke -> Stroke(width = size.width.div(100))
                 else -> Fill
@@ -67,7 +71,13 @@ fun PointChart(
             )
 
             if (axisConfig.showXLabels) {
-                drawXLabel(data.xValue, centerOffset, radius, pointData.count())
+                drawXLabel(
+                    data = data.xValue,
+                    centerOffset = centerOffset,
+                    radius = radius,
+                    count = pointData.count(),
+                    textColor = labelTextColor
+                )
             }
         }
     }

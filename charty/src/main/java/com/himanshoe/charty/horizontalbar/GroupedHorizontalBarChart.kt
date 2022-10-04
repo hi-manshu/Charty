@@ -107,7 +107,7 @@ fun GroupedHorizontalBarChart(
                             horizontalBarConfig.showLabels,
                             topLeft = topLeft,
                             barWidth = barWidth,
-                            labelTextColor=   labelTextColor
+                            labelTextColor = labelTextColor
                         )
                     }
                 }
@@ -134,7 +134,7 @@ private fun DrawScope.drawBars(
             horizontalBarData = horizontalBarData,
             barHeight = barHeight,
             topLeft = topLeft,
-            labelTextColor =labelTextColor
+            labelTextColor = labelTextColor
         )
     }
 }
