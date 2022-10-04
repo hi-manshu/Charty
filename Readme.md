@@ -21,23 +21,13 @@ dependencies {
   implementation("com.himanshoe:charty:1.1.3-alpha04")
 }
 ```
+
 ## Integrating it in your project
 
-1. BarChart
-
-```kotlin
-  BarChart(
-    modifier = Modifier,
-    onBarClick = { // handle Click for individual bar}
-    colors = // colors,
-    barData = // list of BarData,
-    )
-```
-
-For more detailed implementation, click [here](docs/BarChart.md)
-
-## Documentation
 You can find the detail implementation of the following:
+- ![Charty](img/demo/BarChart.png)
+- [BarChart](docs/BarChart.md)
+
 
 - [CandleStickChart](docs/CandleStickChart.md)
 - [BubbleChart](docs/BubbleChart.md)
@@ -52,8 +42,8 @@ You can find the detail implementation of the following:
 - [CurveLineChart](docs/CurveLineChart.md)
 - [PieChart](docs/PieChart.md)
 
-
 ### Contribution
+
 Please feel free to fork it and open a PR.
 
 ## License
