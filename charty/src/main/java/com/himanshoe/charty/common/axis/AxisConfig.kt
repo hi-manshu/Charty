@@ -9,16 +9,18 @@ data class AxisConfig(
     val showXLabels: Boolean,
     val xAxisColor: Color = Color.LightGray,
     val yAxisColor: Color = Color.LightGray,
+    val textColor: Color,
 )
 
 internal object AxisConfigDefaults {
 
-    fun axisConfigDefaults() = AxisConfig(
+    fun axisConfigDefaults(isDarkMode: Boolean) = AxisConfig(
         xAxisColor = Color.LightGray,
         showAxis = true,
         isAxisDashed = false,
         showUnitLabels = true,
         showXLabels = true,
         yAxisColor = Color.LightGray,
+        textColor = if (isDarkMode) Color.White else Color.Black
     )
 }

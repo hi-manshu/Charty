@@ -36,7 +36,7 @@ fun BarChart(
     onBarClick: (BarData) -> Unit,
     modifier: Modifier = Modifier,
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
     BarChart(
@@ -57,10 +57,9 @@ fun BarChart(
     onBarClick: (BarData) -> Unit,
     modifier: Modifier = Modifier,
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
-    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
     val maxYValueState = rememberSaveable { mutableStateOf(barData.maxYValue()) }
     val clickedBar = remember { mutableStateOf(Offset(-10F, -10F)) }
 
@@ -71,7 +70,11 @@ fun BarChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = labelTextColor)
+                    drawYAxisWithLabels(
+                        axisConfig = axisConfig,
+                        maxValue = maxYValue,
+                        textColor = axisConfig.textColor
+                    )
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -106,7 +109,7 @@ fun BarChart(
                     barHeight,
                     topLeft,
                     barData.count(),
-                    labelTextColor
+                    axisConfig.textColor
                 )
             }
         }

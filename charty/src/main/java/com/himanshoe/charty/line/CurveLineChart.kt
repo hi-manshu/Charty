@@ -37,7 +37,7 @@ fun CurveLineChart(
     lineColor: Color,
     modifier: Modifier = Modifier,
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     curveLineConfig: CurveLineConfig = CurveLineConfigDefaults.curveLineConfigDefaults()
 ) {
     CurveLineChart(
@@ -58,7 +58,7 @@ fun CurveLineChart(
     lineColor: List<Color>,
     modifier: Modifier = Modifier,
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     curveLineConfig: CurveLineConfig = CurveLineConfigDefaults.curveLineConfigDefaults()
 ) {
     CurveLineChart(
@@ -79,7 +79,7 @@ fun CurveLineChart(
     lineColor: Color,
     modifier: Modifier = Modifier,
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     curveLineConfig: CurveLineConfig = CurveLineConfigDefaults.curveLineConfigDefaults()
 ) {
     CurveLineChart(
@@ -100,7 +100,7 @@ fun CurveLineChart(
     lineColors: List<Color>,
     modifier: Modifier = Modifier,
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     curveLineConfig: CurveLineConfig = CurveLineConfigDefaults.curveLineConfigDefaults()
 ) {
     val graphPathPoints = mutableListOf<PointF>()
@@ -108,7 +108,6 @@ fun CurveLineChart(
     val lineBound = remember { mutableStateOf(0F) }
     val maxYValueState = rememberSaveable { mutableStateOf(lineData.maxYValue()) }
     val maxYValue = maxYValueState.value
-    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
     Canvas(
         modifier = modifier
@@ -116,7 +115,7 @@ fun CurveLineChart(
             .padding(horizontal = chartDimens.padding)
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = labelTextColor)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = axisConfig.textColor)
                 }
             },
         onDraw = {

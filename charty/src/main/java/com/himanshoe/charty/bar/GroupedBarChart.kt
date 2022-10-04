@@ -36,21 +36,20 @@ fun GroupedBarChart(
     modifier: Modifier = Modifier,
     onBarClick: (BarData) -> Unit = {},
     barDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
     val barWidth = remember { mutableStateOf(0F) }
     val maxYValueState = rememberSaveable { mutableStateOf(groupedBarData.maxYValue()) }
     val clickedBar = remember { mutableStateOf(Offset(-10F, -10F)) }
     val maxYValue = maxYValueState.value
-    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
     val totalItems: Int = groupedBarData.totalItems()
     Canvas(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = labelTextColor)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = axisConfig.textColor)
                 }
             }
             .padding(horizontal = barDimens.padding)
@@ -91,7 +90,7 @@ fun GroupedBarChart(
                         barHeight,
                         topLeft,
                         groupedBarData.count(),
-                        labelTextColor
+                        axisConfig.textColor
                     )
                 }
             }

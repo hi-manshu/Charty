@@ -39,7 +39,7 @@ fun StackedBarChart(
     modifier: Modifier = Modifier,
     onBarClick: (StackedBarData) -> Unit = {},
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
     if (stackBarData.isValid(colors.count()).not()) {
@@ -50,13 +50,12 @@ fun StackedBarChart(
     val maxYValue = maxYValueState.value
     val barWidth = remember { mutableStateOf(0F) }
     val clickedBar = remember { mutableStateOf(Offset(-10F, -10F)) }
-    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
     Canvas(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = labelTextColor)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = axisConfig.textColor)
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -71,12 +70,7 @@ fun StackedBarChart(
 
         stackBarData.reversed().forEachIndexed { index, stackBarDataIndividual ->
             drawIndividualStackedBar(
-                index,
-                stackBarDataIndividual,
-                barWidth.value,
-                yScalableFactor,
-                barConfig,
-                colors
+                index, stackBarDataIndividual, barWidth.value, yScalableFactor, barConfig, colors
             )
         }
         drawLabels(
@@ -86,7 +80,7 @@ fun StackedBarChart(
             axisConfig,
             clickedBar.value,
             onBarClick,
-            labelTextColor
+            axisConfig.textColor
         )
     }
 }
@@ -103,18 +97,10 @@ private fun DrawScope.drawLabels(
     stackBarData.forEachIndexed { index, stackBarDataIndividual ->
         val barHeight = stackBarDataIndividual.yValue.sum().times(yScalableFactor)
         val barTopLeft = getTopLeft(
-            index,
-            width,
-            size,
-            stackBarDataIndividual.yValue.sum(),
-            yScalableFactor
+            index, width, size, stackBarDataIndividual.yValue.sum(), yScalableFactor
         )
         val barTopRight = getTopRight(
-            index,
-            width,
-            size,
-            stackBarDataIndividual.yValue.sum(),
-            yScalableFactor
+            index, width, size, stackBarDataIndividual.yValue.sum(), yScalableFactor
         )
         if (clickedBarValue.x in (barTopLeft.x..barTopRight.x)) {
             onBarClick(stackBarDataIndividual)

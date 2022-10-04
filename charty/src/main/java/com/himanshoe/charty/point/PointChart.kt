@@ -32,19 +32,18 @@ fun PointChart(
     colors: List<Color>,
     modifier: Modifier = Modifier,
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     pointConfig: PointConfig = PointConfigDefaults.pointConfigDefaults()
 ) {
     val maxYValueState = rememberSaveable { mutableStateOf(pointData.maxYValue()) }
     val maxYValue = maxYValueState.value
     val pointBound = remember { mutableStateOf(0F) }
-    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
     Canvas(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = labelTextColor)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = axisConfig.textColor)
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -64,10 +63,7 @@ fun PointChart(
             }
 
             drawCircle(
-                center = centerOffset,
-                style = style,
-                radius = radius,
-                brush = brush
+                center = centerOffset, style = style, radius = radius, brush = brush
             )
 
             if (axisConfig.showXLabels) {
@@ -76,7 +72,7 @@ fun PointChart(
                     centerOffset = centerOffset,
                     radius = radius,
                     count = pointData.count(),
-                    textColor = labelTextColor
+                    textColor = axisConfig.textColor
                 )
             }
         }
@@ -89,7 +85,7 @@ fun PointChart(
     color: Color,
     modifier: Modifier = Modifier,
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     pointConfig: PointConfig = PointConfigDefaults.pointConfigDefaults()
 ) {
     PointChart(

@@ -41,13 +41,12 @@ fun CombinedBarChart(
     barColors: List<Color>,
     lineColors: List<Color>,
     modifier: Modifier = Modifier,
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     combinedBarConfig: CombinedBarConfig = CombinedBarConfigDefaults.barConfigDimesDefaults()
 ) {
     val maxYValueState = rememberSaveable { mutableStateOf(combinedBarData.maxYValue()) }
     val clickedBar = remember { mutableStateOf(Offset(-10F, -10F)) }
-    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
     val maxYValue = maxYValueState.value
     val chartBound = remember { mutableStateOf(0F) }
@@ -56,7 +55,7 @@ fun CombinedBarChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = labelTextColor)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = axisConfig.textColor)
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -105,14 +104,18 @@ fun CombinedBarChart(
             }
             if (combinedBarConfig.hasDotMarker) {
                 drawCircle(
-                    center = centerOffset,
-                    radius = radius,
-                    brush = brush
+                    center = centerOffset, radius = radius, brush = brush
                 )
             }
 
             if (axisConfig.showXLabels) {
-                drawCombinedBarLabel(data, chartBound.value, barHeight, topLeft, labelTextColor)
+                drawCombinedBarLabel(
+                    data,
+                    chartBound.value,
+                    barHeight,
+                    topLeft,
+                    axisConfig.textColor
+                )
             }
             val pathEffect =
                 if (combinedBarConfig.hasSmoothCurve) PathEffect.cornerPathEffect(strokeWidth) else null
@@ -133,7 +136,7 @@ fun CombinedBarChart(
     barColors: List<Color>,
     lineColor: Color,
     modifier: Modifier = Modifier,
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     combinedBarConfig: CombinedBarConfig = CombinedBarConfigDefaults.barConfigDimesDefaults()
 ) {
@@ -156,7 +159,7 @@ fun CombinedBarChart(
     barColor: Color,
     lineColors: List<Color>,
     modifier: Modifier = Modifier,
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     combinedBarConfig: CombinedBarConfig = CombinedBarConfigDefaults.barConfigDimesDefaults()
 ) {
@@ -179,7 +182,7 @@ fun CombinedBarChart(
     barColor: Color,
     lineColor: Color,
     modifier: Modifier = Modifier,
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     combinedBarConfig: CombinedBarConfig = CombinedBarConfigDefaults.barConfigDimesDefaults()
 ) {

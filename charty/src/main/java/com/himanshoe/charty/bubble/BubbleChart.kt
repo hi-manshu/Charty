@@ -34,7 +34,7 @@ fun BubbleChart(
     modifier: Modifier = Modifier,
     bubbleConfig: BubbleConfig = BubbleConfigDefaults.bubbleConfigDefaults(),
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
 ) {
     BubbleChart(bubbleData, listOf(color, color), modifier, bubbleConfig, chartDimens, axisConfig)
 }
@@ -46,9 +46,8 @@ fun BubbleChart(
     modifier: Modifier = Modifier,
     bubbleConfig: BubbleConfig = BubbleConfigDefaults.bubbleConfigDefaults(),
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
 ) {
-    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
     val maxYValueState = rememberSaveable { mutableStateOf(bubbleData.maxYValue()) }
     val maxVolumeState = rememberSaveable { mutableStateOf(bubbleData.maxVolumeSize()) }
 
@@ -60,7 +59,7 @@ fun BubbleChart(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = labelTextColor)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = axisConfig.textColor)
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -97,7 +96,7 @@ fun BubbleChart(
                 drawXLabel(
                     data.xValue, centerOffset, size.width.div(70),
                     bubbleData.count(),
-                    labelTextColor
+                    axisConfig.textColor
                 )
             }
         }

@@ -32,7 +32,7 @@ fun LineChart(
     color: Color,
     modifier: Modifier = Modifier,
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     lineConfig: LineConfig = LineConfigDefaults.lineConfigDefaults()
 ) {
     LineChart(
@@ -51,19 +51,18 @@ fun LineChart(
     colors: List<Color>,
     modifier: Modifier = Modifier,
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
-    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(),
+    axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     lineConfig: LineConfig = LineConfigDefaults.lineConfigDefaults()
 ) {
     val maxYValueState = rememberSaveable { mutableStateOf(lineData.maxYValue()) }
     val maxYValue = maxYValueState.value
     val lineBound = remember { mutableStateOf(0F) }
-    val labelTextColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
     Canvas(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = labelTextColor)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = axisConfig.textColor)
                 }
             }
             .padding(horizontal = chartDimens.padding)
@@ -97,7 +96,7 @@ fun LineChart(
                     centerOffset,
                     radius,
                     lineData.count(),
-                    labelTextColor
+                    axisConfig.textColor
                 )
             }
         }
