@@ -79,9 +79,11 @@ fun LineChart(
 
         lineData.forEachIndexed { index, data ->
             val centerOffset = dataToOffSet(index, lineBound.value, size, data.yValue, scaleFactor)
-            when (index) {
-                0 -> path.moveTo(centerOffset.x, centerOffset.y)
-                else -> path.lineTo(centerOffset.x, centerOffset.y)
+            if (lineData.size > 1) {
+                when (index) {
+                    0 -> path.moveTo(centerOffset.x, centerOffset.y)
+                    else -> path.lineTo(centerOffset.x, centerOffset.y)
+                }
             }
             if (lineConfig.hasDotMarker) {
                 drawCircle(
@@ -100,12 +102,14 @@ fun LineChart(
                 )
             }
         }
-        val pathEffect =
-            if (lineConfig.hasSmoothCurve) PathEffect.cornerPathEffect(strokeWidth) else null
-        drawPath(
-            path = path,
-            brush = brush,
-            style = Stroke(width = strokeWidth, pathEffect = pathEffect),
-        )
+        if (lineData.size > 1) {
+            val pathEffect =
+                if (lineConfig.hasSmoothCurve) PathEffect.cornerPathEffect(strokeWidth) else null
+            drawPath(
+                path = path,
+                brush = brush,
+                style = Stroke(width = strokeWidth, pathEffect = pathEffect),
+            )
+        }
     }
 }
