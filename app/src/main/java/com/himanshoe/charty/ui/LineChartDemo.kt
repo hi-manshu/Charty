@@ -32,8 +32,6 @@ fun LineChartDemo() {
             .padding(32.dp)
     ) {
         item {
-
-
             Column {
                 Button(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
