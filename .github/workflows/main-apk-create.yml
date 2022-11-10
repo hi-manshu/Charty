@@ -28,7 +28,7 @@ jobs:
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
           repo_token: "${{ github.token }}"
-          automatic_release_tag: "latest-master"
+          automatic_release_tag: "latest-main"
           prerelease: true
           title: "Staging Build"
           files: app/build/outputs/apk/debug/app-debug.apk
