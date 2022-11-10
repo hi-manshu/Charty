@@ -1,9 +1,9 @@
-name: Create APK from Master
+name: Create APK from Main
 
 on:
   push:
     branches:
-    - mater-apk
+    - main
 
 jobs:
   build:
