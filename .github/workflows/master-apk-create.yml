@@ -3,7 +3,7 @@ name: Create APK from Master
 on:
   push:
     branches:
-    - master
+    - mater-apk
 
 jobs:
   build:
