@@ -19,7 +19,7 @@ In `build.gradle` of app module, include this dependency
 
 ```gradle
 dependencies {
-  implementation("com.himanshoe:charty:1.0.0")
+  implementation("com.himanshoe:charty:1.0.1")
 }
 ```
 
