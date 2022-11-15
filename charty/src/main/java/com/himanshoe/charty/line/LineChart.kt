@@ -4,9 +4,9 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
@@ -54,7 +54,7 @@ fun LineChart(
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     lineConfig: LineConfig = LineConfigDefaults.lineConfigDefaults()
 ) {
-    val maxYValueState = rememberSaveable { mutableStateOf(lineData.maxYValue()) }
+    val maxYValueState = remember { derivedStateOf { lineData.maxYValue() } }
     val maxYValue = maxYValueState.value
     val lineBound = remember { mutableStateOf(0F) }
 

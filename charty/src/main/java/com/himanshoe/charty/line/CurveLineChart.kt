@@ -6,18 +6,13 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.asAndroidPath
-import androidx.compose.ui.graphics.asComposePath
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
@@ -106,7 +101,7 @@ fun CurveLineChart(
     val graphPathPoints = mutableListOf<PointF>()
     val backgroundPathPoints = mutableListOf<PointF>()
     val lineBound = remember { mutableStateOf(0F) }
-    val maxYValueState = rememberSaveable { mutableStateOf(lineData.maxYValue()) }
+    val maxYValueState = remember { derivedStateOf { lineData.maxYValue() } }
     val maxYValue = maxYValueState.value
 
     Canvas(
