@@ -72,7 +72,7 @@ fun LineChart(
         val scaleFactor = size.height.div(maxYValue)
         val brush = Brush.linearGradient(colors)
         val radius = size.width.div(70)
-        val strokeWidth = size.width.div(100)
+        val strokeWidth = lineConfig.strokeSize.toPx()
         val path = Path().apply {
             moveTo(0f, size.height)
         }

@@ -192,7 +192,7 @@ fun CurveLineChart(
                     colors = lineColors,
                 ),
                 style = Stroke(
-                    width = 5F,
+                    width = curveLineConfig.strokeSize.toPx(),
                     cap = StrokeCap.Round
                 )
             )
