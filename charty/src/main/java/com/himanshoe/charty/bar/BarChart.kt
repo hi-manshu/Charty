@@ -5,9 +5,10 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
@@ -60,10 +61,12 @@ fun BarChart(
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     barConfig: BarConfig = BarConfigDefaults.barConfigDimesDefaults()
 ) {
-    val maxYValueState = rememberSaveable { mutableStateOf(barData.maxYValue()) }
+    val maxYValue by remember(barData) {
+        derivedStateOf {
+            barData.maxYValue()
+        }
+    }
     val clickedBar = remember { mutableStateOf(Offset(-10F, -10F)) }
-
-    val maxYValue = maxYValueState.value
     val barWidth = remember { mutableStateOf(0F) }
 
     Canvas(
