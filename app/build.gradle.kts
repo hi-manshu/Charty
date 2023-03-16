@@ -33,8 +33,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
@@ -44,7 +44,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
+        kotlinCompilerExtensionVersion = "1.4.1"
     }
 }
 
@@ -52,8 +52,8 @@ dependencies {
     implementation(project(":charty"))
 // implementation("com.himanshoe:charty:1.1.3-alpha05")
     implementation(Deps.Compose.ui)
-    implementation("androidx.compose.material3:material3:1.0.0-alpha15")
-    implementation("androidx.navigation:navigation-compose:2.5.1")
+    implementation("androidx.compose.material3:material3:1.1.0-alpha08")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
     implementation(Deps.Compose.activity)
     implementation(Deps.Jetpack.Core.ktx)
     implementation(Deps.Android.materialDesign)
