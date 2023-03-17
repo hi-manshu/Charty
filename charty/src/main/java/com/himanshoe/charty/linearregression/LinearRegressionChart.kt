@@ -27,6 +27,10 @@ import com.himanshoe.charty.linearregression.model.LinearRegressionData
 import com.himanshoe.charty.linearregression.model.maxYValue
 import com.himanshoe.charty.point.cofig.PointType
 
+// TODO: Figure out yAxis - device diff. Update to make labels more centered and relevant.
+// TODO: Figure out xAxis - also set xAxis in same way
+// TODO: Figure how to adjust axis labels
+
 @Composable
 fun LinearRegressionChart(
     linearRegressionData: List<LinearRegressionData>,
@@ -50,19 +54,23 @@ fun LinearRegressionChart(
             }
             .padding(horizontal = chartDimens.padding)
     ) {
+        println("SIZE: $size")
         chartBound.value = size.width.div(linearRegressionData.count().times(1.2F))
         val yScaleFactor = size.height.div(maxYValue)
         val scatterBrush = Brush.linearGradient(scatterColors)
         val lineBrush = Brush.linearGradient(lineColors)
-        val radius = size.width.div(70)
+        val scatterRadius = linearRegressionConfig.pointSize.toPx()
+        val textRadius = size.width.div(70)
         val strokeWidth = linearRegressionConfig.strokeSize.toPx()
         val path = Path().apply {
             moveTo(0f, size.height)
         }
 
         linearRegressionData.forEachIndexed { index, data ->
+            // TODO: To adjust yLabels, need to adjust yOffset
             val scatterCenterOffset =
                 dataToOffSet(index, chartBound.value, size, data.yPointValue, yScaleFactor)
+            println("OFFSET: $scatterCenterOffset")
             val style = when (linearRegressionConfig.pointType) {
                 is PointType.Stroke -> Stroke(width = size.width.div(100))
                 else -> Fill
@@ -77,14 +85,14 @@ fun LinearRegressionChart(
             }
 
             drawCircle(
-                center = scatterCenterOffset, style = style, radius = radius, brush = scatterBrush
+                center = scatterCenterOffset, style = style, radius = scatterRadius, brush = scatterBrush
             )
 
             if (axisConfig.showXLabels) {
                 drawXLabel(
                     data = data.xValue,
                     centerOffset = scatterCenterOffset,
-                    radius = radius,
+                    radius = textRadius,
                     count = linearRegressionData.count(),
                     textColor = axisConfig.textColor
                 )
