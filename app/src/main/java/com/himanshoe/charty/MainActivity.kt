@@ -26,29 +26,31 @@ class MainActivity : ComponentActivity() {
                     navigator.navigate("barchart")
                 }, onHorizontalBarChartClicked = {
                 navigator.navigate("horizontalBarChartDemo")
-            }, onCircleChartClicked = {
-                navigator.navigate("circlechart")
-            }, onLineChartClicked = {
-                navigator.navigate("linechart")
-            }, onCurveChartClicked = {
-                navigator.navigate("curvelinechart")
-            }, onPointChartClicked = {
-                navigator.navigate("pointchart")
-            }, onPieChartClicked = {
-                navigator.navigate("piechart")
-            }, onGroupHorizontalClicked = {
-                navigator.navigate("grouphorizontalbar")
-            }, onGroupBarClicked = {
-                navigator.navigate("groupbar")
-            }, onCombinedBarChartClicked = {
-                navigator.navigate("combinedBar")
-            }, onCandleChartClicked = {
-                navigator.navigate("candleChart")
-            }, onStackedBarClicked = {
-                navigator.navigate("stackedBar")
-            }, onBubbleChartClicked = {
-                navigator.navigate("bubbleChart")
-            }
+                }, onCircleChartClicked = {
+                    navigator.navigate("circlechart")
+                }, onLineChartClicked = {
+                    navigator.navigate("linechart")
+                }, onCurveChartClicked = {
+                    navigator.navigate("curvelinechart")
+                }, onPointChartClicked = {
+                    navigator.navigate("pointchart")
+                }, onPieChartClicked = {
+                    navigator.navigate("piechart")
+                }, onGroupHorizontalClicked = {
+                    navigator.navigate("grouphorizontalbar")
+                }, onGroupBarClicked = {
+                    navigator.navigate("groupbar")
+                }, onCombinedBarChartClicked = {
+                    navigator.navigate("combinedBar")
+                }, onCandleChartClicked = {
+                    navigator.navigate("candleChart")
+                }, onStackedBarClicked = {
+                    navigator.navigate("stackedBar")
+                }, onBubbleChartClicked = {
+                    navigator.navigate("bubbleChart")
+                }, onLinearRegressionChartClicked = {
+                    navigator.navigate("linearRegressionChart")
+                }
             )
         }
     }
@@ -69,6 +71,7 @@ fun MainApp(
     onCandleChartClicked: () -> Unit,
     onGroupBarClicked: () -> Unit,
     onStackedBarClicked: () -> Unit,
+    onLinearRegressionClicked: () -> Unit
 ) {
 
     val list: List<Pair<String, () -> Unit>> =
@@ -85,7 +88,8 @@ fun MainApp(
             "Grouped Horizontal Chart" to onGroupHorizontalClicked,
             "Horizontal Bar Chart" to onHorizontalBarChartClicked,
             "Pie Chart" to onPieChartClicked,
-            "Point Chart" to onPointChartClicked
+            "Point Chart" to onPointChartClicked,
+            "Linear Regression Chart" to onLinearRegressionClicked
         )
 
     LazyColumn(

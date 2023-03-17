@@ -7,19 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.himanshoe.charty.ui.BarChartDemo
-import com.himanshoe.charty.ui.BubbleChartDemo
-import com.himanshoe.charty.ui.CandleStickChartDemo
-import com.himanshoe.charty.ui.CircleChartDemo
-import com.himanshoe.charty.ui.CombinedBarChartDemo
-import com.himanshoe.charty.ui.CurveLineChartDemo
-import com.himanshoe.charty.ui.GroupBarChartDemo
-import com.himanshoe.charty.ui.GroupedHorizontalBarChartDemo
-import com.himanshoe.charty.ui.HorizontalBarChartDemo
-import com.himanshoe.charty.ui.LineChartDemo
-import com.himanshoe.charty.ui.PieChartDemo
-import com.himanshoe.charty.ui.PointChartDemo
-import com.himanshoe.charty.ui.StackedBarChartDemo
+import com.himanshoe.charty.ui.*
 
 @Composable
 fun RegisterNavigation(
@@ -36,7 +24,8 @@ fun RegisterNavigation(
     onCombinedBarChartClicked: () -> Unit,
     onCandleChartClicked: () -> Unit,
     onStackedBarClicked: () -> Unit,
-    onBubbleChartClicked: () -> Unit
+    onBubbleChartClicked: () -> Unit,
+    onLinearRegressionChartClicked: () -> Unit
 ) {
     NavHost(
         modifier = Modifier.background(Color.Black),
@@ -58,7 +47,8 @@ fun RegisterNavigation(
                 onGroupHorizontalClicked = onGroupHorizontalClicked,
                 onCombinedBarChartClicked = onCombinedBarChartClicked,
                 onCandleChartClicked = onCandleChartClicked,
-                onStackedBarClicked = onStackedBarClicked
+                onStackedBarClicked = onStackedBarClicked,
+                onLinearRegressionClicked = onLinearRegressionChartClicked
             )
         }
         composable("horizontalBarChartDemo") { HorizontalBarChartDemo() }
@@ -73,5 +63,6 @@ fun RegisterNavigation(
         composable("combinedBar") { CombinedBarChartDemo() }
         composable("candleChart") { CandleStickChartDemo() }
         composable("bubbleChart") { BubbleChartDemo() }
+        composable("linearRegressionChart") { LinearRegressionChartDemo() }
     }
 }
