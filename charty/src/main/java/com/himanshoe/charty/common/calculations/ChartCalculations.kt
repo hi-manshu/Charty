@@ -17,3 +17,18 @@ internal fun dataToOffSet(
     val y = size.height.minus(data.times(yScaleFactor))
     return Offset(((startX.plus(endX)).div(2F)), y)
 }
+
+internal fun unboundDataToOffset(
+    size: Size,
+    xData: Float,
+    xMax: Float,
+    xRange: Float,
+    yData: Float,
+    yScaleFactor: Float
+): Offset {
+    val currentXDiff = xMax.minus(xData)
+    val rangeDiff = xRange.minus(currentXDiff)
+    val x = rangeDiff.div(xRange).times(size.width)
+    val y = size.height.minus(yData.times(yScaleFactor))
+    return Offset(x, y)
+}

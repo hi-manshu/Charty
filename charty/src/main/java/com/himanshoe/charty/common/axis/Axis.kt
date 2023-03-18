@@ -14,7 +14,7 @@ internal fun DrawScope.drawYAxisWithLabels(
     axisConfig: AxisConfig,
     maxValue: Float,
     isCandleChart: Boolean = false,
-    textColor: Color = Color.Black
+    textColor: Color = Color.White
 ) {
     val graphYAxisEndPoint = size.height.div(4)
     val pathEffect = PathEffect.dashPathEffect(floatArrayOf(40f, 20f), 0f)
@@ -77,6 +77,38 @@ internal fun DrawScope.drawXLabel(
                     textAlign = Paint.Align.CENTER
                 }
             )
+        }
+    }
+}
+
+internal fun DrawScope.drawSetXAxisWithLabels(
+    maxValue: Float,
+    minValue: Float,
+    range: Float,
+    breaks: Int = 5,
+    isCandleChart: Boolean = false,
+    textColor: Color = Color.White
+) {
+    val steps = maxValue.minus(minValue).div(breaks.minus(1))
+    val labels = (0..breaks.minus(1)).map { minValue.plus(it.times(steps)) }
+
+    labels.forEach { label ->
+        val currentXDiff = maxValue.minus(label)
+        val rangeDiff = range.minus(currentXDiff)
+        val x = rangeDiff.div(range).times(size.width)
+        drawIntoCanvas {
+            it.nativeCanvas.apply {
+                drawText(
+                    getLabelText(label, isCandleChart),
+                    x,
+                    size.height.plus(50f),
+                    Paint().apply {
+                        color = textColor.toArgb()
+                        textSize = size.width.div(30)
+                        textAlign = Paint.Align.CENTER
+                    }
+                )
+            }
         }
     }
 }

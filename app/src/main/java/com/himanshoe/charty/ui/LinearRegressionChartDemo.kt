@@ -37,11 +37,11 @@ fun LinearRegressionChartDemo() {
                     strokeSize = 2.dp
                 ),
                 linearRegressionData = listOf(
-                    LinearRegressionData(xValue = 3986.37, yPointValue = 128.25f, yLineValue = 128f),
-                    LinearRegressionData(xValue = 3992.01, yPointValue = 128.05f, yLineValue = 128.13f),
-                    LinearRegressionData(xValue = 3918.32, yPointValue = 126.16f, yLineValue = 126.52f),
-                    LinearRegressionData(xValue = 3861.59, yPointValue = 125.45f, yLineValue = 125.29f),
-                    LinearRegressionData(xValue = 3884.29, yPointValue = 125.82f, yLineValue = 125.78f),
+                    LinearRegressionData(xValue = 3986.37f, yPointValue = 128.25f, yLineValue = 128f),
+                    LinearRegressionData(xValue = 3992.01f, yPointValue = 128.05f, yLineValue = 128.13f),
+                    LinearRegressionData(xValue = 3918.32f, yPointValue = 126.16f, yLineValue = 126.52f),
+                    LinearRegressionData(xValue = 3861.59f, yPointValue = 125.45f, yLineValue = 125.29f),
+                    LinearRegressionData(xValue = 3884.29f, yPointValue = 125.82f, yLineValue = 125.78f),
                 )
             )
         }
@@ -70,11 +70,11 @@ fun LinearRegressionChartDemo() {
                     pointSize = 2.dp
                 ),
                 linearRegressionData = listOf(
-                    LinearRegressionData(xValue = 3986.37, yPointValue = 128.25f, yLineValue = 128f),
-                    LinearRegressionData(xValue = 3992.01, yPointValue = 128.05f, yLineValue = 128.13f),
-                    LinearRegressionData(xValue = 3918.32, yPointValue = 126.16f, yLineValue = 126.52f),
-                    LinearRegressionData(xValue = 3861.59, yPointValue = 125.45f, yLineValue = 125.29f),
-                    LinearRegressionData(xValue = 3884.29, yPointValue = 125.82f, yLineValue = 125.78f),
+                    LinearRegressionData(xValue = 3986.37f, yPointValue = 128.25f, yLineValue = 128f),
+                    LinearRegressionData(xValue = 3992.01f, yPointValue = 128.05f, yLineValue = 128.13f),
+                    LinearRegressionData(xValue = 3918.32f, yPointValue = 126.16f, yLineValue = 126.52f),
+                    LinearRegressionData(xValue = 3861.59f, yPointValue = 125.45f, yLineValue = 125.29f),
+                    LinearRegressionData(xValue = 3884.29f, yPointValue = 125.82f, yLineValue = 125.78f),
                 )
             )
         }

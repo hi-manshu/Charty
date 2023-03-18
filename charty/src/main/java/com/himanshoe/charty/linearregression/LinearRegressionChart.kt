@@ -16,20 +16,17 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
-import com.himanshoe.charty.common.axis.drawXLabel
+import com.himanshoe.charty.common.axis.drawSetXAxisWithLabels
 import com.himanshoe.charty.common.axis.drawYAxisWithLabels
-import com.himanshoe.charty.common.calculations.dataToOffSet
+import com.himanshoe.charty.common.calculations.unboundDataToOffset
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 import com.himanshoe.charty.linearregression.config.LinearRegressionConfig
 import com.himanshoe.charty.linearregression.config.LinearRegressionDefaults
-import com.himanshoe.charty.linearregression.model.DependentValues
-import com.himanshoe.charty.linearregression.model.LinearRegressionData
-import com.himanshoe.charty.linearregression.model.maxYValue
+import com.himanshoe.charty.linearregression.model.*
 import com.himanshoe.charty.point.cofig.PointType
 
 // TODO: Figure out yAxis - device diff. Update to make labels more centered and relevant.
-// TODO: Figure out xAxis - also set xAxis in same way
 // TODO: Figure how to adjust axis labels
 
 @Composable
@@ -47,24 +44,31 @@ fun LinearRegressionChart(
         .groupBy(keySelector = { it.xValue }, valueTransform = { DependentValues(it.yPointValue, it.yLineValue) })
     val maxYValueState = remember { derivedStateOf { linearRegressionData.maxYValue() } }
     val maxYValue = maxYValueState.value
+    val maxXValueState = remember { derivedStateOf { linearRegressionData.maxXValue() } }
+    val maxXValue = maxXValueState.value
+    val minXValueState = remember { derivedStateOf { linearRegressionData.minXValue() } }
+    val minXValue = minXValueState.value
+    val xRange = maxXValue.minus(minXValue)
+    // TODO: Make the range padding variable
+    val adjustedXRange = xRange.plus(xRange.times(.1f))
     val chartBound = remember { mutableStateOf(0F) }
 
     Canvas(
         modifier = modifier
             .drawBehind {
                 if (axisConfig.showAxis) {
-                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = axisConfig.textColor)
+                    drawYAxisWithLabels(axisConfig, maxYValue, textColor = Color.White)
                 }
             }
             .padding(horizontal = chartDimens.padding)
     ) {
         println("SIZE: $size")
         chartBound.value = size.width.div(data.count().times(1.2F))
+        println("BOUND: ${chartBound.value}")
         val yScaleFactor = size.height.div(maxYValue)
         val scatterBrush = Brush.linearGradient(scatterColors)
         val lineBrush = Brush.linearGradient(lineColors)
         val scatterRadius = linearRegressionConfig.pointSize.toPx()
-        val textRadius = size.width.div(70)
         val strokeWidth = linearRegressionConfig.strokeSize.toPx()
         val path = Path().apply {
             moveTo(0f, size.height)
@@ -73,11 +77,12 @@ fun LinearRegressionChart(
         data.entries.forEachIndexed { index, functionData ->
             functionData.value.forEach { yValues ->
                 // TODO: To adjust yLabels, need to adjust yOffset
-                val scatterCenterOffset = dataToOffSet(
-                    index = index,
-                    bound = chartBound.value,
+                val scatterCenterOffset = unboundDataToOffset(
                     size = size,
-                    data = yValues.yPointValue,
+                    xData = functionData.key,
+                    xMax = maxXValue,
+                    xRange = adjustedXRange,
+                    yData = yValues.yPointValue,
                     yScaleFactor = yScaleFactor
                 )
                 println("OFFSET: $scatterCenterOffset")
@@ -85,11 +90,12 @@ fun LinearRegressionChart(
                     is PointType.Stroke -> Stroke(width = size.width.div(100))
                     else -> Fill
                 }
-                val lineCenterOffset = dataToOffSet(
-                    index = index,
-                    bound = chartBound.value,
+                val lineCenterOffset = unboundDataToOffset(
                     size = size,
-                    data = yValues.yLineValue,
+                    xData = functionData.key,
+                    xMax = maxXValue,
+                    xRange = adjustedXRange,
+                    yData = yValues.yLineValue,
                     yScaleFactor = yScaleFactor
                 )
 
@@ -107,13 +113,12 @@ fun LinearRegressionChart(
                     brush = scatterBrush
                 )
 
+                // TODO: make breaks variable
                 if (axisConfig.showXLabels) {
-                    drawXLabel(
-                        data = functionData.key,
-                        centerOffset = scatterCenterOffset,
-                        radius = textRadius,
-                        count = data.count(),
-                        textColor = axisConfig.textColor
+                    drawSetXAxisWithLabels(
+                        maxValue = maxXValue,
+                        minValue = minXValue,
+                        range = adjustedXRange
                     )
                 }
             }
