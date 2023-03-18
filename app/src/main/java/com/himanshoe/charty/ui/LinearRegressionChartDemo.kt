@@ -89,5 +89,40 @@ fun LinearRegressionChartDemo() {
                 color = if (isSystemInDarkTheme()) Color.White else Color.Black
             )
         }
+
+        item {
+            LinearRegressionChart(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(height = 300.dp)
+                    .padding(20.dp),
+                scatterColors = colors.last(),
+                lineColors = colors.first(),
+                linearRegressionConfig = LinearRegressionConfig(
+                    pointType = PointType.Fill,
+                    strokeSize = 2.dp
+                ),
+                linearRegressionData = listOf(
+                    LinearRegressionData(10F, 35F, 35f),
+                    LinearRegressionData(20F, 25F, 25f),
+                    LinearRegressionData(10F, 50F, 50f),
+                    LinearRegressionData(100F, 10F, 10f),
+                    LinearRegressionData(10F, 15F, 15f),
+                    LinearRegressionData(50F, 100F, 100f),
+                    LinearRegressionData(20F, 25F, 25f),
+                )
+            )
+        }
+        item {
+            Text(
+                text = "Linear Regression Chart with\nduplicate x values",
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                textAlign = TextAlign.Center,
+                color = if (isSystemInDarkTheme()) Color.White else Color.Black
+            )
+        }
     }
 }

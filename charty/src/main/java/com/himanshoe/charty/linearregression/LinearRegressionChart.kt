@@ -23,6 +23,7 @@ import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
 import com.himanshoe.charty.linearregression.config.LinearRegressionConfig
 import com.himanshoe.charty.linearregression.config.LinearRegressionDefaults
+import com.himanshoe.charty.linearregression.model.DependentValues
 import com.himanshoe.charty.linearregression.model.LinearRegressionData
 import com.himanshoe.charty.linearregression.model.maxYValue
 import com.himanshoe.charty.point.cofig.PointType
@@ -41,6 +42,9 @@ fun LinearRegressionChart(
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
     linearRegressionConfig: LinearRegressionConfig = LinearRegressionDefaults.linearRegressionDefaults()
 ) {
+    val data = linearRegressionData
+        .sortedBy { it.xValue.toString().toFloat() }
+        .groupBy(keySelector = { it.xValue }, valueTransform = { DependentValues(it.yPointValue, it.yLineValue) })
     val maxYValueState = remember { derivedStateOf { linearRegressionData.maxYValue() } }
     val maxYValue = maxYValueState.value
     val chartBound = remember { mutableStateOf(0F) }
@@ -55,7 +59,7 @@ fun LinearRegressionChart(
             .padding(horizontal = chartDimens.padding)
     ) {
         println("SIZE: $size")
-        chartBound.value = size.width.div(linearRegressionData.count().times(1.2F))
+        chartBound.value = size.width.div(data.count().times(1.2F))
         val yScaleFactor = size.height.div(maxYValue)
         val scatterBrush = Brush.linearGradient(scatterColors)
         val lineBrush = Brush.linearGradient(lineColors)
@@ -66,39 +70,55 @@ fun LinearRegressionChart(
             moveTo(0f, size.height)
         }
 
-        linearRegressionData.forEachIndexed { index, data ->
-            // TODO: To adjust yLabels, need to adjust yOffset
-            val scatterCenterOffset =
-                dataToOffSet(index, chartBound.value, size, data.yPointValue, yScaleFactor)
-            println("OFFSET: $scatterCenterOffset")
-            val style = when (linearRegressionConfig.pointType) {
-                is PointType.Stroke -> Stroke(width = size.width.div(100))
-                else -> Fill
-            }
-            val lineCenterOffset = dataToOffSet(index, chartBound.value, size, data.yLineValue, yScaleFactor)
+        data.entries.forEachIndexed { index, functionData ->
+            functionData.value.forEach { yValues ->
+                // TODO: To adjust yLabels, need to adjust yOffset
+                val scatterCenterOffset = dataToOffSet(
+                    index = index,
+                    bound = chartBound.value,
+                    size = size,
+                    data = yValues.yPointValue,
+                    yScaleFactor = yScaleFactor
+                )
+                println("OFFSET: $scatterCenterOffset")
+                val style = when (linearRegressionConfig.pointType) {
+                    is PointType.Stroke -> Stroke(width = size.width.div(100))
+                    else -> Fill
+                }
+                val lineCenterOffset = dataToOffSet(
+                    index = index,
+                    bound = chartBound.value,
+                    size = size,
+                    data = yValues.yLineValue,
+                    yScaleFactor = yScaleFactor
+                )
 
-            if (linearRegressionData.size > 1) {
-                when (index) {
-                    0 -> path.moveTo(lineCenterOffset.x, lineCenterOffset.y)
-                    linearRegressionData.size - 1 -> path.lineTo(lineCenterOffset.x, lineCenterOffset.y)
+                if (data.size > 1) {
+                    when (index) {
+                        0 -> path.moveTo(lineCenterOffset.x, lineCenterOffset.y)
+                        data.size - 1 -> path.lineTo(lineCenterOffset.x, lineCenterOffset.y)
+                    }
+                }
+
+                drawCircle(
+                    center = scatterCenterOffset,
+                    style = style,
+                    radius = scatterRadius,
+                    brush = scatterBrush
+                )
+
+                if (axisConfig.showXLabels) {
+                    drawXLabel(
+                        data = functionData.key,
+                        centerOffset = scatterCenterOffset,
+                        radius = textRadius,
+                        count = data.count(),
+                        textColor = axisConfig.textColor
+                    )
                 }
             }
-
-            drawCircle(
-                center = scatterCenterOffset, style = style, radius = scatterRadius, brush = scatterBrush
-            )
-
-            if (axisConfig.showXLabels) {
-                drawXLabel(
-                    data = data.xValue,
-                    centerOffset = scatterCenterOffset,
-                    radius = textRadius,
-                    count = linearRegressionData.count(),
-                    textColor = axisConfig.textColor
-                )
-            }
         }
-        if (linearRegressionData.size > 1) {
+        if (data.size > 1) {
             drawPath(
                 path = path,
                 brush = lineBrush,
