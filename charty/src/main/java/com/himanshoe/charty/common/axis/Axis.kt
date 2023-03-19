@@ -51,6 +51,50 @@ internal fun DrawScope.drawYAxisWithLabels(
     }
 }
 
+internal fun DrawScope.drawYAxisWithScaledLabels(
+    axisConfig: AxisConfig,
+    maxValue: Float,
+    minValue: Float,
+    range: Float,
+    breaks: Int = 5,
+    isCandleChart: Boolean = false,
+    textColor: Color = Color.White,
+    fontSize: Float = 12f
+) {
+    val steps = maxValue.minus(minValue).div(breaks.minus(1))
+    val labels = (0..breaks.minus(1)).map { minValue.plus(it.times(steps)) }.reversed()
+    val pathEffect = PathEffect.dashPathEffect(floatArrayOf(40f, 20f), 0f)
+
+    labels.forEach { label ->
+        val currentYDiff = maxValue.minus(label)
+        val rangeDiff = range.minus(currentYDiff)
+        val y = size.height.minus(rangeDiff.div(range).times(size.height))
+
+        drawIntoCanvas {
+            it.nativeCanvas.apply {
+                drawText(
+                    getLabelText(label, isCandleChart),
+                    0f,
+                    y.minus(15),
+                    Paint().apply {
+                        color = textColor.toArgb()
+                        textSize = fontSize
+                        textAlign = Paint.Align.CENTER
+                    }
+                )
+            }
+        }
+        drawLine(
+            start = Offset(x = 0f, y = y),
+            end = Offset(x = size.width, y = y),
+            color = axisConfig.xAxisColor,
+            pathEffect = if (axisConfig.isAxisDashed) pathEffect else null,
+            alpha = 0.1F,
+            strokeWidth = size.width.div(200)
+        )
+    }
+}
+
 private fun getLabelText(value: Float, isCandleChart: Boolean): String {
     val pattern = if (isCandleChart) "#" else "#.##"
     return DecimalFormat(pattern).format(value).toString()
@@ -87,7 +131,8 @@ internal fun DrawScope.drawSetXAxisWithLabels(
     range: Float,
     breaks: Int = 5,
     isCandleChart: Boolean = false,
-    textColor: Color = Color.White
+    textColor: Color = Color.White,
+    fontSize: Float = 12f
 ) {
     val steps = maxValue.minus(minValue).div(breaks.minus(1))
     val labels = (0..breaks.minus(1)).map { minValue.plus(it.times(steps)) }
@@ -96,6 +141,7 @@ internal fun DrawScope.drawSetXAxisWithLabels(
         val currentXDiff = maxValue.minus(label)
         val rangeDiff = range.minus(currentXDiff)
         val x = rangeDiff.div(range).times(size.width)
+
         drawIntoCanvas {
             it.nativeCanvas.apply {
                 drawText(
@@ -104,7 +150,7 @@ internal fun DrawScope.drawSetXAxisWithLabels(
                     size.height.plus(50f),
                     Paint().apply {
                         color = textColor.toArgb()
-                        textSize = size.width.div(30)
+                        textSize = fontSize
                         textAlign = Paint.Align.CENTER
                     }
                 )

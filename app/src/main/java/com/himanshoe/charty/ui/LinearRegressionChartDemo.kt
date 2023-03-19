@@ -1,11 +1,13 @@
 package com.himanshoe.charty.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,6 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.himanshoe.charty.common.axis.Multiplier
+import com.himanshoe.charty.common.axis.XLabels
+import com.himanshoe.charty.common.axis.YLabels
 import com.himanshoe.charty.linearregression.LinearRegressionChart
 import com.himanshoe.charty.linearregression.config.LinearRegressionConfig
 import com.himanshoe.charty.linearregression.model.LinearRegressionData
@@ -23,6 +28,7 @@ fun LinearRegressionChartDemo() {
     LazyColumn(
         Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
         item {
             LinearRegressionChart(
@@ -35,6 +41,19 @@ fun LinearRegressionChartDemo() {
                 linearRegressionConfig = LinearRegressionConfig(
                     pointType = PointType.Fill,
                     strokeSize = 2.dp
+                ),
+                yLabelConfig = YLabels(
+                    fontColor = Color.Red,
+                    fontSize = 24f,
+                    rangeAdjustment = Multiplier(.1f),
+                    minValueAdjustment = Multiplier(.1f),
+                    breaks = 10
+                ),
+                xLabelConfig = XLabels(
+                    fontColor = Color.Blue,
+                    fontSize = 8f,
+                    rangeAdjustment = Multiplier(.1f),
+                    breaks = 7
                 ),
                 linearRegressionData = listOf(
                     LinearRegressionData(xValue = 3986.37f, yPointValue = 128.25f, yLineValue = 128f),
