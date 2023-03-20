@@ -1,13 +1,17 @@
 package com.himanshoe.charty.common.axis
 
 import android.graphics.Paint
+import android.graphics.Rect
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import com.himanshoe.charty.common.label.XLabels
+import com.himanshoe.charty.common.label.YLabels
 import java.text.DecimalFormat
 
 internal fun DrawScope.drawYAxisWithLabels(
@@ -53,43 +57,50 @@ internal fun DrawScope.drawYAxisWithLabels(
 
 internal fun DrawScope.drawYAxisWithScaledLabels(
     axisConfig: AxisConfig,
+    yLabelConfig: YLabels,
     maxValue: Float,
     minValue: Float,
     range: Float,
-    breaks: Int = 5,
-    isCandleChart: Boolean = false,
-    textColor: Color = Color.White,
-    fontSize: Float = 12f
+    isCandleChart: Boolean = false
 ) {
-    val steps = maxValue.minus(minValue).div(breaks.minus(1))
-    val labels = (0..breaks.minus(1)).map { minValue.plus(it.times(steps)) }.reversed()
+    val steps = maxValue.minus(minValue).div(yLabelConfig.breaks.minus(1))
+    val labels = (0..yLabelConfig.breaks.minus(1)).map { minValue.plus(it.times(steps)) }.reversed()
     val pathEffect = PathEffect.dashPathEffect(floatArrayOf(40f, 20f), 0f)
 
     labels.forEach { label ->
         val currentYDiff = maxValue.minus(label)
         val rangeDiff = range.minus(currentYDiff)
         val y = size.height.minus(rangeDiff.div(range).times(size.height))
+        val x = 0f.minus(yLabelConfig.xOffset)
+        val stringLabel = getLabelText(label, isCandleChart)
+        val bounds = Rect()
+        val paint = Paint()
+        paint.apply {
+            getTextBounds(stringLabel, 0, stringLabel.length, bounds)
+            color = yLabelConfig.fontColor.toArgb()
+            textSize = yLabelConfig.fontSize
+            textAlign = yLabelConfig.textAlignment
+        }
+        val yRotated = if (yLabelConfig.rotation == 0f) y.minus(yLabelConfig.yOffset) else y.minus(bounds.height().div(2f))
 
-        drawIntoCanvas {
-            it.nativeCanvas.apply {
-                drawText(
-                    getLabelText(label, isCandleChart),
-                    0f,
-                    y.minus(15),
-                    Paint().apply {
-                        color = textColor.toArgb()
-                        textSize = fontSize
-                        textAlign = Paint.Align.CENTER
-                    }
-                )
+        rotate(degrees = yLabelConfig.rotation, pivot = Offset(x = x, y = y)) {
+            drawIntoCanvas {
+                it.nativeCanvas.apply {
+                    drawText(
+                        stringLabel,
+                        x,
+                        yRotated,
+                        paint
+                    )
+                }
             }
         }
         drawLine(
-            start = Offset(x = 0f, y = y),
+            start = Offset(x = 0f.plus(yLabelConfig.lineStartPadding), y = y),
             end = Offset(x = size.width, y = y),
             color = axisConfig.xAxisColor,
             pathEffect = if (axisConfig.isAxisDashed) pathEffect else null,
-            alpha = 0.1F,
+            alpha = yLabelConfig.lineAlpha,
             strokeWidth = size.width.div(200)
         )
     }
@@ -126,33 +137,38 @@ internal fun DrawScope.drawXLabel(
 }
 
 internal fun DrawScope.drawSetXAxisWithLabels(
+    xLabelConfig: XLabels,
     maxValue: Float,
     minValue: Float,
     range: Float,
-    breaks: Int = 5,
-    isCandleChart: Boolean = false,
-    textColor: Color = Color.White,
-    fontSize: Float = 12f
+    isCandleChart: Boolean = false
 ) {
-    val steps = maxValue.minus(minValue).div(breaks.minus(1))
-    val labels = (0..breaks.minus(1)).map { minValue.plus(it.times(steps)) }
+    val steps = maxValue.minus(minValue).div(xLabelConfig.breaks.minus(1))
+    val labels = (0..xLabelConfig.breaks.minus(1)).map { minValue.plus(it.times(steps)) }
 
     labels.forEach { label ->
         val currentXDiff = maxValue.minus(label)
         val rangeDiff = range.minus(currentXDiff)
         val x = rangeDiff.div(range).times(size.width)
+        val y = size.height.plus(xLabelConfig.yOffset)
+        val stringLabel = getLabelText(label, isCandleChart)
+        val paint = Paint()
+        val bounds = Rect()
+        paint.apply {
+            getTextBounds(stringLabel, 0, stringLabel.length, bounds)
+            color = xLabelConfig.fontColor.toArgb()
+            textSize = xLabelConfig.fontSize
+            textAlign = xLabelConfig.textAlignment
+        }
+        val xRotated = if (xLabelConfig.rotation == 0f) x else x.plus(bounds.width().div(2f))
 
-        drawIntoCanvas {
-            it.nativeCanvas.apply {
-                drawText(
-                    getLabelText(label, isCandleChart),
-                    x,
-                    size.height.plus(50f),
-                    Paint().apply {
-                        color = textColor.toArgb()
-                        textSize = fontSize
-                        textAlign = Paint.Align.CENTER
-                    }
+        rotate(degrees = xLabelConfig.rotation, pivot = Offset(x = x, y = y)) {
+            drawIntoCanvas {
+                it.nativeCanvas.drawText(
+                    stringLabel,
+                    xRotated,
+                    y,
+                    paint
                 )
             }
         }

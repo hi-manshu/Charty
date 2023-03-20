@@ -1,4 +1,4 @@
-package com.himanshoe.charty.common.axis
+package com.himanshoe.charty.common.label
 
 @JvmInline
 value class Multiplier(val factor: Float) {

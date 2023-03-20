@@ -14,13 +14,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
-import com.himanshoe.charty.common.axis.*
+import com.himanshoe.charty.common.axis.AxisConfig
 import com.himanshoe.charty.common.axis.AxisConfigDefaults
 import com.himanshoe.charty.common.axis.drawSetXAxisWithLabels
 import com.himanshoe.charty.common.axis.drawYAxisWithScaledLabels
 import com.himanshoe.charty.common.calculations.unboundDataToOffset
 import com.himanshoe.charty.common.dimens.ChartDimens
 import com.himanshoe.charty.common.dimens.ChartDimensDefaults
+import com.himanshoe.charty.common.label.XLabels
+import com.himanshoe.charty.common.label.XLabelsDefaults
+import com.himanshoe.charty.common.label.YLabels
+import com.himanshoe.charty.common.label.YLabelsDefaults
 import com.himanshoe.charty.linearregression.config.LinearRegressionConfig
 import com.himanshoe.charty.linearregression.config.LinearRegressionDefaults
 import com.himanshoe.charty.linearregression.model.*
@@ -65,12 +69,10 @@ fun LinearRegressionChart(
                 if (axisConfig.showAxis) {
                     drawYAxisWithScaledLabels(
                         axisConfig = axisConfig,
+                        yLabelConfig = yLabelConfig,
                         maxValue = adjustedMaxYValue,
                         minValue = adjustedMinYValue,
-                        range = adjustedYRange,
-                        breaks = yLabelConfig.breaks,
-                        textColor = yLabelConfig.fontColor,
-                        fontSize = yLabelConfig.fontSize
+                        range = adjustedYRange
                     )
                 }
 
@@ -79,9 +81,7 @@ fun LinearRegressionChart(
                         maxValue = maxXValue,
                         minValue = minXValue,
                         range = adjustedXRange,
-                        breaks = xLabelConfig.breaks,
-                        textColor = xLabelConfig.fontColor,
-                        fontSize = xLabelConfig.fontSize
+                        xLabelConfig = xLabelConfig
                     )
                 }
             }
@@ -135,6 +135,7 @@ fun LinearRegressionChart(
                 )
             }
         }
+
         if (data.size > 1) {
             drawPath(
                 path = path,

@@ -15,9 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.himanshoe.charty.common.axis.Multiplier
-import com.himanshoe.charty.common.axis.XLabels
-import com.himanshoe.charty.common.axis.YLabels
+import com.himanshoe.charty.common.label.Multiplier
+import com.himanshoe.charty.common.label.XLabels
+import com.himanshoe.charty.common.label.YLabels
 import com.himanshoe.charty.linearregression.LinearRegressionChart
 import com.himanshoe.charty.linearregression.config.LinearRegressionConfig
 import com.himanshoe.charty.linearregression.model.LinearRegressionData
@@ -51,7 +51,7 @@ fun LinearRegressionChartDemo() {
                 ),
                 xLabelConfig = XLabels(
                     fontColor = Color.Blue,
-                    fontSize = 8f,
+                    fontSize = 24f,
                     rangeAdjustment = Multiplier(.1f),
                     breaks = 7
                 ),
