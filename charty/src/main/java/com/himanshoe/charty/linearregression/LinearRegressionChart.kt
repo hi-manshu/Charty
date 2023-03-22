@@ -25,12 +25,13 @@ import com.himanshoe.charty.common.label.XLabels
 import com.himanshoe.charty.common.label.XLabelsDefaults
 import com.himanshoe.charty.common.label.YLabels
 import com.himanshoe.charty.common.label.YLabelsDefaults
+import com.himanshoe.charty.linearregression.calculations.betaSlopeCalculation
+import com.himanshoe.charty.linearregression.calculations.calculateRegressionEndPoints
+import com.himanshoe.charty.linearregression.calculations.yInterceptCalculation
 import com.himanshoe.charty.linearregression.config.LinearRegressionConfig
 import com.himanshoe.charty.linearregression.config.LinearRegressionDefaults
 import com.himanshoe.charty.linearregression.model.*
 import com.himanshoe.charty.point.cofig.PointType
-
-// TODO: Calculate regression values in composable?
 
 @Composable
 fun LinearRegressionChart(
@@ -45,14 +46,19 @@ fun LinearRegressionChart(
     linearRegressionConfig: LinearRegressionConfig = LinearRegressionDefaults.linearRegressionDefaults()
 ) {
     val data = linearRegressionData
-        .sortedBy { it.xValue.toString().toFloat() }
-        .groupBy(keySelector = { it.xValue }, valueTransform = { DependentValues(it.yPointValue, it.yLineValue) })
+        .sortedBy { it.xValue }
+        .groupBy(keySelector = { it.xValue }, valueTransform = { it.yValue })
 
-    val maxYValue by remember { derivedStateOf { linearRegressionData.maxYValue() } }
+    val betaSlope = betaSlopeCalculation(data = linearRegressionData)
+    val yIntercept = yInterceptCalculation(data = linearRegressionData, betaSlope = betaSlope)
+    val regressionData =
+        calculateRegressionEndPoints(data = data, betaSlope = betaSlope, yIntercept = yIntercept)
+
+    val maxYValue by remember { derivedStateOf { maxOf(regressionData.maxYValue(), linearRegressionData.maxYValue()) } }
     val adjustedMaxYValue = maxYValue.plus(maxYValue.times(yLabelConfig.maxValueAdjustment.factor))
 
-    val minYValueState = remember { derivedStateOf { linearRegressionData.minYValue() } }
-    val minYValue = if (yLabelConfig.isBaseZero) 0f else minYValueState.value
+    val minYValueState by remember { derivedStateOf { minOf(regressionData.minYValue(), linearRegressionData.minYValue()) } }
+    val minYValue = if (yLabelConfig.isBaseZero) 0f else minYValueState
     val adjustedMinYValue = minYValue.minus(minYValue.times(yLabelConfig.minValueAdjustment.factor))
 
     val maxXValue by remember { derivedStateOf { linearRegressionData.maxXValue() } }
@@ -96,13 +102,13 @@ fun LinearRegressionChart(
         }
 
         data.entries.forEachIndexed { index, functionData ->
-            functionData.value.forEach { yValues ->
+            functionData.value.forEach { yValue ->
                 val scatterCenterOffset = unboundDataToOffset(
                     size = size,
                     xData = functionData.key,
                     xMax = maxXValue,
                     xRange = adjustedXRange,
-                    yData = yValues.yPointValue,
+                    yData = yValue,
                     yMax = adjustedMaxYValue,
                     yRange = adjustedYRange
                 )
@@ -110,20 +116,34 @@ fun LinearRegressionChart(
                     is PointType.Stroke -> Stroke(width = size.width.div(100))
                     else -> Fill
                 }
-                val lineCenterOffset = unboundDataToOffset(
-                    size = size,
-                    xData = functionData.key,
-                    xMax = maxXValue,
-                    xRange = adjustedXRange,
-                    yData = yValues.yLineValue,
-                    yMax = adjustedMaxYValue,
-                    yRange = adjustedYRange
-                )
 
                 if (data.size > 1) {
                     when (index) {
-                        0 -> path.moveTo(lineCenterOffset.x, lineCenterOffset.y)
-                        data.size - 1 -> path.lineTo(lineCenterOffset.x, lineCenterOffset.y)
+                        0 -> {
+                            val lineCenterOffset = unboundDataToOffset(
+                                size = size,
+                                xData = regressionData.first().xValue,
+                                xMax = maxXValue,
+                                xRange = adjustedXRange,
+                                yData = regressionData.first().yValue,
+                                yMax = adjustedMaxYValue,
+                                yRange = adjustedYRange
+                            )
+
+                            path.moveTo(lineCenterOffset.x, lineCenterOffset.y)
+                        }
+                        data.size - 1 -> {
+                            val lineCenterOffset = unboundDataToOffset(
+                                size = size,
+                                xData = regressionData.last().xValue,
+                                xMax = maxXValue,
+                                xRange = adjustedXRange,
+                                yData = regressionData.last().yValue,
+                                yMax = adjustedMaxYValue,
+                                yRange = adjustedYRange
+                            )
+                            path.lineTo(lineCenterOffset.x, lineCenterOffset.y)
+                        }
                     }
                 }
 

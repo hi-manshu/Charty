@@ -56,11 +56,11 @@ fun LinearRegressionChartDemo() {
                     breaks = 7
                 ),
                 linearRegressionData = listOf(
-                    LinearRegressionData(xValue = 3986.37f, yPointValue = 128.25f, yLineValue = 128f),
-                    LinearRegressionData(xValue = 3992.01f, yPointValue = 128.05f, yLineValue = 128.13f),
-                    LinearRegressionData(xValue = 3918.32f, yPointValue = 126.16f, yLineValue = 126.52f),
-                    LinearRegressionData(xValue = 3861.59f, yPointValue = 125.45f, yLineValue = 125.29f),
-                    LinearRegressionData(xValue = 3884.29f, yPointValue = 125.82f, yLineValue = 125.78f),
+                    LinearRegressionData(xValue = 3986.37f, yValue = 128.25f),
+                    LinearRegressionData(xValue = 3992.01f, yValue = 128.05f),
+                    LinearRegressionData(xValue = 3918.32f, yValue = 126.16f),
+                    LinearRegressionData(xValue = 3861.59f, yValue = 125.45f),
+                    LinearRegressionData(xValue = 3884.29f, yValue = 125.82f),
                 )
             )
         }
@@ -89,11 +89,11 @@ fun LinearRegressionChartDemo() {
                     pointSize = 2.dp
                 ),
                 linearRegressionData = listOf(
-                    LinearRegressionData(xValue = 3986.37f, yPointValue = 128.25f, yLineValue = 128f),
-                    LinearRegressionData(xValue = 3992.01f, yPointValue = 128.05f, yLineValue = 128.13f),
-                    LinearRegressionData(xValue = 3918.32f, yPointValue = 126.16f, yLineValue = 126.52f),
-                    LinearRegressionData(xValue = 3861.59f, yPointValue = 125.45f, yLineValue = 125.29f),
-                    LinearRegressionData(xValue = 3884.29f, yPointValue = 125.82f, yLineValue = 125.78f),
+                    LinearRegressionData(xValue = 3986.37f, yValue = 128.25f),
+                    LinearRegressionData(xValue = 3992.01f, yValue = 128.05f),
+                    LinearRegressionData(xValue = 3918.32f, yValue = 126.16f),
+                    LinearRegressionData(xValue = 3861.59f, yValue = 125.45f),
+                    LinearRegressionData(xValue = 3884.29f, yValue = 125.82f),
                 )
             )
         }
@@ -122,13 +122,13 @@ fun LinearRegressionChartDemo() {
                     strokeSize = 2.dp
                 ),
                 linearRegressionData = listOf(
-                    LinearRegressionData(10F, 35F, 35f),
-                    LinearRegressionData(20F, 25F, 25f),
-                    LinearRegressionData(10F, 50F, 50f),
-                    LinearRegressionData(100F, 10F, 10f),
-                    LinearRegressionData(10F, 15F, 15f),
-                    LinearRegressionData(50F, 100F, 100f),
-                    LinearRegressionData(20F, 25F, 25f),
+                    LinearRegressionData(10F, 35F),
+                    LinearRegressionData(20F, 25F),
+                    LinearRegressionData(10F, 50F),
+                    LinearRegressionData(100F, 10F),
+                    LinearRegressionData(10F, 15F),
+                    LinearRegressionData(50F, 100F),
+                    LinearRegressionData(20F, 25F),
                 )
             )
         }
