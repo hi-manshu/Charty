@@ -81,7 +81,12 @@ internal fun DrawScope.drawYAxisWithScaledLabels(
             textSize = yLabelConfig.fontSize
             textAlign = yLabelConfig.textAlignment
         }
-        val yRotated = if (yLabelConfig.rotation == 0f) y.minus(yLabelConfig.yOffset) else y.minus(bounds.height().div(2f))
+
+        // TODO: Look at offset here
+        // TODO: Consider here how rotation degrees effects amount bound needs to be divided by
+        val yRotated =
+            if (yLabelConfig.rotation == 0f) y.plus(bounds.height().div(2f)).minus(yLabelConfig.yOffset)
+            else y.plus(bounds.height().div(2f)).minus(yLabelConfig.yOffset)
 
         rotate(degrees = yLabelConfig.rotation, pivot = Offset(x = x, y = y)) {
             drawIntoCanvas {
@@ -98,7 +103,7 @@ internal fun DrawScope.drawYAxisWithScaledLabels(
         drawLine(
             start = Offset(x = 0f.plus(yLabelConfig.lineStartPadding), y = y),
             end = Offset(x = size.width, y = y),
-            color = axisConfig.xAxisColor,
+            color = axisConfig.yAxisColor,
             pathEffect = if (axisConfig.isAxisDashed) pathEffect else null,
             alpha = yLabelConfig.lineAlpha,
             strokeWidth = size.width.div(200)
@@ -137,6 +142,7 @@ internal fun DrawScope.drawXLabel(
 }
 
 internal fun DrawScope.drawSetXAxisWithLabels(
+    axisConfig: AxisConfig,
     xLabelConfig: XLabels,
     maxValue: Float,
     minValue: Float,
@@ -145,6 +151,7 @@ internal fun DrawScope.drawSetXAxisWithLabels(
 ) {
     val steps = maxValue.minus(minValue).div(xLabelConfig.breaks.minus(1))
     val labels = (0..xLabelConfig.breaks.minus(1)).map { minValue.plus(it.times(steps)) }
+    val pathEffect = PathEffect.dashPathEffect(floatArrayOf(40f, 20f), 0f)
 
     labels.forEach { label ->
         val currentXDiff = maxValue.minus(label)
@@ -154,6 +161,7 @@ internal fun DrawScope.drawSetXAxisWithLabels(
         val stringLabel = getLabelText(label, isCandleChart)
         val paint = Paint()
         val bounds = Rect()
+
         paint.apply {
             getTextBounds(stringLabel, 0, stringLabel.length, bounds)
             color = xLabelConfig.fontColor.toArgb()
@@ -171,6 +179,16 @@ internal fun DrawScope.drawSetXAxisWithLabels(
                     paint
                 )
             }
+        }
+        if (xLabelConfig.showLines) {
+            drawLine(
+                start = Offset(x = x, y = 0f),
+                end = Offset(x = x, y = size.height),
+                color = axisConfig.xAxisColor,
+                pathEffect = if (axisConfig.isAxisDashed) pathEffect else null,
+                alpha = xLabelConfig.lineAlpha,
+                strokeWidth = size.width.div(200)
+            )
         }
     }
 }

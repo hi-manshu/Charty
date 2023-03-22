@@ -10,7 +10,9 @@ data class XLabels(
     val breaks: Int = 5,
     val yOffset: Float = 50f,
     val textAlignment: Align = Align.CENTER,
-    val rotation: Float = 0f
+    val rotation: Float = 0f,
+    val lineAlpha: Float = .1f,
+    val showLines: Boolean = false
 )
 
 internal object XLabelsDefaults {

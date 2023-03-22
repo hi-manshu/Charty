@@ -47,13 +47,15 @@ fun LinearRegressionChartDemo() {
                     fontSize = 24f,
                     rangeAdjustment = Multiplier(.1f),
                     minValueAdjustment = Multiplier(.1f),
-                    breaks = 10
+                    breaks = 10,
+                    rotation = -45f
                 ),
                 xLabelConfig = XLabels(
                     fontColor = Color.Blue,
                     fontSize = 24f,
                     rangeAdjustment = Multiplier(.1f),
-                    breaks = 7
+                    breaks = 7,
+                    rotation = 45f
                 ),
                 linearRegressionData = listOf(
                     LinearRegressionData(xValue = 3986.37f, yValue = 128.25f),

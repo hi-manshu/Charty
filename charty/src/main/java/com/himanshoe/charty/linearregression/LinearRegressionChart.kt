@@ -8,7 +8,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -69,36 +68,23 @@ fun LinearRegressionChart(
     val adjustedXRange = xRange.plus(xRange.times(xLabelConfig.rangeAdjustment.factor))
     val adjustedYRange = yRange.plus(yRange.times(yLabelConfig.rangeAdjustment.factor))
 
-    Canvas(
-        modifier = modifier
-            .drawBehind {
-                if (axisConfig.showAxis) {
-                    drawYAxisWithScaledLabels(
-                        axisConfig = axisConfig,
-                        yLabelConfig = yLabelConfig,
-                        maxValue = adjustedMaxYValue,
-                        minValue = adjustedMinYValue,
-                        range = adjustedYRange
-                    )
-                }
-
-                if (axisConfig.showXLabels) {
-                    drawSetXAxisWithLabels(
-                        maxValue = maxXValue,
-                        minValue = minXValue,
-                        range = adjustedXRange,
-                        xLabelConfig = xLabelConfig
-                    )
-                }
-            }
-            .padding(horizontal = chartDimens.padding)
-    ) {
+    Canvas(modifier = modifier.padding(horizontal = chartDimens.padding)) {
         val scatterBrush = Brush.linearGradient(scatterColors)
         val lineBrush = Brush.linearGradient(lineColors)
         val scatterRadius = linearRegressionConfig.pointSize.toPx()
         val strokeWidth = linearRegressionConfig.strokeSize.toPx()
         val path = Path().apply {
             moveTo(0f, size.height)
+        }
+
+        if (axisConfig.showAxis) {
+            drawYAxisWithScaledLabels(
+                axisConfig = axisConfig,
+                yLabelConfig = yLabelConfig,
+                maxValue = adjustedMaxYValue,
+                minValue = adjustedMinYValue,
+                range = adjustedYRange
+            )
         }
 
         data.entries.forEachIndexed { index, functionData ->
@@ -154,6 +140,16 @@ fun LinearRegressionChart(
                     brush = scatterBrush
                 )
             }
+        }
+
+        if (axisConfig.showXLabels) {
+            drawSetXAxisWithLabels(
+                maxValue = maxXValue,
+                minValue = minXValue,
+                range = adjustedXRange,
+                xLabelConfig = xLabelConfig,
+                axisConfig = axisConfig
+            )
         }
 
         if (data.size > 1) {
