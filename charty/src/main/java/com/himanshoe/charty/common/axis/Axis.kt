@@ -13,6 +13,10 @@ import androidx.compose.ui.graphics.toArgb
 import com.himanshoe.charty.common.label.XLabels
 import com.himanshoe.charty.common.label.YLabels
 import java.text.DecimalFormat
+import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.sin
 
 internal fun DrawScope.drawYAxisWithLabels(
     axisConfig: AxisConfig,
@@ -82,11 +86,13 @@ internal fun DrawScope.drawYAxisWithScaledLabels(
             textAlign = yLabelConfig.textAlignment
         }
 
-        // TODO: Look at offset here
-        // TODO: Consider here how rotation degrees effects amount bound needs to be divided by
+        val rotateOffset = sin(abs(yLabelConfig.rotation).toRadians()).times(bounds.width().div(2f))
+        val bottomCornerOffset = cos(45f.toRadians()).times(bounds.height())
+        val centerBottomRightCorner = rotateOffset.minus(bottomCornerOffset)
+
         val yRotated =
-            if (yLabelConfig.rotation == 0f) y.plus(bounds.height().div(2f)).minus(yLabelConfig.yOffset)
-            else y.plus(bounds.height().div(2f)).minus(yLabelConfig.yOffset)
+            if (yLabelConfig.rotation == 0f) y.plus(bounds.height())
+            else y.plus(bounds.height()).plus(centerBottomRightCorner)
 
         rotate(degrees = yLabelConfig.rotation, pivot = Offset(x = x, y = y)) {
             drawIntoCanvas {
@@ -168,7 +174,12 @@ internal fun DrawScope.drawSetXAxisWithLabels(
             textSize = xLabelConfig.fontSize
             textAlign = xLabelConfig.textAlignment
         }
-        val xRotated = if (xLabelConfig.rotation == 0f) x else x.plus(bounds.width().div(2f))
+
+        val rotateOffset = sin(xLabelConfig.rotation.toRadians()).times(bounds.width().div(2f))
+        val topCornerOffset = cos(45f.toRadians()).times(bounds.height().div(2f))
+        val centerTopLeftCorner = rotateOffset.minus(topCornerOffset)
+
+        val xRotated = if (xLabelConfig.rotation == 0f) x else x.plus(centerTopLeftCorner)
 
         rotate(degrees = xLabelConfig.rotation, pivot = Offset(x = x, y = y)) {
             drawIntoCanvas {
@@ -192,3 +203,5 @@ internal fun DrawScope.drawSetXAxisWithLabels(
         }
     }
 }
+
+fun Float.toRadians() = this * (PI / 180f).toFloat()

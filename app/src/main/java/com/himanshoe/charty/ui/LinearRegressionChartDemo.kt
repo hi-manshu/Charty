@@ -48,14 +48,16 @@ fun LinearRegressionChartDemo() {
                     rangeAdjustment = Multiplier(.1f),
                     minValueAdjustment = Multiplier(.1f),
                     breaks = 10,
-                    rotation = -45f
+                    rotation = -45f,
+                    lineAlpha = .9f
                 ),
                 xLabelConfig = XLabels(
                     fontColor = Color.Blue,
                     fontSize = 24f,
                     rangeAdjustment = Multiplier(.1f),
                     breaks = 7,
-                    rotation = 45f
+                    rotation = 60f,
+                    showLines = true
                 ),
                 linearRegressionData = listOf(
                     LinearRegressionData(xValue = 3986.37f, yValue = 128.25f),
@@ -90,6 +92,14 @@ fun LinearRegressionChartDemo() {
                     strokeSize = 2.dp,
                     pointSize = 2.dp
                 ),
+                yLabelConfig = YLabels(
+                    rotation = -60f,
+                    lineAlpha = .9f
+                ),
+                xLabelConfig = XLabels(
+                    rotation = 45f,
+                    showLines = true
+                ),
                 linearRegressionData = listOf(
                     LinearRegressionData(xValue = 3986.37f, yValue = 128.25f),
                     LinearRegressionData(xValue = 3992.01f, yValue = 128.05f),
@@ -122,6 +132,14 @@ fun LinearRegressionChartDemo() {
                 linearRegressionConfig = LinearRegressionConfig(
                     pointType = PointType.Fill,
                     strokeSize = 2.dp
+                ),
+                yLabelConfig = YLabels(
+                    rotation = -30f,
+                    lineAlpha = .9f
+                ),
+                xLabelConfig = XLabels(
+                    rotation = 30f,
+                    showLines = true
                 ),
                 linearRegressionData = listOf(
                     LinearRegressionData(10F, 35F),

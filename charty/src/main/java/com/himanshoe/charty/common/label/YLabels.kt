@@ -11,7 +11,6 @@ data class YLabels(
     val minValueAdjustment: Multiplier = Multiplier(0f),
     val isBaseZero: Boolean = false,
     val breaks: Int = 5,
-    val yOffset: Float = 0f,
     val xOffset: Float = 25f,
     val textAlignment: Align = Align.CENTER,
     val rotation: Float = 0f,
