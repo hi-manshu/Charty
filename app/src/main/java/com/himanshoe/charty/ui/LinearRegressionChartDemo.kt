@@ -93,7 +93,7 @@ fun LinearRegressionChartDemo() {
                     pointSize = 2.dp
                 ),
                 yLabelConfig = YLabels(
-                    rotation = -60f,
+                    rotation = 0f,
                     lineAlpha = .9f
                 ),
                 xLabelConfig = XLabels(

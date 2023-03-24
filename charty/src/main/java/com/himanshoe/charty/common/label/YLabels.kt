@@ -12,6 +12,7 @@ data class YLabels(
     val isBaseZero: Boolean = false,
     val breaks: Int = 5,
     val xOffset: Float = 25f,
+    val yOffset: Float = 0f,
     val textAlignment: Align = Align.CENTER,
     val rotation: Float = 0f,
     val lineAlpha: Float = .1f,

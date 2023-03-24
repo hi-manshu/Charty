@@ -9,6 +9,7 @@ data class XLabels(
     val rangeAdjustment: Multiplier = Multiplier(.1f),
     val breaks: Int = 5,
     val yOffset: Float = 50f,
+    val xOffset: Float = 0f,
     val textAlignment: Align = Align.CENTER,
     val rotation: Float = 0f,
     val lineAlpha: Float = .1f,

@@ -22,7 +22,7 @@ internal fun DrawScope.drawYAxisWithLabels(
     axisConfig: AxisConfig,
     maxValue: Float,
     isCandleChart: Boolean = false,
-    textColor: Color = Color.White
+    textColor: Color = Color.Black
 ) {
     val graphYAxisEndPoint = size.height.div(4)
     val pathEffect = PathEffect.dashPathEffect(floatArrayOf(40f, 20f), 0f)
@@ -86,15 +86,16 @@ internal fun DrawScope.drawYAxisWithScaledLabels(
             textAlign = yLabelConfig.textAlignment
         }
 
-        val rotateOffset = sin(abs(yLabelConfig.rotation).toRadians()).times(bounds.width().div(2f))
-        val bottomCornerOffset = cos(45f.toRadians()).times(bounds.height())
+        val rotation = abs(yLabelConfig.rotation).toRadians()
+        val rotateOffset = sin(rotation).times(bounds.width().div(2f))
+        val bottomCornerOffset = cos(rotation).times(bounds.height().div(2f))
         val centerBottomRightCorner = rotateOffset.minus(bottomCornerOffset)
 
         val yRotated =
-            if (yLabelConfig.rotation == 0f) y.plus(bounds.height())
-            else y.plus(bounds.height()).plus(centerBottomRightCorner)
+            if (yLabelConfig.rotation == 0f) y.plus(bounds.height()).plus(yLabelConfig.yOffset)
+            else y.plus(bounds.height()).plus(centerBottomRightCorner).plus(yLabelConfig.yOffset)
 
-        rotate(degrees = yLabelConfig.rotation, pivot = Offset(x = x, y = y)) {
+        rotate(degrees = yLabelConfig.rotation, pivot = Offset(x = x, y = yRotated)) {
             drawIntoCanvas {
                 it.nativeCanvas.apply {
                     drawText(
@@ -175,13 +176,16 @@ internal fun DrawScope.drawSetXAxisWithLabels(
             textAlign = xLabelConfig.textAlignment
         }
 
-        val rotateOffset = sin(xLabelConfig.rotation.toRadians()).times(bounds.width().div(2f))
-        val topCornerOffset = cos(45f.toRadians()).times(bounds.height().div(2f))
+        val rotation = 90f.minus(xLabelConfig.rotation).toRadians()
+        val rotateOffset = sin(rotation).times(bounds.width().div(2f))
+        val topCornerOffset = cos(rotation).times(bounds.height().div(2f))
         val centerTopLeftCorner = rotateOffset.minus(topCornerOffset)
 
-        val xRotated = if (xLabelConfig.rotation == 0f) x else x.plus(centerTopLeftCorner)
+        val xRotated =
+            if (xLabelConfig.rotation == 0f) x.plus(xLabelConfig.xOffset)
+            else x.plus(xLabelConfig.xOffset).plus(centerTopLeftCorner)
 
-        rotate(degrees = xLabelConfig.rotation, pivot = Offset(x = x, y = y)) {
+        rotate(degrees = xLabelConfig.rotation, pivot = Offset(x = xRotated, y = y)) {
             drawIntoCanvas {
                 it.nativeCanvas.drawText(
                     stringLabel,
