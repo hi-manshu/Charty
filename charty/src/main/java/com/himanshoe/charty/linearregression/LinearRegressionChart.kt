@@ -32,8 +32,6 @@ import com.himanshoe.charty.linearregression.config.LinearRegressionDefaults
 import com.himanshoe.charty.linearregression.model.*
 import com.himanshoe.charty.point.cofig.PointType
 
-// TODO: Clean up the code
-// TODO: Make better demo examples
 // TODO: Add documentation
 
 @Composable

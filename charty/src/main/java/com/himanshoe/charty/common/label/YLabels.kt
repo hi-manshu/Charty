@@ -15,7 +15,7 @@ data class YLabels(
     val yOffset: Float = 0f,
     val textAlignment: Align = Align.CENTER,
     val rotation: Float = 0f,
-    val lineAlpha: Float = .1f,
+    val lineAlpha: Multiplier = Multiplier(.1f),
     val lineStartPadding: Float = 25f
 )
 

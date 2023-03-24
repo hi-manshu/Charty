@@ -5,7 +5,7 @@ import androidx.compose.ui.unit.dp
 import com.himanshoe.charty.point.cofig.PointType
 
 data class LinearRegressionConfig(
-    val pointType: PointType,
+    val pointType: PointType = PointType.Stroke,
     val strokeSize: Dp = 5.dp,
     val pointSize: Dp = 5.dp
 )

@@ -1,17 +1,20 @@
+@file:Suppress("DuplicatedCode")
+
 package com.himanshoe.charty.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,53 +28,20 @@ import com.himanshoe.charty.point.cofig.PointType
 
 @Composable
 fun LinearRegressionChartDemo() {
+    var regressionConfig by remember { mutableStateOf(LinearRegressionConfig()) }
+    var yLabels by remember { mutableStateOf(YLabels()) }
+    var xLabels by remember { mutableStateOf(XLabels()) }
+
     LazyColumn(
         Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
         item {
-            LinearRegressionChart(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(height = 300.dp)
-                    .padding(20.dp),
-                scatterColors = colors.last(),
-                lineColors = colors.first(),
-                linearRegressionConfig = LinearRegressionConfig(
-                    pointType = PointType.Fill,
-                    strokeSize = 2.dp
-                ),
-                yLabelConfig = YLabels(
-                    fontColor = Color.Red,
-                    fontSize = 24f,
-                    rangeAdjustment = Multiplier(.1f),
-                    minValueAdjustment = Multiplier(.1f),
-                    breaks = 10,
-                    rotation = -45f,
-                    lineAlpha = .9f
-                ),
-                xLabelConfig = XLabels(
-                    fontColor = Color.Blue,
-                    fontSize = 24f,
-                    rangeAdjustment = Multiplier(.1f),
-                    breaks = 7,
-                    rotation = 60f,
-                    showLines = true
-                ),
-                linearRegressionData = listOf(
-                    LinearRegressionData(xValue = 3986.37f, yValue = 128.25f),
-                    LinearRegressionData(xValue = 3992.01f, yValue = 128.05f),
-                    LinearRegressionData(xValue = 3918.32f, yValue = 126.16f),
-                    LinearRegressionData(xValue = 3861.59f, yValue = 125.45f),
-                    LinearRegressionData(xValue = 3884.29f, yValue = 125.82f),
-                )
-            )
-        }
-        item {
             Text(
                 text = "Linear Regression Chart",
-                fontSize = 16.sp,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.ExtraBold,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp),
@@ -88,17 +58,36 @@ fun LinearRegressionChartDemo() {
                 scatterColors = colors.last(),
                 lineColors = colors.first(),
                 linearRegressionConfig = LinearRegressionConfig(
-                    pointType = PointType.Fill,
-                    strokeSize = 2.dp,
-                    pointSize = 2.dp
+                    pointType = regressionConfig.pointType,
+                    strokeSize = regressionConfig.strokeSize,
+                    pointSize = regressionConfig.pointSize
                 ),
                 yLabelConfig = YLabels(
-                    rotation = 0f,
-                    lineAlpha = .9f
+                    fontColor = yLabels.fontColor,
+                    fontSize = yLabels.fontSize,
+                    rangeAdjustment = yLabels.rangeAdjustment,
+                    minValueAdjustment = yLabels.minValueAdjustment,
+                    breaks = yLabels.breaks,
+                    rotation = yLabels.rotation,
+                    lineAlpha = yLabels.lineAlpha,
+                    maxValueAdjustment = yLabels.maxValueAdjustment,
+                    isBaseZero = yLabels.isBaseZero,
+                    xOffset = yLabels.xOffset,
+                    yOffset = yLabels.yOffset,
+                    textAlignment = yLabels.textAlignment,
+                    lineStartPadding = yLabels.lineStartPadding
                 ),
                 xLabelConfig = XLabels(
-                    rotation = 45f,
-                    showLines = true
+                    fontColor = xLabels.fontColor,
+                    fontSize = xLabels.fontSize,
+                    rangeAdjustment = xLabels.rangeAdjustment,
+                    breaks = xLabels.breaks,
+                    yOffset = xLabels.yOffset,
+                    xOffset = xLabels.xOffset,
+                    textAlignment = xLabels.textAlignment,
+                    rotation = xLabels.rotation,
+                    lineAlpha = xLabels.lineAlpha,
+                    showLines = xLabels.showLines
                 ),
                 linearRegressionData = listOf(
                     LinearRegressionData(xValue = 3986.37f, yValue = 128.25f),
@@ -110,58 +99,219 @@ fun LinearRegressionChartDemo() {
             )
         }
         item {
-            Text(
-                text = "Linear Regression Chart with\nadjusted point size",
-                fontSize = 16.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                textAlign = TextAlign.Center,
-                color = if (isSystemInDarkTheme()) Color.White else Color.Black
-            )
-        }
+            var pointSwitch by remember { mutableStateOf(false) }
 
-        item {
-            LinearRegressionChart(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(height = 300.dp)
-                    .padding(20.dp),
-                scatterColors = colors.last(),
-                lineColors = colors.first(),
-                linearRegressionConfig = LinearRegressionConfig(
-                    pointType = PointType.Fill,
-                    strokeSize = 2.dp
-                ),
-                yLabelConfig = YLabels(
-                    rotation = -30f,
-                    lineAlpha = .9f
-                ),
-                xLabelConfig = XLabels(
-                    rotation = 30f,
-                    showLines = true
-                ),
-                linearRegressionData = listOf(
-                    LinearRegressionData(10F, 35F),
-                    LinearRegressionData(20F, 25F),
-                    LinearRegressionData(10F, 50F),
-                    LinearRegressionData(100F, 10F),
-                    LinearRegressionData(10F, 15F),
-                    LinearRegressionData(50F, 100F),
-                    LinearRegressionData(20F, 25F),
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Text("Figure Configs", fontSize = 32.sp, fontWeight = FontWeight.ExtraBold)
+
+                Spacer(Modifier.height(15.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val value = if (pointSwitch) "Fill" else "Stroke"
+                    Text("Point Type: $value")
+                    Switch(
+                        checked = pointSwitch,
+                        onCheckedChange = {
+                            regressionConfig = regressionConfig.copy(pointType = if (it) PointType.Fill else PointType.Stroke)
+                            pointSwitch = it
+                        }
+                    )
+                }
+
+                Spacer(Modifier.height(15.dp))
+
+                Text("Stroke Size: ${regressionConfig.strokeSize.value.toInt()}.dp")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = regressionConfig.strokeSize.value,
+                    onValueChange = {
+                        regressionConfig = regressionConfig.copy(strokeSize = it.dp)
+                    },
+                    valueRange = 1f..20f
                 )
-            )
+
+                Spacer(Modifier.height(5.dp))
+
+                Text("Point Size: ${regressionConfig.pointSize.value.toInt()}.dp")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = regressionConfig.pointSize.value,
+                    onValueChange = {
+                        regressionConfig = regressionConfig.copy(pointSize = it.dp)
+                    },
+                    valueRange = 1f..20f
+                )
+            }
         }
         item {
-            Text(
-                text = "Linear Regression Chart with\nduplicate x values",
-                fontSize = 16.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                textAlign = TextAlign.Center,
-                color = if (isSystemInDarkTheme()) Color.White else Color.Black
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Text("Y-Axis Configs", fontSize = 32.sp, fontWeight = FontWeight.ExtraBold)
+
+                Spacer(Modifier.height(15.dp))
+
+                Text("Font Size: ${yLabels.fontSize}")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = yLabels.fontSize,
+                    onValueChange = {
+                        yLabels = yLabels.copy(fontSize = it)
+                    },
+                    valueRange = 1f..50f
+                )
+
+                Spacer(Modifier.height(5.dp))
+
+                Text("X Offset: ${yLabels.xOffset}")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = yLabels.xOffset,
+                    onValueChange = {
+                        yLabels = yLabels.copy(xOffset = it)
+                    },
+                    valueRange = 1f..100f
+                )
+
+                Spacer(Modifier.height(5.dp))
+
+                Text("Rotation: ${yLabels.rotation}")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = yLabels.rotation,
+                    onValueChange = {
+                        yLabels = yLabels.copy(rotation = it)
+                    },
+                    valueRange = -90f..0f
+                )
+
+                Spacer(Modifier.height(5.dp))
+
+                Text("Breaks: ${yLabels.breaks}")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = yLabels.breaks.toFloat(),
+                    onValueChange = {
+                        yLabels = yLabels.copy(breaks = it.toInt())
+                    },
+                    valueRange = 1f..15f
+                )
+
+                Spacer(Modifier.height(5.dp))
+
+                Text("Adjusted Range: ${yLabels.rangeAdjustment.factor}")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = yLabels.rangeAdjustment.factor,
+                    onValueChange = {
+                        yLabels = yLabels.copy(rangeAdjustment = Multiplier(it))
+                    },
+                    valueRange = 0f..1f
+                )
+
+                Spacer(Modifier.height(5.dp))
+
+                Text("Adjusted Min: ${yLabels.minValueAdjustment.factor}")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = yLabels.minValueAdjustment.factor,
+                    onValueChange = {
+                        yLabels = yLabels.copy(minValueAdjustment = Multiplier(it))
+                    },
+                    valueRange = 0f..1f
+                )
+
+                Spacer(Modifier.height(5.dp))
+
+                Text("Adjusted Max: ${yLabels.maxValueAdjustment.factor}")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = yLabels.maxValueAdjustment.factor,
+                    onValueChange = {
+                        yLabels = yLabels.copy(maxValueAdjustment = Multiplier(it))
+                    },
+                    valueRange = 0f..1f
+                )
+            }
+        }
+        item {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Text("X-Axis Configs", fontSize = 32.sp, fontWeight = FontWeight.ExtraBold)
+
+                Spacer(Modifier.height(15.dp))
+
+                Text("Font Size: ${xLabels.fontSize}")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = xLabels.fontSize,
+                    onValueChange = {
+                        xLabels = xLabels.copy(fontSize = it)
+                    },
+                    valueRange = 1f..50f
+                )
+
+                Spacer(Modifier.height(5.dp))
+
+                Text("Y Offset: ${xLabels.yOffset}")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = xLabels.yOffset,
+                    onValueChange = {
+                        xLabels = xLabels.copy(yOffset = it)
+                    },
+                    valueRange = 1f..100f
+                )
+
+                Spacer(Modifier.height(5.dp))
+
+                Text("Rotation: ${xLabels.rotation}")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = xLabels.rotation,
+                    onValueChange = {
+                        xLabels = xLabels.copy(rotation = it)
+                    },
+                    valueRange = 0f..90f
+                )
+
+                Spacer(Modifier.height(5.dp))
+
+                Text("Breaks: ${xLabels.breaks}")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = xLabels.breaks.toFloat(),
+                    onValueChange = {
+                        xLabels = xLabels.copy(breaks = it.toInt())
+                    },
+                    valueRange = 1f..15f
+                )
+
+                Spacer(Modifier.height(5.dp))
+
+                Text("Adjusted Range: ${xLabels.rangeAdjustment.factor}")
+                Spacer(Modifier.height(2.5.dp))
+                Slider(
+                    value = xLabels.rangeAdjustment.factor,
+                    onValueChange = {
+                        xLabels = xLabels.copy(rangeAdjustment = Multiplier(it))
+                    },
+                    valueRange = 0f..1f
+                )
+            }
         }
     }
 }

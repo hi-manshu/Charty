@@ -112,7 +112,7 @@ internal fun DrawScope.drawYAxisWithScaledLabels(
             end = Offset(x = size.width, y = y),
             color = axisConfig.yAxisColor,
             pathEffect = if (axisConfig.isAxisDashed) pathEffect else null,
-            alpha = yLabelConfig.lineAlpha,
+            alpha = yLabelConfig.lineAlpha.factor,
             strokeWidth = size.width.div(200)
         )
     }
@@ -201,7 +201,7 @@ internal fun DrawScope.drawSetXAxisWithLabels(
                 end = Offset(x = x, y = size.height),
                 color = axisConfig.xAxisColor,
                 pathEffect = if (axisConfig.isAxisDashed) pathEffect else null,
-                alpha = xLabelConfig.lineAlpha,
+                alpha = xLabelConfig.lineAlpha.factor,
                 strokeWidth = size.width.div(200)
             )
         }

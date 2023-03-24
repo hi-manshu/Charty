@@ -12,7 +12,7 @@ data class XLabels(
     val xOffset: Float = 0f,
     val textAlignment: Align = Align.CENTER,
     val rotation: Float = 0f,
-    val lineAlpha: Float = .1f,
+    val lineAlpha: Multiplier = Multiplier(.1f),
     val showLines: Boolean = false
 )
 
