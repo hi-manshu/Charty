@@ -59,6 +59,11 @@ internal fun DrawScope.drawYAxisWithLabels(
     }
 }
 
+/**
+ * Draws y labels according to [yLabelConfig].
+ *
+ * This function handles breaks, rotation, label placement, guidelines, and styling.
+ */
 internal fun DrawScope.drawYAxisWithScaledLabels(
     axisConfig: AxisConfig,
     yLabelConfig: YLabels,
@@ -148,6 +153,11 @@ internal fun DrawScope.drawXLabel(
     }
 }
 
+/**
+ * Draws x labels according to [xLabelConfig].
+ *
+ * This function handles breaks, rotation, label placement, guidelines, and styling.
+ */
 internal fun DrawScope.drawSetXAxisWithLabels(
     axisConfig: AxisConfig,
     xLabelConfig: XLabels,

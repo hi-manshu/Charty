@@ -3,6 +3,9 @@ package com.himanshoe.charty.linearregression.calculations
 import com.himanshoe.charty.linearregression.model.LinearRegressionData
 import kotlin.math.pow
 
+/**
+ * Calculates the regression slope value.
+ */
 internal fun betaSlopeCalculation(data: List<LinearRegressionData>): Double {
     val independentMean = data.map { it.xValue }.average()
     val dependentMean = data.map { it.yValue }.average()
@@ -13,9 +16,15 @@ internal fun betaSlopeCalculation(data: List<LinearRegressionData>): Double {
     return numerator/denominator
 }
 
+/**
+ * Calculates the estimated y-intercept value of the regression line.
+ */
 internal fun yInterceptCalculation(data: List<LinearRegressionData>, betaSlope: Double) =
     data.sumOf { point -> point.yValue - (point.xValue * betaSlope) } / data.size
 
+/**
+ * Calculates the regression end points for plotting.
+ */
 internal fun calculateRegressionEndPoints(
     data: Map<Float, List<Float>>,
     betaSlope: Double,

@@ -18,6 +18,9 @@ internal fun dataToOffSet(
     return Offset(((startX.plus(endX)).div(2F)), y)
 }
 
+/**
+ * Provides point offsets calculated by their position relative to the screen's width and height.
+ */
 internal fun unboundDataToOffset(
     size: Size,
     xData: Float,
