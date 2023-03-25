@@ -55,8 +55,8 @@ fun LinearRegressionChartDemo() {
                     .fillMaxWidth()
                     .height(height = 300.dp)
                     .padding(20.dp),
-                scatterColors = colors.last(),
-                lineColors = colors.first(),
+                scatterColor = colors.last(),
+                lineColor = colors.first(),
                 linearRegressionConfig = LinearRegressionConfig(
                     pointType = regressionConfig.pointType,
                     strokeSize = regressionConfig.strokeSize,

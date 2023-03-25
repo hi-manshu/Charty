@@ -32,8 +32,23 @@ import com.himanshoe.charty.linearregression.config.LinearRegressionDefaults
 import com.himanshoe.charty.linearregression.model.*
 import com.himanshoe.charty.point.cofig.PointType
 
-// TODO: Add documentation
-
+/**
+ * A chart that calculates the regression of the given set of data.
+ *
+ * This chart accepts a list of [LinearRegressionData] and calculates and plots the data's regression line.
+ *
+ * @param linearRegressionData the list of [LinearRegressionData] points that will be plotted as points.
+ * These data are also used to calculate the linear regression.
+ * @param scatterColors a list of colors to use as a gradient. The gradient will be applied from point to point
+ * rather than within each point.
+ * @param lineColors a list of colors to use as a gradient. The gradient will be applied to the regression line.
+ * @param modifier the [Modifier] to be applied to this slider.
+ * @param chartDimens the [ChartDimens] to be applied to the canvas.
+ * @param axisConfig the [AxisConfig] to be applied to the chart's axes.
+ * @param yLabelConfig the [YLabels] to be applied to the y-axis's labels and lines.
+ * @param xLabelConfig the [XLabels] to be applied to the x-axis's labels and lines.
+ * @param linearRegressionConfig the [LinearRegressionConfig] to be applied to the data points and regression line.
+ */
 @Composable
 fun LinearRegressionChart(
     linearRegressionData: List<LinearRegressionData>,
@@ -164,11 +179,27 @@ fun LinearRegressionChart(
     }
 }
 
+/**
+ * A chart that calculates the regression of the given set of data.
+ *
+ * This chart accepts a list of [LinearRegressionData] and calculates and plots the data's regression line.
+ *
+ * @param linearRegressionData the list of [LinearRegressionData] points that will be plotted as points.
+ * These data are also used to calculate the linear regression.
+ * @param scatterColor the color to be applied to data points.
+ * @param lineColor the color to be applied to the regression line.
+ * @param modifier the [Modifier] to be applied to this slider.
+ * @param chartDimens the [ChartDimens] to be applied to the canvas.
+ * @param axisConfig the [AxisConfig] to be applied to the chart's axes.
+ * @param yLabelConfig the [YLabels] to be applied to the y-axis's labels and lines.
+ * @param xLabelConfig the [XLabels] to be applied to the x-axis's labels and lines.
+ * @param linearRegressionConfig the [LinearRegressionConfig] to be applied to the data points and regression line.
+ */
 @Composable
 fun LinearRegressionChart(
     linearRegressionData: List<LinearRegressionData>,
-    scatterColors: Color,
-    lineColors: Color,
+    scatterColor: Color,
+    lineColor: Color,
     modifier: Modifier = Modifier,
     chartDimens: ChartDimens = ChartDimensDefaults.chartDimesDefaults(),
     axisConfig: AxisConfig = AxisConfigDefaults.axisConfigDefaults(isSystemInDarkTheme()),
@@ -178,8 +209,8 @@ fun LinearRegressionChart(
 ) {
     LinearRegressionChart(
         linearRegressionData = linearRegressionData,
-        scatterColors = listOf(scatterColors, scatterColors),
-        lineColors = listOf(lineColors, lineColors),
+        scatterColors = listOf(scatterColor, scatterColor),
+        lineColors = listOf(lineColor, lineColor),
         modifier = modifier,
         chartDimens = chartDimens,
         axisConfig = axisConfig,
