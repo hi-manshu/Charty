@@ -173,7 +173,7 @@ fun LinearRegressionChart(
             drawPath(
                 path = path,
                 brush = lineBrush,
-                style = Stroke(width = strokeWidth),
+                style = Stroke(width = strokeWidth, cap = linearRegressionConfig.lineCap),
             )
         }
     }
