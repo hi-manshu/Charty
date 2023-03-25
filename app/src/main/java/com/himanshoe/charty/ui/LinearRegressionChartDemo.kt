@@ -7,7 +7,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -25,6 +24,7 @@ import com.himanshoe.charty.linearregression.LinearRegressionChart
 import com.himanshoe.charty.linearregression.config.LinearRegressionConfig
 import com.himanshoe.charty.linearregression.model.LinearRegressionData
 import com.himanshoe.charty.point.cofig.PointType
+import com.himanshoe.charty.ui.composables.TextSlider
 
 @Composable
 fun LinearRegressionChartDemo() {
@@ -128,26 +128,20 @@ fun LinearRegressionChartDemo() {
 
                 Spacer(Modifier.height(15.dp))
 
-                Text("Stroke Size: ${regressionConfig.strokeSize.value.toInt()}.dp")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "Stroke Size: ${regressionConfig.strokeSize.value.toInt()}.dp",
                     value = regressionConfig.strokeSize.value,
-                    onValueChange = {
-                        regressionConfig = regressionConfig.copy(strokeSize = it.dp)
-                    },
+                    onValueChange = { regressionConfig = regressionConfig.copy(strokeSize = it.dp) },
                     valueRange = 1f..20f
                 )
 
                 Spacer(Modifier.height(5.dp))
 
-                Text("Point Size: ${regressionConfig.pointSize.value.toInt()}.dp")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "Point Size: ${regressionConfig.pointSize.value.toInt()}.dp",
                     value = regressionConfig.pointSize.value,
-                    onValueChange = {
-                        regressionConfig = regressionConfig.copy(pointSize = it.dp)
-                    },
-                    valueRange = 1f..20f
+                    onValueChange = { regressionConfig = regressionConfig.copy(pointSize = it.dp) },
+                    valueRange = 1f..20f,
                 )
             }
         }
@@ -161,85 +155,64 @@ fun LinearRegressionChartDemo() {
 
                 Spacer(Modifier.height(15.dp))
 
-                Text("Font Size: ${yLabels.fontSize}")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "Font Size: ${yLabels.fontSize}",
                     value = yLabels.fontSize,
-                    onValueChange = {
-                        yLabels = yLabels.copy(fontSize = it)
-                    },
+                    onValueChange = { yLabels = yLabels.copy(fontSize = it) },
                     valueRange = 1f..50f
                 )
 
                 Spacer(Modifier.height(5.dp))
 
-                Text("X Offset: ${yLabels.xOffset}")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "X Offset: ${yLabels.xOffset}",
                     value = yLabels.xOffset,
-                    onValueChange = {
-                        yLabels = yLabels.copy(xOffset = it)
-                    },
+                    onValueChange = { yLabels = yLabels.copy(xOffset = it) },
                     valueRange = 1f..100f
                 )
 
                 Spacer(Modifier.height(5.dp))
 
-                Text("Rotation: ${yLabels.rotation}")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "Rotation: ${yLabels.rotation}",
                     value = yLabels.rotation,
-                    onValueChange = {
-                        yLabels = yLabels.copy(rotation = it)
-                    },
+                    onValueChange = { yLabels = yLabels.copy(rotation = it) },
                     valueRange = -90f..0f
                 )
 
                 Spacer(Modifier.height(5.dp))
 
-                Text("Breaks: ${yLabels.breaks}")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "Breaks: ${yLabels.breaks}",
                     value = yLabels.breaks.toFloat(),
-                    onValueChange = {
-                        yLabels = yLabels.copy(breaks = it.toInt())
-                    },
+                    onValueChange = { yLabels = yLabels.copy(breaks = it.toInt()) },
                     valueRange = 1f..15f
                 )
 
                 Spacer(Modifier.height(5.dp))
 
-                Text("Adjusted Range: ${yLabels.rangeAdjustment.factor}")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "Adjusted Range: ${yLabels.rangeAdjustment.factor}",
                     value = yLabels.rangeAdjustment.factor,
-                    onValueChange = {
-                        yLabels = yLabels.copy(rangeAdjustment = Multiplier(it))
-                    },
+                    onValueChange = { yLabels = yLabels.copy(rangeAdjustment = Multiplier(it)) },
                     valueRange = 0f..1f
                 )
 
                 Spacer(Modifier.height(5.dp))
 
-                Text("Adjusted Min: ${yLabels.minValueAdjustment.factor}")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "Adjusted Min: ${yLabels.minValueAdjustment.factor}",
                     value = yLabels.minValueAdjustment.factor,
-                    onValueChange = {
-                        yLabels = yLabels.copy(minValueAdjustment = Multiplier(it))
-                    },
+                    onValueChange = { yLabels = yLabels.copy(minValueAdjustment = Multiplier(it)) },
                     valueRange = 0f..1f
                 )
 
                 Spacer(Modifier.height(5.dp))
 
-                Text("Adjusted Max: ${yLabels.maxValueAdjustment.factor}")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "Adjusted Max: ${yLabels.maxValueAdjustment.factor}",
                     value = yLabels.maxValueAdjustment.factor,
-                    onValueChange = {
-                        yLabels = yLabels.copy(maxValueAdjustment = Multiplier(it))
-                    },
+                    onValueChange = { yLabels = yLabels.copy(maxValueAdjustment = Multiplier(it)) },
                     valueRange = 0f..1f
                 )
             }
@@ -254,61 +227,46 @@ fun LinearRegressionChartDemo() {
 
                 Spacer(Modifier.height(15.dp))
 
-                Text("Font Size: ${xLabels.fontSize}")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "Font Size: ${xLabels.fontSize}",
                     value = xLabels.fontSize,
-                    onValueChange = {
-                        xLabels = xLabels.copy(fontSize = it)
-                    },
+                    onValueChange = { xLabels = xLabels.copy(fontSize = it) },
                     valueRange = 1f..50f
                 )
 
                 Spacer(Modifier.height(5.dp))
 
-                Text("Y Offset: ${xLabels.yOffset}")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "Y Offset: ${xLabels.yOffset}",
                     value = xLabels.yOffset,
-                    onValueChange = {
-                        xLabels = xLabels.copy(yOffset = it)
-                    },
+                    onValueChange = { xLabels = xLabels.copy(yOffset = it) },
                     valueRange = 1f..100f
                 )
 
                 Spacer(Modifier.height(5.dp))
 
-                Text("Rotation: ${xLabels.rotation}")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "Rotation: ${xLabels.rotation}",
                     value = xLabels.rotation,
-                    onValueChange = {
-                        xLabels = xLabels.copy(rotation = it)
-                    },
+                    onValueChange = { xLabels = xLabels.copy(rotation = it) },
                     valueRange = 0f..90f
                 )
 
                 Spacer(Modifier.height(5.dp))
 
-                Text("Breaks: ${xLabels.breaks}")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "Breaks: ${xLabels.breaks}",
                     value = xLabels.breaks.toFloat(),
-                    onValueChange = {
-                        xLabels = xLabels.copy(breaks = it.toInt())
-                    },
+                    onValueChange = { xLabels = xLabels.copy(breaks = it.toInt()) },
                     valueRange = 1f..15f
                 )
 
                 Spacer(Modifier.height(5.dp))
 
-                Text("Adjusted Range: ${xLabels.rangeAdjustment.factor}")
-                Spacer(Modifier.height(2.5.dp))
-                Slider(
+                TextSlider(
+                    text = "Adjusted Range: ${xLabels.rangeAdjustment.factor}",
                     value = xLabels.rangeAdjustment.factor,
-                    onValueChange = {
-                        xLabels = xLabels.copy(rangeAdjustment = Multiplier(it))
-                    },
+                    onValueChange = { xLabels = xLabels.copy(rangeAdjustment = Multiplier(it)) },
                     valueRange = 0f..1f
                 )
             }
