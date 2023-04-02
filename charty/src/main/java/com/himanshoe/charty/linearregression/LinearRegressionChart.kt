@@ -8,9 +8,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import com.himanshoe.charty.common.axis.AxisConfig
@@ -30,6 +28,9 @@ import com.himanshoe.charty.linearregression.calculations.yInterceptCalculation
 import com.himanshoe.charty.linearregression.config.LinearRegressionConfig
 import com.himanshoe.charty.linearregression.config.LinearRegressionDefaults
 import com.himanshoe.charty.linearregression.model.*
+import com.himanshoe.charty.linearregression.model.maxYValue
+import com.himanshoe.charty.linearregression.model.minXValue
+import com.himanshoe.charty.linearregression.model.minYValue
 import com.himanshoe.charty.point.cofig.PointType
 
 /**
@@ -65,10 +66,12 @@ fun LinearRegressionChart(
         .sortedBy { it.xValue }
         .groupBy(keySelector = { it.xValue }, valueTransform = { it.yValue })
 
-    val betaSlope = betaSlopeCalculation(data = linearRegressionData)
-    val yIntercept = yInterceptCalculation(data = linearRegressionData, betaSlope = betaSlope)
+    val betaSlope =
+        if (linearRegressionData.isNotEmpty()) betaSlopeCalculation(data = linearRegressionData) else 0.0
+    val yIntercept =
+        if (linearRegressionData.isNotEmpty()) yInterceptCalculation(data = linearRegressionData, betaSlope = betaSlope) else 0.0
     val regressionData =
-        calculateRegressionEndPoints(data = data, betaSlope = betaSlope, yIntercept = yIntercept)
+        if (data.isNotEmpty()) calculateRegressionEndPoints(data = data, betaSlope = betaSlope, yIntercept = yIntercept) else listOf()
 
     val maxYValue by remember { derivedStateOf { maxOf(regressionData.maxYValue(), linearRegressionData.maxYValue()) } }
     val adjustedMaxYValue = maxYValue.plus(maxYValue.times(yLabelConfig.maxValueAdjustment.factor))
@@ -150,12 +153,25 @@ fun LinearRegressionChart(
                     }
                 }
 
-                drawCircle(
-                    center = scatterCenterOffset,
-                    style = style,
-                    radius = scatterRadius,
-                    brush = scatterBrush
-                )
+                try {
+                    drawCircle(
+                        center = scatterCenterOffset,
+                        style = style,
+                        radius = scatterRadius,
+                        brush = scatterBrush
+                    )
+                } catch (e: IllegalStateException) {
+                    drawContext.canvas.nativeCanvas.drawText(
+                        "No data to display",
+                        size.width.div(2f),
+                        size.height.div(2f),
+                        android.graphics.Paint().apply {
+                            color = yLabelConfig.fontColor.toArgb()
+                            textSize = 48f
+                            textAlign = yLabelConfig.textAlignment
+                        }
+                    )
+                }
             }
         }
 
