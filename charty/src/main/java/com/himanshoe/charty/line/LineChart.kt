@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.himanshoe.charty.common.ChartDataCollection
+import com.himanshoe.charty.common.ChartSurface
 import com.himanshoe.charty.common.config.AxisConfig
 import com.himanshoe.charty.common.config.ChartDefaults
 import com.himanshoe.charty.common.ui.drawXAxisLabels
@@ -66,25 +67,11 @@ fun LineChart(
     lineConfig: LineConfig = LineChartDefaults.defaultConfig(),
     chartColors: LineChartColors = LineChartDefaults.defaultColor(),
 ) {
-    BoxWithConstraints(
-        modifier = modifier
-            .padding(padding.times(2))
-            .drawBehind {
-                if (dataCollection.data.count() >= 14 && axisConfig.showGridLabel) {
-                    drawXAxisLabels(
-                        data = dataCollection.data.map { it.xValue },
-                        count = dataCollection.data.count(),
-                        padding = padding.toPx(),
-                        minLabelCount = axisConfig.minLabelCount
-                    )
-                    drawYAxisLabels(
-                        dataCollection.data.map { it.yValue },
-                        spacing = padding.toPx(),
-                    )
-                }
-            }
-            .background(Color.White),
-        contentAlignment = Alignment.Center
+    ChartSurface(
+        padding = padding,
+        chartData = dataCollection,
+        modifier = modifier,
+        axisConfig = axisConfig
     ) {
         Canvas(
             modifier = Modifier.fillMaxSize()

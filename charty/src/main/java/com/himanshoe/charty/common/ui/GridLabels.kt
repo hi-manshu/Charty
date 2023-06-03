@@ -27,10 +27,9 @@ internal fun DrawScope.drawXAxisLabels(
         textAlign = Paint.Align.CENTER
         getTextBounds(data.toString(), 0, data.toString().length, textBounds)
     }
-    val textCount = data.toString().length.coerceAtLeast(minLabelCount)
 
     drawContext.canvas.nativeCanvas.drawText(
-        data.toString().take(textCount),
+        data.toString().take(minLabelCount),
         center.x,
         size.height + padding,
         textPaint

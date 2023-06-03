@@ -14,9 +14,12 @@ object ChartDefaults {
     )
 
     fun colorDefaults() = ChartColors(
-        listOf(
+        contentColor = listOf(
             Color(0xffed625d),
             Color(0xfff79f88)
+        ),
+        backgroundColors = listOf(
+            Color.Transparent, Color.Transparent
         )
     )
 }
