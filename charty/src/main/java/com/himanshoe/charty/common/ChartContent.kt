@@ -33,6 +33,8 @@ fun ChartSurface(
                         padding = padding.toPx(),
                         minLabelCount = axisConfig.minLabelCount
                     )
+                }
+                if (axisConfig.showGridLabel) {
                     drawYAxisLabels(
                         chartData.data.map { it.yValue },
                         spacing = padding.toPx(),
