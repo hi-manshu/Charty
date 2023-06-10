@@ -3,28 +3,38 @@ package com.himanshoe.charty.line
 import android.graphics.PointF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastForEachIndexed
 import com.himanshoe.charty.common.ChartDataCollection
 import com.himanshoe.charty.common.ChartSurface
 import com.himanshoe.charty.common.config.AxisConfig
 import com.himanshoe.charty.common.config.ChartDefaults
+import com.himanshoe.charty.common.math.chartDataToOffset
+import com.himanshoe.charty.common.maxYValue
+import com.himanshoe.charty.common.minYValue
+import com.himanshoe.charty.common.ui.drawGridLines
+import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawXAxisLabels
-import com.himanshoe.charty.common.ui.drawYAxisLabels
+import com.himanshoe.charty.common.ui.drawYAxis
 import com.himanshoe.charty.line.config.LineChartColors
 import com.himanshoe.charty.line.config.LineChartDefaults
 import com.himanshoe.charty.line.config.LineConfig
@@ -67,73 +77,111 @@ fun LineChart(
     lineConfig: LineConfig = LineChartDefaults.defaultConfig(),
     chartColors: LineChartColors = LineChartDefaults.defaultColor(),
 ) {
+    val points = dataCollection.data
+
+    var chartWidth by remember { mutableStateOf(0F) }
+    var chartHeight by remember { mutableStateOf(0F) }
+    var pointBound by remember { mutableStateOf(0F) }
+
+    val horizontalScale = chartWidth.div(points.count())
+    val verticalScale = chartHeight.div((dataCollection.maxYValue() - dataCollection.minYValue()))
+
     ChartSurface(
         padding = padding,
         chartData = dataCollection,
         modifier = modifier,
         axisConfig = axisConfig
     ) {
+        val lineColor = Brush.linearGradient(chartColors.lineColor)
+        val backgroundColor = Brush.linearGradient(chartColors.backgroundColors)
+        val dotColor = Brush.linearGradient(chartColors.dotColor)
+
+        val minYValue = dataCollection.minYValue()
+
         Canvas(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            val graphPathPoints = mutableListOf<PointF>()
-
-            val xStep = size.width / (dataCollection.data.size - 1)
-            val yStep =
-                size.height / (dataCollection.data.maxOf { it.yValue } - dataCollection.data.minOf { it.yValue })
-
-            dataCollection.data.forEachIndexed { index, data ->
-                val x = index * xStep
-                val y =
-                    size.height - (data.yValue - dataCollection.data.minOf { it.yValue }) * yStep
-                val innerX = x.coerceIn(x - radiusScale * size.width, x + radiusScale * size.width)
-                val innerY = y.coerceIn(0f, size.height)
-
-                graphPathPoints.add(PointF(innerX, innerY))
-
-                if (index > 0) {
-                    val prevX = (index - 1) * xStep
-                    val prevY =
-                        size.height - (dataCollection.data[index - 1].yValue - dataCollection.data.minOf { it.yValue }) * yStep
-                    val prevInnerX = prevX.coerceIn(
-                        prevX - radiusScale * size.width,
-                        prevX + radiusScale * size.width
-                    )
-                    val prevInnerY = prevY.coerceIn(0f, size.height)
-
-                    val path = Path().apply {
-                        moveTo(prevInnerX, prevInnerY)
-                        cubicTo(
-                            prevInnerX, prevInnerY,
-                            innerX, innerY,
-                            innerX, innerY
-                        )
-                        lineTo(innerX, size.height)
-                        lineTo(prevInnerX, size.height)
-                        close()
-                    }
-
-                    drawPath(
-                        path = path,
-                        brush = Brush.linearGradient(
-                            colors = chartColors.backgroundColors,
-                        )
-                    )
-
-                    drawPath(
-                        path = path,
-                        brush = Brush.linearGradient(
-                            colors = chartColors.lineColor,
-                        ),
-                        style = Stroke(width = lineConfig.strokeSize.toPx())
+            modifier = Modifier
+                .background(backgroundColor)
+                .fillMaxSize()
+                .onSizeChanged { size ->
+                    chartWidth = size.width.toFloat()
+                    chartHeight = size.height.toFloat()
+                    pointBound = size.width.div(
+                        points
+                            .count()
+                            .times(1.2F)
                     )
                 }
-            }
+                .drawBehind {
+                    if (axisConfig.showAxes) {
+                        drawYAxis(axisConfig.axisColor, axisConfig.axisStroke)
+                        drawXAxis(axisConfig.axisColor, axisConfig.axisStroke)
+                    }
+                    if (axisConfig.showGridLines) {
+                        drawGridLines(chartWidth, chartHeight, padding.toPx())
+                    }
+                }
+        ) {
+            val graphPathPoints = mutableListOf<PointF>()
+            val radius = size.width * radiusScale
 
+            Path().apply {
+
+                val firstData = points.first()
+                val initialX = 0f
+                val initialY = size.height - ((firstData.yValue - minYValue) * verticalScale)
+                moveTo(initialX, initialY) // Move to the initial point
+
+                points.fastForEachIndexed { index, data ->
+                    val centerOffset = chartDataToOffset(
+                        index,
+                        pointBound,
+                        size,
+                        data.yValue,
+                        horizontalScale,
+                    )
+
+                    val x = centerOffset.x
+                    val y = size.height - ((data.yValue - minYValue) * verticalScale)
+                    val innerX =
+                        x.coerceIn(centerOffset.x - radius / 2, centerOffset.x + radius / 2)
+                    val innerY = y.coerceIn(radius, size.height - radius)
+
+                    graphPathPoints.add(PointF(innerX, innerY))
+
+                    if (points.size > 1) {
+                        when (index) {
+                            0 -> moveTo(x, y)
+                            else -> lineTo(innerX, innerY)
+                        }
+                    }
+
+                    if (points.count() < 14) {
+                        drawXAxisLabels(
+                            data = data.xValue,
+                            center = centerOffset,
+                            count = points.count(),
+                            padding = padding.toPx(),
+                            minLabelCount = axisConfig.minLabelCount,
+                        )
+                    }
+                }
+                // Close the path
+                lineTo(size.width, size.height)
+                close()
+
+                val pathEffect =
+                    if (lineConfig.hasSmoothCurve) PathEffect.cornerPathEffect(radius) else null
+                // Draw the background path
+                drawPath(
+                    path = this,
+                    brush = lineColor,
+                    style = Stroke(width = lineConfig.strokeSize, pathEffect = pathEffect),
+                )
+            }
             if (lineConfig.hasDotMarker) {
-                graphPathPoints.forEach { point ->
+                graphPathPoints.fastForEach { point ->
                     drawCircle(
-                        color = chartColors.dotColor.first(),
+                        brush = dotColor,
                         radius = radiusScale * size.width,
                         center = Offset(point.x, point.y)
                     )
@@ -142,7 +190,6 @@ fun LineChart(
         }
     }
 }
-
 
 @Composable
 fun LineChartPreview(modifier: Modifier = Modifier) {

@@ -7,5 +7,5 @@ import androidx.compose.ui.unit.Dp
 data class LineConfig(
     val hasSmoothCurve: Boolean,
     val hasDotMarker: Boolean,
-    val strokeSize: Dp
+    val strokeSize: Float
 )

@@ -9,14 +9,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.himanshoe.charty.common.ChartDataCollection
 import com.himanshoe.charty.line.CurveLineChart
-import com.himanshoe.charty.line.LineChartPreview
+import com.himanshoe.charty.line.LineChart
 import com.himanshoe.charty.line.model.LineData
 import com.himanshoe.charty.point.PointChart
-import com.himanshoe.charty.point.PointChartPreview
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +31,13 @@ class MainActivity : ComponentActivity() {
         LazyColumn(modifier) {
             item {
                 CurveLineChart(
+                    dataCollection = ChartDataCollection(generateMockLineDataList()),
+                    modifier = Modifier
+                        .size(450.dp),
+                )
+            }
+            item {
+                LineChart(
                     dataCollection = ChartDataCollection(generateMockLineDataList()),
                     modifier = Modifier
                         .size(450.dp),
