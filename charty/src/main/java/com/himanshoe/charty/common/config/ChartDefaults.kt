@@ -12,14 +12,6 @@ object ChartDefaults {
         axisColor = Color.Black,
         minLabelCount = 2
     )
-    fun noAxisDefault() = AxisConfig(
-        showGridLabel = false,
-        showAxes = false,
-        showGridLines = false,
-        axisStroke = 0F,
-        axisColor = Color.Transparent,
-        minLabelCount = Int.MIN_VALUE
-    )
 
     fun colorDefaults() = ChartColors(
         contentColor = listOf(
