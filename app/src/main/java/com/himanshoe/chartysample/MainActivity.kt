@@ -57,6 +57,11 @@ class MainActivity : ComponentActivity() {
         BarData(50f, "Category C", color = Color.Blue),
         BarData(50f, "Category C", color = Color.Blue),
         BarData(50f, "Category C", color = Color.Blue),
+        BarData(30f, "Category C", color = Color.Green),
+        BarData(50f, "Category C", color = Color.Blue),
+        BarData(50f, "Category C", color = Color.Blue),
+        BarData(20f, "Category C", color = Color.Yellow),
+        BarData(50f, "Category C", color = Color.Blue),
     )
 
     @Composable

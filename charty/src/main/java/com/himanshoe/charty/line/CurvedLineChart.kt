@@ -130,9 +130,13 @@ fun CurveLineChart(
                         val prevX = previousCenterOffset.x
                         val prevY =
                             size.height -
-                                    ((dataCollection.data[prevIndex].yValue -
-                                            dataCollection.data.minOf { it.yValue })
-                                            * verticalScale)
+                                (
+                                    (
+                                        dataCollection.data[prevIndex].yValue -
+                                            dataCollection.data.minOf { it.yValue }
+                                        ) *
+                                        verticalScale
+                                    )
 
                         val prevInnerX = prevX.coerceIn(
                             prevX - radiusScale * size.width,

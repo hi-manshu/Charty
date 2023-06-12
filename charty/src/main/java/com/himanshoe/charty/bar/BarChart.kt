@@ -50,26 +50,28 @@ fun BarChart(
         axisConfig = axisConfig
     ) {
         val data = dataCollection.data
-        androidx.compose.foundation.Canvas(modifier = Modifier
-            .fillMaxSize()
-            .onSizeChanged { size ->
-                chartWidth = size.width.toFloat()
-                chartHeight = size.height.toFloat()
-                chartBound = chartWidth.div(
-                    points
-                        .count()
-                        .times(1.2F)
-                )
-            }
-            .drawBehind {
-                if (axisConfig.showAxes) {
-                    drawYAxis(axisConfig.axisColor, axisConfig.axisStroke)
-                    drawXAxis(axisConfig.axisColor, axisConfig.axisStroke)
+        androidx.compose.foundation.Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .onSizeChanged { size ->
+                    chartWidth = size.width.toFloat()
+                    chartHeight = size.height.toFloat()
+                    chartBound = chartWidth.div(
+                        points
+                            .count()
+                            .times(1.2F)
+                    )
                 }
-                if (axisConfig.showGridLines) {
-                    drawGridLines(chartWidth, chartHeight, padding.toPx())
+                .drawBehind {
+                    if (axisConfig.showAxes) {
+                        drawYAxis(axisConfig.axisColor, axisConfig.axisStroke)
+                        drawXAxis(axisConfig.axisColor, axisConfig.axisStroke)
+                    }
+                    if (axisConfig.showGridLines) {
+                        drawGridLines(chartWidth, chartHeight, padding.toPx())
+                    }
                 }
-            }) {
+        ) {
             val maxValue = data.maxOf { it.yValue }
             val barCount = data.size
             val availableWidth = size.width - (barSpacing.toPx() * (barCount - 1))

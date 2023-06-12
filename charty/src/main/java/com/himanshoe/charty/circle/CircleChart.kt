@@ -6,16 +6,12 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,19 +62,19 @@ fun CircleChart(
     var chartWidth by remember { mutableStateOf(0F) }
     var chartHeight by remember { mutableStateOf(0F) }
 
-
     LaunchedEffect(Unit) {
         animatedFactor.animateTo(
             targetValue = angleFactor,
             animationSpec = tween(1000)
         )
     }
-    Canvas(modifier = modifier
-        .fillMaxSize()
-        .onSizeChanged { size ->
-            chartWidth = size.width.toFloat()
-            chartHeight = size.height.toFloat()
-        }
+    Canvas(
+        modifier = modifier
+            .fillMaxSize()
+            .onSizeChanged { size ->
+                chartWidth = size.width.toFloat()
+                chartHeight = size.height.toFloat()
+            }
     ) {
         val scaleFactor = chartWidth.div(dataCollection.data.count())
         val sizeArc = size.div(scaleFactor)

@@ -35,7 +35,7 @@ import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawXAxisLabels
 import com.himanshoe.charty.common.ui.drawYAxis
 import com.himanshoe.charty.point.config.PointType
-import com.himanshoe.charty.point.model.Point
+import com.himanshoe.charty.point.model.PointData
 
 @Composable
 fun PointChart(
@@ -169,23 +169,23 @@ private fun PointChartPreview(modifier: Modifier = Modifier) {
     }
 }
 
-private fun generateMockPointList(): List<Point> {
+private fun generateMockPointList(): List<PointData> {
     return listOf(
-        Point(-10F, "Jan"),
-        Point(10F, "Feb"),
-        Point(05F, "Mar"),
-        Point(50F, "Apr"),
-        Point(03F, "June"),
-        Point(9F, "July"),
-        Point(40F, "Aug"),
-        Point(60F, "Sept"),
-        Point(33F, "Oct"),
-        Point(11F, "Nov"),
-        Point(27F, "Dec"),
-        Point(10F, "Jan"),
-        Point(73F, "Oct"),
-        Point(-20F, "Nov"),
-        Point(0F, "Dec"),
-        Point(10F, "Jan"),
+        PointData(-10F, "Jan"),
+        PointData(10F, "Feb"),
+        PointData(05F, "Mar"),
+        PointData(50F, "Apr"),
+        PointData(03F, "June"),
+        PointData(9F, "July"),
+        PointData(40F, "Aug"),
+        PointData(60F, "Sept"),
+        PointData(33F, "Oct"),
+        PointData(11F, "Nov"),
+        PointData(27F, "Dec"),
+        PointData(10F, "Jan"),
+        PointData(73F, "Oct"),
+        PointData(-20F, "Nov"),
+        PointData(0F, "Dec"),
+        PointData(10F, "Jan"),
     )
 }

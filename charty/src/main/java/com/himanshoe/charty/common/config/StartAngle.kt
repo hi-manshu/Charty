@@ -2,7 +2,6 @@ package com.himanshoe.charty.common.config
 
 import androidx.compose.runtime.Immutable
 
-
 @Immutable
 sealed class StartAngle(open val angle: Float) {
     object Zero : StartAngle(0F)
