@@ -6,14 +6,19 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.himanshoe.charty.common.ChartDataCollection
 import com.himanshoe.charty.line.CurveLineChart
 import com.himanshoe.charty.line.LineChart
 import com.himanshoe.charty.line.model.LineData
+import com.himanshoe.charty.pie.PieChart
+import com.himanshoe.charty.pie.config.PieChartDefaults
+import com.himanshoe.charty.pie.model.PieData
 import com.himanshoe.charty.point.PointChart
 
 class MainActivity : ComponentActivity() {
@@ -26,9 +31,29 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private val data = listOf(
+        PieData(30f, "Category A", Color.Blue),
+        PieData(20f, "Category B", Color.Red),
+        PieData(10f, "Category C", Color.Green),
+        PieData(10f, "Category C", Color.Black),
+    )
+
     @Composable
     private fun ChartContent(modifier: Modifier = Modifier) {
         LazyColumn(modifier) {
+            item {
+                PieChart(
+                    pieChartConfig= PieChartDefaults.defaultConfig().copy(donut = false),
+                    dataCollection = ChartDataCollection(data),
+                    modifier = Modifier.wrapContentSize()
+                )
+            }
+            item {
+                PieChart(
+                    dataCollection = ChartDataCollection(data),
+                    modifier = Modifier.wrapContentSize()
+                )
+            }
             item {
                 CurveLineChart(
                     dataCollection = ChartDataCollection(generateMockLineDataList()),

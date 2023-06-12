@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
@@ -125,7 +126,6 @@ fun LineChart(
             val radius = size.width * radiusScale
 
             Path().apply {
-
                 val firstData = points.first()
                 val initialX = 0f
                 val initialY = size.height - ((firstData.yValue - minYValue) * verticalScale)
@@ -192,7 +192,8 @@ fun LineChart(
 }
 
 @Composable
-fun LineChartPreview(modifier: Modifier = Modifier) {
+@Preview
+private fun LineChartPreview(modifier: Modifier = Modifier) {
     Column(modifier) {
         CurveLineChart(
             dataCollection = ChartDataCollection(generateMockPointList()),

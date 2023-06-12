@@ -1,0 +1,33 @@
+config:
+  warningsAsErrors: true
+
+complexity:
+  LongParameterList:
+    ignoreDefaultParameters: true
+    ignoreAnnotated: [ 'Composable' ]
+  LongMethod:
+    ignoreAnnotated: ['Composable']
+  TooManyFunctions:
+    active: false
+
+naming:
+  FunctionNaming:
+    ignoreAnnotated: ['Composable']
+
+style:
+  DataClassShouldBeImmutable:
+    active: true
+  MagicNumber:
+    ignoreEnums: true
+    ignoreAnnotated: ['Composable','Stable',"Test"]
+    ignorePropertyDeclaration: true
+    excludes: ['**/internal/**']
+  SpacingBetweenPackageAndImports:
+    active: true
+  UnusedImports:
+    active: true
+  UnusedPrivateMember:
+    ignoreAnnotated: ['MultiplePreviews']
+  WildcardImport:
+    active: true
+    excludeImports: []

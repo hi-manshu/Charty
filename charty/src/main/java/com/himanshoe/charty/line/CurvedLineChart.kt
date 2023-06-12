@@ -3,7 +3,6 @@ package com.himanshoe.charty.line
 import android.graphics.PointF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -11,14 +10,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -35,10 +31,8 @@ import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawXAxisLabels
 import com.himanshoe.charty.common.ui.drawYAxis
-import com.himanshoe.charty.common.ui.drawYAxisLabels
 import com.himanshoe.charty.line.config.CurvedLineChartColors
 import com.himanshoe.charty.line.config.CurvedLineChartDefaults
-import com.himanshoe.charty.line.config.LineChartColors
 import com.himanshoe.charty.line.config.LineChartDefaults
 import com.himanshoe.charty.line.config.LineConfig
 
@@ -135,7 +129,10 @@ fun CurveLineChart(
                         )
                         val prevX = previousCenterOffset.x
                         val prevY =
-                            size.height - ((dataCollection.data[prevIndex].yValue - dataCollection.data.minOf { it.yValue }) * verticalScale)
+                            size.height -
+                                    ((dataCollection.data[prevIndex].yValue -
+                                            dataCollection.data.minOf { it.yValue })
+                                            * verticalScale)
 
                         val prevInnerX = prevX.coerceIn(
                             prevX - radiusScale * size.width,
@@ -182,4 +179,3 @@ fun CurveLineChart(
         }
     }
 }
-

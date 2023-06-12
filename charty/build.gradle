@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
 }
+apply from: '../quality/static-check.gradle'
 
 android {
     namespace 'com.himanshoe.charty'

@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.util.fastMap
 import com.himanshoe.charty.common.config.AxisConfig
 import com.himanshoe.charty.common.config.ChartDefaults
 import com.himanshoe.charty.common.ui.drawXAxisLabels
@@ -28,7 +29,7 @@ fun ChartSurface(
             .drawBehind {
                 if (chartData.data.count() >= 14 && axisConfig.showGridLabel) {
                     drawXAxisLabels(
-                        data = chartData.data.map { it.xValue },
+                        data = chartData.data.fastMap { it.xValue },
                         count = chartData.data.count(),
                         padding = padding.toPx(),
                         minLabelCount = axisConfig.minLabelCount
@@ -36,7 +37,7 @@ fun ChartSurface(
                 }
                 if (axisConfig.showGridLabel) {
                     drawYAxisLabels(
-                        chartData.data.map { it.yValue },
+                        chartData.data.fastMap { it.yValue },
                         spacing = padding.toPx(),
                     )
                 }

@@ -16,7 +16,6 @@ internal fun DrawScope.drawXAxisLabels(
     minLabelCount: Int,
     textColor: Color = Color.Black,
 ) {
-
     val divisibleFactor = if (count > 10) count else 1
     val textSizeFactor = if (count > 10) 3 else 30
 
@@ -35,7 +34,6 @@ internal fun DrawScope.drawXAxisLabels(
         textPaint
     )
 }
-
 
 internal fun DrawScope.drawXAxisLabels(
     data: List<Any>,
@@ -117,10 +115,3 @@ fun DrawScope.drawYAxisLabels(
         )
     }
 }
-
-
-
-
-
-
-
