@@ -1,6 +1,5 @@
 package com.himanshoe.chartysample
 
-//import com.himanshoe.charty.bar.BarData
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.himanshoe.charty.bar.BarChart
 import com.himanshoe.charty.bar.model.BarData
+import com.himanshoe.charty.bubble.BubbleChart
+import com.himanshoe.charty.bubble.model.BubbleData
 import com.himanshoe.charty.circle.CircleChart
 import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.common.ChartDataCollection
@@ -26,6 +27,7 @@ import com.himanshoe.charty.pie.PieChart
 import com.himanshoe.charty.pie.config.PieChartDefaults
 import com.himanshoe.charty.pie.model.PieData
 import com.himanshoe.charty.point.PointChart
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +37,18 @@ class MainActivity : ComponentActivity() {
                 ChartContent(Modifier.fillMaxSize())
             }
         }
+    }
+
+    private fun generateMockBubbleData(count: Int = 10): List<BubbleData> {
+        val mockData = mutableListOf<BubbleData>()
+        for (i in 1..count) {
+            val xValue = "X$i"
+            val yValue = Random.nextFloat() * 100
+            val volumeSize = Random.nextFloat() * 100
+            val bubbleData = BubbleData(xValue, yValue, volumeSize)
+            mockData.add(bubbleData)
+        }
+        return mockData
     }
 
     private val data = listOf(
@@ -50,10 +64,10 @@ class MainActivity : ComponentActivity() {
         CircleData(50f, "Category C", Color.Black),
     )
     private val bardata = listOf(
-        BarData(30f, "Category A", color = Color.Red),
+        BarData(10f, "Category A", color = Color.Red),
         BarData(20f, "Category B", color = Color.Blue),
         BarData(50f, "Category C", color = Color.Blue),
-        BarData(50f, "Category C", color = Color.Blue),
+        BarData(40f, "Category C", color = Color.Blue),
         BarData(50f, "Category C", color = Color.Blue),
         BarData(50f, "Category C", color = Color.Blue),
         BarData(50f, "Category C", color = Color.Blue),
@@ -67,6 +81,14 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun ChartContent(modifier: Modifier = Modifier) {
         LazyColumn(modifier) {
+            item {
+                BubbleChart(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(400.dp),
+                    dataCollection = ChartDataCollection(generateMockBubbleData())
+                )
+            }
             item {
                 BarChart(
                     dataCollection = ChartDataCollection(bardata),

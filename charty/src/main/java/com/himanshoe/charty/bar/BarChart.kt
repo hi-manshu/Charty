@@ -21,6 +21,8 @@ import com.himanshoe.charty.common.ChartDataCollection
 import com.himanshoe.charty.common.ChartSurface
 import com.himanshoe.charty.common.config.AxisConfig
 import com.himanshoe.charty.common.config.ChartDefaults
+import com.himanshoe.charty.common.maxYValue
+import com.himanshoe.charty.common.minYValue
 import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawXAxisLabels
@@ -30,10 +32,10 @@ import java.lang.Exception
 @Composable
 fun BarChart(
     dataCollection: ChartDataCollection,
-    barColor: Color,
     modifier: Modifier = Modifier,
     barSpacing: Dp = 8.dp,
     padding: Dp = 16.dp,
+    barColor: Color = Color.Blue,
     axisConfig: AxisConfig = ChartDefaults.axisConfigDefaults(),
 ) {
     val points = dataCollection.data
@@ -50,6 +52,7 @@ fun BarChart(
         axisConfig = axisConfig
     ) {
         val data = dataCollection.data
+
         androidx.compose.foundation.Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -72,33 +75,40 @@ fun BarChart(
                     }
                 }
         ) {
-            val maxValue = data.maxOf { it.yValue }
+            val maxValue = dataCollection.maxYValue()
             val barCount = data.size
-            val availableWidth = size.width - (barSpacing.toPx() * (barCount - 1))
+            val minValue = dataCollection.minYValue()
+            val range = maxValue - minValue
+            val availableWidth = chartWidth - (barSpacing.toPx() * (barCount - 1))
             val maxBarWidth = availableWidth / barCount
 
             data.fastForEachIndexed { index, barData ->
                 val barWidth = maxBarWidth.coerceAtMost(screenWidth / barCount)
 
-                val barHeight = (barData.yValue / maxValue) * (size.height - axisConfig.axisStroke)
+                val barHeight =
+                    (barData.yValue - minValue) / range * (chartHeight - axisConfig.axisStroke)
 
                 val startX = index * (barWidth + barSpacing.toPx())
-                val startY = size.height - barHeight
+                val startY = chartHeight - barHeight
 
-                drawRect(
-                    color = barColor,
-                    topLeft = Offset(startX, startY),
-                    size = Size(barWidth, barHeight)
-                )
-
-                if (data.count() < 14) {
-                    drawXAxisLabels(
-                        data = barData.xValue,
-                        center = Offset(startX + barWidth / 2, startY),
-                        count = data.count(),
-                        padding = padding.toPx(),
-                        minLabelCount = axisConfig.minLabelCount,
+                if (barData is BarData) {
+                    drawRect(
+                        color = barColor,
+                        topLeft = Offset(startX, startY),
+                        size = Size(barWidth, barHeight)
                     )
+
+                    if (data.count() < 14) {
+                        drawXAxisLabels(
+                            data = barData.xValue,
+                            center = Offset(startX + barWidth / 2, startY),
+                            count = data.count(),
+                            padding = padding.toPx(),
+                            minLabelCount = axisConfig.minLabelCount,
+                        )
+                    }
+                } else {
+                    throw Exception("$barData should have color")
                 }
             }
         }
@@ -149,18 +159,20 @@ fun BarChart(
                     }
                 }
         ) {
-            val maxValue = data.maxOf { it.yValue }
+            val maxValue = dataCollection.maxYValue()
             val barCount = data.size
-            val availableWidth = size.width - (barSpacing.toPx() * (barCount - 1))
+            val minValue = dataCollection.minYValue()
+            val range = maxValue - minValue
+            val availableWidth = chartWidth - (barSpacing.toPx() * (barCount - 1))
             val maxBarWidth = availableWidth / barCount
 
             data.fastForEachIndexed { index, barData ->
                 val barWidth = maxBarWidth.coerceAtMost(screenWidth / barCount)
-
-                val barHeight = (barData.yValue / maxValue) * (size.height - axisConfig.axisStroke)
+                val barHeight =
+                    (barData.yValue - minValue) / range * (chartHeight - axisConfig.axisStroke)
 
                 val startX = index * (barWidth + barSpacing.toPx())
-                val startY = size.height - barHeight
+                val startY = chartHeight - barHeight
 
                 if (barData is BarData) {
                     if (barData.color != null) {

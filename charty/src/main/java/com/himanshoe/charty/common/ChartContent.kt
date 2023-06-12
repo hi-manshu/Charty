@@ -25,7 +25,12 @@ fun ChartSurface(
 ) {
     BoxWithConstraints(
         modifier = modifier
-            .padding(padding.times(2))
+            .padding(
+                start = padding.times(2),
+                bottom = padding.times(2),
+                top = padding.times(2),
+                end = padding
+            )
             .drawBehind {
                 if (chartData.data.count() >= 14 && axisConfig.showGridLabel) {
                     drawXAxisLabels(
