@@ -58,6 +58,7 @@ fun CircleChart(
     val maxYValueState = rememberSaveable { mutableStateOf(dataCollection.maxYValue()) }
     val maxYValue = maxYValueState.value
     val angleFactor = if (config.maxValue != null) 360.div(config.maxValue) else 360.div(maxYValue)
+
     val animatedFactor = remember {
         Animatable(initialValue = 0f)
     }
@@ -81,12 +82,12 @@ fun CircleChart(
     ) {
         val scaleFactor = chartWidth.div(dataCollection.data.count())
         val sizeArc = size.div(scaleFactor)
+        val factor = if (canAnimate) animatedFactor.value else angleFactor
 
         dataCollection.data.fastForEachIndexed { index, circleData ->
             if (circleData is CircleData) {
                 val arcWidth = sizeArc.width.plus(index.times(scaleFactor))
                 val arcHeight = sizeArc.height.plus(index.times(scaleFactor))
-                val factor = if (canAnimate) animatedFactor.value else angleFactor
 
                 drawArc(
                     color = circleData.color,
