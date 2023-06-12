@@ -1,6 +1,7 @@
 package com.himanshoe.charty.pie.config
 
 import androidx.compose.runtime.Immutable
+import com.himanshoe.charty.common.config.StartAngle
 
 @Immutable
 data class PieChartConfig(
@@ -8,12 +9,3 @@ data class PieChartConfig(
     val showLabel: Boolean,
     val startAngle: StartAngle = StartAngle.Zero
 )
-
-@Immutable
-sealed class StartAngle(open val angle: Float) {
-    object Zero : StartAngle(0F)
-    object StraightAngle : StartAngle(180F)
-    object ReflexAngle : StartAngle(270F)
-    object RightAngle : StartAngle(90F)
-    data class CustomAngle(override val angle: Float) : StartAngle(angle)
-}
