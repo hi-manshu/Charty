@@ -14,3 +14,8 @@ data class ChartDataCollection(val data: List<ChartData>)
 fun ChartDataCollection.maxYValue() = data.maxOf { it.yValue }
 
 fun ChartDataCollection.minYValue() = data.minOf { it.yValue }
+
+@Immutable
+data class ComposeList<T>(val data: List<T>)
+
+fun <T> List<T>.toComposeList() = ComposeList<T>(this)

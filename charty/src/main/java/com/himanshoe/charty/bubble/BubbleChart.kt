@@ -26,6 +26,7 @@ import com.himanshoe.charty.common.maxYValue
 import com.himanshoe.charty.common.minYValue
 import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
+import com.himanshoe.charty.common.ui.drawXAxisLabels
 import com.himanshoe.charty.common.ui.drawYAxis
 import com.himanshoe.charty.line.config.CurvedLineChartColors
 import com.himanshoe.charty.line.config.CurvedLineChartDefaults
@@ -92,6 +93,15 @@ fun BubbleChart(
                         radius = bubbleRadius,
                         center = Offset(x, y)
                     )
+                    if (points.count() < 14) {
+                        drawXAxisLabels(
+                            data = data.xValue,
+                            center = Offset(x, y),
+                            count = points.count(),
+                            padding = padding.toPx(),
+                            minLabelCount = axisConfig.minLabelCount,
+                        )
+                    }
                 } else {
                     throw Exception("Use ChartDataCollection for BubbleData")
                 }

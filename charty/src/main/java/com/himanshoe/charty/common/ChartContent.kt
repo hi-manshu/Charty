@@ -53,3 +53,34 @@ fun ChartSurface(
         content()
     }
 }
+
+@Composable
+fun <T> ChartSurface(
+    padding: Dp,
+    chartData: ComposeList<T>,
+    modifier: Modifier = Modifier,
+    axisConfig: AxisConfig = ChartDefaults.axisConfigDefaults(),
+    content: @Composable () -> Unit = {}
+) {
+    BoxWithConstraints(
+        modifier = modifier
+            .padding(
+                start = padding.times(2),
+                bottom = padding.times(2),
+                top = padding.times(2),
+                end = padding
+            )
+            .drawBehind {
+                if (axisConfig.showGridLabel) {
+                    drawYAxisLabels(
+                        chartData.data as List<Float>,
+                        spacing = padding.toPx(),
+                    )
+                }
+            }
+            .background(Color.White),
+        contentAlignment = Alignment.Center
+    ) {
+        content()
+    }
+}
