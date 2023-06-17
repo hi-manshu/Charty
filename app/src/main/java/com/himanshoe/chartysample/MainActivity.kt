@@ -59,30 +59,30 @@ class MainActivity : ComponentActivity() {
     }
 
     private val data = listOf(
-        PieData(30f, "Category A", Color.Blue),
-        PieData(20f, "Category B", Color.Red),
-        PieData(13f, "Category C", Color.Green),
-        PieData(10f, "Category C", Color.Black),
+        PieData(30f, "Category A", color = Color(0xffed625d)),
+        PieData(20f, "Category B", color = Color(0xfff79f88)),
+        PieData(13f, "Category C", color = Color(0xFF43A047)),
+        PieData(10f, "Category D", color = Color(0xFF93A047)),
     )
     private val circleData = listOf(
-        CircleData(30f, "Category A", color = Color.Blue),
-        CircleData(20f, "Category B", Color.Red),
-        CircleData(10f, "Category C", Color.Green),
-        CircleData(50f, "Category C", Color.Black),
+        CircleData(30f, "Category A", color = Color(0xffed625d)),
+        CircleData(20f, "Category B", color = Color(0xfff79f88)),
+        CircleData(13f, "Category C", color = Color(0xFF43A047)),
+        CircleData(10f, "Category D", color = Color(0xFF93A047)),
     )
     private val bardata = listOf(
         BarData(10f, "Category A", color = Color(0xffed625d)),
         BarData(20f, "Category B", color = Color(0xffed125d)),
         BarData(50f, "Category C", color = Color(0xffed225d)),
-        BarData(40f, "Category C", color = Color(0xffed325d)),
-        BarData(50f, "Category C", color = Color(0xffed425d)),
-        BarData(50f, "Category C", color = Color(0xffed525d)),
-        BarData(50f, "Category C", color = Color(0xffed625d)),
-        BarData(30f, "Category C", color = Color(0xffed725d)),
-        BarData(50f, "Category C", color = Color(0xffed825d)),
-        BarData(50f, "Category C", color = Color(0xffed925d)),
-        BarData(20f, "Category C", color = Color(0xffed615d)),
-        BarData(50f, "Category C", color = Color(0xffed625d)),
+        BarData(40f, "Category D", color = Color(0xffed325d)),
+        BarData(50f, "Category E", color = Color(0xffed425d)),
+        BarData(50f, "Category F", color = Color(0xffed525d)),
+        BarData(50f, "Category G", color = Color(0xffed625d)),
+        BarData(30f, "Category H", color = Color(0xffed725d)),
+        BarData(50f, "Category I", color = Color(0xffed825d)),
+        BarData(50f, "Category J", color = Color(0xffed925d)),
+        BarData(20f, "Category K", color = Color(0xffed615d)),
+        BarData(50f, "Category L", color = Color(0xffed625d)),
     )
 
     @Composable
