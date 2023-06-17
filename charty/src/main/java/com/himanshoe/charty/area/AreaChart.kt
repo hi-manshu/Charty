@@ -36,7 +36,8 @@ fun AreaChart(
     padding: Dp = 16.dp,
 ) {
     val items = areaData.data.flatMap { it.points }
-    val maxValue = items.maxOrNull()?.roundToInt() ?: 0
+    val maxValue = items.maxOrNull() ?: 0F
+    val minValue = items.minOrNull() ?: 0f
     var chartWidth by remember { mutableStateOf(0F) }
     var chartHeight by remember { mutableStateOf(0F) }
 
@@ -68,17 +69,17 @@ fun AreaChart(
                     val height = size.height
 
                     val xStep = width / (areaData.data[0].points.size - 1)
-                    val yStep = height / maxValue
+                    val yStep = height / (maxValue - minValue)
 
                     areaData.data.fastForEach { data ->
                         val dataPoints = data.points
                         val dataPointsPath = Path()
 
-                        dataPointsPath.moveTo(0f, height - (dataPoints[0] * yStep))
+                        dataPointsPath.moveTo(0f, height - ((dataPoints[0] - minValue) * yStep))
 
                         for (i in 1 until dataPoints.size) {
                             val x = i * xStep
-                            val y = height - (dataPoints[i] * yStep)
+                            val y = height - ((dataPoints[i] - minValue) * yStep)
                             dataPointsPath.lineTo(x, y)
                         }
 
@@ -96,3 +97,4 @@ fun AreaChart(
         }
     )
 }
+
