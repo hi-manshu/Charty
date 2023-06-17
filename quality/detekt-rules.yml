@@ -18,16 +18,17 @@ style:
   DataClassShouldBeImmutable:
     active: true
   MagicNumber:
+    active: true
     ignoreEnums: true
     ignoreAnnotated: ['Composable','Stable',"Test"]
     ignorePropertyDeclaration: true
-    excludes: ['**/internal/**']
+    excludes: ['**/internal/**','.*default.*|.*mock.*']
   SpacingBetweenPackageAndImports:
     active: true
   UnusedImports:
     active: true
   UnusedPrivateMember:
-    ignoreAnnotated: ['MultiplePreviews']
+    ignoreAnnotated: ['Preview']
   WildcardImport:
     active: true
     excludeImports: []

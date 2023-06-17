@@ -1,6 +1,8 @@
 package com.himanshoe.charty.common.config
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
 
 object ChartDefaults {
 
@@ -21,5 +23,24 @@ object ChartDefaults {
         backgroundColors = listOf(
             Color.Transparent, Color.Transparent
         )
+    )
+
+    fun stackedBarColors(): List<Color> {
+        return listOf(
+            Color(0xFF1E88E5), // Blue
+            Color(0xFF43A047), // Green
+            Color(0xFFFB8C00), // Orange
+            Color(0xFFE53935), // Red
+        )
+    }
+
+    fun defaultTextLabelConfig() = ChartyLabelTextConfig(
+        textSize = TextUnit.Unspecified,
+        fontStyle = null,
+        fontWeight = null,
+        fontFamily = null,
+        textColor = Color.Black,
+        maxLine = 1,
+        overflow = TextOverflow.Ellipsis
     )
 }

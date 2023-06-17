@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,9 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMap
 import com.himanshoe.charty.common.ChartDataCollection
+import com.himanshoe.charty.common.config.ChartDefaults
+import com.himanshoe.charty.common.config.ChartyLabelTextConfig
 import com.himanshoe.charty.pie.config.PieChartConfig
 import com.himanshoe.charty.pie.config.PieChartDefaults
-import com.himanshoe.charty.pie.config.PieChartLabelTextConfig
 import com.himanshoe.charty.pie.model.PieData
 
 private const val ReflexAnge = 270
@@ -41,7 +40,7 @@ private const val ReflexAnge = 270
 fun PieChart(
     dataCollection: ChartDataCollection,
     modifier: Modifier = Modifier,
-    textLabelTextConfig: PieChartLabelTextConfig = PieChartDefaults.defaultTextLabelConfig(),
+    textLabelTextConfig: ChartyLabelTextConfig = ChartDefaults.defaultTextLabelConfig(),
     pieChartConfig: PieChartConfig = PieChartDefaults.defaultConfig(),
 ) {
     val pieChartData = dataCollection.data.fastMap { it.yValue }

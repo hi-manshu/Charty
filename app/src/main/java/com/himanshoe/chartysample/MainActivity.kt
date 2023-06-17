@@ -24,6 +24,9 @@ import com.himanshoe.charty.circle.CircleChart
 import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.common.ChartDataCollection
 import com.himanshoe.charty.common.ComposeList
+import com.himanshoe.charty.common.toComposeList
+import com.himanshoe.charty.group.GroupedBarChart
+import com.himanshoe.charty.group.model.GroupBarData
 import com.himanshoe.charty.line.CurveLineChart
 import com.himanshoe.charty.line.LineChart
 import com.himanshoe.charty.line.model.LineData
@@ -68,18 +71,18 @@ class MainActivity : ComponentActivity() {
         CircleData(50f, "Category C", Color.Black),
     )
     private val bardata = listOf(
-        BarData(10f, "Category A", color = Color.Red),
-        BarData(20f, "Category B", color = Color.Blue),
-        BarData(50f, "Category C", color = Color.Blue),
-        BarData(40f, "Category C", color = Color.Blue),
-        BarData(50f, "Category C", color = Color.Blue),
-        BarData(50f, "Category C", color = Color.Blue),
-        BarData(50f, "Category C", color = Color.Blue),
-        BarData(30f, "Category C", color = Color.Green),
-        BarData(50f, "Category C", color = Color.Blue),
-        BarData(50f, "Category C", color = Color.Blue),
-        BarData(20f, "Category C", color = Color.Yellow),
-        BarData(50f, "Category C", color = Color.Blue),
+        BarData(10f, "Category A", color = Color(0xffed625d)),
+        BarData(20f, "Category B", color = Color(0xffed125d)),
+        BarData(50f, "Category C", color = Color(0xffed225d)),
+        BarData(40f, "Category C", color = Color(0xffed325d)),
+        BarData(50f, "Category C", color = Color(0xffed425d)),
+        BarData(50f, "Category C", color = Color(0xffed525d)),
+        BarData(50f, "Category C", color = Color(0xffed625d)),
+        BarData(30f, "Category C", color = Color(0xffed725d)),
+        BarData(50f, "Category C", color = Color(0xffed825d)),
+        BarData(50f, "Category C", color = Color(0xffed925d)),
+        BarData(20f, "Category C", color = Color(0xffed615d)),
+        BarData(50f, "Category C", color = Color(0xffed625d)),
     )
 
     @Composable
@@ -114,9 +117,57 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    internal val chartColors = listOf(Color(0xffed625d), Color(0xfff79f88), Color(0xFF43A047))
+
+    private val groupData = listOf(
+        GroupBarData(
+            label = "Group 1",
+            dataPoints = listOf(-10f, 15f, 8f),
+            chartColors
+        ),
+        GroupBarData(
+            label = "Group 2",
+            dataPoints = listOf(12f, 6f, 14f),
+            chartColors
+        ),
+        GroupBarData(
+            label = "Group 3",
+            dataPoints = listOf(5f, 9f, 11f),
+            chartColors
+        ),
+        GroupBarData(
+            label = "Group 4",
+            dataPoints = listOf(5f, 9f, 11f),
+            chartColors
+        ),
+        GroupBarData(
+            label = "Group 5",
+            dataPoints = listOf(12f, 6f, 14f),
+            chartColors
+        ),
+        GroupBarData(
+            label = "Group 7",
+            dataPoints = listOf(5f, 9f, 11f),
+            chartColors
+        ),
+        GroupBarData(
+            label = "Group 8",
+            dataPoints = listOf(1f, 9f, 11f),
+            chartColors
+        )
+    )
+
     @Composable
     private fun ChartContent(modifier: Modifier = Modifier) {
         LazyColumn(modifier) {
+            item {
+
+                GroupedBarChart(
+                    groupBarDataCollection = groupData.toComposeList(), modifier = Modifier
+                        .fillMaxWidth()
+                        .height(400.dp)
+                )
+            }
             item {
                 MyScreen()
             }
