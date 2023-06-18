@@ -20,6 +20,9 @@ import com.himanshoe.charty.bar.BarChart
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bubble.BubbleChart
 import com.himanshoe.charty.bubble.model.BubbleData
+import com.himanshoe.charty.candle.CandleStickChart
+import com.himanshoe.charty.candle.config.CandleStickConfig
+import com.himanshoe.charty.candle.model.CandleData
 import com.himanshoe.charty.circle.CircleChart
 import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.common.ChartDataCollection
@@ -113,7 +116,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    internal val chartColors = listOf(Color(0xffed625d), Color(0xfff79f88), Color(0xFF43A047))
+    private val chartColors = listOf(
+        Color(0xffed625d),
+        Color(0xfff79f88),
+        Color(0xFF43A047)
+    )
 
     private val groupData = listOf(
         GroupBarData(
@@ -154,8 +161,45 @@ class MainActivity : ComponentActivity() {
     )
 
     @Composable
+    fun CandlestickChartExample() {
+        val candleData = listOf(
+            CandleData(high = 20f, low = 8f, open = 10f, close = 15f),
+            CandleData(high = 22f, low = 16f, open = 18f, close = 20f),
+            CandleData(high = 14f, low = 8f, open = 12f, close = 9f),
+            CandleData(high = 9f, low = 3f, open = 7f, close = 5f),
+            CandleData(high = 10f, low = 4f, open = 6f, close = 8f),
+            CandleData(high = 15f, low = 10f, open = 13f, close = 12f),
+            CandleData(high = 20f, low = 8f, open = 10f, close = 15f),
+            CandleData(high = 22f, low = 16f, open = 18f, close = 20f),
+            CandleData(high = 14f, low = 8f, open = 12f, close = 9f),
+            CandleData(high = 9f, low = 3f, open = 7f, close = 5f),
+            CandleData(high = 10f, low = 4f, open = 6f, close = 8f),
+            CandleData(high = 15f, low = 10f, open = 13f, close = 12f),
+            CandleData(high = 9f, low = 3f, open = 7f, close = 5f),
+            CandleData(high = 10f, low = 4f, open = 6f, close = 8f),
+            CandleData(high = 15f, low = 10f, open = 13f, close = 12f),
+            CandleData(high = 20f, low = 8f, open = 10f, close = 15f),
+            CandleData(high = 22f, low = 16f, open = 18f, close = 20f),
+            CandleData(high = 14f, low = 8f, open = 12f, close = 9f),
+            CandleData(high = 9f, low = 3f, open = 7f, close = 5f),
+            CandleData(high = 10f, low = 4f, open = 6f, close = 8f),
+            CandleData(high = 15f, low = 10f, open = 13f, close = 12f),
+        )
+
+        CandleStickChart(
+            candleData = ComposeList(candleData),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp),
+        )
+    }
+
+    @Composable
     private fun ChartContent(modifier: Modifier = Modifier) {
         LazyColumn(modifier) {
+            item {
+                CandlestickChartExample()
+            }
             item {
 
                 GroupedBarChart(
