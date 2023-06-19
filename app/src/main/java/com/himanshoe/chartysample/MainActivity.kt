@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,7 +22,6 @@ import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bubble.BubbleChart
 import com.himanshoe.charty.bubble.model.BubbleData
 import com.himanshoe.charty.candle.CandleStickChart
-import com.himanshoe.charty.candle.config.CandleStickConfig
 import com.himanshoe.charty.candle.model.CandleData
 import com.himanshoe.charty.circle.CircleChart
 import com.himanshoe.charty.circle.model.CircleData
@@ -37,6 +37,8 @@ import com.himanshoe.charty.pie.PieChart
 import com.himanshoe.charty.pie.config.PieChartDefaults
 import com.himanshoe.charty.pie.model.PieData
 import com.himanshoe.charty.point.PointChart
+import com.himanshoe.charty.stacked.StackedBarChart
+import com.himanshoe.charty.stacked.config.StackBarData
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
@@ -83,37 +85,33 @@ class MainActivity : ComponentActivity() {
         BarData(20f, "Category K", color = Color(0xffed615d)),
         BarData(50f, "Category L", color = Color(0xffed625d)),
     )
+    private val areaData = listOf(
+        AreaData(
+            points = listOf(0.5f, 0.8f, 0.6f, 0.9f, 0.7f, 0.4f),
+            xValue = "Item 1",
+            color = Color.Yellow
+        ),
+        AreaData(
+            xValue = "Item 2",
+            points = listOf(0.33f, 0.6f, 0.93f, 0.7f, 0.9f, 1.5f),
+            color = Color.DarkGray
+        ),
+        AreaData(
+            xValue = "Item 3",
+            points = listOf(0.3f, 0.6f, 0.4f, 0.7f, 0.9f, 0.3f),
+            color = Color.Red
+        ),
+    )
 
     @Composable
-    fun MyScreen() {
-        val dataSeries = listOf(
-            AreaData(
-                points = listOf(0.5f, 0.8f, 0.6f, 0.9f, 0.7f, 0.4f),
-                xValue = "Item 1",
-                color = Color.Yellow
-            ),
-            AreaData(
-                xValue = "Item 2",
-                points = listOf(0.33f, 0.6f, 0.93f, 0.7f, 0.9f, 1.5f),
-                color = Color.DarkGray
-            ),
-            AreaData(
-                xValue = "Item 3",
-                points = listOf(0.3f, 0.6f, 0.4f, 0.7f, 0.9f, 0.3f),
-                color = Color.Red
-            ),
-        )
-        val maxValue = 1.0f
-
-        Box(Modifier.fillMaxSize()) {
-            AreaChart(
-                modifier = Modifier
-                    .size(400.dp),
-                areaData = ComposeList(
-                    dataSeries
-                )
+    fun AreaChart() {
+        AreaChart(
+            modifier = Modifier
+                .size(400.dp),
+            areaData = ComposeList(
+                areaData
             )
-        }
+        )
     }
 
     private val chartColors = listOf(
@@ -161,6 +159,29 @@ class MainActivity : ComponentActivity() {
     )
 
     @Composable
+    fun StackedBarChartDemo() {
+
+        val stackBarData = ComposeList(
+            listOf(
+                StackBarData(dataPoints = listOf(10f, 20F, 30f), colors = chartColors, label = "1"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "2"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "3"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "3"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "3"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "3"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "3"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "3")
+            )
+        )
+        StackedBarChart(
+            stackBarData = stackBarData,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp),
+        )
+    }
+
+    @Composable
     fun CandlestickChartExample() {
         val candleData = listOf(
             CandleData(high = 20f, low = 8f, open = 10f, close = 15f),
@@ -197,6 +218,10 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun ChartContent(modifier: Modifier = Modifier) {
         LazyColumn(modifier) {
+
+            item {
+                StackedBarChartDemo()
+            }
             item {
                 CandlestickChartExample()
             }
@@ -209,7 +234,7 @@ class MainActivity : ComponentActivity() {
                 )
             }
             item {
-                MyScreen()
+                AreaChart()
             }
             item {
                 BubbleChart(
