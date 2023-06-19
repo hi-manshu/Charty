@@ -166,11 +166,17 @@ class MainActivity : ComponentActivity() {
                 StackBarData(dataPoints = listOf(10f, 20F, 30f), colors = chartColors, label = "1"),
                 StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "2"),
                 StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "3"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "3"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "3"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "3"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "3"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "3")
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "4"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "5"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "6"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "7"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "8"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "9"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "10"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "11"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "12"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "13"),
+                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "14"),
             )
         )
         StackedBarChart(

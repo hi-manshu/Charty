@@ -1,12 +1,8 @@
 package com.himanshoe.charty.stacked
 
-import android.util.Log
+import android.graphics.Paint
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +13,10 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -24,6 +24,7 @@ import com.himanshoe.charty.common.ChartSurface
 import com.himanshoe.charty.common.ComposeList
 import com.himanshoe.charty.common.config.AxisConfig
 import com.himanshoe.charty.common.config.ChartDefaults
+import com.himanshoe.charty.common.config.ChartyLabelTextConfig
 import com.himanshoe.charty.common.toComposeList
 import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
@@ -36,9 +37,9 @@ fun StackedBarChart(
     modifier: Modifier = Modifier,
     axisConfig: AxisConfig = ChartDefaults.axisConfigDefaults(),
     padding: Dp = 16.dp,
-    spacing: Dp = 4.dp
+    spacing: Dp = 4.dp,
+    textLabelTextConfig: ChartyLabelTextConfig = ChartDefaults.defaultTextLabelConfig(),
 ) {
-
     val allDataPoints = stackBarData.data.map {
         it.dataPoints.sum()
     }.toMutableList().apply {
@@ -75,7 +76,7 @@ fun StackedBarChart(
             }) {
             val width = chartWidth - (padding).toPx()
             val height = chartHeight - (padding).toPx()
-            val scaleFactor = height / maxSum
+            val scaleFactor = chartHeight / maxSum
 
             val barCount = stackBarData.data.size
             val totalSpacing = (barCount - 1) * spacing.toPx()
@@ -84,6 +85,30 @@ fun StackedBarChart(
             stackBarData.data.forEachIndexed { index, stackValues ->
                 val x = (index * (barWidth + spacing.toPx()))
                 var startY = height + padding.toPx()
+
+                if (axisConfig.showGridLabel) {
+                    when {
+                        barCount < 14 -> {
+                            drawLabel(
+                                stackValues = stackValues,
+                                index = index,
+                                barWidth = barWidth + spacing.toPx(),
+                                chartHeight = chartHeight,
+                                textLabelTextConfig = textLabelTextConfig
+                            )
+                        }
+
+                        index == 0 || index == barCount / 2 || index == barCount - 1 -> {
+                            drawLabel(
+                                stackValues = stackValues,
+                                index = index,
+                                barWidth = barWidth + spacing.toPx(),
+                                chartHeight = chartHeight,
+                                textLabelTextConfig = textLabelTextConfig
+                            )
+                        }
+                    }
+                }
 
                 stackValues.dataPoints.forEachIndexed { stackIndex, value ->
                     val stackHeight = value * scaleFactor
@@ -105,6 +130,33 @@ fun StackedBarChart(
     }
 }
 
+private fun DrawScope.drawLabel(
+    stackValues: StackBarData,
+    index: Int,
+    barWidth: Float,
+    chartHeight: Float,
+    textLabelTextConfig: ChartyLabelTextConfig
+) {
+    val label = stackValues.label
+    val labelY = chartHeight + size.width / 20
+    val labelX = when (index) {
+        0 -> 0.5f * barWidth
+        else -> (index * barWidth) + (barWidth / 2f)
+    }
+
+    drawIntoCanvas {
+        it.nativeCanvas.drawText(
+            label,
+            labelX,
+            labelY,
+            Paint().apply {
+                color = textLabelTextConfig.textColor.toArgb()
+                textAlign = Paint.Align.CENTER
+                textSize = size.width / 35f
+            }
+        )
+    }
+}
 
 
 
