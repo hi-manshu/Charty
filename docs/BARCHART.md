@@ -1,6 +1,6 @@
 ### BarChart
 
-To use the BarChart composable, follow the steps below:
+To use the BarChart, follow the steps below:
 
 - Include the Charty library in your Android project.
 - Use the `BarChart` composable in your code:
@@ -36,7 +36,7 @@ In the above `BarChart`, we have `barColor` that will override the individual Ba
 
 ### Parameters
 
-The `BarChart` composable accepts the following parameters:
+`BarChart` accepts the following parameters:
 
 - `dataCollection`: A `ChartDataCollection` object representing the data to be displayed in the bar
   chart.
