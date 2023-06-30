@@ -34,6 +34,7 @@ import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.common.ChartDataCollection
 import com.himanshoe.charty.common.ComposeList
 import com.himanshoe.charty.common.toComposeList
+import com.himanshoe.charty.gauge.GaugeChart
 import com.himanshoe.charty.group.GroupedBarChart
 import com.himanshoe.charty.group.model.GroupBarData
 import com.himanshoe.charty.line.CurveLineChart
@@ -129,7 +130,7 @@ class MainActivity : ComponentActivity() {
     private val groupData = listOf(
         GroupBarData(
             label = "Group 1",
-            dataPoints = listOf(-10f, 15f, 8f),
+            dataPoints = listOf(10f, 15f, 8f),
             chartColors
         ),
         GroupBarData(
@@ -251,17 +252,16 @@ class MainActivity : ComponentActivity() {
     private fun ChartContent(modifier: Modifier = Modifier) {
         LazyColumn(modifier) {
             item {
-                val barData = listOf(10f, 20f, 15f, 30f, 25f)
-                val lineData = listOf(5f, 15f, 10f, 25f, 20f)
-
-//                CombinedBarLineChartX(
-//                    barData = barData,
-//                    lineData = lineData,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(400.dp)
-//                )
-
+                BarChart(
+                    dataCollection = ChartDataCollection(bardata),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(400.dp)
+                )
+            }
+            item {
+                val percentValue = 75
+                GaugeChart(percentValue = percentValue)
             }
             item {
                 StackedBarChartDemo()
@@ -289,14 +289,7 @@ class MainActivity : ComponentActivity() {
                     dataCollection = ChartDataCollection(generateMockBubbleData())
                 )
             }
-            item {
-                BarChart(
-                    dataCollection = ChartDataCollection(bardata),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(400.dp)
-                )
-            }
+
             item {
                 CircleChart(
                     modifier = Modifier.size(400.dp),

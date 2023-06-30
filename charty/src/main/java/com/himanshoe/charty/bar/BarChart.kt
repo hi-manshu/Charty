@@ -145,6 +145,7 @@ fun BarChart(
         axisConfig = axisConfig
     ) {
         val data = dataCollection.data
+
         androidx.compose.foundation.Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -169,7 +170,11 @@ fun BarChart(
         ) {
             val maxValue = dataCollection.maxYValue()
             val barCount = data.size
-            val minValue = dataCollection.minYValue()
+            val minValue =   if (dataCollection.minYValue() < 0) {
+                dataCollection.minYValue()
+            } else {
+                0F
+            }
             val range = maxValue - minValue
             val availableWidth = chartWidth - (barSpacing.toPx() * (barCount - 1))
             val maxBarWidth = availableWidth / barCount

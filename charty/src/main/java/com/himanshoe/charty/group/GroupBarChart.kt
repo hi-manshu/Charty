@@ -35,6 +35,7 @@ import com.himanshoe.charty.common.ComposeList
 import com.himanshoe.charty.common.config.AxisConfig
 import com.himanshoe.charty.common.config.ChartDefaults
 import com.himanshoe.charty.common.config.ChartyLabelTextConfig
+import com.himanshoe.charty.common.minYValue
 import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawYAxis
@@ -54,7 +55,11 @@ fun GroupedBarChart(
     val allDataPoints = groupBarDataCollection.data.flatMap { it.dataPoints }
     val maxValue = allDataPoints.maxOrNull() ?: 0f
     val minValue = allDataPoints.minOrNull() ?: 0f
-
+    val newItems = if (allDataPoints.min() > 0F) {
+        listOf(0F) + allDataPoints
+    } else {
+        allDataPoints
+    }
     var chartWidth by remember { mutableStateOf(0F) }
     var chartHeight by remember { mutableStateOf(0F) }
 
@@ -62,7 +67,7 @@ fun GroupedBarChart(
         modifier = modifier,
         padding = padding,
         axisConfig = axisConfig,
-        chartData = ComposeList(allDataPoints),
+        chartData = ComposeList(newItems),
     ) {
         Canvas(
             modifier = Modifier
@@ -149,9 +154,9 @@ private fun calculateBarX(
     barIndex: Int,
     barWidth: Float
 ) = (groupIndex * groupWidth) +
-    ((1 - barWidthRatio) / 2) *
-    groupWidth +
-    (barIndex * barWidth) + (barWidth / 2f)
+        ((1 - barWidthRatio) / 2) *
+        groupWidth +
+        (barIndex * barWidth) + (barWidth / 2f)
 
 private fun calculateBarHeight(
     barValue: Float,
@@ -159,8 +164,9 @@ private fun calculateBarHeight(
     maxValue: Float,
     chartHeight: Float
 ): Float {
-    val range = maxValue - minValue
-    val normalizedValue = barValue - minValue
+    val newMinValue = if (minValue < 0) minValue else 0F
+    val range = maxValue - newMinValue
+    val normalizedValue = barValue - newMinValue
     val heightRatio = if (range != 0f) normalizedValue / range else 0f
     return heightRatio * chartHeight
 }

@@ -49,8 +49,14 @@ fun ChartSurface(
                     )
                 }
                 if (axisConfig.showGridLabel) {
+                    val newItems = if (chartData.minYValue() > 0) {
+                        listOf(0F) + chartData.data.map { it.yValue }
+                    } else {
+                        chartData.data.map { it.yValue }
+                    }
+
                     drawYAxisLabels(
-                        chartData.data.fastMap { it.yValue },
+                        newItems,
                         spacing = padding.toPx(),
                     )
                 }
