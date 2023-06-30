@@ -38,6 +38,7 @@ import com.himanshoe.charty.common.config.ChartDefaults
 import com.himanshoe.charty.common.math.chartDataToOffset
 import com.himanshoe.charty.common.maxYValue
 import com.himanshoe.charty.common.minYValue
+import com.himanshoe.charty.common.toChartDataCollection
 import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawXAxisLabels
@@ -169,7 +170,7 @@ fun PointChart(
 private fun PointChartPreview(modifier: Modifier = Modifier) {
     Column(modifier) {
         PointChart(
-            pointData = ChartDataCollection(generateMockPointList()),
+            pointData = generateMockPointList().toChartDataCollection(),
             modifier = Modifier
                 .size(450.dp),
             contentColor = Color.Red,

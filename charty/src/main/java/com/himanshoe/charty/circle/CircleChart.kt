@@ -49,6 +49,7 @@ import com.himanshoe.charty.circle.config.CircleConfigDefaults
 import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.common.ChartDataCollection
 import com.himanshoe.charty.common.maxYValue
+import com.himanshoe.charty.common.toChartDataCollection
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -158,6 +159,6 @@ private fun CircleChartScreen() {
             .scale(1f)
             .size(400.dp)
             .padding(20.dp),
-        dataCollection = ChartDataCollection(circleData),
+        dataCollection = circleData.toChartDataCollection(),
     )
 }

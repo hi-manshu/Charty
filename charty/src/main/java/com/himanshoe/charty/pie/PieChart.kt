@@ -37,6 +37,7 @@ import androidx.compose.ui.util.fastMap
 import com.himanshoe.charty.common.ChartDataCollection
 import com.himanshoe.charty.common.config.ChartDefaults
 import com.himanshoe.charty.common.config.ChartyLabelTextConfig
+import com.himanshoe.charty.common.toChartDataCollection
 import com.himanshoe.charty.pie.config.PieChartConfig
 import com.himanshoe.charty.pie.config.PieChartDefaults
 import com.himanshoe.charty.pie.model.PieData
@@ -154,7 +155,7 @@ private fun PieChartPreview() {
         PieData(10f, "Category C", Color.Black),
     )
     PieChart(
-        dataCollection = ChartDataCollection(data),
+        dataCollection = data.toChartDataCollection(),
         modifier = Modifier.wrapContentSize()
     )
 }

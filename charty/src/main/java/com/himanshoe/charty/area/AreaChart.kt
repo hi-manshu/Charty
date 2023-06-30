@@ -31,6 +31,7 @@ import com.himanshoe.charty.common.ChartSurface
 import com.himanshoe.charty.common.ComposeList
 import com.himanshoe.charty.common.config.AxisConfig
 import com.himanshoe.charty.common.config.ChartDefaults
+import com.himanshoe.charty.common.toComposeList
 import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawYAxis
@@ -51,7 +52,7 @@ fun AreaChart(
     ChartSurface(
         modifier = modifier.fillMaxSize(),
         padding = padding,
-        chartData = ComposeList(items),
+        chartData = items.toComposeList(),
         content = {
             Column {
                 Canvas(

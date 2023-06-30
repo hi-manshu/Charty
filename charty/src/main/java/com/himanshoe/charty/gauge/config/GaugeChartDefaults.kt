@@ -10,7 +10,7 @@ package com.himanshoe.charty.gauge.config
 
 import androidx.compose.ui.graphics.Color
 
-object GaugeChartDefaults{
+object GaugeChartDefaults {
 
     fun configDefaults() = GaugeChartConfig(
         primaryColor = Color(0xFF20A100),

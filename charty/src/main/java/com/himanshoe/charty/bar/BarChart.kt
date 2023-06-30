@@ -170,7 +170,7 @@ fun BarChart(
         ) {
             val maxValue = dataCollection.maxYValue()
             val barCount = data.size
-            val minValue =   if (dataCollection.minYValue() < 0) {
+            val minValue = if (dataCollection.minYValue() < 0) {
                 dataCollection.minYValue()
             } else {
                 0F

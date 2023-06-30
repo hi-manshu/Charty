@@ -30,6 +30,7 @@ import com.himanshoe.charty.common.ChartSurface
 import com.himanshoe.charty.common.ComposeList
 import com.himanshoe.charty.common.config.AxisConfig
 import com.himanshoe.charty.common.config.ChartDefaults
+import com.himanshoe.charty.common.toComposeList
 import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawYAxis
@@ -56,7 +57,7 @@ fun CandleStickChart(
         modifier = modifier,
         padding = padding,
         axisConfig = axisConfig,
-        chartData = ComposeList(listOfAxisValues),
+        chartData = listOfAxisValues.toComposeList(),
         content = {
             Canvas(
                 modifier = Modifier

@@ -28,4 +28,4 @@ fun ChartDataCollection.minYValue() = data.minOf { it.yValue }
 @Immutable
 data class ComposeList<T>(val data: List<T>)
 
-fun <T> List<T>.toComposeList() = ComposeList<T>(this)
+fun <T> List<T>.toComposeList() = ComposeList(this)

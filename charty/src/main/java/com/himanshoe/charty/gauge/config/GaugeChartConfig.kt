@@ -15,5 +15,5 @@ import androidx.compose.ui.graphics.Color
 data class GaugeChartConfig(
     val placeHolderColor: Color,
     val primaryColor: Color,
-    val strokeWidth:Float
+    val strokeWidth: Float
 )

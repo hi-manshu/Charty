@@ -35,7 +35,7 @@ import com.himanshoe.charty.common.ComposeList
 import com.himanshoe.charty.common.config.AxisConfig
 import com.himanshoe.charty.common.config.ChartDefaults
 import com.himanshoe.charty.common.config.ChartyLabelTextConfig
-import com.himanshoe.charty.common.minYValue
+import com.himanshoe.charty.common.toComposeList
 import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawYAxis
@@ -67,7 +67,7 @@ fun GroupedBarChart(
         modifier = modifier,
         padding = padding,
         axisConfig = axisConfig,
-        chartData = ComposeList(newItems),
+        chartData = newItems.toComposeList(),
     ) {
         Canvas(
             modifier = Modifier
@@ -154,9 +154,9 @@ private fun calculateBarX(
     barIndex: Int,
     barWidth: Float
 ) = (groupIndex * groupWidth) +
-        ((1 - barWidthRatio) / 2) *
-        groupWidth +
-        (barIndex * barWidth) + (barWidth / 2f)
+    ((1 - barWidthRatio) / 2) *
+    groupWidth +
+    (barIndex * barWidth) + (barWidth / 2f)
 
 private fun calculateBarHeight(
     barValue: Float,
