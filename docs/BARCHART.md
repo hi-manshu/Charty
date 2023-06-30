@@ -11,7 +11,6 @@ fun BarChart(
     modifier: Modifier = Modifier,
     barSpacing: Dp = 8.dp,
     padding: Dp = 16.dp,
-    barColor: Color = Color.Blue,
     axisConfig: AxisConfig = ChartDefaults.axisConfigDefaults(),
 ) {
     // Implementation details...
