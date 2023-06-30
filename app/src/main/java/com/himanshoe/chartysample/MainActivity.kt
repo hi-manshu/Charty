@@ -1,13 +1,19 @@
+/*
+ * **************
+ *  Charty Library : Android
+ *
+ *  Copyright (c) 2023. Charty Contributor
+ * **************
+ */
+
 package com.himanshoe.chartysample
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -163,20 +169,40 @@ class MainActivity : ComponentActivity() {
 
         val stackBarData = ComposeList(
             listOf(
-                StackBarData(dataPoints = listOf(10f, 20F, 30f), colors = chartColors, label = "1"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "2"),
+                StackBarData(dataPoints = listOf(3f, 20F, 30f), colors = chartColors, label = "1"),
+                StackBarData(dataPoints = listOf(9f, 25f, 35f), colors = chartColors, label = "2"),
                 StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "3"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "4"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "5"),
+                StackBarData(dataPoints = listOf(1f, 25f, 3f), colors = chartColors, label = "4"),
+                StackBarData(dataPoints = listOf(10f, 25f, 5f), colors = chartColors, label = "5"),
                 StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "6"),
                 StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "7"),
                 StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "8"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "9"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "10"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "11"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "12"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "13"),
-                StackBarData(dataPoints = listOf(10f, 25f, 35f), colors = chartColors, label = "14"),
+                StackBarData(dataPoints = listOf(10f, 25f, 20f), colors = chartColors, label = "9"),
+                StackBarData(
+                    dataPoints = listOf(10f, 25f, 35f),
+                    colors = chartColors,
+                    label = "10"
+                ),
+                StackBarData(
+                    dataPoints = listOf(10f, 25f, 35f),
+                    colors = chartColors,
+                    label = "11"
+                ),
+                StackBarData(
+                    dataPoints = listOf(10f, 25f, 35f),
+                    colors = chartColors,
+                    label = "12"
+                ),
+                StackBarData(
+                    dataPoints = listOf(10f, 25f, 35f),
+                    colors = chartColors,
+                    label = "13"
+                ),
+                StackBarData(
+                    dataPoints = listOf(10f, 25f, 35f),
+                    colors = chartColors,
+                    label = "14"
+                ),
             )
         )
         StackedBarChart(
@@ -224,7 +250,19 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun ChartContent(modifier: Modifier = Modifier) {
         LazyColumn(modifier) {
+            item {
+                val barData = listOf(10f, 20f, 15f, 30f, 25f)
+                val lineData = listOf(5f, 15f, 10f, 25f, 20f)
 
+//                CombinedBarLineChartX(
+//                    barData = barData,
+//                    lineData = lineData,
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(400.dp)
+//                )
+
+            }
             item {
                 StackedBarChartDemo()
             }
@@ -234,7 +272,8 @@ class MainActivity : ComponentActivity() {
             item {
 
                 GroupedBarChart(
-                    groupBarDataCollection = groupData.toComposeList(), modifier = Modifier
+                    groupBarDataCollection = groupData.toComposeList(),
+                    modifier = Modifier
                         .fillMaxWidth()
                         .height(400.dp)
                 )

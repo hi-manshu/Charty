@@ -1,3 +1,11 @@
+/*
+ * **************
+ *  Charty Library : Android
+ *
+ *  Copyright (c) 2023. Charty Contributor
+ * **************
+ */
+
 package com.himanshoe.charty.common
 
 import androidx.compose.foundation.background

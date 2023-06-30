@@ -1,3 +1,11 @@
+/*
+ * **************
+ *  Charty Library : Android
+ *
+ *  Copyright (c) 2023. Charty Contributor
+ * **************
+ */
+
 package com.himanshoe.charty.area
 
 import androidx.compose.foundation.Canvas
@@ -26,7 +34,6 @@ import com.himanshoe.charty.common.config.ChartDefaults
 import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawYAxis
-import kotlin.math.roundToInt
 
 @Composable
 fun AreaChart(
@@ -97,4 +104,3 @@ fun AreaChart(
         }
     )
 }
-

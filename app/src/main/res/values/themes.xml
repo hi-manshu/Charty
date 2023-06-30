@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /***************
+  ~ * Charty Library : Android
+  ~ *
+  ~ * Copyright (c) 2023. Charty Contributor
+  ~ ****************/
+  -->
+
 <resources>
 
     <style name="Theme.Charty" parent="android:Theme.Material.Light.NoActionBar" />

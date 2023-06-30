@@ -1,3 +1,11 @@
+/*
+ * **************
+ *  Charty Library : Android
+ *
+ *  Copyright (c) 2023. Charty Contributor
+ * **************
+ */
+
 package com.himanshoe.charty.common
 
 import androidx.compose.runtime.Immutable
@@ -10,6 +18,8 @@ interface ChartData {
 
 @Immutable
 data class ChartDataCollection(val data: List<ChartData>)
+
+fun List<ChartData>.toChartDataCollection() = ChartDataCollection(this)
 
 fun ChartDataCollection.maxYValue() = data.maxOf { it.yValue }
 

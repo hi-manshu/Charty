@@ -1,3 +1,11 @@
+/*
+ * **************
+ *  Charty Library : Android
+ *
+ *  Copyright (c) 2023. Charty Contributor
+ * **************
+ */
+
 package com.himanshoe.charty.stacked
 
 import android.graphics.Paint
@@ -20,6 +28,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEachIndexed
 import com.himanshoe.charty.common.ChartSurface
 import com.himanshoe.charty.common.ComposeList
 import com.himanshoe.charty.common.config.AxisConfig
@@ -59,21 +68,23 @@ fun StackedBarChart(
         axisConfig = axisConfig,
         chartData = allDataPoints.toComposeList()
     ) {
-        Canvas(modifier = Modifier
-            .fillMaxSize()
-            .onSizeChanged { size ->
-                chartWidth = size.width.toFloat()
-                chartHeight = size.height.toFloat()
-            }
-            .drawBehind {
-                if (axisConfig.showAxes) {
-                    drawYAxis(axisConfig.axisColor, axisConfig.axisStroke)
-                    drawXAxis(axisConfig.axisColor, axisConfig.axisStroke)
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .onSizeChanged { size ->
+                    chartWidth = size.width.toFloat()
+                    chartHeight = size.height.toFloat()
                 }
-                if (axisConfig.showGridLines) {
-                    drawGridLines(chartWidth, chartHeight, padding.toPx())
+                .drawBehind {
+                    if (axisConfig.showAxes) {
+                        drawYAxis(axisConfig.axisColor, axisConfig.axisStroke)
+                        drawXAxis(axisConfig.axisColor, axisConfig.axisStroke)
+                    }
+                    if (axisConfig.showGridLines) {
+                        drawGridLines(chartWidth, chartHeight, padding.toPx())
+                    }
                 }
-            }) {
+        ) {
             val width = chartWidth - (padding).toPx()
             val height = chartHeight - (padding).toPx()
             val scaleFactor = chartHeight / maxSum
@@ -82,7 +93,7 @@ fun StackedBarChart(
             val totalSpacing = (barCount - 1) * spacing.toPx()
             val barWidth = (width - totalSpacing) / barCount.toFloat()
 
-            stackBarData.data.forEachIndexed { index, stackValues ->
+            stackBarData.data.fastForEachIndexed { index, stackValues ->
                 val x = (index * (barWidth + spacing.toPx()))
                 var startY = height + padding.toPx()
 
@@ -110,7 +121,7 @@ fun StackedBarChart(
                     }
                 }
 
-                stackValues.dataPoints.forEachIndexed { stackIndex, value ->
+                stackValues.dataPoints.fastForEachIndexed { stackIndex, value ->
                     val stackHeight = value * scaleFactor
                     val endY = startY - stackHeight
 
@@ -157,6 +168,3 @@ private fun DrawScope.drawLabel(
         )
     }
 }
-
-
-

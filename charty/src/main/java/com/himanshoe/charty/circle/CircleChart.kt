@@ -1,3 +1,11 @@
+/*
+ * **************
+ *  Charty Library : Android
+ *
+ *  Copyright (c) 2023. Charty Contributor
+ * **************
+ */
+
 package com.himanshoe.charty.circle
 
 import androidx.compose.animation.core.Animatable

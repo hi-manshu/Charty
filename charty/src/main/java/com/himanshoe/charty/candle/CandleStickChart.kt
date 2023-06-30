@@ -1,11 +1,19 @@
+/*
+ * **************
+ *  Charty Library : Android
+ *
+ *  Copyright (c) 2023. Charty Contributor
+ * **************
+ */
+
 package com.himanshoe.charty.candle
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -15,8 +23,8 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
-import com.himanshoe.charty.candle.config.CandleStickDefaults
 import com.himanshoe.charty.candle.config.CandleStickConfig
+import com.himanshoe.charty.candle.config.CandleStickDefaults
 import com.himanshoe.charty.candle.model.CandleData
 import com.himanshoe.charty.common.ChartSurface
 import com.himanshoe.charty.common.ComposeList
@@ -76,7 +84,6 @@ fun CandleStickChart(
                 } else {
                     innerWidth / candleCount
                 }
-
 
                 candleData.data.fastForEachIndexed { index, data ->
                     val x = padding.toPx() + index * candleWidth
