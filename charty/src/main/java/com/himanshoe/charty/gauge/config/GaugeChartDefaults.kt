@@ -12,9 +12,15 @@ import androidx.compose.ui.graphics.Color
 
 object GaugeChartDefaults {
 
-    fun configDefaults() = GaugeChartConfig(
+    fun gaugeConfigDefaults() = GaugeChartConfig(
         primaryColor = Color(0xFF20A100),
         placeHolderColor = Color(0xFFABEDCD),
-        strokeWidth = 48F
+        strokeWidth = 48F,
+        showNeedle = true
+    )
+
+    fun needleConfigDefaults() = NeedleConfig(
+        color = Color(0xFF93A047),
+        strokeWidth = 40f,
     )
 }

@@ -21,22 +21,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import com.himanshoe.charty.gauge.config.GaugeChartConfig
 import com.himanshoe.charty.gauge.config.GaugeChartDefaults
+import com.himanshoe.charty.gauge.config.NeedleConfig
+import kotlin.math.cos
+import kotlin.math.sin
+
+private const val START_ANGLE = 135F
+private const val INITIAL_START_ANGLE = 405F
 
 @Composable
 fun GaugeChart(
     percentValue: Int,
     modifier: Modifier = Modifier,
-    gaugeChartConfig: GaugeChartConfig = GaugeChartDefaults.configDefaults(),
+    gaugeChartConfig: GaugeChartConfig = GaugeChartDefaults.gaugeConfigDefaults(),
+    needleConfig: NeedleConfig = GaugeChartDefaults.needleConfigDefaults(),
     animated: Boolean = true,
     animationSpec: AnimationSpec<Float> = tween(),
-    startAngle: Float = 135f,
-    endAngle: Float = 405f,
 ) {
     require(percentValue in 1..100) { "percentValue must be within the range of 1 to 100" }
 
@@ -46,12 +51,12 @@ fun GaugeChart(
             val centerX = size.width / 2
             val centerY = size.height / 2
             val radius = (size.width - gaugeChartConfig.strokeWidth) / 2
-            val sweepAngle = endAngle - startAngle
+            val sweepAngle = INITIAL_START_ANGLE - START_ANGLE
 
             // Draw background arc
             drawArc(
                 color = gaugeChartConfig.placeHolderColor,
-                startAngle = startAngle,
+                startAngle = START_ANGLE,
                 sweepAngle = sweepAngle,
                 useCenter = false,
                 topLeft = Offset(centerX - radius, centerY - radius),
@@ -62,15 +67,47 @@ fun GaugeChart(
             val currentSweepAngle = animatedPercent * sweepAngle
             drawArc(
                 color = gaugeChartConfig.primaryColor,
-                startAngle = startAngle,
+                startAngle = START_ANGLE,
                 sweepAngle = currentSweepAngle,
                 useCenter = false,
                 topLeft = Offset(centerX - radius, centerY - radius),
                 size = Size(radius * 2, radius * 2),
                 style = Stroke(width = gaugeChartConfig.strokeWidth, cap = StrokeCap.Round)
             )
+
+            if (gaugeChartConfig.showNeedle) {
+                // Calculate needle path
+                val needleAngle = START_ANGLE + currentSweepAngle
+                val needlePath = Path().apply {
+                    val startPoint =
+                        polarToCartesian(centerX, centerY, radius.div(1.2F), needleAngle)
+                    val endPoint = polarToCartesian(centerX, centerY, radius.div(1.2F), needleAngle)
+
+                    moveTo(centerX, centerY)
+                    lineTo(startPoint.x, startPoint.y)
+                    lineTo(endPoint.x, endPoint.y)
+                }
+
+                // Draw needle
+                drawPath(
+                    path = needlePath,
+                    color = needleConfig.color,
+                    style = Stroke(width = needleConfig.strokeWidth, cap = StrokeCap.Round)
+                )
+            }
         }
     }
+}
+
+private fun polarToCartesian(
+    centerX: Float,
+    centerY: Float,
+    radius: Float,
+    angle: Float
+): Offset {
+    val x = centerX + radius * cos(Math.toRadians(angle.toDouble())).toFloat()
+    val y = centerY + radius * sin(Math.toRadians(angle.toDouble())).toFloat()
+    return Offset(x, y)
 }
 
 @Composable
@@ -100,6 +137,5 @@ private fun rememberAnimatedPercent(
 @Composable
 fun GaugeChartPreview() {
     val percentValue = 100
-    val primaryColor = Color.Blue
     GaugeChart(percentValue = percentValue)
 }

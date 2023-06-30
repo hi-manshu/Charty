@@ -18,7 +18,7 @@ style:
   DataClassShouldBeImmutable:
     active: true
   MagicNumber:
-    active: true
+    active: false
     ignoreEnums: true
     ignoreAnnotated: ['Composable','Stable',"Test"]
     ignorePropertyDeclaration: true

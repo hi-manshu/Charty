@@ -12,9 +12,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
 @Immutable
-data class GaugeChartConfig(
-    val placeHolderColor: Color,
-    val primaryColor: Color,
+data class NeedleConfig(
+    val color: Color,
     val strokeWidth: Float,
-    val showNeedle: Boolean
 )

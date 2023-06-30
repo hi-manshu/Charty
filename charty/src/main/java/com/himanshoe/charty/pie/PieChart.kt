@@ -42,8 +42,6 @@ import com.himanshoe.charty.pie.config.PieChartConfig
 import com.himanshoe.charty.pie.config.PieChartDefaults
 import com.himanshoe.charty.pie.model.PieData
 
-private const val ReflexAnge = 270
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PieChart(
@@ -127,22 +125,6 @@ fun PieChart(
             }
         }
     }
-}
-
-private fun convertTouchEventPointToAngle(
-    width: Float,
-    height: Float,
-    xPos: Float,
-    yPos: Float
-): Double {
-    val centerX = width / 2
-    val centerY = height / 2
-
-    val x = xPos - centerX
-    val y = centerY - yPos
-
-    val angle = Math.toDegrees(kotlin.math.atan2(y.toDouble(), x.toDouble())) + 90
-    return if (angle < 0) angle + 360 else angle
 }
 
 @Composable
