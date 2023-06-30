@@ -13,8 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 
 fun DrawScope.drawGridLines(width: Float, height: Float, spacing: Float) {
-    val horizontalGridSpacing = height / 5
-    val verticalGridSpacing = width / 4
+    val newHeight = height.minus(spacing)
+    val newWidth = width.minus(spacing)
+    val horizontalGridSpacing = newHeight / 5
+    val verticalGridSpacing = newWidth / 4
 
     repeat(4) { i ->
         val y = (i + 1) * horizontalGridSpacing
@@ -22,13 +24,13 @@ fun DrawScope.drawGridLines(width: Float, height: Float, spacing: Float) {
 
         drawLine(
             start = Offset(0F, y + spacing),
-            end = Offset(width + spacing, y + spacing),
+            end = Offset(newWidth + spacing, y + spacing),
             color = Color.LightGray,
             strokeWidth = 1f
         )
         drawLine(
             start = Offset(x + spacing, 0F),
-            end = Offset(x + spacing, height + spacing),
+            end = Offset(x + spacing, newHeight + spacing),
             color = Color.LightGray,
             strokeWidth = 1f
         )
