@@ -48,7 +48,7 @@ import com.himanshoe.charty.point.model.PointData
 
 @Composable
 fun PointChart(
-    pointData: ChartDataCollection,
+    dataCollection: ChartDataCollection,
     contentColor: Color,
     modifier: Modifier = Modifier,
     backgroundColor: Color = Color.White,
@@ -58,7 +58,7 @@ fun PointChart(
     radiusScale: Float = 0.02f,
 ) {
     PointChart(
-        dataCollection = pointData,
+        dataCollection = dataCollection,
         modifier = modifier,
         padding = padding,
         pointType = pointType,
@@ -170,7 +170,7 @@ fun PointChart(
 private fun PointChartPreview(modifier: Modifier = Modifier) {
     Column(modifier) {
         PointChart(
-            pointData = generateMockPointList().toChartDataCollection(),
+            dataCollection = generateMockPointList().toChartDataCollection(),
             modifier = Modifier
                 .size(450.dp),
             contentColor = Color.Red,

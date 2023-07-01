@@ -42,7 +42,7 @@ data class CandleStickConfig(
 - `axisConfig`: Optional `AxisConfig` object representing the configuration of the chart axes.
   Default is `ChartDefaults.axisConfigDefaults()`.
 
-Where, AxisConfig looks like,
+Where, `AxisConfig` looks like,
 
 ```kotlin
 data class AxisConfig(
