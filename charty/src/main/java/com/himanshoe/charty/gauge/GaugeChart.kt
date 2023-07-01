@@ -71,7 +71,7 @@ fun GaugeChart(
                 val longerDividerLength = radius * 0.1f
                 val shorterDividerLength = radius * 0.05f
 
-                for (i in 1..dividerCount) {
+                for (i in 0..dividerCount) { // Updated loop range to include 0
                     val dividerStartAngle = START_ANGLE + (i * dividerSweepAngle)
                     val isLongerDivider = i % 10 == 0
 
@@ -136,6 +136,7 @@ fun GaugeChart(
         }
     }
 }
+
 
 private fun polarToCartesian(
     centerX: Float,

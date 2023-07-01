@@ -1,17 +1,17 @@
-### CandleChartChart
+### CandleStickChart
 
-To use the CandleChartChart, follow the steps below:
+To use the CandleStickChart, follow the steps below:
 
 - Include the Charty library in your Android project.
-- Use the `CandleChartChart` composable in your code:
+- Use the `CandleStickChart` composable in your code:
 
 ```kotlin @Composable
-fun CandleChartChart(
-    dataCollection: ChartDataCollection,
+fun CandleStickChart(
+    candleData: ComposeList<CandleData>,
     modifier: Modifier = Modifier,
-    padding: Dp = 16.dp,
     axisConfig: AxisConfig = ChartDefaults.axisConfigDefaults(),
-    chartColors: CurvedLineChartColors = CurvedLineChartDefaults.defaultColor(),
+    padding: Dp = 16.dp,
+    candleConfig: CandleStickConfig = CandleStickDefaults.defaultCandleStickConfig(),
 ) {
     // Implementation details...
 }
@@ -19,20 +19,23 @@ fun CandleChartChart(
 
 ### Parameters
 
-`CandleChartChart` accepts the following parameters:
+`CandleStickChart` accepts the following parameters:
 
-- `dataCollection`: A `ChartDataCollection` object representing the data to be displayed in bubble
-  chart of type `BubbleData`.
+- `candleData`: A `ComposeList` object representing the data to be displayed in CandleStickChart
+  of type `CandleData`.
 - `modifier`: Optional `Modifier` to customize the appearance and behavior of the chart.
 - `padding`: Optional `Dp` value representing the padding around the chart. Default is `16.dp`.
-- `chartColors`: Optional `CurvedLineChartColors` value representing the color used in the chart.
+- `candleConfig`: Optional `CandleStickConfig` value representing the config used in the chart.
   where it looks like,
 
 ```kotlin
-data class CurvedLineChartColors(
-    val dotColor: List<Color> = emptyList(),
-    val backgroundColors: List<Color> = emptyList(),
-    val contentColor: List<Color> = emptyList(),
+@Immutable
+data class CandleStickConfig(
+  val positiveColor: Color,
+  val negativeColor: Color,
+  val wickColor: Color,
+  val canCandleScale: Boolean,
+  val wickWidthScale: Float = 0.05f,
 )
 ```
 
