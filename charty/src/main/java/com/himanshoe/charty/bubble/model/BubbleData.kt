@@ -8,8 +8,10 @@
 
 package com.himanshoe.charty.bubble.model
 
+import androidx.compose.runtime.Immutable
 import com.himanshoe.charty.common.ChartData
 
+@Immutable
 data class BubbleData(
     override val xValue: Any,
     override val yValue: Float,

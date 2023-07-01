@@ -8,6 +8,9 @@
 
 package com.himanshoe.charty.candle.model
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class CandleData(
     val high: Float,
     val low: Float,
