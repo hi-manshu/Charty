@@ -1,7 +1,9 @@
 ## LineChart Documentation
 
-The `LineChart` is a composable function that displays a line chart using the Jetpack Compose
-framework. It is used to visualize data as a series of connected points with straight lines.
+To use the LineChart, follow the steps below:
+
+- Include the Charty library in your Android project.
+- Use the `LineChart` composable in your code:
 
 ### Function Signature
 

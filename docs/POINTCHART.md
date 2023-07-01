@@ -4,7 +4,6 @@ To use the PointChart, follow the steps below:
 
 - Include the Charty library in your Android project.
 - Use the `PointChart` composable in your code:
--
 
 ### Function Signature
 

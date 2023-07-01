@@ -1,6 +1,9 @@
 ## GroupedBarChart
 
-Renders a grouped bar chart with multiple bars in each group.
+To use the GroupedBarChart, follow the steps below:
+
+- Include the Charty library in your Android project.
+- Use the `GroupedBarChart` composable in your code:
 
 ### Function Signature
 

@@ -4,7 +4,7 @@ To use the PieChart, follow the steps below:
 
 - Include the Charty library in your Android project.
 - Use the `PieChart` composable in your code:
-- 
+
 ```kotlin
 
 @Composable
