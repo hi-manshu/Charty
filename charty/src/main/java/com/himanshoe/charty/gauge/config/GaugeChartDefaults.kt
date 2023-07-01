@@ -16,7 +16,10 @@ object GaugeChartDefaults {
         primaryColor = Color(0xFF20A100),
         placeHolderColor = Color(0xFFABEDCD),
         strokeWidth = 48F,
-        showNeedle = true
+        showNeedle = true,
+        showIndicator = true,
+        indicatorColor = Color(0xffed625d),
+        indicatorWidth = 8F
     )
 
     fun needleConfigDefaults() = NeedleConfig(

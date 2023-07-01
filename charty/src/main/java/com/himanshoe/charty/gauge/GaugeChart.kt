@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -63,7 +64,44 @@ fun GaugeChart(
                 size = Size(radius * 2, radius * 2),
                 style = Stroke(width = gaugeChartConfig.strokeWidth, cap = StrokeCap.Round)
             )
+            if (gaugeChartConfig.showIndicator) {
+                // Draw minute hour dividers
+                val dividerCount = 100
+                val dividerSweepAngle = sweepAngle / dividerCount
+                val longerDividerLength = radius * 0.1f
+                val shorterDividerLength = radius * 0.05f
 
+                for (i in 1..dividerCount) {
+                    val dividerStartAngle = START_ANGLE + (i * dividerSweepAngle)
+                    val isLongerDivider = i % 10 == 0
+
+                    val dividerLength =
+                        if (isLongerDivider) longerDividerLength else shorterDividerLength
+                    val startPoint = polarToCartesian(
+                        centerX,
+                        centerY,
+                        radius - gaugeChartConfig.strokeWidth,
+                        dividerStartAngle
+                    )
+                    val endPoint = polarToCartesian(
+                        centerX,
+                        centerY,
+                        radius - gaugeChartConfig.strokeWidth - dividerLength,
+                        dividerStartAngle
+                    )
+                    val color =
+                        if (isLongerDivider) gaugeChartConfig.indicatorColor else gaugeChartConfig.indicatorColor.copy(
+                            alpha = 0.8F
+                        )
+                    drawLine(
+                        color = color,
+                        start = Offset(startPoint.x, startPoint.y),
+                        end = Offset(endPoint.x, endPoint.y),
+                        strokeWidth = gaugeChartConfig.indicatorWidth,
+                        cap = StrokeCap.Round
+                    )
+                }
+            }
             val currentSweepAngle = animatedPercent * sweepAngle
             drawArc(
                 color = gaugeChartConfig.primaryColor,

@@ -16,5 +16,8 @@ data class GaugeChartConfig(
     val placeHolderColor: Color,
     val primaryColor: Color,
     val strokeWidth: Float,
-    val showNeedle: Boolean
+    val showNeedle: Boolean,
+    val showIndicator: Boolean,
+    val indicatorColor: Color,
+    val indicatorWidth: Float,
 )
