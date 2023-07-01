@@ -29,13 +29,13 @@ fun CircleChart(
 where, it looks like,
 ```kotlin
 data class CircleChartLabelTextConfig(
-val textSize: TextUnit,
-val fontStyle: FontStyle? = null,
-val fontWeight: FontWeight? = null,
-val fontFamily: FontFamily? = null,
-val indicatorSize: Dp = 10.dp,
-val maxLine: Int = 1,
-val overflow: TextOverflow = TextOverflow.Ellipsis
+  val textSize: TextUnit,
+  val fontStyle: FontStyle? = null,
+  val fontWeight: FontWeight? = null,
+  val fontFamily: FontFamily? = null,
+  val indicatorSize: Dp = 10.dp,
+  val maxLine: Int = 1,
+  val overflow: TextOverflow = TextOverflow.Ellipsis
 )
 ```
 - `config`: Optional `CircleChartConfig` type parameter. Configuration for the circle chart appearance. Default configuration can be accessed through CircleConfigDefaults.circleConfigDefaults().
