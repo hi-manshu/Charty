@@ -1,4 +1,4 @@
-## PointChart Documentation
+### PointChart 
 
 To use the PointChart, follow the steps below:
 

@@ -1,4 +1,4 @@
-## LineChart Documentation
+### LineChart
 
 To use the LineChart, follow the steps below:
 

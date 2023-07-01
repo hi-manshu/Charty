@@ -1,4 +1,4 @@
-## PieChart Documentation
+### PieChart 
 
 To use the PieChart, follow the steps below:
 

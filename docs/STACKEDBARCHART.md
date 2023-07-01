@@ -1,4 +1,4 @@
-## StackedBarChart Documentation
+### StackedBarChart 
 
 To use the StackedBarChart, follow the steps below:
 
