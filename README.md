@@ -13,7 +13,7 @@ _Made with ❤️ for Android Developers by Himanshu_
 ![GitHub forks](https://img.shields.io/github/forks/hi-manshu/charty)
 ![GitHub Repo stars](https://img.shields.io/github/stars/hi-manshu/charty)
 ![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/com.himanshoe/charty)
-![Charty Static Check](https://github.com/github/docs/actions/workflows/static-check.yml/badge.svg)
+![Charty Static Check](https://github.com/hi-manshu/charty/actions/workflows/static-check.yml/badge.svg)
 
 
 ## Implementation
