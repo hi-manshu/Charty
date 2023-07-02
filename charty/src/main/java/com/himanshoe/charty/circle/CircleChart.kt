@@ -51,6 +51,15 @@ import com.himanshoe.charty.common.ChartDataCollection
 import com.himanshoe.charty.common.maxYValue
 import com.himanshoe.charty.common.toChartDataCollection
 
+/**
+ * Renders a circle chart based on the provided data.
+ *
+ * @param dataCollection The collection of chart data.
+ * @param modifier The modifier to apply to the chart.
+ * @param canAnimate Whether the chart should animate its appearance.
+ * @param textLabelTextConfig The configuration for the label text in the chart.
+ * @param config The configuration for the circle chart.
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CircleChart(

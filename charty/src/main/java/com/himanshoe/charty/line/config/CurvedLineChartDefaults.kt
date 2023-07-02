@@ -10,8 +10,16 @@ package com.himanshoe.charty.line.config
 
 import androidx.compose.ui.graphics.Color
 
+/**
+ * Default configuration values for a curved line chart.
+ */
 object CurvedLineChartDefaults {
 
+    /**
+     * Returns the default colors for the curved line chart.
+     *
+     * @return The default colors for the curved line chart.
+     */
     fun defaultColor() = CurvedLineChartColors(
         contentColor = listOf(
             Color(0xffed625d),
@@ -27,3 +35,4 @@ object CurvedLineChartDefaults {
         ),
     )
 }
+

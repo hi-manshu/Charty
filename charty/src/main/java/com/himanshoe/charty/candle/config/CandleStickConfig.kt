@@ -11,6 +11,15 @@ package com.himanshoe.charty.candle.config
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
+/**
+ * Configuration options for a candlestick chart.
+ *
+ * @param positiveColor The color of positive (rising) candles.
+ * @param negativeColor The color of negative (falling) candles.
+ * @param wickColor The color of the wicks (lines) connecting the candle bodies.
+ * @param canCandleScale Whether the candles can be scaled.
+ * @param wickWidthScale The scaling factor for the width of the wicks, relative to the candle width.
+ */
 @Immutable
 data class CandleStickConfig(
     val positiveColor: Color,

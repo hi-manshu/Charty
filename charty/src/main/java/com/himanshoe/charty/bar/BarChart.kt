@@ -37,6 +37,16 @@ import com.himanshoe.charty.common.ui.drawXAxisLabels
 import com.himanshoe.charty.common.ui.drawYAxis
 import java.lang.Exception
 
+/**
+ * A composable function that displays a bar chart based on the provided data collection.
+ *
+ * @param dataCollection The collection of chart data representing the bars in the chart.
+ * @param modifier Modifier for applying styling and positioning to the chart.
+ * @param barSpacing The spacing between bars in the chart.
+ * @param padding Padding around the chart content to create spacing.
+ * @param barColor The color used to fill the bars in the chart.
+ * @param axisConfig Configuration for the chart axes, including color and stroke width.
+ */
 @Composable
 fun BarChart(
     dataCollection: ChartDataCollection,
@@ -123,6 +133,15 @@ fun BarChart(
     }
 }
 
+/**
+ * A composable function that displays a bar chart based on the provided data collection.
+ *
+ * @param dataCollection The collection of chart data representing the bars in the chart.
+ * @param modifier Modifier for applying styling and positioning to the chart.
+ * @param barSpacing The spacing between bars in the chart.
+ * @param padding Padding around the chart content to create spacing.
+ * @param axisConfig Configuration for the chart axes, including color and stroke width.
+ */
 @Composable
 fun BarChart(
     dataCollection: ChartDataCollection,

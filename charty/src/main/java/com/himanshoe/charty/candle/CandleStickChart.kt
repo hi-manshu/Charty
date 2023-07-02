@@ -35,6 +35,15 @@ import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawYAxis
 
+/**
+ * Renders a candlestick chart based on the provided candle data.
+ *
+ * @param candleData The list of candlestick data.
+ * @param modifier The modifier for the chart.
+ * @param axisConfig The configuration for the chart axes.
+ * @param padding The padding around the chart.
+ * @param candleConfig The configuration for the candlesticks.
+ */
 @Composable
 fun CandleStickChart(
     candleData: ComposeList<CandleData>,

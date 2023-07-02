@@ -35,6 +35,16 @@ import kotlin.math.sin
 private const val START_ANGLE = 135F
 private const val INITIAL_START_ANGLE = 405F
 
+/**
+ * A composable function that displays a gauge chart.
+ *
+ * @param percentValue The value in percentage to be displayed on the gauge chart.
+ * @param modifier The modifier for styling or positioning the gauge chart.
+ * @param gaugeChartConfig The configuration for the gauge chart appearance.
+ * @param needleConfig The configuration for the needle in the gauge chart.
+ * @param animated Determines whether the gauge chart should be animated.
+ * @param animationSpec The animation specification for the gauge chart animation.
+ */
 @Composable
 fun GaugeChart(
     percentValue: Int,

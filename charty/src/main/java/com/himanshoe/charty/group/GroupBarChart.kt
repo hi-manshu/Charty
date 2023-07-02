@@ -41,6 +41,16 @@ import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawYAxis
 import com.himanshoe.charty.group.model.GroupBarData
 
+/**
+ * Composable function that renders a grouped bar chart.
+ *
+ * @param groupBarDataCollection The collection of group bar chart data.
+ * @param modifier The modifier for the chart.
+ * @param padding The padding around the chart. Defaults to 16.dp.
+ * @param barWidthRatio The ratio of the bar width to the available space. Defaults to 0.8f.
+ * @param axisConfig The configuration for the chart's axis. Defaults to [ChartDefaults.axisConfigDefaults].
+ * @param textLabelTextConfig The configuration for the text labels in the chart. Defaults to [ChartDefaults.defaultTextLabelConfig].
+ */
 @Composable
 fun GroupedBarChart(
     groupBarDataCollection: ComposeList<GroupBarData>,

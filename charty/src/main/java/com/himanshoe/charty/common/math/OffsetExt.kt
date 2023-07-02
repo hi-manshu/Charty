@@ -11,6 +11,17 @@ package com.himanshoe.charty.common.math
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 
+
+/**
+ * Calculates the offset for a data point on a chart.
+ *
+ * @param index The index of the data point.
+ * @param bound The width of each data point.
+ * @param size The size of the chart.
+ * @param data The value of the data point.
+ * @param scaleFactor The scale factor for the data points.
+ * @return The offset of the data point.
+ */
 internal fun chartDataToOffset(
     index: Int,
     bound: Float,

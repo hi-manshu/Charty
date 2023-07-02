@@ -16,6 +16,16 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 
+/**
+ * Draws X-axis labels for a single data point.
+ *
+ * @param data The data value for the label.
+ * @param center The center position of the label.
+ * @param count The total count of data points.
+ * @param padding The padding value.
+ * @param minLabelCount The minimum label count.
+ * @param textColor The color of the text label.
+ */
 internal fun DrawScope.drawXAxisLabels(
     data: Any,
     center: Offset,
@@ -43,6 +53,15 @@ internal fun DrawScope.drawXAxisLabels(
     )
 }
 
+/**
+ * Draws X-axis labels for a list of data points.
+ *
+ * @param data The list of data points.
+ * @param count The total count of data points.
+ * @param padding The padding value.
+ * @param minLabelCount The minimum label count.
+ * @param textColor The color of the text labels.
+ */
 internal fun DrawScope.drawXAxisLabels(
     data: List<Any>,
     count: Int,
@@ -86,6 +105,13 @@ internal fun DrawScope.drawXAxisLabels(
     )
 }
 
+/**
+ * Draws Y-axis labels for a list of values.
+ *
+ * @param values The list of values.
+ * @param spacing The spacing between labels.
+ * @param textColor The color of the text labels.
+ */
 fun DrawScope.drawYAxisLabels(
     values: List<Float>,
     spacing: Float,

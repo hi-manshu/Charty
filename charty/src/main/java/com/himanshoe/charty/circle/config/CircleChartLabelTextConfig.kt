@@ -17,6 +17,17 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 
+/**
+ * Configuration options for the labels in a circle chart.
+ *
+ * @param textSize The size of the text.
+ * @param fontStyle The style of the font.
+ * @param fontWeight The weight of the font.
+ * @param fontFamily The family of the font.
+ * @param indicatorSize The size of the label indicator.
+ * @param maxLine The maximum number of lines for the label text.
+ * @param overflow The text overflow behavior.
+ */
 @Immutable
 data class CircleChartLabelTextConfig(
     val textSize: TextUnit,

@@ -42,6 +42,14 @@ import com.himanshoe.charty.pie.config.PieChartConfig
 import com.himanshoe.charty.pie.config.PieChartDefaults
 import com.himanshoe.charty.pie.model.PieData
 
+/**
+ * Displays a pie chart based on the provided data collection.
+ *
+ * @param dataCollection The collection of data points for the pie chart.
+ * @param modifier The modifier for styling the pie chart.
+ * @param textLabelTextConfig The configuration for the text labels in the pie chart.
+ * @param pieChartConfig The configuration for the pie chart.
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PieChart(

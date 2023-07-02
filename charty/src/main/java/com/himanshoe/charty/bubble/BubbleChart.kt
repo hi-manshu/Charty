@@ -39,6 +39,15 @@ import com.himanshoe.charty.common.ui.drawYAxis
 import com.himanshoe.charty.line.config.CurvedLineChartColors
 import com.himanshoe.charty.line.config.CurvedLineChartDefaults
 
+/**
+ * A composable function that displays a bubble chart based on the provided data collection.
+ *
+ * @param dataCollection The collection of chart data representing the bubbles in the chart.
+ * @param modifier Modifier for applying styling and positioning to the chart.
+ * @param padding Padding around the chart content to create spacing.
+ * @param axisConfig Configuration for the chart axes, including color and stroke width.
+ * @param chartColors Configuration for the colors used in the bubble chart.
+ */
 @Composable
 fun BubbleChart(
     dataCollection: ChartDataCollection,

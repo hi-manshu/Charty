@@ -12,6 +12,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 
+/**
+ * Draws the X axis.
+ *
+ * @param color The color of the axis.
+ * @param stroke The stroke width of the axis.
+ */
 fun DrawScope.drawXAxis(color: Color, stroke: Float) {
     drawLine(
         start = Offset(0f, 0F),
@@ -21,6 +27,12 @@ fun DrawScope.drawXAxis(color: Color, stroke: Float) {
     )
 }
 
+/**
+ * Draws the Y axis.
+ *
+ * @param color The color of the axis.
+ * @param stroke The stroke width of the axis.
+ */
 fun DrawScope.drawYAxis(color: Color, stroke: Float) {
     drawLine(
         start = Offset(0f, size.height),
@@ -29,3 +41,4 @@ fun DrawScope.drawYAxis(color: Color, stroke: Float) {
         strokeWidth = stroke
     )
 }
+

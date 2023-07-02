@@ -40,6 +40,16 @@ import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawYAxis
 import com.himanshoe.charty.stacked.config.StackBarData
 
+/**
+ * Composable function that renders a stacked bar chart.
+ *
+ * @param stackBarData The collection of stack bar data.
+ * @param modifier The modifier for the chart.
+ * @param axisConfig The configuration for the chart axes.
+ * @param padding The padding around the chart.
+ * @param spacing The spacing between stack bars.
+ * @param textLabelTextConfig The configuration for the text labels in the chart.
+ */
 @Composable
 fun StackedBarChart(
     stackBarData: ComposeList<StackBarData>,

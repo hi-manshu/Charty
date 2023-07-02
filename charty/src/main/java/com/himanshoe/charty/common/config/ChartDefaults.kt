@@ -14,6 +14,9 @@ import androidx.compose.ui.unit.TextUnit
 
 object ChartDefaults {
 
+    /**
+     * Provides default values for the axis configuration.
+     */
     fun axisConfigDefaults() = AxisConfig(
         showGridLabel = true,
         showAxes = true,
@@ -23,6 +26,9 @@ object ChartDefaults {
         minLabelCount = 2
     )
 
+    /**
+     * Provides default colors for the chart.
+     */
     fun colorDefaults() = ChartColors(
         contentColor = listOf(
             Color(0xffed625d),
@@ -33,15 +39,9 @@ object ChartDefaults {
         )
     )
 
-    fun stackedBarColors(): List<Color> {
-        return listOf(
-            Color(0xFF1E88E5), // Blue
-            Color(0xFF43A047), // Green
-            Color(0xFFFB8C00), // Orange
-            Color(0xFFE53935), // Red
-        )
-    }
-
+    /**
+     * Provides default values for text label configuration in the chart.
+     */
     fun defaultTextLabelConfig() = ChartyLabelTextConfig(
         textSize = TextUnit.Unspecified,
         fontStyle = null,

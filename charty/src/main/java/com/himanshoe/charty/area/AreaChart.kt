@@ -36,6 +36,14 @@ import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawYAxis
 
+/**
+ * A composable function that displays an area chart based on the provided area data.
+ *
+ * @param areaData The collection of area data containing labels and points that define the areas on the chart.
+ * @param modifier Modifier for applying styling and positioning to the chart.
+ * @param axisConfig Configuration for the chart axes, including color and stroke width.
+ * @param padding Padding around the chart content to create spacing.
+ */
 @Composable
 fun AreaChart(
     areaData: ComposeList<AreaData>,

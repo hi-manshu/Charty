@@ -46,6 +46,18 @@ import com.himanshoe.charty.common.ui.drawYAxis
 import com.himanshoe.charty.point.config.PointType
 import com.himanshoe.charty.point.model.PointData
 
+/**
+ * Displays a point chart using the provided data.
+ *
+ * @param dataCollection The collection of chart data.
+ * @param contentColor The color of the chart points.
+ * @param modifier The modifier for the chart.
+ * @param backgroundColor The background color of the chart.
+ * @param padding The padding around the chart.
+ * @param pointType The type of point to use in the chart.
+ * @param axisConfig The configuration for the chart axes.
+ * @param radiusScale The scale factor for the point radius.
+ */
 @Composable
 fun PointChart(
     dataCollection: ChartDataCollection,
@@ -71,6 +83,17 @@ fun PointChart(
     )
 }
 
+/**
+ * Displays a point chart using the provided data.
+ *
+ * @param dataCollection The collection of chart data.
+ * @param modifier The modifier for the chart.
+ * @param padding The padding around the chart.
+ * @param pointType The type of point to use in the chart.
+ * @param axisConfig The configuration for the chart axes.
+ * @param radiusScale The scale factor for the point radius.
+ * @param chartColors The colors used in the chart.
+ */
 @Composable
 fun PointChart(
     dataCollection: ChartDataCollection,

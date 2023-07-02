@@ -50,6 +50,19 @@ import com.himanshoe.charty.line.config.LineChartDefaults
 import com.himanshoe.charty.line.config.LineConfig
 import com.himanshoe.charty.line.model.LineData
 
+/**
+ * A composable function that displays a line chart.
+ *
+ * @param dataCollection The collection of chart data points.
+ * @param dotColor The color of the data points.
+ * @param lineColor The color of the line in the chart.
+ * @param modifier The modifier for the chart.
+ * @param backgroundColor The background color of the chart.
+ * @param padding The padding around the chart.
+ * @param axisConfig The configuration for the chart's axes.
+ * @param lineConfig The configuration for the line in the chart.
+ * @param radiusScale The scale factor for the radius of the data points.
+ */
 @Composable
 fun LineChart(
     dataCollection: ChartDataCollection,
@@ -77,6 +90,17 @@ fun LineChart(
     )
 }
 
+/**
+ * A composable function that displays a line chart.
+ *
+ * @param dataCollection The collection of chart data points.
+ * @param modifier The modifier for the chart.
+ * @param padding The padding around the chart.
+ * @param axisConfig The configuration for the chart's axes.
+ * @param radiusScale The scale factor for the radius of the data points.
+ * @param lineConfig The configuration for the line in the chart.
+ * @param chartColors The colors used in the chart.
+ */
 @Composable
 fun LineChart(
     dataCollection: ChartDataCollection,
