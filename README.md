@@ -2,8 +2,6 @@
 
 ![Charty](image/charty-banner.png)
 
-[![Code](https://github.com/hi-manshu/Charty/actions/workflows/build.yml/badge.svg)](https://github.com/PatilShreyas/Capturable/actions/workflows/build.yml)
-
 Chart Library built using Jetpack Compose and is highly customizable.
 _Made with ❤️ for Android Developers by Himanshu_
 
