@@ -3,7 +3,7 @@ name: Charty Documentation Generation
 on:
   push:
     branches:
-      - redo
+      - main
 
 jobs:
   generate-docs:

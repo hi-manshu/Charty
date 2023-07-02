@@ -1,7 +1,10 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.dokka'
+    id 'com.vanniktech.maven.publish' version "0.25.3"
 
 }
 apply from: '../quality/static-check.gradle'
@@ -41,7 +44,10 @@ android {
         kotlinCompilerExtensionVersion '1.4.7'
     }
 }
-
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.S01)
+    signAllPublications()
+}
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.10.1'

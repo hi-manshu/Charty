@@ -12,7 +12,7 @@ _Made with ❤️ for Android Developers by Himanshu_
 ![GitHub Repository size](https://img.shields.io/github/repo-size/hi-manshu/charty)
 ![GitHub forks](https://img.shields.io/github/forks/hi-manshu/charty)
 ![GitHub Repo stars](https://img.shields.io/github/stars/hi-manshu/charty)
-![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/com.himanshoe/charty)
+![Charty](https://img.shields.io/maven-central/v/com.himanshoe/charty?color=f4c430&label=Maven%20Central%20%3A%20Charty)
 ![Charty Static Check](https://github.com/hi-manshu/charty/actions/workflows/static-check.yml/badge.svg)
 
 
