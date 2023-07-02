@@ -35,7 +35,7 @@ You can find the detail implementation of the following:
 | ------------- |:-------------:|
 | [BarChart](docs/BARCHART.md)      | <img src="image/demo/barchart.png" width=50% height=50%> |
 | [CandleStickChart](docs/CANDLECHART.md)      | <img src="image/demo/candlestickchart.png" width=50% height=50%> |
-| [BubbleChart](docs/BUBBLECHART.md)     | <img src="image/demo/barchart.png" width=50% height=50%> |
+| [BubbleChart](docs/BUBBLECHART.md)     | <img src="image/demo/bubblechart.png" width=50% height=50%> |
 | [StackedBarChart](docs/STACKEDBARCHART.md)     | <img src="image/demo/stackedbarchart.png" width=50% height=50%> |
 | [GroupedBarChart](docs/GROUPEDBARCHART.md)    | <img src="image/demo/groupbarhchart.png" width=50% height=50%> |
 | [CircleChart](docs/CIRCLECHART.md)    | <img src="image/demo/circlechart.png" width=50% height=50%> |
