@@ -67,7 +67,7 @@ fun CircleChart(
     modifier: Modifier = Modifier,
     canAnimate: Boolean = true,
     textLabelTextConfig: CircleChartLabelTextConfig = CircleConfigDefaults.defaultTextLabelConfig(),
-    config: CircleChartConfig = CircleConfigDefaults.circleConfigDefaults(),
+    config: CircleChartConfig = CircleConfigDefaults.circleChartConfig(),
 ) {
     val maxYValueState = rememberSaveable { mutableStateOf(dataCollection.maxYValue()) }
     val maxYValue = maxYValueState.value

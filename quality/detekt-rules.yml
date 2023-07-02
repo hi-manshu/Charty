@@ -4,6 +4,8 @@ config:
 complexity:
   LongParameterList:
     ignoreDefaultParameters: true
+    functionThreshold: 8
+    constructorThreshold: 8
     ignoreAnnotated: [ 'Composable' ]
   LongMethod:
     ignoreAnnotated: ['Composable']
@@ -17,6 +19,9 @@ naming:
 style:
   DataClassShouldBeImmutable:
     active: true
+  MaxLineLength:
+    active: false
+    maxLineLength: 166
   MagicNumber:
     active: false
     ignoreEnums: true

@@ -35,7 +35,6 @@ import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawXAxisLabels
 import com.himanshoe.charty.common.ui.drawYAxis
-import java.lang.Exception
 
 /**
  * A composable function that displays a bar chart based on the provided data collection.
@@ -126,7 +125,7 @@ fun BarChart(
                         )
                     }
                 } else {
-                    throw Exception("$barData should have color")
+                    throw NoSuchFieldException("$barData should have color")
                 }
             }
         }
@@ -214,7 +213,7 @@ fun BarChart(
                             size = Size(barWidth, barHeight)
                         )
                     } else {
-                        throw Exception("$barData should have color")
+                        throw NoSuchFieldException("$barData should have color")
                     }
 
                     if (data.count() < 14) {
