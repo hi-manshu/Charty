@@ -19,7 +19,7 @@ object CircleConfigDefaults {
     /**
      * Returns the default configuration for a circle chart.
      */
-    fun circleConfigDefaults() = CircleChartConfig(
+    fun circleChartConfig() = CircleChartConfig(
         startAngle = StartAngle.Zero,
         maxValue = null,
         showLabel = true

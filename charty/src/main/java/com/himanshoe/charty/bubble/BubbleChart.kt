@@ -120,7 +120,7 @@ fun BubbleChart(
                         )
                     }
                 } else {
-                    throw Exception("Use ChartDataCollection for BubbleData")
+                    throw ClassCastException("Use ChartDataCollection for BubbleData")
                 }
             }
         }
