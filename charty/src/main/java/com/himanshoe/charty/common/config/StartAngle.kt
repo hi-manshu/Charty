@@ -42,4 +42,3 @@ sealed class StartAngle(open val angle: Float) {
      */
     data class CustomAngle(override val angle: Float) : StartAngle(angle)
 }
-

@@ -41,4 +41,3 @@ fun DrawScope.drawYAxis(color: Color, stroke: Float) {
         strokeWidth = stroke
     )
 }
-

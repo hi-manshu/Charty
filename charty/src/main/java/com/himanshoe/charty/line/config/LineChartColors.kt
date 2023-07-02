@@ -38,4 +38,3 @@ data class CurvedLineChartColors(
     val backgroundColors: List<Color> = emptyList(),
     val contentColor: List<Color> = emptyList(),
 )
-

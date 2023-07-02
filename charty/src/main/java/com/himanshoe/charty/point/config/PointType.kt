@@ -27,4 +27,3 @@ sealed interface PointType {
     @Immutable
     data class Stroke(val strokeWidth: Float = 4F) : PointType
 }
-

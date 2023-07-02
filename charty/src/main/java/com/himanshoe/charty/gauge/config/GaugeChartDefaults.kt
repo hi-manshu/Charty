@@ -40,4 +40,3 @@ object GaugeChartDefaults {
         strokeWidth = 40f,
     )
 }
-

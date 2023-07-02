@@ -11,7 +11,6 @@ package com.himanshoe.charty.common.math
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 
-
 /**
  * Calculates the offset for a data point on a chart.
  *

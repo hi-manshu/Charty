@@ -25,4 +25,3 @@ data class PointData(override val yValue: Float, override val xValue: Any) : Cha
     override val chartString: String
         get() = "Point Chart"
 }
-

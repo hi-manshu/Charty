@@ -37,4 +37,3 @@ object CircleConfigDefaults {
         overflow = TextOverflow.Ellipsis
     )
 }
-

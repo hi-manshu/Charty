@@ -55,4 +55,3 @@ data class ComposeList<T>(val data: List<T>)
  * Extension function to convert a List to a ComposeList.
  */
 fun <T> List<T>.toComposeList() = ComposeList(this)
-
