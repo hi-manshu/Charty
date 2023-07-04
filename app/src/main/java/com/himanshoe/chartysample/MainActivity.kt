@@ -270,7 +270,6 @@ class MainActivity : ComponentActivity() {
                 CandlestickChartExample()
             }
             item {
-
                 GroupedBarChart(
                     groupBarDataCollection = groupData.toComposeList(),
                     modifier = Modifier
@@ -289,7 +288,6 @@ class MainActivity : ComponentActivity() {
                     dataCollection = ChartDataCollection(generateMockBubbleData())
                 )
             }
-
             item {
                 CircleChart(
                     modifier = Modifier.size(400.dp),
