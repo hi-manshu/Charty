@@ -53,6 +53,7 @@ import com.himanshoe.charty.stacked.config.StackedBarChartDefaults
  * @param padding The padding around the chart.
  * @param spacing The spacing between stack bars.
  * @param textLabelTextConfig The configuration for the text labels in the chart.
+ * @param chartColors Configuration for the colors used in the stack bars chart.
  */
 @Composable
 fun StackedBarChart(
