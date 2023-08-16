@@ -40,6 +40,10 @@ android {
     buildFeatures {
         compose true
     }
+    lint {
+        abortOnError false
+        warningsAsErrors true
+    }
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.7'
     }

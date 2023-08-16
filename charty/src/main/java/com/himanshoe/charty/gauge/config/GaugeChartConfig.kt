@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.Color
  *
  * @param placeHolderColor The color of the placeholder arc in the gauge chart.
  * @param primaryColor The color of the primary arc in the gauge chart.
+ * @param textColor The color of the text in the gauge chart.
+ * @param showText Indicates whether to show the text in the gauge chart.
  * @param strokeWidth The width of the arcs in the gauge chart.
  * @param showNeedle Indicates whether to show the needle in the gauge chart.
  * @param showIndicator Indicates whether to show the indicator in the gauge chart.
@@ -30,5 +32,7 @@ data class GaugeChartConfig(
     val showNeedle: Boolean,
     val showIndicator: Boolean,
     val indicatorColor: Color,
+    val textColor: Color,
+    val showText: Boolean,
     val indicatorWidth: Float,
 )

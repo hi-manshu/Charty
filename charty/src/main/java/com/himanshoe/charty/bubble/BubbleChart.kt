@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -96,7 +95,6 @@ fun BubbleChart(
             val maxVolumeSize = data.maxOf { it.volumeSize }
 
             dataCollection.data.fastForEachIndexed { index, data ->
-
                 if (data is BubbleData) {
                     val bubbleRadius =
                         data.volumeSize / maxVolumeSize * 50 // Adjust the scaling factor here
@@ -106,9 +104,9 @@ fun BubbleChart(
                             .coerceIn(0f, chartHeight - bubbleRadius * 2) + bubbleRadius
 
                     drawCircle(
-                        color = Color.Blue,
+                        brush = contentColor,
                         radius = bubbleRadius,
-                        center = Offset(x, y)
+                        center = Offset(x = x, y = y)
                     )
                     if (points.count() < 14) {
                         drawXAxisLabels(
