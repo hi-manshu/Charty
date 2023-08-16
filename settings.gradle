@@ -5,6 +5,11 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+plugins {
+    // See https://jmfayard.github.io/refreshVersions
+    id 'de.fayard.refreshVersions' version '0.51.0'
+}
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -12,6 +17,19 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
 rootProject.name = "Charty"
 include ':app'
 include ':charty'
+
+refreshVersions {
+    featureFlags {
+        enable 'LIBS'
+        disable 'GRADLE_UPDATES'
+    }
+
+    // ignore all non-stable releases
+    rejectVersionIf {
+        candidate.stabilityLevel != StabilityLevel.Stable
+    }
+}

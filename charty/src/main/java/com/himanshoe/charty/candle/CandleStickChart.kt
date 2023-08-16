@@ -52,10 +52,11 @@ fun CandleStickChart(
     padding: Dp = 16.dp,
     candleConfig: CandleStickConfig = CandleStickDefaults.defaultCandleStickConfig(),
 ) {
-    val listOfAxisValues = candleData.data.flatMap { listOf(it.high, it.low, it.open, it.close) }
-        .distinct()
-        .sorted()
-
+    val listOfAxisValues = remember(candleData.data) {
+        candleData.data.flatMap { listOf(it.high, it.low, it.open, it.close) }
+            .distinct()
+            .sorted()
+    }
     val maxValue = candleData.data.maxOf { maxOf(it.high, it.open, it.close) }
     val minValue = candleData.data.minOf { minOf(it.low, it.open, it.close) }
 

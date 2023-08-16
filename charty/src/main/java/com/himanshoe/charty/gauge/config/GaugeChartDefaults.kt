@@ -26,7 +26,9 @@ object GaugeChartDefaults {
         strokeWidth = 48F,
         showNeedle = true,
         showIndicator = true,
+        showText = true,
         indicatorColor = Color(0xffed625d),
+        textColor = Color(0xffed625d),
         indicatorWidth = 8F
     )
 

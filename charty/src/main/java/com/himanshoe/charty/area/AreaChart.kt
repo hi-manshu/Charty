@@ -51,7 +51,9 @@ fun AreaChart(
     axisConfig: AxisConfig = ChartDefaults.axisConfigDefaults(),
     padding: Dp = 16.dp,
 ) {
-    val items = areaData.data.flatMap { it.points }
+    val items = remember(areaData) {
+        areaData.data.flatMap { it.points }
+    }
     val maxValue = items.maxOrNull() ?: 0F
     val minValue = items.minOrNull() ?: 0f
     var chartWidth by remember { mutableStateOf(0F) }

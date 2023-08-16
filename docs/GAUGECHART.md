@@ -5,7 +5,8 @@ To use the GaugeChart, follow the steps below:
 - Include the Charty library in your Android project.
 - Use the `GaugeChart` composable in your code:
 
-```kotlin @Composable
+```kotlin 
+@Composable
 fun GaugeChart(
     percentValue: Int,
     modifier: Modifier = Modifier,
@@ -28,7 +29,9 @@ fun GaugeChart(
 - Properties of `GaugeChartConfig`:
   - `placeHolderColor`: `Color` - Color of the background arc of the chart. Default is `Color.LightGray`.
   - `primaryColor`: `Color` - Color of the primary arc indicating the current value. Default is `Color.Blue`.
+  - `textColor`: `Color` - Color of the primary text indicating the current value.
   - `showNeedle`: `Boolean` - Specifies whether to show the needle indicating the current value. Default is `true`.
+  - `showText`: `Boolean` - Specifies whether to show the text of the current value. Default is `true`.
   - `showIndicator`: `Boolean` - Specifies whether to show the minute hour dividers. Default is `true`.
   - `indicatorColor`: `Color` - Color of the minute hour dividers. Default is `Color.Red`.
   - `indicatorWidth`: `Dp` - Width of the minute hour dividers. Default is `2.dp`.

@@ -8,6 +8,7 @@
 
 package com.himanshoe.charty.gauge
 
+import android.graphics.Paint
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.tween
@@ -24,6 +25,8 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import com.himanshoe.charty.gauge.config.GaugeChartConfig
 import com.himanshoe.charty.gauge.config.GaugeChartDefaults
@@ -53,7 +56,7 @@ fun GaugeChart(
     animated: Boolean = true,
     animationSpec: AnimationSpec<Float> = tween(),
 ) {
-    require(percentValue in 1..100) { "percentValue must be within the range of 1 to 100" }
+    require(percentValue in 0..100) { "percentValue must be within the range of 1 to 100" }
 
     val animatedPercent = rememberAnimatedPercent(animated, percentValue, animationSpec)
     Box(modifier = modifier.aspectRatio(1f)) {
@@ -142,6 +145,18 @@ fun GaugeChart(
                     style = Stroke(width = needleConfig.strokeWidth, cap = StrokeCap.Round)
                 )
             }
+            if (gaugeChartConfig.showText) {
+                drawContext.canvas.nativeCanvas.drawText(
+                    "$percentValue %",
+                    center.x,
+                    size.height - size.height / 4,
+                    Paint().apply {
+                        color = gaugeChartConfig.textColor.toArgb()
+                        textSize = size.width / 25
+                        textAlign = Paint.Align.CENTER
+                    }
+                )
+            }
         }
     }
 }
@@ -182,7 +197,7 @@ private fun rememberAnimatedPercent(
 
 @Preview
 @Composable
-fun GaugeChartPreview() {
+private fun GaugeChartPreview() {
     val percentValue = 100
     GaugeChart(percentValue = percentValue)
 }

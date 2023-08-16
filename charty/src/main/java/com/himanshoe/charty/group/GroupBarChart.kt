@@ -62,7 +62,9 @@ fun GroupedBarChart(
 ) {
     require(barWidthRatio in 0.4f..0.9f) { "barWidthRatio must be within the range of 0.4F to 0.9F, but use 0.8F for best looking View" }
 
-    val allDataPoints = groupBarDataCollection.data.flatMap { it.dataPoints }
+    val allDataPoints = remember(groupBarDataCollection.data) {
+        groupBarDataCollection.data.flatMap { it.dataPoints }
+    }
     val maxValue = allDataPoints.maxOrNull() ?: 0f
     val minValue = allDataPoints.minOrNull() ?: 0f
     val newItems = if (allDataPoints.min() > 0F) {
