@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
  * @param wickColor The color of the wicks (lines) connecting the candle bodies.
  * @param canCandleScale Whether the candles can be scaled.
  * @param wickWidthScale The scaling factor for the width of the wicks, relative to the candle width.
+ * @property backgroundColors The background colors of the candles chart.
  */
 @Immutable
 data class CandleStickConfig(
@@ -27,4 +28,5 @@ data class CandleStickConfig(
     val wickColor: Color,
     val canCandleScale: Boolean,
     val wickWidthScale: Float = 0.05f,
+    val backgroundColors: List<Color> = emptyList(),
 )

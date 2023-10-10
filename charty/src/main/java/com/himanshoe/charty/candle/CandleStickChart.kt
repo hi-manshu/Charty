@@ -9,6 +9,7 @@
 package com.himanshoe.charty.candle
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -70,6 +72,7 @@ fun CandleStickChart(
         content = {
             Canvas(
                 modifier = Modifier
+                    .background(brush = Brush.linearGradient(candleConfig.backgroundColors))
                     .fillMaxSize()
                     .onSizeChanged { size ->
                         chartWidth = size.width.toFloat()
