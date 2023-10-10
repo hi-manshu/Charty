@@ -54,7 +54,7 @@ fun AreaChart(
     modifier: Modifier = Modifier,
     axisConfig: AxisConfig = ChartDefaults.axisConfigDefaults(),
     padding: Dp = 16.dp,
-    chartColors: AreaChartColors = AreaChartDefaults.defaultColor()
+    chartColors: AreaChartColors = AreaChartDefaults.defaultColor(),
 ) {
     val backgroundColor = Brush.linearGradient(chartColors.backgroundColors)
     val items = areaData.data.flatMap { it.points }

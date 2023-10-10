@@ -8,6 +8,8 @@
 
 package com.himanshoe.charty.bar
 
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,12 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
+import com.himanshoe.charty.bar.config.BarChartColors
+import com.himanshoe.charty.bar.config.BarChartDefaults
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.common.ChartDataCollection
 import com.himanshoe.charty.common.ChartSurface
@@ -45,6 +50,7 @@ import com.himanshoe.charty.common.ui.drawYAxis
  * @param padding Padding around the chart content to create spacing.
  * @param barColor The color used to fill the bars in the chart.
  * @param axisConfig Configuration for the chart axes, including color and stroke width.
+ * @param chartColors Configuration for the colors used in the bar chart.
  */
 @Composable
 fun BarChart(
@@ -54,9 +60,11 @@ fun BarChart(
     padding: Dp = 16.dp,
     barColor: Color = Color.Blue,
     axisConfig: AxisConfig = ChartDefaults.axisConfigDefaults(),
+    chartColors: BarChartColors = BarChartDefaults.defaultColor(),
 ) {
     val points = dataCollection.data
 
+    val backgroundColor = Brush.linearGradient(chartColors.backgroundColors)
     val screenWidth = with(LocalContext.current) { resources.displayMetrics.widthPixels.toFloat() }
     var chartBound by remember { mutableStateOf(0F) }
     var chartWidth by remember { mutableStateOf(0F) }
@@ -70,8 +78,9 @@ fun BarChart(
     ) {
         val data = dataCollection.data
 
-        androidx.compose.foundation.Canvas(
+        Canvas(
             modifier = Modifier
+                .background(backgroundColor)
                 .fillMaxSize()
                 .onSizeChanged { size ->
                     chartWidth = size.width.toFloat()
@@ -140,6 +149,7 @@ fun BarChart(
  * @param barSpacing The spacing between bars in the chart.
  * @param padding Padding around the chart content to create spacing.
  * @param axisConfig Configuration for the chart axes, including color and stroke width.
+ * @param chartColors Configuration for the colors used in the bar chart.
  */
 @Composable
 fun BarChart(
@@ -148,9 +158,11 @@ fun BarChart(
     barSpacing: Dp = 8.dp,
     padding: Dp = 16.dp,
     axisConfig: AxisConfig = ChartDefaults.axisConfigDefaults(),
+    chartColors: BarChartColors = BarChartDefaults.defaultColor(),
 ) {
     val points = dataCollection.data
 
+    val backgroundColor = Brush.linearGradient(chartColors.backgroundColors)
     val screenWidth = with(LocalContext.current) { resources.displayMetrics.widthPixels.toFloat() }
     var chartBound by remember { mutableStateOf(0F) }
     var chartWidth by remember { mutableStateOf(0F) }
@@ -164,8 +176,9 @@ fun BarChart(
     ) {
         val data = dataCollection.data
 
-        androidx.compose.foundation.Canvas(
+        Canvas(
             modifier = Modifier
+                .background(backgroundColor)
                 .fillMaxSize()
                 .onSizeChanged { size ->
                     chartWidth = size.width.toFloat()
