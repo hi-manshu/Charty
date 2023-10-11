@@ -10,6 +10,7 @@ package com.himanshoe.charty.group
 
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +22,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -39,6 +41,8 @@ import com.himanshoe.charty.common.toComposeList
 import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawYAxis
+import com.himanshoe.charty.group.config.GroupBarChartColors
+import com.himanshoe.charty.group.config.GroupBarChartDefaults
 import com.himanshoe.charty.group.model.GroupBarData
 
 /**
@@ -50,6 +54,7 @@ import com.himanshoe.charty.group.model.GroupBarData
  * @param barWidthRatio The ratio of the bar width to the available space. Defaults to 0.8f.
  * @param axisConfig The configuration for the chart's axis. Defaults to [ChartDefaults.axisConfigDefaults].
  * @param textLabelTextConfig The configuration for the text labels in the chart. Defaults to [ChartDefaults.defaultTextLabelConfig].
+ * @param chartColors Configuration for the colors used in the group bars chart.
  */
 @Composable
 fun GroupedBarChart(
@@ -59,7 +64,10 @@ fun GroupedBarChart(
     barWidthRatio: Float = 0.8f,
     axisConfig: AxisConfig = ChartDefaults.axisConfigDefaults(),
     textLabelTextConfig: ChartyLabelTextConfig = ChartDefaults.defaultTextLabelConfig(),
+    chartColors: GroupBarChartColors = GroupBarChartDefaults.defaultColor(),
 ) {
+    val backgroundColor = Brush.linearGradient(chartColors.backgroundColors)
+
     require(barWidthRatio in 0.4f..0.9f) { "barWidthRatio must be within the range of 0.4F to 0.9F, but use 0.8F for best looking View" }
 
     val allDataPoints = groupBarDataCollection.data.flatMap { it.dataPoints }
@@ -81,6 +89,7 @@ fun GroupedBarChart(
     ) {
         Canvas(
             modifier = Modifier
+                .background(backgroundColor)
                 .fillMaxSize()
                 .onSizeChanged { size ->
                     chartWidth = size.width.toFloat()

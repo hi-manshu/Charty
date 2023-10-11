@@ -10,6 +10,7 @@ package com.himanshoe.charty.stacked
 
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -39,6 +41,8 @@ import com.himanshoe.charty.common.ui.drawGridLines
 import com.himanshoe.charty.common.ui.drawXAxis
 import com.himanshoe.charty.common.ui.drawYAxis
 import com.himanshoe.charty.stacked.config.StackBarData
+import com.himanshoe.charty.stacked.config.StackedBarChartColors
+import com.himanshoe.charty.stacked.config.StackedBarChartDefaults
 
 /**
  * Composable function that renders a stacked bar chart.
@@ -49,6 +53,7 @@ import com.himanshoe.charty.stacked.config.StackBarData
  * @param padding The padding around the chart.
  * @param spacing The spacing between stack bars.
  * @param textLabelTextConfig The configuration for the text labels in the chart.
+ * @param chartColors Configuration for the colors used in the stack bars chart.
  */
 @Composable
 fun StackedBarChart(
@@ -58,7 +63,10 @@ fun StackedBarChart(
     padding: Dp = 16.dp,
     spacing: Dp = 4.dp,
     textLabelTextConfig: ChartyLabelTextConfig = ChartDefaults.defaultTextLabelConfig(),
+    chartColors: StackedBarChartColors = StackedBarChartDefaults.defaultColor(),
 ) {
+    val backgroundColor = Brush.linearGradient(chartColors.backgroundColors)
+
     val allDataPoints = stackBarData.data.map {
         it.dataPoints.sum()
     }.toMutableList().apply {
@@ -80,6 +88,7 @@ fun StackedBarChart(
     ) {
         Canvas(
             modifier = Modifier
+                .background(backgroundColor)
                 .fillMaxSize()
                 .onSizeChanged { size ->
                     chartWidth = size.width.toFloat()

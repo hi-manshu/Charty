@@ -22,23 +22,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.himanshoe.charty.area.AreaChart
+import com.himanshoe.charty.area.config.AreaChartColors
 import com.himanshoe.charty.area.model.AreaData
 import com.himanshoe.charty.bar.BarChart
+import com.himanshoe.charty.bar.config.BarChartColors
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bubble.BubbleChart
 import com.himanshoe.charty.bubble.model.BubbleData
 import com.himanshoe.charty.candle.CandleStickChart
+import com.himanshoe.charty.candle.config.CandleStickDefaults
 import com.himanshoe.charty.candle.model.CandleData
 import com.himanshoe.charty.circle.CircleChart
 import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.common.ChartDataCollection
 import com.himanshoe.charty.common.ComposeList
+import com.himanshoe.charty.common.config.ChartDefaults
 import com.himanshoe.charty.common.toComposeList
 import com.himanshoe.charty.gauge.GaugeChart
 import com.himanshoe.charty.group.GroupedBarChart
+import com.himanshoe.charty.group.config.GroupBarChartColors
 import com.himanshoe.charty.group.model.GroupBarData
 import com.himanshoe.charty.line.CurveLineChart
 import com.himanshoe.charty.line.LineChart
+import com.himanshoe.charty.line.config.CurvedLineChartColors
+import com.himanshoe.charty.line.config.CurvedLineChartDefaults
+import com.himanshoe.charty.line.config.LineChartDefaults
 import com.himanshoe.charty.line.model.LineData
 import com.himanshoe.charty.pie.PieChart
 import com.himanshoe.charty.pie.config.PieChartDefaults
@@ -46,6 +54,7 @@ import com.himanshoe.charty.pie.model.PieData
 import com.himanshoe.charty.point.PointChart
 import com.himanshoe.charty.stacked.StackedBarChart
 import com.himanshoe.charty.stacked.config.StackBarData
+import com.himanshoe.charty.stacked.config.StackedBarChartColors
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
@@ -110,21 +119,15 @@ class MainActivity : ComponentActivity() {
         ),
     )
 
-    @Composable
-    fun AreaChart() {
-        AreaChart(
-            modifier = Modifier
-                .size(400.dp),
-            areaData = ComposeList(
-                areaData
-            )
-        )
-    }
-
     private val chartColors = listOf(
         Color(0xffed625d),
         Color(0xfff79f88),
         Color(0xFF43A047)
+    )
+
+    private val backgroundColors = listOf(
+        Color.White,
+        Color.White,
     )
 
     private val groupData = listOf(
@@ -166,7 +169,7 @@ class MainActivity : ComponentActivity() {
     )
 
     @Composable
-    fun StackedBarChartDemo() {
+    fun StackedBarChartDemo(backgroundColors: List<Color>) {
 
         val stackBarData = ComposeList(
             listOf(
@@ -211,11 +214,12 @@ class MainActivity : ComponentActivity() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp),
+            chartColors = StackedBarChartColors(backgroundColors = backgroundColors),
         )
     }
 
     @Composable
-    fun CandlestickChartExample() {
+    fun CandlestickChartExample(backgroundColors: List<Color>) {
         val candleData = listOf(
             CandleData(high = 20f, low = 8f, open = 10f, close = 15f),
             CandleData(high = 22f, low = 16f, open = 18f, close = 20f),
@@ -245,6 +249,9 @@ class MainActivity : ComponentActivity() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp),
+            candleConfig = CandleStickDefaults.defaultCandleStickConfig().copy(
+                backgroundColors = backgroundColors,
+            ),
         )
     }
 
@@ -256,7 +263,8 @@ class MainActivity : ComponentActivity() {
                     dataCollection = ChartDataCollection(bardata),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(400.dp)
+                        .height(400.dp),
+                    chartColors = BarChartColors(backgroundColors = backgroundColors),
                 )
             }
             item {
@@ -264,35 +272,41 @@ class MainActivity : ComponentActivity() {
                 GaugeChart(percentValue = percentValue)
             }
             item {
-                StackedBarChartDemo()
+                StackedBarChartDemo(backgroundColors = backgroundColors)
             }
             item {
-                CandlestickChartExample()
+                CandlestickChartExample(backgroundColors = backgroundColors)
             }
             item {
-
                 GroupedBarChart(
                     groupBarDataCollection = groupData.toComposeList(),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(400.dp)
+                        .height(400.dp),
+                    chartColors = GroupBarChartColors(backgroundColors = backgroundColors),
                 )
             }
             item {
-                AreaChart()
+                AreaChart(
+                    areaData = ComposeList(areaData),
+                    modifier = Modifier
+                        .size(400.dp),
+                    chartColors = AreaChartColors(backgroundColors = backgroundColors),
+                )
             }
             item {
                 BubbleChart(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(400.dp),
-                    dataCollection = ChartDataCollection(generateMockBubbleData())
+                    dataCollection = ChartDataCollection(generateMockBubbleData()),
+                    chartColors = CurvedLineChartColors(backgroundColors = backgroundColors),
                 )
             }
-
             item {
                 CircleChart(
-                    modifier = Modifier.size(400.dp),
+                    modifier = Modifier
+                        .size(400.dp),
                     dataCollection = ChartDataCollection(circleData),
                 )
             }
@@ -300,13 +314,15 @@ class MainActivity : ComponentActivity() {
                 PieChart(
                     pieChartConfig = PieChartDefaults.defaultConfig().copy(donut = false),
                     dataCollection = ChartDataCollection(data),
-                    modifier = Modifier.wrapContentSize()
+                    modifier = Modifier
+                        .wrapContentSize(),
                 )
             }
             item {
                 PieChart(
                     dataCollection = ChartDataCollection(data),
-                    modifier = Modifier.wrapContentSize()
+                    modifier = Modifier
+                        .wrapContentSize(),
                 )
             }
             item {
@@ -314,6 +330,9 @@ class MainActivity : ComponentActivity() {
                     dataCollection = ChartDataCollection(generateMockLineDataList()),
                     modifier = Modifier
                         .size(450.dp),
+                    chartColors = CurvedLineChartDefaults.defaultColor().copy(
+                        backgroundColors = backgroundColors,
+                    ),
                 )
             }
             item {
@@ -321,6 +340,9 @@ class MainActivity : ComponentActivity() {
                     dataCollection = ChartDataCollection(generateMockLineDataList()),
                     modifier = Modifier
                         .size(450.dp),
+                    chartColors = LineChartDefaults.defaultColor().copy(
+                        backgroundColors = backgroundColors,
+                    ),
                 )
             }
             item {
@@ -328,6 +350,9 @@ class MainActivity : ComponentActivity() {
                     dataCollection = ChartDataCollection(generateMockLineDataList()),
                     modifier = Modifier
                         .size(450.dp),
+                    chartColors = ChartDefaults.colorDefaults().copy(
+                        backgroundColors = backgroundColors,
+                    ),
                 )
             }
         }

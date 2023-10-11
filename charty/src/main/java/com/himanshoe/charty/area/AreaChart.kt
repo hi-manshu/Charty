@@ -19,13 +19,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import com.himanshoe.charty.area.config.AreaChartColors
+import com.himanshoe.charty.area.config.AreaChartDefaults
 import com.himanshoe.charty.area.model.AreaData
 import com.himanshoe.charty.common.ChartSurface
 import com.himanshoe.charty.common.ComposeList
@@ -43,6 +45,7 @@ import com.himanshoe.charty.common.ui.drawYAxis
  * @param modifier Modifier for applying styling and positioning to the chart.
  * @param axisConfig Configuration for the chart axes, including color and stroke width.
  * @param padding Padding around the chart content to create spacing.
+ * @param chartColors Configuration for the colors used in the area chart.
  */
 @Composable
 fun AreaChart(
@@ -50,7 +53,9 @@ fun AreaChart(
     modifier: Modifier = Modifier,
     axisConfig: AxisConfig = ChartDefaults.axisConfigDefaults(),
     padding: Dp = 16.dp,
+    chartColors: AreaChartColors = AreaChartDefaults.defaultColor(),
 ) {
+    val backgroundColor = Brush.linearGradient(chartColors.backgroundColors)
     val items = areaData.data.flatMap { it.points }
     val maxValue = items.maxOrNull() ?: 0F
     val minValue = items.minOrNull() ?: 0f
@@ -65,8 +70,8 @@ fun AreaChart(
             Column {
                 Canvas(
                     modifier = Modifier
+                        .background(backgroundColor)
                         .fillMaxSize()
-                        .background(Color.White)
                         .onSizeChanged { size ->
                             chartWidth = size.width.toFloat()
                             chartHeight = size.height.toFloat()
