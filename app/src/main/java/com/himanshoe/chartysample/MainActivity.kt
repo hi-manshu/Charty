@@ -11,7 +11,6 @@ package com.himanshoe.chartysample
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,7 +19,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.himanshoe.charty.area.AreaChart
@@ -271,10 +269,7 @@ class MainActivity : ComponentActivity() {
             }
             item {
                 val percentValue = 75
-                GaugeChart(
-                    percentValue = percentValue,
-                    modifier = Modifier.background(brush = Brush.linearGradient(backgroundColors)),
-                )
+                GaugeChart(percentValue = percentValue)
             }
             item {
                 StackedBarChartDemo(backgroundColors = backgroundColors)
