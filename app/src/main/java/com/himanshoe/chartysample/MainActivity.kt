@@ -129,7 +129,7 @@ class MainActivity : ComponentActivity() {
 
     private val backgroundColors = listOf(
         Color.White,
-        Color(0xFFF3E0F7)
+        Color.White,
     )
 
     private val groupData = listOf(
@@ -311,7 +311,6 @@ class MainActivity : ComponentActivity() {
             item {
                 CircleChart(
                     modifier = Modifier
-                        .background(brush = Brush.linearGradient(backgroundColors))
                         .size(400.dp),
                     dataCollection = ChartDataCollection(circleData),
                 )
@@ -321,7 +320,6 @@ class MainActivity : ComponentActivity() {
                     pieChartConfig = PieChartDefaults.defaultConfig().copy(donut = false),
                     dataCollection = ChartDataCollection(data),
                     modifier = Modifier
-                        .background(brush = Brush.linearGradient(backgroundColors))
                         .wrapContentSize(),
                 )
             }
@@ -329,7 +327,6 @@ class MainActivity : ComponentActivity() {
                 PieChart(
                     dataCollection = ChartDataCollection(data),
                     modifier = Modifier
-                        .background(brush = Brush.linearGradient(backgroundColors))
                         .wrapContentSize(),
                 )
             }
