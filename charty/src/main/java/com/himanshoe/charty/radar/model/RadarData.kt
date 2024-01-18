@@ -13,7 +13,7 @@ import com.himanshoe.charty.common.ChartData
 data class RadarData(
     override val yValue: Float,
     override val xValue: Any,
-): ChartData {
+) : ChartData {
     override val chartString: String
         get() = "Radar Chart"
 }

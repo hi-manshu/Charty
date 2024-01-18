@@ -1,5 +1,6 @@
 package com.himanshoe.charty.radar
 
+import android.graphics.Paint
 import android.graphics.PointF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
@@ -11,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import android.graphics.Paint
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -26,8 +26,8 @@ import com.himanshoe.charty.common.config.AxisConfig
 import com.himanshoe.charty.common.config.ChartDefaults
 import com.himanshoe.charty.common.maxYValue
 import com.himanshoe.charty.common.minYValue
-import com.himanshoe.charty.radar.config.RadarChartDefaults
 import com.himanshoe.charty.radar.config.RadarChartColors
+import com.himanshoe.charty.radar.config.RadarChartDefaults
 import com.himanshoe.charty.radar.config.RadarConfig
 import com.himanshoe.charty.radar.model.RadarData
 import kotlin.math.abs
@@ -57,7 +57,7 @@ fun RadarChart(
     val minYValue by remember { mutableStateOf(dataCollection.minYValue()) }
     val diff = abs(maxYValue * 0.1F)
     val dataRange = (minYValue - diff)..(maxYValue + diff)
-    val partitionAngle = (2 * Math.PI / dataCollection.data.size ).toFloat()
+    val partitionAngle = (2 * Math.PI / dataCollection.data.size).toFloat()
 
     Canvas(
         modifier = modifier
@@ -66,11 +66,11 @@ fun RadarChart(
                     dataCollection = dataCollection,
                     dataRange = dataRange,
                     radius = size.minDimension / 3,
-                    center = PointF(size.width/2, size.height/2),
+                    center = PointF(size.width / 2, size.height / 2),
                     axisConfig = axisConfig,
                 )
             }
-    ){
+    ) {
         val radius = size.minDimension / 3
         val centerX = size.width / 2
         val centerY = size.height / 2
@@ -87,13 +87,13 @@ fun RadarChart(
                 val angle = index * partitionAngle
                 val x = centerX + scaleFactor * (chartData.yValue - dataRange.start) * cos(angle)
                 val y = centerY + scaleFactor * (chartData.yValue - dataRange.start) * sin(angle)
-                if (index == 0){
+                if (index == 0) {
                     moveTo(x, y)
                 } else {
                     lineTo(x, y)
                 }
 
-                radarPolygonVertices.add(PointF(x,y))
+                radarPolygonVertices.add(PointF(x, y))
             }
             close()
 
@@ -109,7 +109,6 @@ fun RadarChart(
                 )
             }
         }
-
 
         if (radarConfig.hasDotMarker) {
             radarPolygonVertices.fastForEach {
@@ -131,14 +130,13 @@ private fun DrawScope.drawRadarAxis(
     axisConfig: AxisConfig,
 ) {
     val partitionAngle = (2 * Math.PI / dataCollection.data.size).toFloat()
-
     val axisPolygons = if (axisConfig.showGridLines) {
         listOf(Path(), Path(), Path(), Path())
     } else {
         emptyList()
     }
 
-    for (spokeIndex in 0 until dataCollection.data.size){
+    for (spokeIndex in 0 until dataCollection.data.size) {
         val angle = spokeIndex * partitionAngle
 
         if (axisConfig.showAxes) {
@@ -207,13 +205,15 @@ private fun DrawScope.drawRadarAxis(
 @Composable
 private fun RadarChartPreview() {
     RadarChart(
-        dataCollection = ChartDataCollection(listOf(
-            RadarData(30f, "AAAAAA"),
-            RadarData(25f, "BBBBBB"),
-            RadarData(20f, "CCCCCC"),
-            RadarData(15f, "DDDDDD"),
-            RadarData(10f, "EEEEEE"),
-        )),
+        dataCollection = ChartDataCollection(
+            listOf(
+                RadarData(30f, "AAAAAA"),
+                RadarData(25f, "BBBBBB"),
+                RadarData(20f, "CCCCCC"),
+                RadarData(15f, "DDDDDD"),
+                RadarData(10f, "EEEEEE"),
+            )
+        ),
         modifier = Modifier.size(350.dp),
         axisConfig = ChartDefaults.axisConfigDefaults(),
         radarConfig = RadarChartDefaults.defaultConfig().copy(
