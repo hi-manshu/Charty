@@ -2,14 +2,28 @@ package com.himanshoe.charty.radar.config
 
 import androidx.compose.ui.graphics.Color
 
+/**
+ * Default configurations and colors for a radar chart.
+ */
 object RadarCharDefaults {
 
+    /**
+     * Returns the default configuration for a radar chart.
+     *
+     * @return The default radar chart configuration.
+     */
     fun defaultConfig(): RadarConfig =
         RadarConfig(
             hasDotMarker = true,
             strokeSize = 5F,
+            fillPolygon = false,
         )
 
+    /**
+     * Returns the default colors for a radar chart.
+     *
+     * @return The default radar chart colors.
+     */
     fun defaultColor(): RadarChartColors =
         RadarChartColors(
             lineColor = listOf(

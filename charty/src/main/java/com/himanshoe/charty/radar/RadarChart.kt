@@ -92,6 +92,12 @@ fun RadarChart(
                 brush = lineColor,
                 style = Stroke(width = radarConfig.strokeSize)
             )
+            if (radarConfig.fillPolygon) {
+                drawPath(
+                    path = this,
+                    brush = Brush.linearGradient(chartColors.fillColor),
+                )
+            }
         }
 
 
@@ -199,10 +205,9 @@ private fun RadarChartPreview() {
             RadarData(10f, "EEEEEE"),
         )),
         modifier = Modifier.size(350.dp),
-        axisConfig = ChartDefaults.axisConfigDefaults().copy(
-            showGridLines = true,
-            showAxes = true,
-            showGridLabel = true,
+        axisConfig = ChartDefaults.axisConfigDefaults(),
+        radarConfig = RadarCharDefaults.defaultConfig().copy(
+            fillPolygon = true
         )
     )
 }
