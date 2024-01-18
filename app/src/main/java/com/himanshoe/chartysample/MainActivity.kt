@@ -44,6 +44,10 @@ import com.himanshoe.charty.pie.PieChart
 import com.himanshoe.charty.pie.config.PieChartDefaults
 import com.himanshoe.charty.pie.model.PieData
 import com.himanshoe.charty.point.PointChart
+import com.himanshoe.charty.radar.RadarChart
+import com.himanshoe.charty.radar.config.RadarCharDefaults
+import com.himanshoe.charty.radar.config.RadarConfig
+import com.himanshoe.charty.radar.model.RadarData
 import com.himanshoe.charty.stacked.StackedBarChart
 import com.himanshoe.charty.stacked.config.StackBarData
 import kotlin.random.Random
@@ -310,6 +314,12 @@ class MainActivity : ComponentActivity() {
                 )
             }
             item {
+                RadarChart(
+                    dataCollection = ChartDataCollection(generateMockRadarDataList()),
+                    modifier = Modifier.size(400.dp),
+                )
+            }
+            item {
                 CurveLineChart(
                     dataCollection = ChartDataCollection(generateMockLineDataList()),
                     modifier = Modifier
@@ -346,6 +356,16 @@ class MainActivity : ComponentActivity() {
             LineData(60F, "Sept"),
             LineData(33F, "Oct"),
             LineData(11F, "Nov"),
+        )
+    }
+
+    private fun generateMockRadarDataList(): List<RadarData> {
+        return listOf(
+            RadarData(0F, "Jan"),
+            RadarData(10F, "Feb"),
+            RadarData(05F, "Mar"),
+            RadarData(50F, "Apr"),
+            RadarData(55F, "May"),
         )
     }
 }
