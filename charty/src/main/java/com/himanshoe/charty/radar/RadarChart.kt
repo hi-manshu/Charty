@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -155,7 +156,7 @@ private fun DrawScope.drawRadarAxis(
             Paint().apply {
                 this.color = axisConfig.axisColor.toArgb()
                 this.textSize = size.width / 30
-                this.textAlign = if (angle > Math.PI/2 && angle < 3*Math.PI/2) {
+                this.textAlign = if (angle > Math.PI / 2 && angle < 3 * Math.PI / 2) {
                     Paint.Align.RIGHT
                 } else {
                     Paint.Align.LEFT
@@ -165,7 +166,7 @@ private fun DrawScope.drawRadarAxis(
 
         axisPolygons.fastForEachIndexed { i, path ->
             val scale = 1F - 0.25F * i
-            if (spokeIndex == 0){
+            if (spokeIndex == 0) {
                 path.moveTo(center.x + scale * radius * cos(angle), center.y + scale * radius * sin(angle))
             } else {
                 path.lineTo(center.x + scale * radius * cos(angle), center.y + scale * radius * sin(angle))
@@ -173,31 +174,50 @@ private fun DrawScope.drawRadarAxis(
         }
     }
 
-    if (axisConfig.showGridLines) {
-        axisPolygons.fastForEach {
-            it.close()
-            drawPath(
-                path = it,
-                color = axisConfig.gridColor,
-                style = Stroke(width = axisConfig.axisStroke)
-            )
-        }
+    if (!axisConfig.showGridLines) return
+
+    axisPolygons.fastForEach {
+        it.close()
+        drawPath(
+            path = it,
+            color = axisConfig.gridColor,
+            style = Stroke(width = axisConfig.axisStroke)
+        )
     }
 
-    if (axisConfig.showGridLabel) {
-        for (i in axisPolygons.indices) {
-            val scale = 1F - 0.25F * i
-            drawContext.canvas.nativeCanvas.drawText(
-                (dataRange.start + (dataRange.endInclusive - dataRange.start) * scale).toString(),
-                center.x + scale * radius * cos(partitionAngle / 2),
-                center.y + scale * radius * sin(partitionAngle / 2),
-                Paint().apply {
-                    this.color = axisConfig.gridColor.toArgb()
-                    this.textSize = size.width / 30
-                    this.textAlign = Paint.Align.CENTER
-                }
-            )
-        }
+    if (!axisConfig.showGridLabel) return
+
+    drawGridLabels(
+        radius = radius,
+        center = center,
+        dataRange = dataRange,
+        angle = (partitionAngle / 2),
+        labelCount = axisPolygons.size,
+        labelColor = axisConfig.gridColor
+    )
+}
+
+private fun DrawScope.drawGridLabels(
+    radius: Float,
+    center: PointF,
+    dataRange: ClosedFloatingPointRange<Float>,
+    angle: Float,
+    labelCount: Int,
+    labelColor: Color
+) {
+    val reduceBy = 1F / labelCount
+    for (i in 0 until labelCount) {
+        val scale = 1F - reduceBy * i
+        drawContext.canvas.nativeCanvas.drawText(
+            (dataRange.start + (dataRange.endInclusive - dataRange.start) * scale).toString(),
+            center.x + scale * radius * cos(angle),
+            center.y + scale * radius * sin(angle),
+            Paint().apply {
+                this.color = labelColor.toArgb()
+                this.textSize = size.width / 30
+                this.textAlign = Paint.Align.CENTER
+            }
+        )
     }
 }
 
