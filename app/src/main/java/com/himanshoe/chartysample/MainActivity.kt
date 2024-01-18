@@ -45,8 +45,6 @@ import com.himanshoe.charty.pie.config.PieChartDefaults
 import com.himanshoe.charty.pie.model.PieData
 import com.himanshoe.charty.point.PointChart
 import com.himanshoe.charty.radar.RadarChart
-import com.himanshoe.charty.radar.config.RadarCharDefaults
-import com.himanshoe.charty.radar.config.RadarConfig
 import com.himanshoe.charty.radar.model.RadarData
 import com.himanshoe.charty.stacked.StackedBarChart
 import com.himanshoe.charty.stacked.config.StackBarData

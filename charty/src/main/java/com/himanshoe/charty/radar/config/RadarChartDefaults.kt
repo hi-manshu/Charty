@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 /**
  * Default configurations and colors for a radar chart.
  */
-object RadarCharDefaults {
+object RadarChartDefaults {
 
     /**
      * Returns the default configuration for a radar chart.
@@ -16,7 +16,7 @@ object RadarCharDefaults {
         RadarConfig(
             hasDotMarker = true,
             strokeSize = 5F,
-            fillPolygon = false,
+            fillPolygon = true,
         )
 
     /**

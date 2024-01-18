@@ -26,7 +26,7 @@ import com.himanshoe.charty.common.config.AxisConfig
 import com.himanshoe.charty.common.config.ChartDefaults
 import com.himanshoe.charty.common.maxYValue
 import com.himanshoe.charty.common.minYValue
-import com.himanshoe.charty.radar.config.RadarCharDefaults
+import com.himanshoe.charty.radar.config.RadarChartDefaults
 import com.himanshoe.charty.radar.config.RadarChartColors
 import com.himanshoe.charty.radar.config.RadarConfig
 import com.himanshoe.charty.radar.model.RadarData
@@ -49,8 +49,8 @@ fun RadarChart(
     dataCollection: ChartDataCollection,
     modifier: Modifier = Modifier,
     axisConfig: AxisConfig = ChartDefaults.axisConfigDefaults(),
-    radarConfig: RadarConfig = RadarCharDefaults.defaultConfig(),
-    chartColors: RadarChartColors = RadarCharDefaults.defaultColor(),
+    radarConfig: RadarConfig = RadarChartDefaults.defaultConfig(),
+    chartColors: RadarChartColors = RadarChartDefaults.defaultColor(),
     radiusScale: Float = 0.02f,
 ) {
     val maxYValue by remember { mutableStateOf(dataCollection.maxYValue()) }
@@ -216,7 +216,7 @@ private fun RadarChartPreview() {
         )),
         modifier = Modifier.size(350.dp),
         axisConfig = ChartDefaults.axisConfigDefaults(),
-        radarConfig = RadarCharDefaults.defaultConfig().copy(
+        radarConfig = RadarChartDefaults.defaultConfig().copy(
             fillPolygon = true
         )
     )
