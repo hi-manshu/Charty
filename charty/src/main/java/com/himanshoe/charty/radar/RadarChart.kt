@@ -34,6 +34,16 @@ import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * A composable function that displays a radar chart.
+ *
+ * @param dataCollection The collection of chart data points.
+ * @param modifier The modifier for the chart.
+ * @param axisConfig The configuration for the chart's axes.
+ * @param radarConfig The configuration for the polygon in the chart.
+ * @param chartColors The colors used in the chart.
+ * @param radiusScale The scale factor for the radius of the data points.
+ */
 @Composable
 fun RadarChart(
     dataCollection: ChartDataCollection,
