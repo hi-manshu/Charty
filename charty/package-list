@@ -223,6 +223,28 @@ $dokka.location:com.himanshoe.charty.point.model/PointData/yValue/#/PointingToDe
 $dokka.location:com.himanshoe.charty.point////PointingToDeclaration/charty/com.himanshoe.charty.point/index.html
 $dokka.location:com.himanshoe.charty.point//PointChart/#com.himanshoe.charty.common.ChartDataCollection#androidx.compose.ui.Modifier#androidx.compose.ui.unit.Dp#com.himanshoe.charty.point.config.PointType#com.himanshoe.charty.common.config.AxisConfig#kotlin.Float#com.himanshoe.charty.common.config.ChartColors/PointingToDeclaration/charty/com.himanshoe.charty.point/-point-chart.html
 $dokka.location:com.himanshoe.charty.point//PointChart/#com.himanshoe.charty.common.ChartDataCollection#androidx.compose.ui.graphics.Color#androidx.compose.ui.Modifier#androidx.compose.ui.graphics.Color#androidx.compose.ui.unit.Dp#com.himanshoe.charty.point.config.PointType#com.himanshoe.charty.common.config.AxisConfig#kotlin.Float/PointingToDeclaration/charty/com.himanshoe.charty.point/-point-chart.html
+$dokka.location:com.himanshoe.charty.radar.config////PointingToDeclaration/charty/com.himanshoe.charty.radar.config/index.html
+$dokka.location:com.himanshoe.charty.radar.config/RadarChartColors///PointingToDeclaration/charty/com.himanshoe.charty.radar.config/-radar-chart-colors/index.html
+$dokka.location:com.himanshoe.charty.radar.config/RadarChartColors/RadarChartColors/#kotlin.collections.List[androidx.compose.ui.graphics.Color]#kotlin.collections.List[androidx.compose.ui.graphics.Color]#kotlin.collections.List[androidx.compose.ui.graphics.Color]/PointingToDeclaration/charty/com.himanshoe.charty.radar.config/-radar-chart-colors/-radar-chart-colors.html
+$dokka.location:com.himanshoe.charty.radar.config/RadarChartColors/dotColor/#/PointingToDeclaration/charty/com.himanshoe.charty.radar.config/-radar-chart-colors/dot-color.html
+$dokka.location:com.himanshoe.charty.radar.config/RadarChartColors/fillColor/#/PointingToDeclaration/charty/com.himanshoe.charty.radar.config/-radar-chart-colors/fill-color.html
+$dokka.location:com.himanshoe.charty.radar.config/RadarChartColors/lineColor/#/PointingToDeclaration/charty/com.himanshoe.charty.radar.config/-radar-chart-colors/line-color.html
+$dokka.location:com.himanshoe.charty.radar.config/RadarChartDefaults///PointingToDeclaration/charty/com.himanshoe.charty.radar.config/-radar-chart-defaults/index.html
+$dokka.location:com.himanshoe.charty.radar.config/RadarChartDefaults/defaultColor/#/PointingToDeclaration/charty/com.himanshoe.charty.radar.config/-radar-chart-defaults/default-color.html
+$dokka.location:com.himanshoe.charty.radar.config/RadarChartDefaults/defaultConfig/#/PointingToDeclaration/charty/com.himanshoe.charty.radar.config/-radar-chart-defaults/default-config.html
+$dokka.location:com.himanshoe.charty.radar.config/RadarConfig///PointingToDeclaration/charty/com.himanshoe.charty.radar.config/-radar-config/index.html
+$dokka.location:com.himanshoe.charty.radar.config/RadarConfig/RadarConfig/#kotlin.Boolean#kotlin.Float#kotlin.Boolean/PointingToDeclaration/charty/com.himanshoe.charty.radar.config/-radar-config/-radar-config.html
+$dokka.location:com.himanshoe.charty.radar.config/RadarConfig/fillPolygon/#/PointingToDeclaration/charty/com.himanshoe.charty.radar.config/-radar-config/fill-polygon.html
+$dokka.location:com.himanshoe.charty.radar.config/RadarConfig/hasDotMarker/#/PointingToDeclaration/charty/com.himanshoe.charty.radar.config/-radar-config/has-dot-marker.html
+$dokka.location:com.himanshoe.charty.radar.config/RadarConfig/strokeSize/#/PointingToDeclaration/charty/com.himanshoe.charty.radar.config/-radar-config/stroke-size.html
+$dokka.location:com.himanshoe.charty.radar.model////PointingToDeclaration/charty/com.himanshoe.charty.radar.model/index.html
+$dokka.location:com.himanshoe.charty.radar.model/RadarData///PointingToDeclaration/charty/com.himanshoe.charty.radar.model/-radar-data/index.html
+$dokka.location:com.himanshoe.charty.radar.model/RadarData/RadarData/#kotlin.Float#kotlin.Any/PointingToDeclaration/charty/com.himanshoe.charty.radar.model/-radar-data/-radar-data.html
+$dokka.location:com.himanshoe.charty.radar.model/RadarData/chartString/#/PointingToDeclaration/charty/com.himanshoe.charty.radar.model/-radar-data/chart-string.html
+$dokka.location:com.himanshoe.charty.radar.model/RadarData/xValue/#/PointingToDeclaration/charty/com.himanshoe.charty.radar.model/-radar-data/x-value.html
+$dokka.location:com.himanshoe.charty.radar.model/RadarData/yValue/#/PointingToDeclaration/charty/com.himanshoe.charty.radar.model/-radar-data/y-value.html
+$dokka.location:com.himanshoe.charty.radar////PointingToDeclaration/charty/com.himanshoe.charty.radar/index.html
+$dokka.location:com.himanshoe.charty.radar//RadarChart/#com.himanshoe.charty.common.ChartDataCollection#androidx.compose.ui.Modifier#com.himanshoe.charty.common.config.AxisConfig#com.himanshoe.charty.radar.config.RadarConfig#com.himanshoe.charty.radar.config.RadarChartColors#kotlin.Float/PointingToDeclaration/charty/com.himanshoe.charty.radar/-radar-chart.html
 $dokka.location:com.himanshoe.charty.stacked.config////PointingToDeclaration/charty/com.himanshoe.charty.stacked.config/index.html
 $dokka.location:com.himanshoe.charty.stacked.config/StackBarData///PointingToDeclaration/charty/com.himanshoe.charty.stacked.config/-stack-bar-data/index.html
 $dokka.location:com.himanshoe.charty.stacked.config/StackBarData/StackBarData/#kotlin.String#kotlin.collections.List[kotlin.Float]#kotlin.collections.List[androidx.compose.ui.graphics.Color]/PointingToDeclaration/charty/com.himanshoe.charty.stacked.config/-stack-bar-data/-stack-bar-data.html
@@ -262,6 +284,9 @@ com.himanshoe.charty.pie.model
 com.himanshoe.charty.point
 com.himanshoe.charty.point.config
 com.himanshoe.charty.point.model
+com.himanshoe.charty.radar
+com.himanshoe.charty.radar.config
+com.himanshoe.charty.radar.model
 com.himanshoe.charty.stacked
 com.himanshoe.charty.stacked.config
 com.himanshoe.charty.util
