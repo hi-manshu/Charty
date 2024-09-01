@@ -220,5 +220,3 @@ fun LineChart(
         }
     }
 }
-
-
