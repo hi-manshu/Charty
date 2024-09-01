@@ -132,4 +132,3 @@ internal fun generateMockPointData(): List<PointData> {
         PointData(10F, "Jan"),
     )
 }
-
