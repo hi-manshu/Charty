@@ -80,7 +80,6 @@ internal fun DrawScope.drawXAxisLabels(
     textMeasurer: TextMeasurer,
     textColor: Color = Color.Black,
 ) {
-
     val xStart = padding / 2
     val xEnd = size.width - padding
     val nearestCenterIndex = if (count % 2 == 0) count / 2 else (count - 1) / 2
