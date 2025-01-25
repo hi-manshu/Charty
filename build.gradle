@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     dependencies {
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.0"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.7"
         classpath "org.jlleitschuh.gradle:ktlint-gradle:11.3.2"
     }
 }
