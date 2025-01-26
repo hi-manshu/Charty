@@ -6,7 +6,7 @@ import com.himanshoe.charty.common.ChartData
 data class BarData(
     override val yValue: Float,
     override val xValue: Any,
-    val barColor: Color,
+    val barColor: Color = Color.Unspecified,
     val barBackgroundColor: Color = Color(0x40D3D3D3),
 ) : ChartData {
     override val chartString: String

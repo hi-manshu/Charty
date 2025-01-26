@@ -13,15 +13,15 @@ data class BarChartColorConfig(
         fun default() =
             BarChartColorConfig(
                 defaultGradientBarColors =
-                    listOf(
-                        Color.Blue,
-                        Color.Green,
-                    ),
+                listOf(
+                    Color.Blue,
+                    Color.Green,
+                ),
                 negativeGradientBarColors =
-                    listOf(
-                        Color.Red,
-                        Color.Black,
-                    ),
+                listOf(
+                    Color.Red,
+                    Color.Black,
+                ),
             )
     }
 }

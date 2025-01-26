@@ -37,6 +37,8 @@ import kotlin.math.absoluteValue
 fun BarChart(
     data: List<BarData>,
     modifier: Modifier = Modifier,
+    target: Float? = null,
+    targetConfig: TargetConfig = TargetConfig.default(),
     barChartConfig: BarChartConfig = BarChartConfig.default(),
     labelConfig: LabelConfig = LabelConfig.default(),
     barChartColorConfig: BarChartColorConfig = BarChartColorConfig.default(),
@@ -45,6 +47,8 @@ fun BarChart(
     BarChartContent(
         data = data,
         modifier = modifier,
+        target = target,
+        targetConfig = targetConfig,
         barChartConfig = barChartConfig,
         labelConfig = labelConfig,
         barChartColorConfig = barChartColorConfig,
@@ -56,12 +60,15 @@ fun BarChart(
 private fun BarChartContent(
     data: List<BarData>,
     modifier: Modifier = Modifier,
+    target: Float? = null,
+    targetConfig: TargetConfig = TargetConfig.default(),
     barChartConfig: BarChartConfig = BarChartConfig.default(),
     labelConfig: LabelConfig = LabelConfig.default(),
     barChartColorConfig: BarChartColorConfig = BarChartColorConfig.default(),
     onBarClick: (Int, BarData) -> Unit = { _, _ -> },
 ) {
     val maxValue = data.maxOfOrNull { it.yValue.absoluteValue } ?: 0f
+    val minValue = data.minOfOrNull { it.yValue.absoluteValue } ?: 0f
     val hasNegativeValues = data.any { it.yValue < 0 }
     val displayData = getDisplayData(data = data, minimumBarCount = barChartConfig.minimumBarCount)
     val canDrawNegativeChart = hasNegativeValues && barChartConfig.drawNegativeValueChart
@@ -82,6 +89,29 @@ private fun BarChartContent(
         displayDataCount = displayData.count(),
     ) { canvasHeight, gap, barWidth ->
 
+        if (target != null) {
+            require(target in minValue..maxValue) { "Target value should be between $minValue and $maxValue" }
+            // Calculate the position of the range buffer line
+            val targetLineY = if (hasNegativeValues) {
+                canvasHeight / 2
+            } else {
+                canvasHeight
+            }
+            val targetLineYPosition = targetLineY - (target / maxValue) * targetLineY
+            // Draw the target line
+            val brush = if (targetConfig.targetLineGradientBarColors.count() == 1) {
+                SolidColor(targetConfig.targetLineGradientBarColors.first())
+            } else {
+                Brush.linearGradient(targetConfig.targetLineGradientBarColors)
+            }
+            drawLine(
+                brush = brush,
+                start = Offset(0f, targetLineYPosition),
+                end = Offset(size.width, targetLineYPosition),
+                strokeWidth = targetConfig.targetWidth,
+                pathEffect = targetConfig.pathEffect
+            )
+        }
         displayData.fastForEachIndexed { index, barData ->
             val height = barData.yValue / maxValue * canvasHeight
             val maxHeight = maxValue / maxValue * canvasHeight
@@ -218,7 +248,7 @@ internal fun getDisplayData(
 ): List<BarData> =
     if (data.size < minimumBarCount) {
         // Add empty bar
-        List(minimumBarCount - data.size) { BarData(0F, 0f, Color.Unspecified) } + data
+        List(minimumBarCount - data.size) { BarData(0F, " ", Color.Unspecified) } + data
     } else {
         data
     }

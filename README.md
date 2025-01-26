@@ -4,9 +4,8 @@
 
 ## Charty : Elementary Chart library for Compose
 
-![Charty](image/charty-banner.png)
-
 Chart Library built using Jetpack Compose and is highly customizable. (CMP version coming soon)
+
 _Made with ❤️ for Android Developers by Himanshu_
 
 [![Github Followers](https://img.shields.io/github/followers/hi-manshu?label=Follow&style=social)](https://github.com/hi-manshu)
