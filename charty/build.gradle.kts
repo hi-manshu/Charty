@@ -21,7 +21,7 @@ kotlin {
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach {
         it.binaries.framework {
             baseName = "shared"
@@ -29,10 +29,9 @@ kotlin {
         }
     }
 
-
     sourceSets {
         commonMain.dependencies {
-            //put your multiplatform dependencies here
+            // put your multiplatform dependencies here
             implementation(compose.runtime)
             implementation(compose.ui)
             implementation(compose.runtime)

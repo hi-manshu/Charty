@@ -7,9 +7,10 @@ data class LabelConfig(
     val showLabel: Boolean,
 ) {
     companion object {
-        fun default() = LabelConfig(
-            textColor = Color.Black,
-            showLabel = true
-        )
+        fun default() =
+            LabelConfig(
+                textColor = Color.Black,
+                showLabel = true,
+            )
     }
 }

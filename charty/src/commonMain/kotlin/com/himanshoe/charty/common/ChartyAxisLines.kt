@@ -12,22 +12,26 @@ import androidx.compose.ui.graphics.PathEffect
  * @param hasNegativeValues A boolean indicating whether the data contains negative values.
  * @return A Modifier with the axis lines drawn.
  */
-fun Modifier.drawAxisLine(hasNegativeValues: Boolean = true, axisLineColor: Color): Modifier {
-    return this.drawWithCache {
+fun Modifier.drawAxisLine(
+    hasNegativeValues: Boolean = true,
+    axisLineColor: Color,
+): Modifier =
+    this.drawWithCache {
         val canvasWidth = size.width
         val canvasHeight = size.height
-        val yAxis = if (hasNegativeValues) {
-            canvasHeight / 2
-        } else {
-            canvasHeight
-        }
+        val yAxis =
+            if (hasNegativeValues) {
+                canvasHeight / 2
+            } else {
+                canvasHeight
+            }
         onDrawBehind {
             // Draw the x-axis
             drawLine(
                 color = axisLineColor,
                 start = Offset(0f, yAxis),
                 end = Offset(canvasWidth, yAxis),
-                strokeWidth = 2f
+                strokeWidth = 2f,
             )
 
             // Draw the y-axis
@@ -35,12 +39,10 @@ fun Modifier.drawAxisLine(hasNegativeValues: Boolean = true, axisLineColor: Colo
                 color = axisLineColor,
                 start = Offset(0f, 0f),
                 end = Offset(0f, canvasHeight),
-                strokeWidth = 2f
+                strokeWidth = 2f,
             )
         }
     }
-}
-
 
 /**
  * Extension function to draw range lines on a canvas.
@@ -48,15 +50,19 @@ fun Modifier.drawAxisLine(hasNegativeValues: Boolean = true, axisLineColor: Colo
  * @param hasNegativeValues A boolean indicating whether the data contains negative values.
  * @return A Modifier with the range lines drawn.
  */
-fun Modifier.drawRangeLines(hasNegativeValues: Boolean = true, rangeLineColor: Color): Modifier {
-    return this.drawWithCache {
+fun Modifier.drawRangeLines(
+    hasNegativeValues: Boolean = true,
+    rangeLineColor: Color,
+): Modifier =
+    this.drawWithCache {
         val canvasWidth = size.width
         val canvasHeight = size.height
-        val yAxis = if (hasNegativeValues) {
-            canvasHeight / 2
-        } else {
-            canvasHeight
-        }
+        val yAxis =
+            if (hasNegativeValues) {
+                canvasHeight / 2
+            } else {
+                canvasHeight
+            }
         val rangeLineCount = 3
         val rangeLineSpacing = canvasHeight / (rangeLineCount * 2 + 1)
         val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
@@ -72,14 +78,14 @@ fun Modifier.drawRangeLines(hasNegativeValues: Boolean = true, rangeLineColor: C
                         start = Offset(0f, yOffsetTop),
                         end = Offset(canvasWidth, yOffsetTop),
                         strokeWidth = 1f,
-                        pathEffect = pathEffect
+                        pathEffect = pathEffect,
                     )
                     drawLine(
                         color = rangeLineColor,
                         start = Offset(0f, yOffsetBottom),
                         end = Offset(canvasWidth, yOffsetBottom),
                         strokeWidth = 1f,
-                        pathEffect = pathEffect
+                        pathEffect = pathEffect,
                     )
                 }
             } else {
@@ -92,10 +98,9 @@ fun Modifier.drawRangeLines(hasNegativeValues: Boolean = true, rangeLineColor: C
                         start = Offset(0f, yOffset),
                         end = Offset(canvasWidth, yOffset),
                         strokeWidth = 1f,
-                        pathEffect = pathEffect
+                        pathEffect = pathEffect,
                     )
                 }
             }
         }
     }
-}

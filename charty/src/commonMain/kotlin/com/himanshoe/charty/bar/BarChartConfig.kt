@@ -5,15 +5,16 @@ data class BarChartConfig(
     val showRangeLines: Boolean,
     val drawNegativeValueChart: Boolean,
     val showCurvedBar: Boolean,
-    val minimumBarCount: Int
+    val minimumBarCount: Int,
 ) {
     companion object {
-        fun default() = BarChartConfig(
-            showAxisLines = true,
-            showRangeLines = true,
-            drawNegativeValueChart = true,
-            showCurvedBar = false,
-            minimumBarCount = 7
-        )
+        fun default() =
+            BarChartConfig(
+                showAxisLines = true,
+                showRangeLines = true,
+                drawNegativeValueChart = true,
+                showCurvedBar = true,
+                minimumBarCount = 7,
+            )
     }
 }

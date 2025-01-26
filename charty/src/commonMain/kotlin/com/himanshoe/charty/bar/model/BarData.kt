@@ -7,7 +7,7 @@ data class BarData(
     override val yValue: Float,
     override val xValue: Any,
     val barColor: Color,
-    val barBackgroundColor: Color = Color(0x40D3D3D3)
+    val barBackgroundColor: Color = Color(0x40D3D3D3),
 ) : ChartData {
     override val chartString: String
         get() = "Bar Chart"

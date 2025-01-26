@@ -2,7 +2,7 @@ package com.himanshoe.charty
 
 import platform.UIKit.UIDevice
 
-class IOSPlatform: Platform {
+class IOSPlatform : Platform {
     override val name: String = UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
 }
 

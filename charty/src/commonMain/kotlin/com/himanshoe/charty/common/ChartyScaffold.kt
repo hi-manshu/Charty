@@ -14,12 +14,13 @@ internal fun ChartyScaffold(
     content: @Composable () -> Unit = {},
 ) {
     BoxWithConstraints(
-        modifier = modifier.padding(
-            start = innerPadding.times(2),
-            bottom = innerPadding.times(2),
-            top = innerPadding.times(2),
-            end = innerPadding
-        )
+        modifier =
+            modifier.padding(
+                start = innerPadding.times(2),
+                bottom = innerPadding.times(2),
+                top = innerPadding.times(2),
+                end = innerPadding,
+            ),
     ) {
         content()
     }
