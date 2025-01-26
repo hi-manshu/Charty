@@ -223,7 +223,7 @@ internal fun getDisplayData(
         data
     }
 
-private fun isClickInsideBar(
+internal fun isClickInsideBar(
     clickOffset: Offset,
     rectTopLeft: Offset,
     rectSize: Size,

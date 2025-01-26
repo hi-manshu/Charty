@@ -36,7 +36,7 @@ fun LineBarChart(
     barChartColorConfig: BarChartColorConfig = BarChartColorConfig.default(),
     onBarClick: (Int, BarData) -> Unit = { _, _ -> },
 ) {
-    LineBarChartCotent(
+    LineBarChartContent(
         data = data,
         modifier = modifier,
         barChartConfig = barChartConfig,
@@ -47,7 +47,7 @@ fun LineBarChart(
 }
 
 @Composable
-private fun LineBarChartCotent(
+private fun LineBarChartContent(
     data: List<BarData>,
     modifier: Modifier = Modifier,
     barChartConfig: BarChartConfig = BarChartConfig.default(),
@@ -221,10 +221,3 @@ private fun DrawScope.backgroundColorBar(
         cornerRadius = cornerRadius,
     )
 }
-
-private fun isClickInsideBar(
-    clickOffset: Offset,
-    rectTopLeft: Offset,
-    rectSize: Size,
-): Boolean =
-    clickOffset.x in rectTopLeft.x..(rectTopLeft.x + rectSize.width) && clickOffset.y in rectTopLeft.y..(rectTopLeft.y + rectSize.height)
