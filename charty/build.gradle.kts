@@ -55,6 +55,22 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
+val detekt by configurations.creating
 dependencies {
-    implementation(libs.detekt)
+    dependencies {
+        detekt(libs.detekt.cli)
+        detekt(libs.detekt.formatting)
+    }
+}
+tasks.register<JavaExec>("detekt") {
+    mainClass = "io.gitlab.arturbosch.detekt.cli.Main"
+    classpath = detekt
+
+    val input = projectDir
+    val config = "$projectDir/detekt.yml"
+    val exclude = ".*/build/.*,.*/resources/.*"
+    val report = "sarif:${layout.buildDirectory.file("reports/detekt/detekt.sarif").get()}"
+    val params = listOf("-i", input, "-c", config, "-ex", exclude, "-r", report, "--build-upon-default-config")
+
+    args(params)
 }

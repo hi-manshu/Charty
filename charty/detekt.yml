@@ -1,0 +1,17 @@
+complexity:
+  LongParameterList:
+    active: false
+  TooManyFunctions:
+    active: false
+
+naming:
+  InvalidPackageDeclaration:
+    rootPackage: "io.github.mrnuggelz.opensubsonic"
+  TopLevelPropertyNaming:
+    constantPattern: '[A-Z][_A-Za-z0-9]*'
+
+style:
+  MaxLineLength:
+    active: false # use MaximumLineLength from formatting
+  MagicNumber:
+    active: false

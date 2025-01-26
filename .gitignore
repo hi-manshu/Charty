@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/charty/build
+/.kotlin/*

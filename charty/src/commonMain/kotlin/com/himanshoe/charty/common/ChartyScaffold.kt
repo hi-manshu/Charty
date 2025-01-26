@@ -15,12 +15,12 @@ internal fun ChartyScaffold(
 ) {
     BoxWithConstraints(
         modifier =
-            modifier.padding(
-                start = innerPadding.times(2),
-                bottom = innerPadding.times(2),
-                top = innerPadding.times(2),
-                end = innerPadding,
-            ),
+        modifier.padding(
+            start = innerPadding.times(2),
+            bottom = innerPadding.times(2),
+            top = innerPadding.times(2),
+            end = innerPadding,
+        ),
     ) {
         content()
     }

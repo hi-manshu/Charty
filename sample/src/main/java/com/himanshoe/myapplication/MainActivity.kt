@@ -46,6 +46,20 @@ class MainActivity : ComponentActivity() {
                                             Color.Black,
                                         ),
                                 ),
+                            data = generateMockData(7,useColor = false),
+                            onBarClick = { _, barData ->
+                                // Handle click event
+                                Log.d("DSfsdfsdfsdfsNonGradient", barData.toString())
+                            },
+                        )
+                    }
+                    item {
+                        LineBarChart(
+                            modifier =
+                                Modifier
+                                    .padding(10.dp)
+                                    .fillMaxWidth()
+                                    .height(300.dp),
                             data = generateMockData(7),
                             onBarClick = { _, barData ->
                                 // Handle click event
