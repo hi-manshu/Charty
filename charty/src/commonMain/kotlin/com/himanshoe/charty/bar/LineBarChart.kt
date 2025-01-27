@@ -23,6 +23,9 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
+import com.himanshoe.charty.bar.config.BarChartColorConfig
+import com.himanshoe.charty.bar.config.BarChartConfig
+import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.common.LabelConfig
 import kotlin.math.absoluteValue
@@ -75,9 +78,9 @@ private fun LineBarChartContent(
     BarChartCanvasScaffold(
         modifier = modifier.padding(bottom = bottomPadding),
         showAxisLines = barChartConfig.showAxisLines,
-        showRangeLines = barChartConfig.showRangeLines,
+        showRangeLines = barChartConfig.showGridLines,
         axisLineColor = barChartColorConfig.axisLineColor,
-        rangeLineColor = barChartColorConfig.rangeLineColor,
+        rangeLineColor = barChartColorConfig.gridLineColor,
         canDrawNegativeChart = canDrawNegativeChart,
         onClick = { clickedOffSet = it },
         displayDataCount = displayData.count(),

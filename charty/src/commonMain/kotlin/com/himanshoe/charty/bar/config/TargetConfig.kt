@@ -1,4 +1,4 @@
-package com.himanshoe.charty.bar
+package com.himanshoe.charty.bar.config
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect

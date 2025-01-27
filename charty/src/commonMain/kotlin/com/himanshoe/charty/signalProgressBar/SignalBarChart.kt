@@ -1,0 +1,138 @@
+package com.himanshoe.charty.signalProgressBar
+
+import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.Canvas
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import kotlinx.coroutines.delay
+
+
+/**
+ * A composable function that displays a signal bar chart with solid colors.
+ *
+ * @param progress A lambda function that returns the current progress as a Float.
+ * @param modifier A Modifier to be applied to the Canvas.
+ * @param trackColor The color to be used for the track.
+ * @param progressColor The color to be used for the progress.
+ * @param gapRatio A Float representing the ratio of the gap between blocks.
+ */
+@Composable
+fun SignalProgressBarChart(
+    progress: () -> Float,
+    modifier: Modifier = Modifier,
+    totalBlocks: Int = 10,
+    trackColor: Color = Color.Gray,
+    progressColor: Color = Color.Green,
+    gapRatio: Float = 0.1F
+) {
+    SignalBarChartContent(
+        progress = progress,
+        totalBlocks = totalBlocks,
+        trackColorBrush = SolidColor(trackColor),
+        progressColorBrush = SolidColor(progressColor),
+        gapRatio = gapRatio,
+        modifier = modifier
+    )
+}
+
+/**
+ * A composable function that displays a signal bar chart with gradient colors.
+ *
+ * @param progress A lambda function that returns the current progress as a Float.
+ * @param trackColors A list of colors to be used for the track gradient.
+ * @param progressColors A list of colors to be used for the progress gradient.
+ * @param modifier A Modifier to be applied to the Canvas.
+ * @param gapRatio A Float representing the ratio of the gap between blocks.
+ */
+@Composable
+fun SignalProgressBarChart(
+    progress: () -> Float,
+    trackColors: List<Color>,
+    progressColors: List<Color>,
+    modifier: Modifier = Modifier,
+    totalBlocks: Int = 50,
+    gapRatio: Float = 0.1F
+) {
+    SignalBarChartContent(
+        progress = progress,
+        totalBlocks = totalBlocks,
+        trackColorBrush = Brush.linearGradient(trackColors),
+        progressColorBrush = Brush.linearGradient(progressColors),
+        gapRatio = gapRatio,
+        modifier = modifier
+    )
+}
+
+/**
+ * A private composable function that displays the content of a signal bar chart.
+ *
+ * @param progress A lambda function that returns the current progress as a Float.
+ * @param trackColorBrush A Brush to be used for the track.
+ * @param progressColorBrush A Brush to be used for the progress.
+ * @param gapRatio A Float representing the ratio of the gap between blocks.
+ * @param totalBlocks An Int representing the total number of blocks in the chart.
+ * @param modifier A Modifier to be applied to the Canvas.
+ */
+@Composable
+private fun SignalBarChartContent(
+    progress: () -> Float,
+    trackColorBrush: Brush,
+    progressColorBrush: Brush,
+    gapRatio: Float,
+    totalBlocks: Int,
+    modifier: Modifier = Modifier,
+) {
+
+    val alphaAnimation = remember { Animatable(0f) }
+    LaunchedEffect(progress()) {
+        delay(200)
+        alphaAnimation.animateTo(progress())
+    }
+    Canvas(modifier = modifier) {
+        val filledBlocks = (alphaAnimation.value / 100 * totalBlocks).toInt()
+        val partialBlockFraction = (alphaAnimation.value / 100 * totalBlocks) - filledBlocks
+        val blockHeight = size.height / (totalBlocks + (totalBlocks - 1) * gapRatio)
+        val gap = blockHeight * gapRatio
+        val blockWidth = size.width
+
+        for (i in 0 until totalBlocks) {
+            val yOffset = size.height - (i + 1) * (blockHeight + gap)
+            val topLeft = Offset(gap, yOffset)
+            val blockSize = Size(blockWidth, blockHeight)
+
+            when {
+                i < filledBlocks -> {
+                    drawRoundRect(
+                        brush = progressColorBrush,
+                        topLeft = topLeft,
+                        size = blockSize
+                    )
+                }
+
+                i == filledBlocks -> {
+                    drawRoundRect(
+                        brush = progressColorBrush,
+                        topLeft = topLeft.copy(y = yOffset + blockHeight * (1 - partialBlockFraction)),
+                        size = blockSize.copy(height = blockHeight * partialBlockFraction)
+                    )
+                    drawRoundRect(
+                        brush = trackColorBrush,
+                        topLeft = topLeft,
+                        size = blockSize.copy(height = blockHeight * (1 - partialBlockFraction))
+                    )
+                }
+
+                else -> {
+                    drawRoundRect(brush = trackColorBrush, topLeft = topLeft, size = blockSize)
+                }
+            }
+        }
+    }
+}
