@@ -13,7 +13,7 @@ data class BarChartConfig(
                 showAxisLines = true,
                 showGridLines = true,
                 drawNegativeValueChart = true,
-                showCurvedBar = true,
+                showCurvedBar = false,
                 minimumBarCount = 7,
             )
     }

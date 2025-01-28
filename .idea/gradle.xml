@@ -11,7 +11,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/charty" />
-            <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/sampleComposeMultiplatformApp" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -106,31 +107,39 @@ private fun SignalBarChartContent(
             val yOffset = size.height - (i + 1) * (blockHeight + gap)
             val topLeft = Offset(gap, yOffset)
             val blockSize = Size(blockWidth, blockHeight)
-
+            val cornerRadius = CornerRadius(5F)
             when {
                 i < filledBlocks -> {
                     drawRoundRect(
                         brush = progressColorBrush,
                         topLeft = topLeft,
-                        size = blockSize
+                        size = blockSize,
+                        cornerRadius = cornerRadius,
                     )
                 }
 
                 i == filledBlocks -> {
                     drawRoundRect(
                         brush = progressColorBrush,
+                        cornerRadius = cornerRadius,
                         topLeft = topLeft.copy(y = yOffset + blockHeight * (1 - partialBlockFraction)),
                         size = blockSize.copy(height = blockHeight * partialBlockFraction)
                     )
                     drawRoundRect(
                         brush = trackColorBrush,
+                        cornerRadius = cornerRadius,
                         topLeft = topLeft,
                         size = blockSize.copy(height = blockHeight * (1 - partialBlockFraction))
                     )
                 }
 
                 else -> {
-                    drawRoundRect(brush = trackColorBrush, topLeft = topLeft, size = blockSize)
+                    drawRoundRect(
+                        cornerRadius = cornerRadius,
+                        brush = trackColorBrush,
+                        topLeft = topLeft,
+                        size = blockSize
+                    )
                 }
             }
         }

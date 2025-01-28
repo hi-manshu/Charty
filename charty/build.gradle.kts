@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.compose.compiler)
 }
 
@@ -24,7 +24,7 @@ kotlin {
         iosSimulatorArm64(),
     ).forEach {
         it.binaries.framework {
-            baseName = "shared"
+            baseName = "charty"
             isStatic = true
         }
     }
@@ -57,10 +57,9 @@ android {
 }
 val detekt by configurations.creating
 dependencies {
-    dependencies {
-        detekt(libs.detekt.cli)
-        detekt(libs.detekt.formatting)
-    }
+    detekt(libs.detekt.cli)
+    detekt(libs.detekt.formatting)
+    debugImplementation(compose.uiTooling)
 }
 tasks.register<JavaExec>("detekt") {
     mainClass = "io.gitlab.arturbosch.detekt.cli.Main"
@@ -70,7 +69,17 @@ tasks.register<JavaExec>("detekt") {
     val config = "$projectDir/detekt.yml"
     val exclude = ".*/build/.*,.*/resources/.*"
     val report = "sarif:${layout.buildDirectory.file("reports/detekt/detekt.sarif").get()}"
-    val params = listOf("-i", input, "-c", config, "-ex", exclude, "-r", report, "--build-upon-default-config")
+    val params = listOf(
+        "-i",
+        input,
+        "-c",
+        config,
+        "-ex",
+        exclude,
+        "-r",
+        report,
+        "--build-upon-default-config"
+    )
 
     args(params)
 }

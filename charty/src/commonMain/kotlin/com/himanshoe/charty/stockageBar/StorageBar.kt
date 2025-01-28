@@ -77,18 +77,16 @@ private fun StorageBarContent(
 ) {
     var clickedOffSet by mutableStateOf<Offset?>(null)
     var clickedBarIndex by mutableIntStateOf(-1)
-
     Canvas(modifier = modifier.fillMaxWidth()
         .pointerInput(data) {
-            detectTapGestures { offset ->
-                clickedOffSet = offset
-            }
-        }) {
+            detectTapGestures { offset -> clickedOffSet = offset }
+        }
+    ) {
         val totalWidth = size.width
         val totalHeight = size.height
         var currentOffset = 0f
-
         val categoryWidths = data.map { it.value * totalWidth }
+
         data.fastForEachIndexed { index, category ->
             val categoryWidth = categoryWidths[index]
             val isFirst = index == 0
@@ -112,7 +110,6 @@ private fun StorageBarContent(
             currentOffset += categoryWidth
         }
 
-        // Draw the remaining track
         if (currentOffset < totalWidth) {
             val backgroundPath = calculatePath(
                 offset = Offset(x = currentOffset, y = 0f),
@@ -124,6 +121,7 @@ private fun StorageBarContent(
                 brush = trackColor
             )
         }
+
     }
 }
 
