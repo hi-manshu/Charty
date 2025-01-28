@@ -74,11 +74,11 @@ kotlin {
 }
 
 android {
-    namespace = "org.example.project"
+    namespace = "com.himanshoe.sample"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "org.example.project"
+        applicationId = "com.himanshoe.sample"
         minSdk = 24
         versionCode = 1
         versionName = "1.0"
@@ -105,11 +105,11 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "org.example.project.MainKt"
+        mainClass = "com.himanshoe.sample.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.example.project"
+            packageName = "com.himanshoe.sample"
             packageVersion = "1.0.0"
         }
     }

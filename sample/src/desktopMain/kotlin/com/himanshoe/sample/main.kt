@@ -1,4 +1,4 @@
-package org.example.project
+package com.himanshoe.sample
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application

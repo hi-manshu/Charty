@@ -1,4 +1,4 @@
-package org.example.project
+package com.himanshoe.sample
 
 interface Platform {
     val name: String

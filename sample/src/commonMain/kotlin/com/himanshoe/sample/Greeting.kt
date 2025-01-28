@@ -1,4 +1,4 @@
-package org.example.project
+package com.himanshoe.sample
 
 class Greeting {
     private val platform = getPlatform()

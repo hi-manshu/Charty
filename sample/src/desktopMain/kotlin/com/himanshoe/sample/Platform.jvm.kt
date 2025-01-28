@@ -1,4 +1,4 @@
-package org.example.project
+package com.himanshoe.sample
 
 class JVMPlatform: Platform {
     override val name: String = "Java ${System.getProperty("java.version")}"

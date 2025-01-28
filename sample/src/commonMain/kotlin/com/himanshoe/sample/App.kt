@@ -1,4 +1,4 @@
-package org.example.project
+package com.himanshoe.sample
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
