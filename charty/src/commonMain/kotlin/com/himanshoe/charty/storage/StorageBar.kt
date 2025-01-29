@@ -1,4 +1,4 @@
-package com.himanshoe.charty.stockageBar
+package com.himanshoe.charty.storage
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.util.fastForEachIndexed
-import com.himanshoe.charty.stockageBar.model.StorageData
+import com.himanshoe.charty.storage.model.StorageData
 
 /**
  * A composable function that displays a storage bar with a single track color.

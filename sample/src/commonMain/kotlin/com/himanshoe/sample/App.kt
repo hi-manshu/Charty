@@ -21,11 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import com.himanshoe.charty.bar.BarChart
 import com.himanshoe.charty.bar.LineBarChart
+import com.himanshoe.charty.bar.ScrollableBarChart
 import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.model.BarData
-import com.himanshoe.charty.signalProgressBar.SignalProgressBarChart
-import com.himanshoe.charty.stockageBar.StorageBar
-import com.himanshoe.charty.stockageBar.model.StorageData
+import com.himanshoe.charty.signalProgress.SignalProgressBarChart
+import com.himanshoe.charty.storage.StorageBar
+import com.himanshoe.charty.storage.model.StorageData
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.random.Random
 
@@ -47,6 +48,9 @@ fun App() {
 
 
 private fun LazyListScope.addStorageBarChart() {
+    item {
+        ScrollableBarChart()
+    }
     item {
         Column(modifier = Modifier.fillParentMaxWidth().padding(vertical = 4.dp)) {
             val data = generateMockStorageCategories()
