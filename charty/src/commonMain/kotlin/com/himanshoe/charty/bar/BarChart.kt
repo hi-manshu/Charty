@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -32,8 +33,8 @@ import com.himanshoe.charty.bar.config.BarChartConfig
 import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.common.LabelConfig
-import com.himanshoe.charty.common.drawAxisLine
-import com.himanshoe.charty.common.drawRangeLines
+import com.himanshoe.charty.common.drawAxisLineForVerticalChart
+import com.himanshoe.charty.common.drawRangeLinesForVerticalChart
 import kotlin.math.absoluteValue
 
 @Composable
@@ -70,10 +71,10 @@ private fun BarChartContent(
     barChartColorConfig: BarChartColorConfig = BarChartColorConfig.default(),
     onBarClick: (Int, BarData) -> Unit = { _, _ -> },
 ) {
-    val maxValue = data.maxOfOrNull { it.yValue.absoluteValue } ?: 0f
-    val minValue = data.minOfOrNull { it.yValue.absoluteValue } ?: 0f
-    val hasNegativeValues = data.any { it.yValue < 0 }
-    val displayData = getDisplayData(data = data, minimumBarCount = barChartConfig.minimumBarCount)
+    val maxValue = remember(data) { data.maxOfOrNull { it.yValue.absoluteValue } ?: 0f }
+    val minValue = remember(data) { data.minOfOrNull { it.yValue.absoluteValue } ?: 0f }
+    val hasNegativeValues = remember(data) { data.any { it.yValue < 0 } }
+    val displayData = remember(data) { getDisplayData(data, barChartConfig.minimumBarCount) }
     val canDrawNegativeChart = hasNegativeValues && barChartConfig.drawNegativeValueChart
     val textMeasurer = rememberTextMeasurer()
     val bottomPadding = if (labelConfig.showLabel && !hasNegativeValues) 8.dp else 0.dp
@@ -134,7 +135,7 @@ private fun BarChartContent(
                 if (barData.yValue < 0) {
                     barChartColorConfig.negativeGradientBarColors
                 } else {
-                    barChartColorConfig.defaultGradientBarColors
+                    barChartColorConfig.fillGradientColors
                 }
             } else {
                 listOf(barData.barColor, barData.barColor)
@@ -293,7 +294,7 @@ internal fun BarChartCanvasScaffold(
         modifier = modifier
             .then(
                 if (showAxisLines) {
-                    Modifier.drawAxisLine(
+                    Modifier.drawAxisLineForVerticalChart(
                         hasNegativeValues = canDrawNegativeChart,
                         axisLineColor = axisLineColor,
                     )
@@ -302,7 +303,7 @@ internal fun BarChartCanvasScaffold(
                 },
             ).then(
                 if (showRangeLines) {
-                    Modifier.drawRangeLines(
+                    Modifier.drawRangeLinesForVerticalChart(
                         hasNegativeValues = canDrawNegativeChart,
                         rangeLineColor = rangeLineColor,
                     )

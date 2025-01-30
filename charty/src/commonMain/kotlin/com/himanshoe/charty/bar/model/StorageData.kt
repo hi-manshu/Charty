@@ -1,4 +1,4 @@
-package com.himanshoe.charty.storage.model
+package com.himanshoe.charty.bar.model
 
 import androidx.compose.ui.graphics.Color
 

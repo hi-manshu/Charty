@@ -1,5 +1,6 @@
 package com.himanshoe.sample
 
+import HorizontalBarChart
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,12 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import com.himanshoe.charty.bar.BarChart
 import com.himanshoe.charty.bar.LineBarChart
-import com.himanshoe.charty.bar.ScrollableBarChart
 import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.model.BarData
-import com.himanshoe.charty.signalProgress.SignalProgressBarChart
-import com.himanshoe.charty.storage.StorageBar
-import com.himanshoe.charty.storage.model.StorageData
+import com.himanshoe.charty.bar.SignalProgressBarChart
+import com.himanshoe.charty.bar.StorageBar
+import com.himanshoe.charty.bar.model.StorageData
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.random.Random
 
@@ -35,9 +35,10 @@ import kotlin.random.Random
 @Preview
 fun App() {
     LazyColumn {
+        addHorizontalBarChart()
         addStorageBarChart()
         addSignalBarChart()
-        addLineBarChart(3F, generateSampleData())
+        addLineBarChart(3F, generateMockBarData(7))
         addLineBarChart(null, generateMockBarData(7))
         addBarChart(2F, generateMockBarData(11))
         addBarChart(null, generateMockBarData(7, false))
@@ -47,10 +48,41 @@ fun App() {
 }
 
 
-private fun LazyListScope.addStorageBarChart() {
+private fun LazyListScope.addHorizontalBarChart() {
     item {
-        ScrollableBarChart()
+        HorizontalBarChart(
+            data = generateMockBarData(7, useColor = false),
+            modifier = Modifier
+                .fillParentMaxWidth()
+                .height(300.dp)
+                .padding(all = 20.dp)
+
+        )
     }
+    item {
+        HorizontalBarChart(
+            data = generateMockBarData(7, useColor = false, hasNegative = false),
+            modifier = Modifier.padding(all = 20.dp)
+                .fillParentMaxWidth()
+                .height(300.dp)
+                .padding(all = 20.dp)
+
+        )
+    }
+    item {
+        HorizontalBarChart(
+            data = generateAllNegativeBarData(7, useColor = false),
+            modifier = Modifier
+                .padding(all = 20.dp)
+                .fillParentMaxWidth()
+                .height(300.dp)
+                .padding(all = 20.dp)
+
+        )
+    }
+}
+
+private fun LazyListScope.addStorageBarChart() {
     item {
         Column(modifier = Modifier.fillParentMaxWidth().padding(vertical = 4.dp)) {
             val data = generateMockStorageCategories()
@@ -114,7 +146,7 @@ private fun LazyListScope.addLineBarChart(target: Float?, data: List<BarData>) {
                 .fillMaxWidth()
                 .height(300.dp),
             barChartColorConfig = BarChartColorConfig(
-                defaultGradientBarColors = listOf(Color.Blue, Color.Green),
+                fillGradientColors = listOf(Color.Blue, Color.Green),
                 negativeGradientBarColors = listOf(Color.Gray, Color.Black)
             ),
             data = data,
@@ -130,7 +162,7 @@ private fun LazyListScope.addBarChart(target: Float?, data: List<BarData>) {
             .height(300.dp),
             target = target,
             barChartColorConfig = BarChartColorConfig(
-                defaultGradientBarColors = listOf(Color.Blue, Color.Green),
+                fillGradientColors = listOf(Color.Blue, Color.Green),
                 negativeGradientBarColors = listOf(Color.Gray, Color.Black)
             ),
             data = data,
@@ -163,9 +195,38 @@ fun generateMockBarData(
     )
 
     val number = if (hasNegative) -10 else 0
-    return List(size) {
+    val data = List(size) {
         BarData(
             yValue = Random.nextFloat() * 20 + number, // Random value between -10 and 10
+            xValue = days[it % days.size],
+            barColor = if (useColor) colors[it % colors.size] else Color.Unspecified
+        )
+    }.toMutableList()
+
+    // Ensure one value is always 0
+    if (data.isNotEmpty()) {
+        val zeroIndex = Random.nextInt(size)
+        data[zeroIndex] = data[zeroIndex].copy(yValue = 0f)
+    }
+
+    return data
+}
+
+fun generateAllNegativeBarData(size: Int, useColor: Boolean = true): List<BarData> {
+    val days = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+    val colors = listOf(
+        Color.Red,
+        Color.Green,
+        Color.Blue,
+        Color.Yellow,
+        Color.DarkGray,
+        Color.Magenta,
+        Color.Cyan
+    )
+
+    return List(size) {
+        BarData(
+            yValue = -(Random.nextFloat() * 20), // Random negative value between -20 and 0
             xValue = days[it % days.size],
             barColor = if (useColor) colors[it % colors.size] else Color.Unspecified
         )

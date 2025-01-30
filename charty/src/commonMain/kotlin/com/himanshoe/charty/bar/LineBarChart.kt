@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -67,7 +68,7 @@ private fun LineBarChartContent(
     val minValue = data.minOfOrNull { it.yValue.absoluteValue } ?: 0f
     val maxValue = data.maxOfOrNull { it.yValue.absoluteValue } ?: 0f
     val hasNegativeValues = data.any { it.yValue < 0 }
-    val displayData = getDisplayData(data = data, minimumBarCount = barChartConfig.minimumBarCount)
+    val displayData = remember(data) { getDisplayData(data, barChartConfig.minimumBarCount) }
     val canDrawNegativeChart = hasNegativeValues && barChartConfig.drawNegativeValueChart
     val textMeasurer = rememberTextMeasurer()
     val bottomPadding = if (labelConfig.showLabel && !hasNegativeValues) 8.dp else 0.dp
@@ -113,7 +114,7 @@ private fun LineBarChartContent(
                 if (barData.yValue < 0) {
                     barChartColorConfig.negativeGradientBarColors
                 } else {
-                    barChartColorConfig.defaultGradientBarColors
+                    barChartColorConfig.fillGradientColors
                 }
             } else {
                 listOf(barData.barColor, barData.barColor)

@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.PathEffect
  * @param hasNegativeValues A boolean indicating whether the data contains negative values.
  * @return A Modifier with the axis lines drawn.
  */
-fun Modifier.drawAxisLine(
+fun Modifier.drawAxisLineForVerticalChart(
     hasNegativeValues: Boolean = true,
     axisLineColor: Color,
 ): Modifier =
@@ -50,7 +50,7 @@ fun Modifier.drawAxisLine(
  * @param hasNegativeValues A boolean indicating whether the data contains negative values.
  * @return A Modifier with the range lines drawn.
  */
-fun Modifier.drawRangeLines(
+fun Modifier.drawRangeLinesForVerticalChart(
     hasNegativeValues: Boolean = true,
     rangeLineColor: Color,
 ): Modifier =

@@ -1,4 +1,4 @@
-package com.himanshoe.charty.signalProgress
+package com.himanshoe.charty.bar
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Canvas

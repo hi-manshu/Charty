@@ -3,7 +3,7 @@ package com.himanshoe.charty.bar.config
 import androidx.compose.ui.graphics.Color
 
 data class BarChartColorConfig(
-    val defaultGradientBarColors: List<Color>,
+    val fillGradientColors: List<Color>,
     val negativeGradientBarColors: List<Color>,
     val barBackgroundColor: Color = Color(0xD3D3D350),
     val gridLineColor: Color = Color(0xFFD3D3DE),
@@ -12,15 +12,13 @@ data class BarChartColorConfig(
     companion object {
         fun default() =
             BarChartColorConfig(
-                defaultGradientBarColors =
-                listOf(
-                    Color.Blue,
-                    Color.Green,
+                fillGradientColors = listOf(
+                    Color(0xFFD9A7C7),
+                    Color(0xFFFFFCDC),
                 ),
-                negativeGradientBarColors =
-                listOf(
-                    Color.Red,
-                    Color.Black,
+                negativeGradientBarColors = listOf(
+                    Color(0xFFCB356B),
+                    Color(0xFFBD3F32),
                 ),
             )
     }
