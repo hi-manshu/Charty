@@ -23,6 +23,16 @@ import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.common.*
 import kotlin.math.absoluteValue
 
+/**
+ * A composable function that displays a horizontal bar chart.
+ *
+ * @param data The list of `BarData` objects representing the data to be displayed in the chart.
+ * @param modifier The modifier to be applied to the chart.
+ * @param barChartConfig The configuration for the bar chart, including settings like minimum bar count, axis lines, and grid lines.
+ * @param barChartColorConfig The color configuration for the bar chart, including colors for the bars, axis lines, and grid lines.
+ * @param horizontalBarLabelConfig The configuration for the labels on the horizontal bars, including text colors and background colors.
+ * @param onBarClick A lambda function to handle click events on the bars. It receives the clicked `BarData` as a parameter.
+ */
 @Composable
 fun HorizontalBarChart(
     data: List<BarData>,
@@ -71,7 +81,7 @@ private fun HorizontalBarChartContent(
                     onDragEnd = { clickedOffSet = null }
                 )
             }
-            .pointerInput(data){
+            .pointerInput(data) {
                 detectTapGestures(
                     onPress = { offset ->
                         clickedOffSet = offset
