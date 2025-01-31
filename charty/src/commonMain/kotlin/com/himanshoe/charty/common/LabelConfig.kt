@@ -4,12 +4,14 @@ import androidx.compose.ui.graphics.Color
 
 data class LabelConfig(
     val textColor: Color,
-    val showLabel: Boolean,
+    val showXLabel: Boolean,
+    val showYLabel: Boolean,
 ) {
     companion object {
         fun default() = LabelConfig(
             textColor = Color.Black,
-            showLabel = true,
+            showXLabel = true,
+            showYLabel = true,
         )
     }
 }

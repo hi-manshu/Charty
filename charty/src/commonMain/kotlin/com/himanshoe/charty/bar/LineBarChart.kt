@@ -33,7 +33,7 @@ import kotlin.math.absoluteValue
 
 @Composable
 fun LineBarChart(
-    data: List<BarData>,
+    data: ()-> List<BarData>,
     modifier: Modifier = Modifier,
     target: Float? = null,
     targetConfig: TargetConfig = TargetConfig.default(),
@@ -56,7 +56,7 @@ fun LineBarChart(
 
 @Composable
 private fun LineBarChartContent(
-    data: List<BarData>,
+    data: ()-> List<BarData>,
     modifier: Modifier = Modifier,
     target: Float? = null,
     targetConfig: TargetConfig = TargetConfig.default(),
@@ -65,38 +65,33 @@ private fun LineBarChartContent(
     barChartColorConfig: BarChartColorConfig = BarChartColorConfig.default(),
     onBarClick: (Int, BarData) -> Unit = { _, _ -> },
 ) {
-    val minValue = data.minOfOrNull { it.yValue.absoluteValue } ?: 0f
-    val maxValue = data.maxOfOrNull { it.yValue.absoluteValue } ?: 0f
-    val hasNegativeValues = data.any { it.yValue < 0 }
-    val displayData = remember(data) { getDisplayData(data, barChartConfig.minimumBarCount) }
+    val minValue = data().minOfOrNull { it.yValue.absoluteValue } ?: 0f
+    val maxValue = data().maxOfOrNull { it.yValue.absoluteValue } ?: 0f
+    val hasNegativeValues = data().any { it.yValue < 0 }
+    val displayData = remember(data()) { getDisplayData(data(), barChartConfig.minimumBarCount) }
     val canDrawNegativeChart = hasNegativeValues && barChartConfig.drawNegativeValueChart
     val textMeasurer = rememberTextMeasurer()
-    val bottomPadding = if (labelConfig.showLabel && !hasNegativeValues) 8.dp else 0.dp
+    val bottomPadding = if (labelConfig.showXLabel && !hasNegativeValues) 8.dp else 0.dp
+    val leftPadding = if (labelConfig.showYLabel) 24.dp else 0.dp
 
-    var clickedOffSet by mutableStateOf(Offset.Zero)
+    var clickedOffset by mutableStateOf(Offset.Zero)
     var clickedBarIndex by mutableIntStateOf(-1)
 
     BarChartCanvasScaffold(
-        modifier = modifier.padding(bottom = bottomPadding),
+        modifier = modifier.padding(bottom = bottomPadding, start = leftPadding),
         showAxisLines = barChartConfig.showAxisLines,
         showRangeLines = barChartConfig.showGridLines,
         axisLineColor = barChartColorConfig.axisLineColor,
         rangeLineColor = barChartColorConfig.gridLineColor,
         canDrawNegativeChart = canDrawNegativeChart,
-        onClick = { clickedOffSet = it },
-        displayDataCount = displayData.count(),
+        onClick = { clickedOffset = it },
+        data = data
     ) { canvasHeight, _, barWidth ->
-        if (target != null) {
-            require(target in minValue..maxValue) { "Target value should be between $minValue and $maxValue" }
-            // Calculate the position of the range buffer line
-            val targetLineY = if (hasNegativeValues) {
-                canvasHeight / 2
-            } else {
-                canvasHeight
-            }
-            val targetLineYPosition = targetLineY - (target / maxValue) * targetLineY
-            // Draw the target line
-            val brush = if (targetConfig.targetLineGradientBarColors.count() == 1) {
+        target?.let {
+            require(it in minValue..maxValue) { "Target value should be between $minValue and $maxValue" }
+            val targetLineY = if (hasNegativeValues) canvasHeight / 2 else canvasHeight
+            val targetLineYPosition = targetLineY - (it / maxValue) * targetLineY
+            val brush = if (targetConfig.targetLineGradientBarColors.size == 1) {
                 SolidColor(targetConfig.targetLineGradientBarColors.first())
             } else {
                 Brush.linearGradient(targetConfig.targetLineGradientBarColors)
@@ -109,68 +104,37 @@ private fun LineBarChartContent(
                 pathEffect = targetConfig.pathEffect
             )
         }
+
         displayData.fastForEachIndexed { index, barData ->
             val color = if (barData.barColor == Color.Unspecified) {
-                if (barData.yValue < 0) {
-                    barChartColorConfig.negativeGradientBarColors
-                } else {
-                    barChartColorConfig.fillGradientColors
-                }
+                if (barData.yValue < 0) barChartColorConfig.negativeGradientBarColors else barChartColorConfig.fillGradientColors
             } else {
                 listOf(barData.barColor, barData.barColor)
             }
             val height = barData.yValue / maxValue * canvasHeight
             val maxHeight = maxValue / maxValue * canvasHeight
+            val yAxis = canvasHeight / 2
             val topLeftY = if (canDrawNegativeChart) {
-                val yAxis = canvasHeight / 2
-                if (barData.yValue < 0) {
-                    yAxis
-                } else {
-                    yAxis - height / 2
-                }
+                if (barData.yValue < 0) yAxis else yAxis - height / 2
             } else {
                 canvasHeight - height
             }
             val backgroundTopLeftY = if (canDrawNegativeChart) {
-                val yAxis = canvasHeight / 2
-                if (barData.yValue < 0) {
-                    yAxis
-                } else {
-                    yAxis - maxHeight / 2
-                }
+                if (barData.yValue < 0) yAxis else yAxis - maxHeight / 2
             } else {
                 canvasHeight - maxHeight
             }
 
             val individualBarTopLeft = Offset(
-                x = index * barWidth + (barWidth - barWidth / 3) / 2, // Center the line within the bar width
-                y = if (barData.yValue < 0) {
-                    topLeftY
-                } else {
-                    topLeftY - if (clickedBarIndex == index) {
-                        (height.absoluteValue * 0.02F / (if (canDrawNegativeChart) 2 else 1))
-                    } else {
-                        0f
-                    }
-                }
+                x = index * barWidth + (barWidth - barWidth / 3) / 2,
+                y = if (barData.yValue < 0) topLeftY else topLeftY - if (clickedBarIndex == index) (height.absoluteValue * 0.02F / (if (canDrawNegativeChart) 2 else 1)) else 0f
             )
 
             val individualBarRectSize = Size(
-                width = barWidth / 3, // Set the width to one-third of the bar width
-                height = if (clickedBarIndex == index) {
-                    height.absoluteValue * 1.02F / (if (canDrawNegativeChart) 2 else 1)
-                } else {
-                    height.absoluteValue / (if (canDrawNegativeChart) 2 else 1)
-                }
+                width = barWidth / 3,
+                height = if (clickedBarIndex == index) height.absoluteValue * 1.02F / (if (canDrawNegativeChart) 2 else 1) else height.absoluteValue / (if (canDrawNegativeChart) 2 else 1)
             )
-            val cornerRadius = if (barChartConfig.showCurvedBar) {
-                CornerRadius(
-                    x = barWidth / 2,
-                    y = barWidth / 2,
-                )
-            } else {
-                CornerRadius.Zero
-            }
+            val cornerRadius = if (barChartConfig.showCurvedBar) CornerRadius(barWidth / 2, barWidth / 2) else CornerRadius.Zero
             val textCharCount = if (displayData.count() <= 7) 3 else 1
             val textSizeFactor = if (displayData.count() <= 13) 4 else 2
             val textLayoutResult = textMeasurer.measure(
@@ -185,12 +149,11 @@ private fun LineBarChartContent(
                 individualBarTopLeft.y + individualBarRectSize.height + 5
             }
 
-            if (isClickInsideBar(clickedOffSet, individualBarTopLeft, individualBarRectSize)) {
+            if (isClickInsideBar(clickedOffset, individualBarTopLeft, individualBarRectSize)) {
                 clickedBarIndex = index
                 onBarClick(index, barData)
             }
 
-            // Draw background bar only if its value is greater than 0
             if (barData.yValue != 0F) {
                 backgroundColorBar(
                     barData = barData,
@@ -213,17 +176,16 @@ private fun LineBarChartContent(
                         topRight = if (barData.yValue >= 0) cornerRadius else CornerRadius.Zero,
                         bottomLeft = if (barData.yValue < 0) cornerRadius else CornerRadius.Zero,
                         bottomRight = if (barData.yValue < 0) cornerRadius else CornerRadius.Zero
-
                     )
                 )
             }
             drawPath(path = path, brush = Brush.linearGradient(color))
-            if (labelConfig.showLabel) {
+            if (labelConfig.showXLabel) {
                 drawText(
                     textLayoutResult = textLayoutResult,
                     brush = SolidColor(labelConfig.textColor),
                     topLeft = Offset(
-                        x = individualBarTopLeft.x + individualBarRectSize.width / 2 - textLayoutResult.size.width / 2, // Center the text within the bar width
+                        x = individualBarTopLeft.x + individualBarRectSize.width / 2 - textLayoutResult.size.width / 2,
                         y = textOffsetY,
                     ),
                 )
@@ -244,11 +206,11 @@ private fun DrawScope.backgroundColorBar(
     drawRoundRect(
         color = barData.barBackgroundColor,
         topLeft = Offset(
-            x = index * (barWidth) + (barWidth - barWidth / 3) / 2, // Center the background bar within the bar width
+            x = index * barWidth + (barWidth - barWidth / 3) / 2,
             y = backgroundTopLeftY
         ),
         size = Size(
-            width = barWidth / 3, // Set the width to one-third of the bar width
+            width = barWidth / 3,
             height = if (canDrawNegativeChart) maxHeight.absoluteValue / 2 else maxHeight.absoluteValue
         ),
         cornerRadius = cornerRadius,

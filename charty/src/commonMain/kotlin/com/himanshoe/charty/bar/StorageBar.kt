@@ -32,7 +32,7 @@ import com.himanshoe.charty.bar.model.StorageData
  */
 @Composable
 fun StorageBar(
-    data: List<StorageData>,
+    data: () -> List<StorageData>,
     trackColor: Color = Color(0xD3D3D3DE),
     modifier: Modifier = Modifier,
     onClick: (StorageData) -> Unit = {}
@@ -55,7 +55,7 @@ fun StorageBar(
  */
 @Composable
 fun StorageBar(
-    data: List<StorageData>,
+    data: () -> List<StorageData>,
     trackColors: List<Color>,
     modifier: Modifier = Modifier,
     onClick: (StorageData) -> Unit = {}
@@ -70,7 +70,7 @@ fun StorageBar(
 
 @Composable
 private fun StorageBarContent(
-    data: List<StorageData>,
+    data: ()->List<StorageData>,
     trackColor: Brush,
     modifier: Modifier = Modifier,
     onClick: (StorageData) -> Unit = {}
@@ -85,9 +85,9 @@ private fun StorageBarContent(
         val totalWidth = size.width
         val totalHeight = size.height
         var currentOffset = 0f
-        val categoryWidths = data.map { it.value * totalWidth }
+        val categoryWidths = data().map { it.value * totalWidth }
 
-        data.fastForEachIndexed { index, category ->
+        data().fastForEachIndexed { index, category ->
             val categoryWidth = categoryWidths[index]
             val isFirst = index == 0
             val additionalHeight = if (clickedBarIndex == index) totalHeight * 0.05F else 0F

@@ -5,6 +5,12 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
 
 /**
  * Extension function to draw axis lines on a canvas.
@@ -41,6 +47,39 @@ fun Modifier.drawAxisLineForVerticalChart(
                 end = Offset(0f, canvasHeight),
                 strokeWidth = 2f,
             )
+        }
+    }
+
+fun Modifier.drawYAxisLabel(
+    minValue: Float,
+    step: Float,
+    maxValue: Float,
+    textMeasurer: TextMeasurer,
+    count: Int,
+    labelColor: Color = Color.Black,
+
+    ): Modifier =
+    this.drawWithCache {
+        onDrawBehind {
+            (0..4).forEach { i ->
+                val value = minValue + i * step
+                val displayValue = value.toString().take(4)
+                val y = size.height - ((value - minValue) / (maxValue - minValue)) * size.height
+                val textLayoutResult = textMeasurer.measure(
+                    text = displayValue,
+                    style = TextStyle(fontSize = (size.width / count / 10).sp),
+                    overflow = TextOverflow.Clip,
+                    maxLines = 1,
+                )
+                drawText(
+                    textLayoutResult = textLayoutResult,
+                    topLeft = Offset(
+                        -textLayoutResult.size.width - 8f,
+                        y - textLayoutResult.size.height / 2
+                    ),
+                    brush = SolidColor(labelColor)
+                )
+            }
         }
     }
 

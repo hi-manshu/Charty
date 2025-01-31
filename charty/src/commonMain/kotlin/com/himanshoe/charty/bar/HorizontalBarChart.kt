@@ -1,26 +1,39 @@
+package com.himanshoe.charty.bar
+
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.*
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.RoundRect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.rotate
-import androidx.compose.ui.hapticfeedback.HapticFeedback
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.text.*
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastForEachIndexed
-import com.himanshoe.charty.bar.config.*
-import com.himanshoe.charty.bar.getDisplayData
+import com.himanshoe.charty.bar.config.BarChartColorConfig
+import com.himanshoe.charty.bar.config.BarChartConfig
+import com.himanshoe.charty.bar.config.HorizontalBarLabelConfig
 import com.himanshoe.charty.bar.model.BarData
-import com.himanshoe.charty.common.*
+import com.himanshoe.charty.common.drawRangeLineForHorizontalChart
+import com.himanshoe.charty.common.drawYAxisLineForHorizontalChart
 import kotlin.math.absoluteValue
 
 /**
@@ -35,7 +48,7 @@ import kotlin.math.absoluteValue
  */
 @Composable
 fun HorizontalBarChart(
-    data: List<BarData>,
+    data: () -> List<BarData>,
     modifier: Modifier = Modifier,
     barChartConfig: BarChartConfig = BarChartConfig.default(),
     barChartColorConfig: BarChartColorConfig = BarChartColorConfig.default(),
@@ -54,19 +67,19 @@ fun HorizontalBarChart(
 
 @Composable
 private fun HorizontalBarChartContent(
-    data: List<BarData>,
+    data: () -> List<BarData>,
     modifier: Modifier = Modifier,
     barChartConfig: BarChartConfig = BarChartConfig.default(),
     barChartColorConfig: BarChartColorConfig = BarChartColorConfig.default(),
     horizontalBarLabelConfig: HorizontalBarLabelConfig = HorizontalBarLabelConfig.MultiColorConfig.default(),
     onBarClick: (BarData) -> Unit = {}
 ) {
-    val maxValue = remember(data) { data.maxOfOrNull { it.yValue.absoluteValue } ?: 0f }
-    val hasNegativeValues = remember(data) { data.any { it.yValue < 0 } }
-    val allNegativeValues = remember(data) { data.all { it.yValue < 0 } }
-    val allPositiveValues = remember(data) { data.all { it.yValue >= 0 } }
+    val maxValue = remember(data()) { data().maxOfOrNull { it.yValue.absoluteValue } ?: 0f }
+    val hasNegativeValues = remember(data()) { data().any { it.yValue < 0 } }
+    val allNegativeValues = remember(data()) { data().all { it.yValue < 0 } }
+    val allPositiveValues = remember(data()) { data().all { it.yValue >= 0 } }
 
-    val displayData = remember(data) { getDisplayData(data, barChartConfig.minimumBarCount) }
+    val displayData = remember(data) { getDisplayData(data(), barChartConfig.minimumBarCount) }
     var clickedOffSet by remember { mutableStateOf<Offset?>(null) }
     var clickedBarIndex by remember { mutableStateOf(-1) }
     val textMeasurer = rememberTextMeasurer()

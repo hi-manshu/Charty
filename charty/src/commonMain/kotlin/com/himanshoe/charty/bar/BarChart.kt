@@ -35,11 +35,12 @@ import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.common.drawAxisLineForVerticalChart
 import com.himanshoe.charty.common.drawRangeLinesForVerticalChart
+import com.himanshoe.charty.common.drawYAxisLabel
 import kotlin.math.absoluteValue
 
 @Composable
 fun BarChart(
-    data: List<BarData>,
+    data: () -> List<BarData>,
     modifier: Modifier = Modifier,
     target: Float? = null,
     targetConfig: TargetConfig = TargetConfig.default(),
@@ -62,7 +63,7 @@ fun BarChart(
 
 @Composable
 private fun BarChartContent(
-    data: List<BarData>,
+    data: () -> List<BarData>,
     modifier: Modifier = Modifier,
     target: Float? = null,
     targetConfig: TargetConfig = TargetConfig.default(),
@@ -71,39 +72,35 @@ private fun BarChartContent(
     barChartColorConfig: BarChartColorConfig = BarChartColorConfig.default(),
     onBarClick: (Int, BarData) -> Unit = { _, _ -> },
 ) {
-    val maxValue = remember(data) { data.maxOfOrNull { it.yValue.absoluteValue } ?: 0f }
-    val minValue = remember(data) { data.minOfOrNull { it.yValue.absoluteValue } ?: 0f }
-    val hasNegativeValues = remember(data) { data.any { it.yValue < 0 } }
-    val displayData = remember(data) { getDisplayData(data, barChartConfig.minimumBarCount) }
+    val maxValue = remember(data()) { data().maxOfOrNull { it.yValue.absoluteValue } ?: 0f }
+    val minValue = remember(data()) { data().minOfOrNull { it.yValue.absoluteValue } ?: 0f }
+    val hasNegativeValues = remember(data()) { data().any { it.yValue < 0 } }
+    val displayData = remember(data) { getDisplayData(data(), barChartConfig.minimumBarCount) }
     val canDrawNegativeChart = hasNegativeValues && barChartConfig.drawNegativeValueChart
     val textMeasurer = rememberTextMeasurer()
-    val bottomPadding = if (labelConfig.showLabel && !hasNegativeValues) 8.dp else 0.dp
+    val bottomPadding = if (labelConfig.showXLabel && !hasNegativeValues) 8.dp else 0.dp
+    val leftPadding = if (labelConfig.showYLabel) 24.dp else 0.dp
 
-    var clickedOffSet by mutableStateOf(Offset.Zero)
+    var clickedOffset by mutableStateOf(Offset.Zero)
     var clickedBarIndex by mutableIntStateOf(-1)
 
     BarChartCanvasScaffold(
-        modifier = modifier.padding(bottom = bottomPadding),
+        modifier = modifier.padding(bottom = bottomPadding, start = leftPadding),
         showAxisLines = barChartConfig.showAxisLines,
         showRangeLines = barChartConfig.showGridLines,
         axisLineColor = barChartColorConfig.axisLineColor,
         rangeLineColor = barChartColorConfig.gridLineColor,
         canDrawNegativeChart = canDrawNegativeChart,
-        onClick = { clickedOffSet = it },
-        displayDataCount = displayData.count(),
+        labelConfig = labelConfig,
+        onClick = { clickedOffset = it },
+        data = { displayData },
     ) { canvasHeight, gap, barWidth ->
 
-        if (target != null) {
-            require(target in minValue..maxValue) { "Target value should be between $minValue and $maxValue" }
-            // Calculate the position of the range buffer line
-            val targetLineY = if (hasNegativeValues) {
-                canvasHeight / 2
-            } else {
-                canvasHeight
-            }
-            val targetLineYPosition = targetLineY - (target / maxValue) * targetLineY
-            // Draw the target line
-            val brush = if (targetConfig.targetLineGradientBarColors.count() == 1) {
+        target?.let {
+            require(it in minValue..maxValue) { "Target value should be between $minValue and $maxValue" }
+            val targetLineY = if (hasNegativeValues) canvasHeight / 2 else canvasHeight
+            val targetLineYPosition = targetLineY - (it / maxValue) * targetLineY
+            val brush = if (targetConfig.targetLineGradientBarColors.size == 1) {
                 SolidColor(targetConfig.targetLineGradientBarColors.first())
             } else {
                 Brush.linearGradient(targetConfig.targetLineGradientBarColors)
@@ -116,52 +113,40 @@ private fun BarChartContent(
                 pathEffect = targetConfig.pathEffect
             )
         }
+
         displayData.fastForEachIndexed { index, barData ->
             val height = barData.yValue / maxValue * canvasHeight
             val maxHeight = maxValue / maxValue * canvasHeight
+            val yAxis = canvasHeight / 2
             val topLeftY = if (canDrawNegativeChart) {
-                val yAxis = canvasHeight / 2
                 if (barData.yValue < 0) yAxis else yAxis - height / 2
             } else {
                 canvasHeight - height
             }
             val backgroundTopLeftY = if (canDrawNegativeChart) {
-                val yAxis = canvasHeight / 2
                 if (barData.yValue < 0) yAxis else yAxis - maxHeight / 2
             } else {
                 canvasHeight - maxHeight
             }
             val color = if (barData.barColor == Color.Unspecified) {
-                if (barData.yValue < 0) {
-                    barChartColorConfig.negativeGradientBarColors
-                } else {
-                    barChartColorConfig.fillGradientColors
-                }
+                if (barData.yValue < 0) barChartColorConfig.negativeGradientBarColors else barChartColorConfig.fillGradientColors
             } else {
                 listOf(barData.barColor, barData.barColor)
             }
             val individualBarTopLeft = Offset(
                 x = index * (barWidth + gap) - if (clickedBarIndex == index) (barWidth * 0.02F) / 2 else 0f,
-                y = if (barData.yValue < 0) {
-                    topLeftY
-                } else {
-                    topLeftY - if (clickedBarIndex == index) (height.absoluteValue * 0.02F / (if (canDrawNegativeChart) 2 else 1)) else 0f
-                }
+                y = if (barData.yValue < 0) topLeftY else topLeftY - if (clickedBarIndex == index) (height.absoluteValue * 0.02F / (if (canDrawNegativeChart) 2 else 1)) else 0f
             )
             val individualBarRectSize = Size(
                 width = if (clickedBarIndex == index) barWidth * 1.02F else barWidth,
                 height = if (clickedBarIndex == index) height.absoluteValue * 1.02F / (if (canDrawNegativeChart) 2 else 1) else height.absoluteValue / (if (canDrawNegativeChart) 2 else 1)
             )
-            val cornerRadius = if (barChartConfig.showCurvedBar) {
-                CornerRadius(x = barWidth / 2, y = barWidth / 2)
-            } else {
-                CornerRadius.Zero
-            }
-            val textCharCount = if (barData.xValue.toString().length >= 3) {
-                if (displayData.count() <= 7) 3 else 1
-            } else {
-                1
-            }
+            val cornerRadius = if (barChartConfig.showCurvedBar) CornerRadius(
+                barWidth / 2,
+                barWidth / 2
+            ) else CornerRadius.Zero
+            val textCharCount =
+                if (barData.xValue.toString().length >= 3) if (displayData.count() <= 7) 3 else 1 else 1
             val textSizeFactor = if (displayData.count() <= 13) 4 else 2
             val textLayoutResult = textMeasurer.measure(
                 text = barData.xValue.toString().take(textCharCount),
@@ -175,12 +160,11 @@ private fun BarChartContent(
                 individualBarTopLeft.y + individualBarRectSize.height + 5
             }
 
-            if (isClickInsideBar(clickedOffSet, individualBarTopLeft, individualBarRectSize)) {
+            if (isClickInsideBar(clickedOffset, individualBarTopLeft, individualBarRectSize)) {
                 clickedBarIndex = index
                 onBarClick(index, barData)
             }
 
-            // Draw background bar only if its value is greater than 0
             if (barData.yValue != 0F) {
                 backgroundColorBar(
                     barData = barData,
@@ -208,10 +192,8 @@ private fun BarChartContent(
                 )
             }
             drawPath(path = path, brush = Brush.linearGradient(color))
-            if (labelConfig.showLabel) {
-                require(barData.xValue.toString().isNotEmpty()) {
-                    "X value should not be empty"
-                }
+            if (labelConfig.showXLabel) {
+                require(barData.xValue.toString().isNotEmpty()) { "X value should not be empty" }
                 drawText(
                     textLayoutResult = textLayoutResult,
                     brush = SolidColor(labelConfig.textColor),
@@ -284,12 +266,19 @@ internal fun BarChartCanvasScaffold(
     showAxisLines: Boolean = false,
     showRangeLines: Boolean = false,
     canDrawNegativeChart: Boolean = false,
-    displayDataCount: Int = 0,
     axisLineColor: Color = Color.Black,
+    labelConfig: LabelConfig = LabelConfig.default(),
     rangeLineColor: Color = Color.Gray,
+    data: () -> List<BarData> = { emptyList() },
     onClick: (Offset) -> Unit = {},
     content: DrawScope.(Float, Float, Float) -> Unit = { _, _, _ -> },
 ) {
+    val textMeasurer = rememberTextMeasurer()
+    // Calculate the range for labels from the data
+    val maxValue = data().maxOfOrNull { it.yValue } ?: 0f
+    val minValue = if (canDrawNegativeChart) data().minOfOrNull { it.yValue } ?: 0f else 0f
+    val step = (maxValue - minValue) / 4
+
     Canvas(
         modifier = modifier
             .then(
@@ -297,6 +286,20 @@ internal fun BarChartCanvasScaffold(
                     Modifier.drawAxisLineForVerticalChart(
                         hasNegativeValues = canDrawNegativeChart,
                         axisLineColor = axisLineColor,
+                    )
+                } else {
+                    Modifier
+                },
+            )
+            .then(
+                if (labelConfig.showYLabel) {
+                    Modifier.drawYAxisLabel(
+                        minValue = minValue,
+                        step = step,
+                        maxValue = maxValue,
+                        labelColor = labelConfig.textColor,
+                        textMeasurer = textMeasurer,
+                        count = data().count()
                     )
                 } else {
                     Modifier
@@ -310,12 +313,18 @@ internal fun BarChartCanvasScaffold(
                 } else {
                     Modifier
                 },
-            ).fillMaxSize()
+            )
+            .fillMaxSize()
             .pointerInput(Unit) { detectTapGestures { onClick(it) } },
     ) {
         val (canvasWidth, canvasHeight) = size
-        val gap = canvasWidth / (displayDataCount * 10)
-        val barWidth = (canvasWidth - gap * (displayDataCount - 1)) / displayDataCount
-        content(canvasHeight, gap, barWidth)
+        val gap = canvasWidth / (data().count() * 10)
+        val barWidth = (canvasWidth - gap * (data().count() - 1)) / data().count()
+
+        content(
+            canvasHeight,
+            gap,
+            barWidth
+        )
     }
 }
