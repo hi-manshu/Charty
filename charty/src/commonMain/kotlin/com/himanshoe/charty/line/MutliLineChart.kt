@@ -12,9 +12,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.common.LabelConfig
-import com.himanshoe.charty.line.config.LineChartColorConfig
 import com.himanshoe.charty.line.config.LineChartConfig
-import com.himanshoe.charty.line.model.LineData
 import com.himanshoe.charty.line.model.MultiLineData
 import com.himanshoe.charty.line.modifier.drawAxesAndGridLines
 
@@ -86,7 +84,7 @@ private fun MultiLineChartContent(
             .fillMaxSize()
             .padding(bottom = bottomPadding, start = leftPadding)
             .drawAxesAndGridLines(
-                lineData = multiLineData.flatMap { it.data },
+                data = multiLineData.flatMap { it.data },
                 colorConfig = multiLineData.first().colorConfig,
                 chartConfig = chartConfig,
                 textMeasurer = textMeasurer,

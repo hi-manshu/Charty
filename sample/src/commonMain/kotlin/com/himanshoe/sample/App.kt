@@ -26,7 +26,10 @@ import com.himanshoe.charty.bar.SignalProgressBarChart
 import com.himanshoe.charty.bar.StorageBar
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.StorageData
+import com.himanshoe.charty.point.PointChart
+import com.himanshoe.charty.point.model.PointData
 import com.himanshoe.charty.common.ChartColor
+import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.line.LineChart
 import com.himanshoe.charty.line.MultiLineChart
 import com.himanshoe.charty.line.config.LineChartColorConfig
@@ -40,6 +43,7 @@ import kotlin.random.Random
 @Preview
 fun App() {
     LazyColumn {
+        addCircleChart()
         addLineChart()
         addMultiLineChart()
         addBarChart(null, generateMockBarData(7, false, false))
@@ -55,35 +59,61 @@ fun App() {
 }
 
 
+private fun LazyListScope.addCircleChart() {
+    item {
+        val mockData = listOf(
+            PointData(xValue = "Mon", yValue = 10f),
+            PointData(xValue = "Tue", yValue = 20f),
+            PointData(xValue = "Wed", yValue = 15f),
+            PointData(xValue = "Thu", yValue = 25f),
+            PointData(xValue = "Fri", yValue = 30f),
+            PointData(xValue = "Mon", yValue = 10f),
+            PointData(xValue = "Tue", yValue = 20f),
+            PointData(xValue = "Wed", yValue = 15f),
+            PointData(xValue = "Thu", yValue = 25f),
+            PointData(xValue = "Fri", yValue = 30f),
+            PointData(xValue = "Fri", yValue = 30f),
+            PointData(xValue = "Mon", yValue = 10f),
+            PointData(xValue = "Tue", yValue = 20f),
+            PointData(xValue = "Wed", yValue = 15f),
+            PointData(xValue = "Thu", yValue = 25f),
+            PointData(xValue = "Fri", yValue = 30f),
+        )
+
+        PointChart(
+            data = { mockData },
+            modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
+            onPointClick = { index, circleData ->
+                println("Clicked on index: $index with data: $circleData")
+            },
+            labelConfig = LabelConfig.default().copy(showXLabel = true, showYLabel = false),
+        )
+    }
+
+}
+
 private fun LazyListScope.addMultiLineChart() {
     item {
         val xValues = listOf("Mon", "Tue", "Wed", "Thu", "Fri")
         val yValuesList = listOf(
-            listOf(0F, 5F, 2F, 11F, 3F),
-            listOf(10F, 5F, 12F, 11F, 30F)
+            listOf(0F, 5F, 2F, 11F, 3F), listOf(10F, 5F, 12F, 11F, 30F)
         )
         val colorConfigs = listOf(
             LineChartColorConfig.default().copy(
-                lineColor = ChartColor.Solid(Color.Red),
-                lineFillColor = ChartColor.Gradient(
+                lineColor = ChartColor.Solid(Color.Red), lineFillColor = ChartColor.Gradient(
                     listOf(Color(0xFFCB356B), Color(0xFFBD3F32))
                 )
-            ),
-            LineChartColorConfig.default().copy(
-                lineColor = ChartColor.Solid(Color.Blue),
-                lineFillColor = ChartColor.Gradient(
+            ), LineChartColorConfig.default().copy(
+                lineColor = ChartColor.Solid(Color.Blue), lineFillColor = ChartColor.Gradient(
                     listOf(Color(0xFF2193b0), Color(0xFF6dd5ed))
                 )
             )
         )
-        val mockData = generateMultiLineData(yValuesList, xValues,colorConfigs)
+        val mockData = generateMultiLineData(yValuesList, xValues, colorConfigs)
 
         MultiLineChart(
             data = { mockData },
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
-                .height(300.dp),
+            modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
             smoothLineCurve = true,
             showFilledArea = true,
             showLineStroke = true,
@@ -107,8 +137,7 @@ private fun LazyListScope.addLineChart() {
                     LineData(11F, "Thu"),
                     LineData(3F, "Fri")
                 )
-            },
-            modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp)
+            }, modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp)
         )
     }
 }
@@ -262,10 +291,9 @@ fun generateMockStorageCategories(): List<StorageData> {
         StorageData(name = "Music", value = 0.10f, color = Color(0xFF42275a)), // Green
     )
 }
+
 fun generateMultiLineData(
-    yValuesList: List<List<Float>>,
-    xValues: List<String>,
-    colorConfigs: List<LineChartColorConfig>
+    yValuesList: List<List<Float>>, xValues: List<String>, colorConfigs: List<LineChartColorConfig>
 ): List<MultiLineData> {
     require(yValuesList.all { it.size == xValues.size }) {
         "Each list of Y values must have the same size as the list of X values"
@@ -278,8 +306,7 @@ fun generateMultiLineData(
         MultiLineData(
             data = yValues.mapIndexed { i, yValue ->
                 LineData(yValue, xValues[i])
-            },
-            colorConfig = colorConfigs[index]
+            }, colorConfig = colorConfigs[index]
         )
     }
 }

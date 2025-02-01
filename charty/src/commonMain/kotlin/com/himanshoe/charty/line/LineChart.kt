@@ -115,7 +115,7 @@ private fun LineChartContent(
                 }
             }
             .drawAxesAndGridLines(
-                lineData = lineData,
+                data = lineData,
                 colorConfig = colorConfig,
                 chartConfig = chartConfig,
                 textMeasurer = textMeasurer,
@@ -224,6 +224,24 @@ internal fun DrawScope.drawLineCurve(
                 brush = Brush.linearGradient(lineColor.value),
                 style = Stroke(cap = chartConfig.lineCap, width = chartConfig.lineChartStrokeWidth)
             )
+        }
+
+        if (chartConfig.drawPointerCircle) {
+            // Draw circles with borders at each data point
+            lineData.forEachIndexed { index, lineDataPoint ->
+                val x = index * xStep
+                val y = canvasHeight - (lineDataPoint.yValue - minValue) * yScale
+                drawCircle(
+                    color = lineColor.value.first(),
+                    radius = 10f,
+                    center = Offset(x, y)
+                )
+                drawCircle(
+                    color = fillColor.value.first(),
+                    radius = 5f,
+                    center = Offset(x, y)
+                )
+            }
         }
     }
 }
