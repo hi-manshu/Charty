@@ -12,9 +12,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEachIndexed
 import com.himanshoe.charty.common.LabelConfig
-import com.himanshoe.charty.line.model.LineData
 import com.himanshoe.charty.line.config.LineChartColorConfig
 import com.himanshoe.charty.line.config.LineChartConfig
+import com.himanshoe.charty.line.model.LineData
 
 
 internal fun Modifier.drawAxesAndGridLines(

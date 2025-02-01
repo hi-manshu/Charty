@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.LabelConfig
+import com.himanshoe.charty.common.drawTargetLineIfNeeded
 import com.himanshoe.charty.line.config.LineChartColorConfig
 import com.himanshoe.charty.line.config.LineChartConfig
 import com.himanshoe.charty.line.model.LineData
@@ -126,15 +127,15 @@ private fun LineChartContent(
     ) {
         val (canvasWidth, canvasHeight) = size
         val xStep = canvasWidth / (lineData.size - 1)
-        target?.let {
-            val targetY = canvasHeight - (it - minValue) * (canvasHeight / yRange)
-            drawLine(
-                brush = Brush.linearGradient(targetConfig.targetLineBarColors.value),
-                start = Offset(0f, targetY),
-                end = Offset(canvasWidth, targetY),
-                strokeWidth = targetConfig.targetStrokeWidth
-            )
-        }
+        drawTargetLineIfNeeded(
+            target = target,
+            minValue = minValue,
+            yScale = canvasHeight / yRange,
+            canvasHeight = canvasHeight,
+            canvasWidth = canvasWidth,
+            targetConfig = targetConfig
+        )
+
         drawLineCurve(
             data = { lineData },
             canvasHeight = canvasHeight,

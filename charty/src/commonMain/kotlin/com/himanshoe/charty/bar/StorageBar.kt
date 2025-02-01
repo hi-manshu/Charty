@@ -70,7 +70,7 @@ fun StorageBar(
 
 @Composable
 private fun StorageBarContent(
-    data: ()->List<StorageData>,
+    data: () -> List<StorageData>,
     trackColor: Brush,
     modifier: Modifier = Modifier,
     onClick: (StorageData) -> Unit = {}

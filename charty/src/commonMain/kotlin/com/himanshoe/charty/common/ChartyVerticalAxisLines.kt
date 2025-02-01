@@ -61,7 +61,7 @@ fun Modifier.drawYAxisLabel(
     ): Modifier =
     this.drawWithCache {
         onDrawBehind {
-            (0..4).forEach { i ->
+            repeat(5) { i ->
                 val value = minValue + i * step
                 val displayValue = value.toString().take(4)
                 val y = size.height - ((value - minValue) / (maxValue - minValue)) * size.height

@@ -20,11 +20,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import com.himanshoe.charty.bar.BarChart
+import com.himanshoe.charty.bar.ComparisonBarChart
 import com.himanshoe.charty.bar.HorizontalBarChart
 import com.himanshoe.charty.bar.LineBarChart
 import com.himanshoe.charty.bar.SignalProgressBarChart
 import com.himanshoe.charty.bar.StorageBar
 import com.himanshoe.charty.bar.model.BarData
+import com.himanshoe.charty.bar.model.ComparisonBarData
 import com.himanshoe.charty.bar.model.StorageData
 import com.himanshoe.charty.point.PointChart
 import com.himanshoe.charty.point.model.PointData
@@ -43,9 +45,10 @@ import kotlin.random.Random
 @Preview
 fun App() {
     LazyColumn {
-        addCircleChart()
+        addComparisonChart()
         addLineChart()
         addMultiLineChart()
+        addCircleChart()
         addBarChart(null, generateMockBarData(7, false, false))
         addHorizontalBarChart()
         addStorageBarChart()
@@ -58,6 +61,63 @@ fun App() {
 
 }
 
+
+private fun LazyListScope.addComparisonChart() {
+    item {
+        val barColors = listOf(
+            ChartColor.Gradient(
+                listOf(Color(0xFF2193b0).copy(0.1F), Color(0xFF6dd5ed))
+            ),
+            ChartColor.Gradient(
+                listOf(
+                    Color(0xFFCB356B).copy(0.1F),
+                    Color(0xFFBD3F32),
+                )
+            ),
+            ChartColor.Gradient(
+                listOf(
+                    Color(0xFFFFFFFF).copy(alpha = 0.3f),
+                    Color(0xFFff6a00).copy(alpha = 0.3f)
+                )
+            )
+        )
+        val mockData = listOf(
+            ComparisonBarData(
+                label = "Category 1",
+                bars = listOf(45f, 70f, 30f),
+                colors = barColors
+            ),
+            ComparisonBarData(
+                label = "Category 2",
+                bars = listOf(80f, 60f, 90f),
+                colors = barColors
+            ),
+            ComparisonBarData(
+                label = "Category 3",
+                bars = listOf(40f, 20f, 50f),
+                colors = barColors
+            ),
+            ComparisonBarData(
+                label = "Category 4",
+                bars = listOf(40f, 20f),
+                colors = barColors.take(2)
+
+            ),
+            ComparisonBarData(
+                label = "Category 5",
+                bars = listOf(40f, 20f, 50f),
+                colors = barColors
+            )
+        )
+
+        ComparisonBarChart(data = { mockData },
+            modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
+            onBarClick = { index ->
+                println("Category $index clicked")
+            })
+    }
+
+}
 
 private fun LazyListScope.addCircleChart() {
     item {
@@ -82,6 +142,7 @@ private fun LazyListScope.addCircleChart() {
 
         PointChart(
             data = { mockData },
+            target = 18f,
             modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
             onPointClick = { index, circleData ->
                 println("Clicked on index: $index with data: $circleData")

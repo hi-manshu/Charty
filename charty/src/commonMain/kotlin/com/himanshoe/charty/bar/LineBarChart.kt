@@ -103,7 +103,7 @@ private fun LineBarChartContent(
             require(it in minValue..maxValue) { "Target value should be between $minValue and $maxValue" }
             val targetLineY = if (hasNegativeValues) canvasHeight / 2 else canvasHeight
             val targetLineYPosition = targetLineY - (it / maxValue) * targetLineY
-            val brush =  Brush.linearGradient(targetConfig.targetLineBarColors.value)
+            val brush = Brush.linearGradient(targetConfig.targetLineBarColors.value)
             drawLine(
                 brush = brush,
                 start = Offset(0f, targetLineYPosition),

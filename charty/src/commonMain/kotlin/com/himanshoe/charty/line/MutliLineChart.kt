@@ -6,12 +6,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.common.LabelConfig
+import com.himanshoe.charty.common.drawTargetLineIfNeeded
 import com.himanshoe.charty.line.config.LineChartConfig
 import com.himanshoe.charty.line.model.MultiLineData
 import com.himanshoe.charty.line.modifier.drawAxesAndGridLines
@@ -111,14 +110,13 @@ private fun MultiLineChartContent(
                 smoothLineCurve = smoothLineCurve
             )
         }
-        target?.let {
-            val targetY = canvasHeight - (it - minValue) * (canvasHeight / yRange)
-            drawLine(
-                brush = Brush.linearGradient(targetConfig.targetLineBarColors.value),
-                start = Offset(0f, targetY),
-                end = Offset(canvasWidth, targetY),
-                strokeWidth = targetConfig.targetStrokeWidth
-            )
-        }
+        drawTargetLineIfNeeded(
+            target = target,
+            minValue = minValue,
+            yScale = canvasHeight / yRange,
+            canvasHeight = canvasHeight,
+            canvasWidth = size.width,
+            targetConfig = targetConfig
+        )
     }
 }

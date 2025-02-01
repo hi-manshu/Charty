@@ -129,10 +129,16 @@ private fun HorizontalBarChartContent(
             val color = getBarColor(barData = barData, barChartColorConfig = barChartColorConfig)
             val barSize = Size(width = barWidth + additionalWidth, height = barHeight - gap)
 
+            val brush = Brush.linearGradient(
+                colors = color,
+                start = Offset(topLeftX, topLeftY),
+                end = Offset(topLeftX + barSize.width, topLeftY + barSize.height)
+            )
+
             drawBar(
                 topLeft = Offset(topLeftX, topLeftY),
                 size = barSize,
-                colors = color,
+                brush = brush,
                 showCurvedBar = barChartConfig.showCurvedBar,
                 isNegative = barData.yValue < 0,
                 allNegativeValues = allNegativeValues,
@@ -164,6 +170,36 @@ private fun HorizontalBarChartContent(
             }
         }
     }
+}
+
+private fun DrawScope.drawBar(
+    topLeft: Offset,
+    size: Size,
+    brush: Brush,
+    isNegative: Boolean,
+    allNegativeValues: Boolean,
+    allPositiveValues: Boolean,
+    showCurvedBar: Boolean,
+) {
+    val cornerRadius = if (showCurvedBar) {
+        CornerRadius(
+            x = size.height / 2, y = size.height / 2
+        )
+    } else {
+        CornerRadius.Zero
+    }
+    val path = Path().apply {
+        addRoundRect(
+            RoundRect(
+                rect = Rect(topLeft, size),
+                topLeft = if (isNegative && !allNegativeValues) cornerRadius else CornerRadius.Zero,
+                bottomLeft = if (isNegative && !allNegativeValues) cornerRadius else CornerRadius.Zero,
+                topRight = if (!isNegative || allPositiveValues || allNegativeValues) cornerRadius else CornerRadius.Zero,
+                bottomRight = if (!isNegative || allPositiveValues || allNegativeValues) cornerRadius else CornerRadius.Zero
+            )
+        )
+    }
+    drawPath(path = path, brush = brush)
 }
 
 private fun calculateBarDimensions(

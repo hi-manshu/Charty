@@ -11,10 +11,10 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEachIndexed
+import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.point.model.PointChartColorConfig
 import com.himanshoe.charty.point.model.PointChartConfig
 import com.himanshoe.charty.point.model.PointData
-import com.himanshoe.charty.common.LabelConfig
 
 internal fun Modifier.drawAxesAndGridLines(
     data: List<PointData>,

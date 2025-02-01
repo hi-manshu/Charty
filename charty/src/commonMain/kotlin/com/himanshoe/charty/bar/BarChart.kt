@@ -32,7 +32,6 @@ import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.config.BarChartConfig
 import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.bar.model.BarData
-import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.common.drawAxisLineForVerticalChart
 import com.himanshoe.charty.common.drawRangeLinesForVerticalChart
@@ -200,7 +199,15 @@ private fun BarChartContent(
                     )
                 )
             }
-            drawPath(path = path, brush = Brush.linearGradient(color))
+            val brush = Brush.linearGradient(
+                colors = color,
+                start = Offset(individualBarTopLeft.x, individualBarTopLeft.y),
+                end = Offset(
+                    individualBarTopLeft.x + individualBarRectSize.width,
+                    individualBarTopLeft.y + individualBarRectSize.height
+                )
+            )
+            drawPath(path = path, brush = brush)
             if (labelConfig.showXLabel) {
                 require(barData.xValue.toString().isNotEmpty()) { "X value should not be empty" }
                 drawText(
