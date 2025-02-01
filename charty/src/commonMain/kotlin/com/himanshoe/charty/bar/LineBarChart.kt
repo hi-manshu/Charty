@@ -31,9 +31,21 @@ import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.common.LabelConfig
 import kotlin.math.absoluteValue
 
+/**
+ * A composable function that displays a line bar chart.
+ *
+ * @param data A lambda function that returns a list of `BarData` representing the data points for the bar chart.
+ * @param modifier A `Modifier` for customizing the layout or drawing behavior of the chart.
+ * @param target An optional target value to be displayed on the chart.
+ * @param targetConfig A `TargetConfig` object for configuring the appearance of the target line.
+ * @param barChartConfig A `BarChartConfig` object for configuring the chart's appearance and behavior.
+ * @param labelConfig A `LabelConfig` object for configuring the labels on the chart.
+ * @param barChartColorConfig A `BarChartColorConfig` object for configuring the colors of the bars, axis lines, and grid lines.
+ * @param onBarClick A lambda function to handle click events on the bars. It receives the index of the clicked bar and the corresponding `BarData` as parameters.
+ */
 @Composable
 fun LineBarChart(
-    data: ()-> List<BarData>,
+    data: () -> List<BarData>,
     modifier: Modifier = Modifier,
     target: Float? = null,
     targetConfig: TargetConfig = TargetConfig.default(),
@@ -56,7 +68,7 @@ fun LineBarChart(
 
 @Composable
 private fun LineBarChartContent(
-    data: ()-> List<BarData>,
+    data: () -> List<BarData>,
     modifier: Modifier = Modifier,
     target: Float? = null,
     targetConfig: TargetConfig = TargetConfig.default(),
@@ -91,16 +103,12 @@ private fun LineBarChartContent(
             require(it in minValue..maxValue) { "Target value should be between $minValue and $maxValue" }
             val targetLineY = if (hasNegativeValues) canvasHeight / 2 else canvasHeight
             val targetLineYPosition = targetLineY - (it / maxValue) * targetLineY
-            val brush = if (targetConfig.targetLineGradientBarColors.size == 1) {
-                SolidColor(targetConfig.targetLineGradientBarColors.first())
-            } else {
-                Brush.linearGradient(targetConfig.targetLineGradientBarColors)
-            }
+            val brush =  Brush.linearGradient(targetConfig.targetLineBarColors.value)
             drawLine(
                 brush = brush,
                 start = Offset(0f, targetLineYPosition),
                 end = Offset(size.width, targetLineYPosition),
-                strokeWidth = targetConfig.targetWidth,
+                strokeWidth = targetConfig.targetStrokeWidth,
                 pathEffect = targetConfig.pathEffect
             )
         }
@@ -134,7 +142,10 @@ private fun LineBarChartContent(
                 width = barWidth / 3,
                 height = if (clickedBarIndex == index) height.absoluteValue * 1.02F / (if (canDrawNegativeChart) 2 else 1) else height.absoluteValue / (if (canDrawNegativeChart) 2 else 1)
             )
-            val cornerRadius = if (barChartConfig.showCurvedBar) CornerRadius(barWidth / 2, barWidth / 2) else CornerRadius.Zero
+            val cornerRadius = if (barChartConfig.showCurvedBar) CornerRadius(
+                barWidth / 2,
+                barWidth / 2
+            ) else CornerRadius.Zero
             val textCharCount = if (displayData.count() <= 7) 3 else 1
             val textSizeFactor = if (displayData.count() <= 13) 4 else 2
             val textLayoutResult = textMeasurer.measure(

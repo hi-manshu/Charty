@@ -6,51 +6,52 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
+import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.line.config.LineChartColorConfig
 import com.himanshoe.charty.line.config.LineChartConfig
 import com.himanshoe.charty.line.model.LineData
+import com.himanshoe.charty.line.model.MultiLineData
 import com.himanshoe.charty.line.modifier.drawAxesAndGridLines
 
 /**
  * A composable function that renders a multi-line chart.
  *
- * @param data A lambda function that returns a list of lists of `LineData` representing the data points for each line.
+ * @param data A lambda function that returns a list of `MultiLineData` representing the data points and color configuration for each line.
  * @param modifier A `Modifier` for customizing the layout or drawing behavior of the chart.
  * @param smoothLineCurve A boolean indicating whether the lines should be drawn with smooth curves.
  * @param showFilledArea A boolean indicating whether the area under the lines should be filled.
  * @param showLineStroke A boolean indicating whether the lines should be stroked.
- * @param colorConfig A list of `LineChartColorConfig` objects for configuring the colors of the lines and filled areas.
  * @param labelConfig A `LabelConfig` object for configuring the labels on the chart.
  * @param chartConfig A `LineChartConfig` object for configuring the chart's appearance and behavior.
  *
  * @throws IllegalArgumentException if both `showFilledArea` and `showLineStroke` are false.
- * @throws IllegalArgumentException if the size of `data` and `colorConfig` are not the same.
  */
 @Composable
 fun MultiLineChart(
-    data: () -> List<List<LineData>>,
+    data: () -> List<MultiLineData>,
     modifier: Modifier = Modifier,
     smoothLineCurve: Boolean = true,
     showFilledArea: Boolean = false,
+    target: Float? = null,
+    targetConfig: TargetConfig = TargetConfig.default(),
     showLineStroke: Boolean = true,
-    colorConfig: List<LineChartColorConfig> = listOf(LineChartColorConfig.default()),
     labelConfig: LabelConfig = LabelConfig.default(),
     chartConfig: LineChartConfig = LineChartConfig()
 ) {
     require(showFilledArea || showLineStroke) {
         "Both showFilledArea and showLineStroke cannot be false at the same time"
     }
-    require(data().size == colorConfig.size) {
-        "Size of data and colorConfig should be same"
-    }
     MultiLineChartContent(
         data = data,
         modifier = modifier,
-        colorConfig = colorConfig,
         labelConfig = labelConfig,
+        targetConfig = targetConfig,
+        target = target,
         showLineStroke = showLineStroke,
         showFilledArea = showFilledArea,
         chartConfig = chartConfig,
@@ -60,20 +61,21 @@ fun MultiLineChart(
 
 @Composable
 private fun MultiLineChartContent(
-    data: () -> List<List<LineData>>,
+    data: () -> List<MultiLineData>,
     modifier: Modifier = Modifier,
     smoothLineCurve: Boolean = true,
     showFilledArea: Boolean = true,
     showLineStroke: Boolean = true,
-    colorConfig: List<LineChartColorConfig> = listOf(LineChartColorConfig.default()),
     labelConfig: LabelConfig = LabelConfig.default(),
+    target: Float? = null,
+    targetConfig: TargetConfig = TargetConfig.default(),
     chartConfig: LineChartConfig = LineChartConfig(),
 ) {
     val multiLineData = data()
     val textMeasurer = rememberTextMeasurer()
     val (minValue, maxValue) = remember(multiLineData) {
-        val min = multiLineData.flatten().minOfOrNull { it.yValue } ?: 0f
-        val max = multiLineData.flatten().maxOfOrNull { it.yValue } ?: 0f
+        val min = multiLineData.flatMap { it.data }.minOfOrNull { it.yValue } ?: 0f
+        val max = multiLineData.flatMap { it.data }.maxOfOrNull { it.yValue } ?: 0f
         min to max
     }
     val yRange = maxValue - minValue
@@ -84,8 +86,8 @@ private fun MultiLineChartContent(
             .fillMaxSize()
             .padding(bottom = bottomPadding, start = leftPadding)
             .drawAxesAndGridLines(
-                lineData = multiLineData.flatten(),
-                colorConfig = colorConfig.first(),
+                lineData = multiLineData.flatMap { it.data },
+                colorConfig = multiLineData.first().colorConfig,
                 chartConfig = chartConfig,
                 textMeasurer = textMeasurer,
                 labelConfig = labelConfig,
@@ -94,11 +96,11 @@ private fun MultiLineChartContent(
             )
     ) {
         val (canvasWidth, canvasHeight) = size
-        val xStep = canvasWidth / (multiLineData.first().size - 1)
+        val xStep = canvasWidth / (multiLineData.first().data.size - 1)
 
-        multiLineData.forEachIndexed { index, lineData ->
+        multiLineData.forEach { lineData ->
             drawLineCurve(
-                data = { lineData },
+                data = { lineData.data },
                 canvasHeight = canvasHeight,
                 xStep = xStep,
                 minValue = minValue,
@@ -106,9 +108,18 @@ private fun MultiLineChartContent(
                 showLineStroke = showLineStroke,
                 showFilledArea = showFilledArea,
                 chartConfig = chartConfig,
-                lineColor = colorConfig.getOrElse(index) { LineChartColorConfig.default() }.lineColor,
-                fillColor = colorConfig.getOrElse(index) { LineChartColorConfig.default() }.lineFillColor,
+                lineColor = lineData.colorConfig.lineColor,
+                fillColor = lineData.colorConfig.lineFillColor,
                 smoothLineCurve = smoothLineCurve
+            )
+        }
+        target?.let {
+            val targetY = canvasHeight - (it - minValue) * (canvasHeight / yRange)
+            drawLine(
+                brush = Brush.linearGradient(targetConfig.targetLineBarColors.value),
+                start = Offset(0f, targetY),
+                end = Offset(canvasWidth, targetY),
+                strokeWidth = targetConfig.targetStrokeWidth
             )
         }
     }

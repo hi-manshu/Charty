@@ -28,9 +28,10 @@ import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.StorageData
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.line.LineChart
-import com.himanshoe.charty.line.model.LineData
 import com.himanshoe.charty.line.MultiLineChart
 import com.himanshoe.charty.line.config.LineChartColorConfig
+import com.himanshoe.charty.line.model.LineData
+import com.himanshoe.charty.line.model.MultiLineData
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.random.Random
 
@@ -56,40 +57,37 @@ fun App() {
 
 private fun LazyListScope.addMultiLineChart() {
     item {
-        val multiLineData = listOf(
-            listOf(
-                LineData(0F, "Mon"),
-                LineData(5F, "Tue"),
-                LineData(2F, "Wed"),
-                LineData(11F, "Thu"),
-                LineData(3F, "Fri")
+        val xValues = listOf("Mon", "Tue", "Wed", "Thu", "Fri")
+        val yValuesList = listOf(
+            listOf(0F, 5F, 2F, 11F, 3F),
+            listOf(10F, 5F, 12F, 11F, 30F)
+        )
+        val colorConfigs = listOf(
+            LineChartColorConfig.default().copy(
+                lineColor = ChartColor.Solid(Color.Red),
+                lineFillColor = ChartColor.Gradient(
+                    listOf(Color(0xFFCB356B), Color(0xFFBD3F32))
+                )
             ),
-            listOf(
-                LineData(1F, "Mon"),
-                LineData(3F, "Tue"),
-                LineData(4F, "Wed"),
-                LineData(8F, "Thu"),
-                LineData(6F, "Fri")
+            LineChartColorConfig.default().copy(
+                lineColor = ChartColor.Solid(Color.Blue),
+                lineFillColor = ChartColor.Gradient(
+                    listOf(Color(0xFF2193b0), Color(0xFF6dd5ed))
+                )
             )
         )
+        val mockData = generateMultiLineData(yValuesList, xValues,colorConfigs)
 
         MultiLineChart(
-            data = { multiLineData },
+            data = { mockData },
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()
                 .height(300.dp),
             smoothLineCurve = true,
-            colorConfig = listOf(
-                LineChartColorConfig.default().copy(
-                    lineColor = ChartColor.Solid(Color.Red),
-                    lineFillColor = ChartColor.Solid(Color.Red)
-                ),
-                LineChartColorConfig.default().copy(
-                    lineColor = ChartColor.Solid(Color.Blue),
-                    lineFillColor = ChartColor.Solid(Color.Blue)
-                )
-            )
+            showFilledArea = true,
+            showLineStroke = true,
+            target = 6F,
         )
     }
 }
@@ -264,4 +262,24 @@ fun generateMockStorageCategories(): List<StorageData> {
         StorageData(name = "Music", value = 0.10f, color = Color(0xFF42275a)), // Green
     )
 }
+fun generateMultiLineData(
+    yValuesList: List<List<Float>>,
+    xValues: List<String>,
+    colorConfigs: List<LineChartColorConfig>
+): List<MultiLineData> {
+    require(yValuesList.all { it.size == xValues.size }) {
+        "Each list of Y values must have the same size as the list of X values"
+    }
+    require(yValuesList.size == colorConfigs.size) {
+        "The size of yValuesList and colorConfigs must be the same"
+    }
 
+    return yValuesList.mapIndexed { index, yValues ->
+        MultiLineData(
+            data = yValues.mapIndexed { i, yValue ->
+                LineData(yValue, xValues[i])
+            },
+            colorConfig = colorConfigs[index]
+        )
+    }
+}

@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
+import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.line.config.LineChartColorConfig
@@ -50,6 +51,8 @@ fun LineChart(
     showLineStroke: Boolean = true,
     colorConfig: LineChartColorConfig = LineChartColorConfig.default(),
     labelConfig: LabelConfig = LabelConfig.default(),
+    target: Float? = null,
+    targetConfig: TargetConfig = TargetConfig.default(),
     chartConfig: LineChartConfig = LineChartConfig()
 ) {
     require(showFilledArea || showLineStroke) {
@@ -63,7 +66,9 @@ fun LineChart(
         showFilledArea = showFilledArea,
         labelConfig = labelConfig,
         chartConfig = chartConfig,
-        smoothLineCurve = smoothLineCurve
+        smoothLineCurve = smoothLineCurve,
+        target = target,
+        targetConfig = targetConfig,
     )
 }
 
@@ -77,6 +82,8 @@ private fun LineChartContent(
     colorConfig: LineChartColorConfig = LineChartColorConfig.default(),
     labelConfig: LabelConfig = LabelConfig.default(),
     chartConfig: LineChartConfig = LineChartConfig(),
+    target: Float? = null,
+    targetConfig: TargetConfig = TargetConfig.default(),
     onClick: (LineData) -> Unit = {}
 ) {
     val lineData = data()
@@ -119,7 +126,15 @@ private fun LineChartContent(
     ) {
         val (canvasWidth, canvasHeight) = size
         val xStep = canvasWidth / (lineData.size - 1)
-
+        target?.let {
+            val targetY = canvasHeight - (it - minValue) * (canvasHeight / yRange)
+            drawLine(
+                brush = Brush.linearGradient(targetConfig.targetLineBarColors.value),
+                start = Offset(0f, targetY),
+                end = Offset(canvasWidth, targetY),
+                strokeWidth = targetConfig.targetStrokeWidth
+            )
+        }
         drawLineCurve(
             data = { lineData },
             canvasHeight = canvasHeight,
@@ -133,6 +148,7 @@ private fun LineChartContent(
             fillColor = colorConfig.lineFillColor,
             smoothLineCurve = smoothLineCurve
         )
+
         if (clickedIndex != -1) {
             val barX = when (clickedIndex) {
                 0 -> 0f

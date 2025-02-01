@@ -32,12 +32,25 @@ import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.config.BarChartConfig
 import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.bar.model.BarData
+import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.common.drawAxisLineForVerticalChart
 import com.himanshoe.charty.common.drawRangeLinesForVerticalChart
 import com.himanshoe.charty.common.drawYAxisLabel
 import kotlin.math.absoluteValue
 
+/**
+ * A composable function that displays a bar chart.
+ *
+ * @param data A lambda function that returns a list of `BarData` representing the data points for the bar chart.
+ * @param modifier A `Modifier` for customizing the layout or drawing behavior of the chart.
+ * @param target An optional target value to be displayed on the chart.
+ * @param targetConfig A `TargetConfig` object for configuring the appearance of the target line.
+ * @param barChartConfig A `BarChartConfig` object for configuring the chart's appearance and behavior.
+ * @param labelConfig A `LabelConfig` object for configuring the labels on the chart.
+ * @param barChartColorConfig A `BarChartColorConfig` object for configuring the colors of the bars, axis lines, and grid lines.
+ * @param onBarClick A lambda function to handle click events on the bars. It receives the index of the clicked bar and the corresponding `BarData` as parameters.
+ */
 @Composable
 fun BarChart(
     data: () -> List<BarData>,
@@ -100,16 +113,12 @@ private fun BarChartContent(
             require(it in minValue..maxValue) { "Target value should be between $minValue and $maxValue" }
             val targetLineY = if (hasNegativeValues) canvasHeight / 2 else canvasHeight
             val targetLineYPosition = targetLineY - (it / maxValue) * targetLineY
-            val brush = if (targetConfig.targetLineGradientBarColors.size == 1) {
-                SolidColor(targetConfig.targetLineGradientBarColors.first())
-            } else {
-                Brush.linearGradient(targetConfig.targetLineGradientBarColors)
-            }
+            val brush = Brush.linearGradient(targetConfig.targetLineBarColors.value)
             drawLine(
                 brush = brush,
                 start = Offset(0f, targetLineYPosition),
                 end = Offset(size.width, targetLineYPosition),
-                strokeWidth = targetConfig.targetWidth,
+                strokeWidth = targetConfig.targetStrokeWidth,
                 pathEffect = targetConfig.pathEffect
             )
         }
