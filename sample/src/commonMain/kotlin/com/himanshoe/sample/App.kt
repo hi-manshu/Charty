@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +29,8 @@ import com.himanshoe.charty.bar.StorageBar
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.ComparisonBarData
 import com.himanshoe.charty.bar.model.StorageData
+import com.himanshoe.charty.circle.CircleChart
+import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.common.asGradientChartColor
@@ -49,11 +52,12 @@ import kotlin.random.Random
 @Preview
 fun App() {
     LazyColumn {
+        addCircleChart()
         addPieChart()
         addComparisonChart()
         addLineChart()
         addMultiLineChart()
-        addCircleChart()
+        addPointChart()
         addBarChart(null, generateMockBarData(7, false, false))
         addHorizontalBarChart()
         addStorageBarChart()
@@ -62,6 +66,25 @@ fun App() {
         addLineBarChart(null, { generateMockBarData(7) })
         addBarChart(2F, generateMockBarData(11))
         addBarChart(null, generateMockBarData(7, false))
+    }
+}
+
+private fun LazyListScope.addCircleChart() {
+
+    item {
+        val data = remember { { generateMockCircleData() } }
+        Box(
+            modifier = Modifier.fillParentMaxWidth().size(300.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            CircleChart(
+                data = data,
+                modifier = Modifier.size(300.dp),
+                onCircleClick = { circleData ->
+                    println("Clicked on circle with data: $circleData")
+                }
+            )
+        }
     }
 }
 
@@ -103,10 +126,7 @@ private fun LazyListScope.addPieChart() {
                 isDonutChart = true,
                 backgroundColor = Color.White.asSolidChartColor(),
                 data = { data },
-                modifier = Modifier
-                    .size(300.dp)
-                    .fillParentMaxWidth()
-                    .padding(4.dp)
+                modifier = Modifier.size(300.dp).fillParentMaxWidth().padding(4.dp)
             )
         }
 
@@ -154,7 +174,7 @@ private fun LazyListScope.addComparisonChart() {
 
 }
 
-private fun LazyListScope.addCircleChart() {
+private fun LazyListScope.addPointChart() {
     item {
         val mockData = listOf(
             PointData(xValue = "Mon", yValue = 10f),
@@ -330,7 +350,7 @@ private fun LazyListScope.addBarChart(target: Float?, data: List<BarData>) {
     }
 }
 
-fun generateSampleData(): List<BarData> {
+private fun generateSampleData(): List<BarData> {
     return listOf(
         BarData(1F, "Mon"),
         BarData(5F, "Mon"),
@@ -340,7 +360,7 @@ fun generateSampleData(): List<BarData> {
     )
 }
 
-fun generateMockBarData(
+private fun generateMockBarData(
     size: Int, useColor: Boolean = false, hasNegative: Boolean = true
 ): List<BarData> {
     val days = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
@@ -366,7 +386,7 @@ fun generateMockBarData(
     return data
 }
 
-fun generateAllNegativeBarData(size: Int, useColor: Boolean = false): List<BarData> {
+private fun generateAllNegativeBarData(size: Int, useColor: Boolean = false): List<BarData> {
     val days = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
     val colors = listOf(
         Color.Red, Color.Green, Color.Blue, Color.Yellow, Color.DarkGray, Color.Magenta, Color.Cyan
@@ -381,7 +401,7 @@ fun generateAllNegativeBarData(size: Int, useColor: Boolean = false): List<BarDa
     }
 }
 
-fun generateMockStorageCategories(): List<StorageData> {
+private fun generateMockStorageCategories(): List<StorageData> {
     return listOf(
         StorageData(
             name = "Document", value = 0.05f, color = Color(0xFFDC143C).asSolidChartColor()
@@ -398,7 +418,7 @@ fun generateMockStorageCategories(): List<StorageData> {
     )
 }
 
-fun generateMultiLineData(
+private fun generateMultiLineData(
     yValuesList: List<List<Float>>, xValues: List<String>, colorConfigs: List<LineChartColorConfig>
 ): List<MultiLineData> {
     require(yValuesList.all { it.size == xValues.size }) {
@@ -415,4 +435,31 @@ fun generateMultiLineData(
             }, colorConfig = colorConfigs[index]
         )
     }
+}
+
+fun generateMockCircleData(): List<CircleData> {
+    val colorLists = listOf(
+        listOf(Color(0xFF00FF00), Color(0xFF0000FF)),
+        listOf(Color(0xFFFFFF00), Color(0xFF00FFFF)),
+        listOf(Color(0xFF000000), Color(0xFFFFA500))
+    )
+    return listOf(
+        CircleData(
+            value = 80F, // Random value between 0 and 100
+            color = colorLists.first().asGradientChartColor(),
+            label = "Label 1"
+        ),
+        CircleData(
+            value = 90F, // Random value between 0 and 100
+            color = colorLists[1].asGradientChartColor(),
+            label = "Label 2"
+        ),
+        CircleData(
+            value = 100F, // Random value between 0 and 100
+            color = colorLists.first().asGradientChartColor(),
+            label = "Label 3"
+        ),
+
+        )
+
 }
