@@ -30,6 +30,7 @@ import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.ComparisonBarData
 import com.himanshoe.charty.bar.model.StorageData
 import com.himanshoe.charty.circle.CircleChart
+import com.himanshoe.charty.circle.SpeedometerProgressBar
 import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.LabelConfig
@@ -52,6 +53,7 @@ import kotlin.random.Random
 @Preview
 fun App() {
     LazyColumn {
+        addSpeedometerProgressBar()
         addCircleChart()
         addPieChart()
         addComparisonChart()
@@ -69,8 +71,35 @@ fun App() {
     }
 }
 
-private fun LazyListScope.addCircleChart() {
+private fun LazyListScope.addSpeedometerProgressBar() {
+    item {
+        Box(
+            modifier = Modifier.fillParentMaxWidth().size(300.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            SpeedometerProgressBar(
+                progress = { 0.50f },
+                title = "Temperature",
+                modifier = Modifier.size(200.dp),
+                trackColor = Color.Gray.copy(alpha = 0.2F).asSolidChartColor(),
+                color = ChartColor.Gradient(
+                    listOf(
+                        Color(0xFF2193b0),
+                        Color(0xFF6dd5ed)
+                    )
+                ),
+                progressIndicatorColor = ChartColor.Gradient(
+                    listOf(
+                        Color(0xFFffafbd),
+                        Color(0xFFffc3a0),
+                    )
+                )
+            )
+        }
+    }
+}
 
+private fun LazyListScope.addCircleChart() {
     item {
         val data = remember { { generateMockCircleData() } }
         Box(

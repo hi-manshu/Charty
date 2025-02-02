@@ -33,12 +33,14 @@ import kotlin.math.sin
 fun CircleChart(
     data: () -> List<CircleData>,
     modifier: Modifier = Modifier,
+    showEndIndicator: Boolean = true,
     onCircleClick: (CircleData) -> Unit = {}
 ) {
     CircleChartContent(
         modifier = modifier,
         onCircleClick = onCircleClick,
-        data = data
+        data = data,
+        showEndIndicator = showEndIndicator,
     )
 }
 
@@ -46,6 +48,7 @@ fun CircleChart(
 private fun CircleChartContent(
     data: () -> List<CircleData>,
     modifier: Modifier = Modifier,
+    showEndIndicator: Boolean = true,
     onCircleClick: (CircleData) -> Unit = {}
 ) {
     var clickedCircleIndex by remember { mutableStateOf(-1) }
@@ -103,16 +106,17 @@ private fun CircleChartContent(
                 style = Stroke(width = scaledStrokeWidth, cap = StrokeCap.Round)
             )
 
-            // Draw the shadow at the end of the tip
-            val endAngle = -90f + sweepAngle
-            val endX = center.x + scaledRadius * cos(endAngle.toRadians())
-            val endY = center.y + scaledRadius * sin(endAngle.toRadians())
-            drawCircle(
-                center = Offset(endX, endY),
-                radius = scaledStrokeWidth / 2,
-                color = Color.Black.copy(alpha = 0.1f),
-            )
-
+            if (showEndIndicator) {
+                // Draw the shadow at the end of the tip
+                val endAngle = -90f + sweepAngle
+                val endX = center.x + scaledRadius * cos(endAngle.toRadians())
+                val endY = center.y + scaledRadius * sin(endAngle.toRadians())
+                drawCircle(
+                    center = Offset(endX, endY),
+                    radius = scaledStrokeWidth / 2,
+                    color = Color.Black.copy(alpha = 0.1f),
+                )
+            }
             if (index == clickedCircleIndex) {
                 onCircleClick(item)
             }
