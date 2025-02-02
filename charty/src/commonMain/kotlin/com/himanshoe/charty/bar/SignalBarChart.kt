@@ -11,7 +11,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
+import com.himanshoe.charty.common.ChartColor
+import com.himanshoe.charty.common.asSolidChartColor
 import kotlinx.coroutines.delay
 
 
@@ -29,43 +30,15 @@ fun SignalProgressBarChart(
     progress: () -> Float,
     modifier: Modifier = Modifier,
     totalBlocks: Int = 10,
-    trackColor: Color = Color.Gray,
-    progressColor: Color = Color.Green,
+    trackColor: ChartColor = Color.Gray.asSolidChartColor(),
+    progressColor: ChartColor = Color.Green.asSolidChartColor(),
     gapRatio: Float = 0.1F
 ) {
     SignalBarChartContent(
         progress = progress,
         totalBlocks = totalBlocks,
-        trackColorBrush = SolidColor(trackColor),
-        progressColorBrush = SolidColor(progressColor),
-        gapRatio = gapRatio,
-        modifier = modifier
-    )
-}
-
-/**
- * A composable function that displays a signal bar chart with gradient colors.
- *
- * @param progress A lambda function that returns the current progress as a Float.
- * @param trackColors A list of colors to be used for the track gradient.
- * @param progressColors A list of colors to be used for the progress gradient.
- * @param modifier A Modifier to be applied to the Canvas.
- * @param gapRatio A Float representing the ratio of the gap between blocks.
- */
-@Composable
-fun SignalProgressBarChart(
-    progress: () -> Float,
-    trackColors: List<Color>,
-    progressColors: List<Color>,
-    modifier: Modifier = Modifier,
-    totalBlocks: Int = 50,
-    gapRatio: Float = 0.1F
-) {
-    SignalBarChartContent(
-        progress = progress,
-        totalBlocks = totalBlocks,
-        trackColorBrush = Brush.linearGradient(trackColors),
-        progressColorBrush = Brush.linearGradient(progressColors),
+        trackColorBrush = Brush.linearGradient(trackColor.value),
+        progressColorBrush = Brush.linearGradient(progressColor.value),
         gapRatio = gapRatio,
         modifier = modifier
     )

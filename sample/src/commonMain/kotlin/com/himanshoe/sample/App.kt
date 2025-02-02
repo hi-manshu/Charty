@@ -28,15 +28,19 @@ import com.himanshoe.charty.bar.StorageBar
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.ComparisonBarData
 import com.himanshoe.charty.bar.model.StorageData
-import com.himanshoe.charty.point.PointChart
-import com.himanshoe.charty.point.model.PointData
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.LabelConfig
+import com.himanshoe.charty.common.asGradientChartColor
+import com.himanshoe.charty.common.asSolidChartColor
 import com.himanshoe.charty.line.LineChart
 import com.himanshoe.charty.line.MultiLineChart
 import com.himanshoe.charty.line.config.LineChartColorConfig
 import com.himanshoe.charty.line.model.LineData
 import com.himanshoe.charty.line.model.MultiLineData
+import com.himanshoe.charty.pie.PieChart
+import com.himanshoe.charty.pie.model.PieChartData
+import com.himanshoe.charty.point.PointChart
+import com.himanshoe.charty.point.model.PointData
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.random.Random
 
@@ -45,6 +49,7 @@ import kotlin.random.Random
 @Preview
 fun App() {
     LazyColumn {
+        addPieChart()
         addComparisonChart()
         addLineChart()
         addMultiLineChart()
@@ -58,7 +63,54 @@ fun App() {
         addBarChart(2F, generateMockBarData(11))
         addBarChart(null, generateMockBarData(7, false))
     }
+}
 
+private fun LazyListScope.addPieChart() {
+    item {
+        val data = listOf(
+            PieChartData(
+                25f,
+                listOf(Color(0xFFFFAFBD), Color(0xFFFFC3A0)).asGradientChartColor(),
+                label = "25%"
+            ),
+            PieChartData(
+                35f,
+                listOf(Color(0xFFf12711), Color(0xFFf5af19)).asGradientChartColor(),
+                label = "35%"
+            ),
+            PieChartData(
+                20f,
+                listOf(Color(0xFFbc4e9c), Color(0xFFf80759)).asGradientChartColor(),
+                label = "20%"
+            ),
+            PieChartData(
+                10f,
+                listOf(Color(0xFF11998e), Color(0xFF38ef7d)).asGradientChartColor(),
+                label = "10%"
+            ),
+            PieChartData(
+                10f,
+                listOf(Color(0xFF11998e), Color(0xFF385f7d)).asGradientChartColor(),
+                label = "10%"
+            ),
+        )
+
+        Box(
+            modifier = Modifier.fillParentMaxWidth().size(300.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            PieChart(
+                isDonutChart = true,
+                backgroundColor = Color.White.asSolidChartColor(),
+                data = { data },
+                modifier = Modifier
+                    .size(300.dp)
+                    .fillParentMaxWidth()
+                    .padding(4.dp)
+            )
+        }
+
+    }
 }
 
 
@@ -67,46 +119,29 @@ private fun LazyListScope.addComparisonChart() {
         val barColors = listOf(
             ChartColor.Gradient(
                 listOf(Color(0xFF2193b0).copy(0.1F), Color(0xFF6dd5ed))
-            ),
-            ChartColor.Gradient(
+            ), ChartColor.Gradient(
                 listOf(
                     Color(0xFFCB356B).copy(0.1F),
                     Color(0xFFBD3F32),
                 )
-            ),
-            ChartColor.Gradient(
+            ), ChartColor.Gradient(
                 listOf(
-                    Color(0xFFFFFFFF).copy(alpha = 0.3f),
-                    Color(0xFFff6a00).copy(alpha = 0.3f)
+                    Color(0xFFFFFFFF).copy(alpha = 0.3f), Color(0xFFff6a00).copy(alpha = 0.3f)
                 )
             )
         )
         val mockData = listOf(
             ComparisonBarData(
-                label = "Category 1",
-                bars = listOf(45f, 70f, 30f),
-                colors = barColors
-            ),
-            ComparisonBarData(
-                label = "Category 2",
-                bars = listOf(80f, 60f, 90f),
-                colors = barColors
-            ),
-            ComparisonBarData(
-                label = "Category 3",
-                bars = listOf(40f, 20f, 50f),
-                colors = barColors
-            ),
-            ComparisonBarData(
-                label = "Category 4",
-                bars = listOf(40f, 20f),
-                colors = barColors.take(2)
+                label = "Category 1", bars = listOf(45f, 70f, 30f), colors = barColors
+            ), ComparisonBarData(
+                label = "Category 2", bars = listOf(80f, 60f, 90f), colors = barColors
+            ), ComparisonBarData(
+                label = "Category 3", bars = listOf(40f, 20f, 50f), colors = barColors
+            ), ComparisonBarData(
+                label = "Category 4", bars = listOf(40f, 20f), colors = barColors.take(2)
 
-            ),
-            ComparisonBarData(
-                label = "Category 5",
-                bars = listOf(40f, 20f, 50f),
-                colors = barColors
+            ), ComparisonBarData(
+                label = "Category 5", bars = listOf(40f, 20f, 50f), colors = barColors
             )
         )
 
@@ -249,7 +284,7 @@ private fun LazyListScope.addStorageBarChart() {
                 data.fastForEach {
                     Box(
                         modifier = Modifier.padding(start = 4.dp).size(10.dp).clip(CircleShape)
-                            .background(it.color), contentAlignment = Alignment.Center
+                            .background(it.color.value.first()), contentAlignment = Alignment.Center
                     ) {}
                     Text(
                         text = it.name, modifier = Modifier.padding(all = 4.dp)
@@ -265,10 +300,12 @@ private fun LazyListScope.addSignalBarChart() {
         SignalProgressBarChart(
             progress = { 79F },
             modifier = Modifier.padding(all = 12.dp).fillMaxWidth(0.15F).height(300.dp),
-            trackColors = listOf(Color.Gray, Color.Black),
-            progressColors = listOf(
-                Color(0xFFffafbd),
-                Color(0xFFffc3a0),
+            trackColor = ChartColor.Gradient(listOf(Color.Gray, Color.Black)),
+            progressColor = ChartColor.Gradient(
+                listOf(
+                    Color(0xFFffafbd),
+                    Color(0xFFffc3a0),
+                )
             ),
             gapRatio = 0.1F
         )
@@ -316,7 +353,7 @@ fun generateMockBarData(
         BarData(
             yValue = Random.nextFloat() * 20 + number, // Random value between -10 and 10
             xValue = days[it % days.size],
-            barColor = if (useColor) colors[it % colors.size] else Color.Unspecified
+            barColor = if (useColor) colors[it % colors.size].asSolidChartColor() else Color.Unspecified.asSolidChartColor()
         )
     }.toMutableList()
 
@@ -339,17 +376,25 @@ fun generateAllNegativeBarData(size: Int, useColor: Boolean = false): List<BarDa
         BarData(
             yValue = -(Random.nextFloat() * 20), // Random negative value between -20 and 0
             xValue = days[it % days.size],
-            barColor = if (useColor) colors[it % colors.size] else Color.Unspecified
+            barColor = if (useColor) colors[it % colors.size].asSolidChartColor() else Color.Unspecified.asSolidChartColor()
         )
     }
 }
 
 fun generateMockStorageCategories(): List<StorageData> {
     return listOf(
-        StorageData(name = "Document", value = 0.05f, color = Color(0xFFDC143C)), // Crimson Red
-        StorageData(name = "Apps", value = 0.20f, color = Color(0xFFFFA500)), // Orange
-        StorageData(name = "System", value = 0.10f, color = Color(0xFF2193b0)), // Yellow
-        StorageData(name = "Music", value = 0.10f, color = Color(0xFF42275a)), // Green
+        StorageData(
+            name = "Document", value = 0.05f, color = Color(0xFFDC143C).asSolidChartColor()
+        ), // Crimson Red
+        StorageData(
+            name = "Apps", value = 0.20f, color = Color(0xFFFFA500).asSolidChartColor()
+        ), // Orange
+        StorageData(
+            name = "System", value = 0.10f, color = Color(0xFF2193b0).asSolidChartColor()
+        ), // Yellow
+        StorageData(
+            name = "Music", value = 0.10f, color = Color(0xFF42275a).asSolidChartColor()
+        ), // Green
     )
 }
 

@@ -32,6 +32,15 @@ import com.himanshoe.charty.bar.model.ComparisonBarData
 import com.himanshoe.charty.bar.modifier.drawAxesAndGridLines
 import com.himanshoe.charty.common.LabelConfig
 
+/**
+ * A composable function that displays a comparison bar chart.
+ *
+ * @param data A lambda function that returns a list of `ComparisonBarData` representing the data points for the comparison bar chart.
+ * @param modifier A `Modifier` for customizing the layout or drawing behavior of the chart.
+ * @param labelConfig A `LabelConfig` object for configuring the labels on the chart.
+ * @param comparisonBarChartConfig A `ComparisonBarChartConfig` object for configuring the chart's appearance and behavior.
+ * @param onBarClick A lambda function to handle click events on the bars. It receives the index of the clicked bar as a parameter.
+ */
 @Composable
 fun ComparisonBarChart(
     data: () -> List<ComparisonBarData>,
@@ -62,13 +71,17 @@ private fun ComparisonBarContent(
     val bottomPadding = if (labelConfig.showXLabel) 24.dp else 0.dp
     val leftPadding = if (labelConfig.showYLabel) 24.dp else 0.dp
 
+    val dataList = data()
+    val maxValue = dataList.flatMap { it.bars }.maxOf { it }
+    val groupCount = dataList.size
+    val maxBarsCount = dataList.maxOf { it.bars.size }
 
     Canvas(modifier = modifier
         .padding(bottom = bottomPadding, start = leftPadding)
         .fillMaxSize()
         .drawAxesAndGridLines(
-            maxValue = data().flatMap { it.bars }.maxOf { it },
-            step = data().flatMap { it.bars }.maxOf { it } / 4,
+            maxValue = maxValue,
+            step = maxValue / 4,
             textMeasurer = textMeasurer,
             labelConfig = labelConfig,
             showAxisLines = comparisonBarChartConfig.showAxisLines,
@@ -76,9 +89,9 @@ private fun ComparisonBarContent(
         )
         .pointerInput(Unit) {
             detectTapGestures { offset ->
-                val groupWidth = size.width / data().size
+                val groupWidth = size.width / groupCount
                 val clickedGroupIndex = (offset.x / groupWidth).toInt()
-                if (clickedGroupIndex in data().indices) {
+                if (clickedGroupIndex in dataList.indices) {
                     selectedCategory = clickedGroupIndex
                     onBarClick(clickedGroupIndex)
                 }
@@ -87,19 +100,15 @@ private fun ComparisonBarContent(
     ) {
         val canvasWidth = size.width
         val canvasHeight = size.height
-        val maxValue = data().flatMap { it.bars }.maxOf { it }
-        val groupWidth = canvasWidth / data().size
-        val barWidth = groupWidth / (data().maxOf { it.bars.size } * 2)
+        val groupWidth = canvasWidth / groupCount
+        val barWidth = groupWidth / (maxBarsCount * 2)
         val cornerRadius = if (comparisonBarChartConfig.showCurvedBar) CornerRadius(
-            barWidth / 2,
-            barWidth / 2
+            barWidth / 2, barWidth / 2
         ) else CornerRadius.Zero
 
-        data().fastForEachIndexed { groupIndex, group ->
+        dataList.fastForEachIndexed { groupIndex, group ->
             val groupStartX = groupIndex * groupWidth
-            val maxBars = data().maxOf { it.bars.size }
             if (groupIndex == selectedCategory) {
-                // Draw a bar filling the max height of the canvas
                 drawBar(
                     cornerRadius = cornerRadius,
                     x = groupStartX,
@@ -129,8 +138,7 @@ private fun ComparisonBarContent(
                 )
             }
 
-            // Draw missing bars as zero height
-            for (barIndex in group.bars.size until maxBars) {
+            for (barIndex in group.bars.size until maxBarsCount) {
                 val barX =
                     groupStartX + (groupWidth - (group.bars.size * (barWidth + barWidth / 4))) / 2 + barIndex * (barWidth + barWidth / 4)
                 drawBar(
@@ -143,9 +151,8 @@ private fun ComparisonBarContent(
                 )
             }
 
-            val textCharCount = if (data().count() <= 7) 3 else 1
-            val textSizeFactor = data().count() * if (data().count() <= 5) 20 else 40
-            // Draw label
+            val textCharCount = if (groupCount <= 7) 3 else 1
+            val textSizeFactor = groupCount * if (groupCount <= 5) 20 else 40
             val textLayoutResult = textMeasurer.measure(
                 text = group.label.take(textCharCount),
                 style = TextStyle(fontSize = (canvasWidth / textSizeFactor).sp)
@@ -154,7 +161,7 @@ private fun ComparisonBarContent(
                 textLayoutResult = textLayoutResult,
                 topLeft = Offset(
                     x = groupStartX + groupWidth / 2 - textLayoutResult.size.width / 2,
-                    y = canvasHeight + (canvasHeight * 0.01f) // 1% padding from bottom
+                    y = canvasHeight + (canvasHeight * 0.01f)
                 ),
                 brush = SolidColor(Color.Black)
             )
@@ -162,14 +169,8 @@ private fun ComparisonBarContent(
     }
 }
 
-
 private fun DrawScope.drawBar(
-    x: Float,
-    y: Float,
-    width: Float,
-    height: Float,
-    brush: Brush,
-    cornerRadius: CornerRadius
+    x: Float, y: Float, width: Float, height: Float, brush: Brush, cornerRadius: CornerRadius
 ) {
     val path = Path().apply {
         addRoundRect(

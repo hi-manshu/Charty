@@ -4,7 +4,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -16,6 +15,19 @@ import com.himanshoe.charty.point.model.PointChartColorConfig
 import com.himanshoe.charty.point.model.PointChartConfig
 import com.himanshoe.charty.point.model.PointData
 
+/**
+ * Extension function to draw axes and grid lines on a point chart.
+ *
+ * @receiver Modifier The modifier to which this function is applied.
+ * @param data A list of PointData objects representing the data points for the chart.
+ * @param colorConfig The color configuration for the chart.
+ * @param chartConfig The configuration for the chart, including line widths and path effects.
+ * @param textMeasurer The TextMeasurer used to measure and draw text.
+ * @param labelConfig The configuration for the labels, including whether to show labels on the axes.
+ * @param minValue The minimum value on the y-axis.
+ * @param yRange The range of values on the y-axis.
+ * @return A Modifier with the axes and grid lines drawn.
+ */
 internal fun Modifier.drawAxesAndGridLines(
     data: List<PointData>,
     colorConfig: PointChartColorConfig,
@@ -70,7 +82,7 @@ internal fun Modifier.drawAxesAndGridLines(
                 textLayoutResult = textLayoutResult, topLeft = Offset(
                     x = (index + 0.5f) * xStep - textLayoutResult.size.width / 2,
                     y = canvasHeight + 4.dp.toPx() // Position below the X-axis
-                ), brush = SolidColor(labelConfig.textColor)
+                ), brush = Brush.linearGradient(labelConfig.textColor.value)
             )
         }
     }
@@ -90,7 +102,7 @@ internal fun Modifier.drawAxesAndGridLines(
                 textLayoutResult = textLayoutResult, topLeft = Offset(
                     x = -textLayoutResult.size.width - 8f,
                     y = canvasHeight - i * yStep - textLayoutResult.size.height / 2
-                ), brush = SolidColor(labelConfig.textColor)
+                ), brush = Brush.linearGradient(labelConfig.textColor.value)
             )
         }
     }

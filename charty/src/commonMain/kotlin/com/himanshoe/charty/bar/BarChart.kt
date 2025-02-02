@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -19,7 +20,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
@@ -30,12 +30,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.config.BarChartConfig
-import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.bar.model.BarData
+import com.himanshoe.charty.bar.modifier.drawAxisLineForVerticalChart
+import com.himanshoe.charty.bar.modifier.drawRangeLinesForVerticalChart
+import com.himanshoe.charty.bar.modifier.drawYAxisLabel
+import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.LabelConfig
-import com.himanshoe.charty.common.drawAxisLineForVerticalChart
-import com.himanshoe.charty.common.drawRangeLinesForVerticalChart
-import com.himanshoe.charty.common.drawYAxisLabel
+import com.himanshoe.charty.common.TargetConfig
+import com.himanshoe.charty.common.asSolidChartColor
 import kotlin.math.absoluteValue
 
 /**
@@ -107,7 +109,6 @@ private fun BarChartContent(
         onClick = { clickedOffset = it },
         data = { displayData },
     ) { canvasHeight, gap, barWidth ->
-
         target?.let {
             require(it in minValue..maxValue) { "Target value should be between $minValue and $maxValue" }
             val targetLineY = if (hasNegativeValues) canvasHeight / 2 else canvasHeight
@@ -136,11 +137,10 @@ private fun BarChartContent(
             } else {
                 canvasHeight - maxHeight
             }
-            val color = if (barData.barColor == Color.Unspecified) {
-                if (barData.yValue < 0) barChartColorConfig.negativeGradientBarColors else barChartColorConfig.fillGradientColors
-            } else {
-                listOf(barData.barColor, barData.barColor)
-            }
+            val color = getBarColor(
+                barData = barData,
+                barChartColorConfig = barChartColorConfig,
+            )
             val individualBarTopLeft = Offset(
                 x = index * (barWidth + gap) - if (clickedBarIndex == index) (barWidth * 0.02F) / 2 else 0f,
                 y = if (barData.yValue < 0) topLeftY else topLeftY - if (clickedBarIndex == index) (height.absoluteValue * 0.02F / (if (canDrawNegativeChart) 2 else 1)) else 0f
@@ -212,7 +212,7 @@ private fun BarChartContent(
                 require(barData.xValue.toString().isNotEmpty()) { "X value should not be empty" }
                 drawText(
                     textLayoutResult = textLayoutResult,
-                    brush = SolidColor(labelConfig.textColor),
+                    brush = Brush.linearGradient(labelConfig.textColor.value),
                     topLeft = Offset(
                         x = individualBarTopLeft.x + barWidth / 2 - textLayoutResult.size.width / 2,
                         y = textOffsetY,
@@ -234,7 +234,7 @@ private fun DrawScope.backgroundColorBar(
     cornerRadius: CornerRadius,
 ) {
     drawRoundRect(
-        color = barData.barBackgroundColor,
+        brush = Brush.linearGradient(barData.barBackgroundColor.value),
         topLeft = Offset(x = index * (barWidth + gap), y = backgroundTopLeftY),
         size = Size(
             width = barWidth,
@@ -249,8 +249,13 @@ internal fun getDisplayData(
     minimumBarCount: Int,
 ): List<BarData> =
     if (data.size < minimumBarCount) {
-        // Add empty bar
-        List(minimumBarCount - data.size) { BarData(0F, " ", Color.Unspecified) } + data
+        List(minimumBarCount - data.size) {
+            BarData(
+                0F,
+                " ",
+                Color.Unspecified.asSolidChartColor()
+            )
+        } + data
     } else {
         data
     }
@@ -282,15 +287,14 @@ internal fun BarChartCanvasScaffold(
     showAxisLines: Boolean = false,
     showRangeLines: Boolean = false,
     canDrawNegativeChart: Boolean = false,
-    axisLineColor: Color = Color.Black,
+    axisLineColor: ChartColor = Color.Black.asSolidChartColor(),
     labelConfig: LabelConfig = LabelConfig.default(),
-    rangeLineColor: Color = Color.Gray,
+    rangeLineColor: ChartColor = Color.Gray.asSolidChartColor(),
     data: () -> List<BarData> = { emptyList() },
     onClick: (Offset) -> Unit = {},
     content: DrawScope.(Float, Float, Float) -> Unit = { _, _, _ -> },
 ) {
     val textMeasurer = rememberTextMeasurer()
-    // Calculate the range for labels from the data
     val maxValue = data().maxOfOrNull { it.yValue } ?: 0f
     val minValue = if (canDrawNegativeChart) data().minOfOrNull { it.yValue } ?: 0f else 0f
     val step = (maxValue - minValue) / 4
@@ -342,5 +346,72 @@ internal fun BarChartCanvasScaffold(
             gap,
             barWidth
         )
+    }
+}
+
+internal fun Modifier.drawYAxisLineForHorizontalChart(
+    hasNegativeValues: Boolean,
+    allNegativeValues: Boolean,
+    allPositiveValues: Boolean,
+    axisLineColor: ChartColor,
+): Modifier = this.drawWithCache {
+    val canvasWidth = size.width
+    val canvasHeight = size.height
+    val xAxis =
+        if (hasNegativeValues && !allNegativeValues && !allPositiveValues) canvasWidth / 2 else 0f
+
+    onDrawBehind {
+        drawLine(
+            brush = Brush.linearGradient(axisLineColor.value),
+            start = Offset(xAxis, 0f),
+            end = Offset(xAxis, canvasHeight),
+            strokeWidth = 2f,
+        )
+    }
+
+}
+
+
+internal fun Modifier.drawRangeLineForHorizontalChart(
+    allNegativeValues: Boolean,
+    allPositiveValues: Boolean,
+    axisLineColor: ChartColor,
+): Modifier = this.drawWithCache {
+    val canvasWidth = size.width
+    val canvasHeight = size.height
+    val dashLength = 10f
+    val dashGap = 10f
+
+    onDrawBehind {
+        val dashCount = 5
+        val dashSpacing = canvasWidth / (dashCount + 1)
+        val drawDashedLine: (Float) -> Unit = { x ->
+            var currentY = 0f
+            while (currentY < canvasHeight) {
+                drawLine(
+                    brush = Brush.linearGradient(axisLineColor.value),
+                    start = Offset(x, currentY),
+                    end = Offset(x, currentY + dashLength),
+                    strokeWidth = 2f,
+                )
+                currentY += dashLength + dashGap
+            }
+        }
+
+        if (allNegativeValues || allPositiveValues) {
+            val centerX = canvasWidth / 2
+            drawDashedLine(centerX - 2 * dashSpacing)
+            drawDashedLine(centerX - dashSpacing)
+            drawDashedLine(centerX)
+            drawDashedLine(centerX + dashSpacing)
+            drawDashedLine(centerX + 2 * dashSpacing)
+        } else {
+            val centerX = canvasWidth / 2
+            drawDashedLine(centerX - dashSpacing)
+            drawDashedLine(centerX - 2 * dashSpacing)
+            drawDashedLine(centerX)
+            drawDashedLine(centerX + dashSpacing)
+            drawDashedLine(centerX + 2 * dashSpacing)
+        }
     }
 }

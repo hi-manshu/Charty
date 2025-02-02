@@ -1,11 +1,12 @@
 package com.himanshoe.charty.point.model
 
-import com.himanshoe.charty.common.ChartData
-
+/**
+ * Data class representing a data point in a point chart.
+ *
+ * @property yValue The y-axis value of the data point.
+ * @property xValue The x-axis value of the data point, which can be of any type.
+ */
 data class PointData(
-    override val yValue: Float,
-    override val xValue: Any,
-) : ChartData {
-    override val chartString: String
-        get() = "Circle Chart"
-}
+    val yValue: Float,
+    val xValue: Any,
+)

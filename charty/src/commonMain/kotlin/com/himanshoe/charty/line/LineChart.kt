@@ -20,9 +20,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
-import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.LabelConfig
+import com.himanshoe.charty.common.TargetConfig
 import com.himanshoe.charty.common.drawTargetLineIfNeeded
 import com.himanshoe.charty.line.config.LineChartColorConfig
 import com.himanshoe.charty.line.config.LineChartConfig

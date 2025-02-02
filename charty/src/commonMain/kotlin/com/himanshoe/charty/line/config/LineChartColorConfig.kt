@@ -3,6 +3,15 @@ package com.himanshoe.charty.line.config
 import androidx.compose.ui.graphics.Color
 import com.himanshoe.charty.common.ChartColor
 
+/**
+ * Data class representing the color configuration for a line chart.
+ *
+ * @property axisColor The color of the axis lines.
+ * @property gridLineColor The color of the grid lines.
+ * @property lineColor The color of the line in the chart.
+ * @property lineFillColor The fill color under the line in the chart, with a default gradient based on the line color.
+ * @property selectionBarColor The color of the selection bar.
+ */
 data class LineChartColorConfig(
     val axisColor: ChartColor,
     val gridLineColor: ChartColor,
@@ -13,6 +22,11 @@ data class LineChartColorConfig(
     val selectionBarColor: ChartColor
 ) {
     companion object {
+        /**
+         * Returns the default configuration for the line chart colors.
+         *
+         * @return A LineChartColorConfig object with default color settings.
+         */
         fun default() = LineChartColorConfig(
             axisColor = ChartColor.Gradient(listOf(Color.Gray, Color.Gray)),
             gridLineColor = ChartColor.Gradient(listOf(Color.Gray, Color.Gray)),

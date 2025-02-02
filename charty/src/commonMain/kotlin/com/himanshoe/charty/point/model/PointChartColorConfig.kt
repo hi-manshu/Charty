@@ -3,6 +3,15 @@ package com.himanshoe.charty.point.model
 import androidx.compose.ui.graphics.Color
 import com.himanshoe.charty.common.ChartColor
 
+/**
+ * Data class representing the color configuration for a point chart.
+ *
+ * @property axisColor The color of the axis lines.
+ * @property gridLineColor The color of the grid lines.
+ * @property circleColor The color of the circles in the chart.
+ * @property strokeColor The stroke color of the circles, with a default gradient based on the circle color.
+ * @property selectionBarColor The color of the selection bar.
+ */
 data class PointChartColorConfig(
     val axisColor: ChartColor,
     val gridLineColor: ChartColor,
@@ -13,6 +22,11 @@ data class PointChartColorConfig(
     val selectionBarColor: ChartColor
 ) {
     companion object {
+        /**
+         * Returns the default configuration for the point chart colors.
+         *
+         * @return A PointChartColorConfig object with default color settings.
+         */
         fun default() = PointChartColorConfig(
             axisColor = ChartColor.Gradient(listOf(Color.Gray, Color.Gray)),
             gridLineColor = ChartColor.Gradient(listOf(Color.Gray, Color.Gray)),

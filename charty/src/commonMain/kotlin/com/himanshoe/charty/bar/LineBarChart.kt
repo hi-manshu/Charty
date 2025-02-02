@@ -14,9 +14,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -26,9 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.config.BarChartConfig
-import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.common.LabelConfig
+import com.himanshoe.charty.common.TargetConfig
 import kotlin.math.absoluteValue
 
 /**
@@ -114,11 +112,10 @@ private fun LineBarChartContent(
         }
 
         displayData.fastForEachIndexed { index, barData ->
-            val color = if (barData.barColor == Color.Unspecified) {
-                if (barData.yValue < 0) barChartColorConfig.negativeGradientBarColors else barChartColorConfig.fillGradientColors
-            } else {
-                listOf(barData.barColor, barData.barColor)
-            }
+            val color = getBarColor(
+                barData = barData,
+                barChartColorConfig = barChartColorConfig,
+            )
             val height = barData.yValue / maxValue * canvasHeight
             val maxHeight = maxValue / maxValue * canvasHeight
             val yAxis = canvasHeight / 2
@@ -194,7 +191,7 @@ private fun LineBarChartContent(
             if (labelConfig.showXLabel) {
                 drawText(
                     textLayoutResult = textLayoutResult,
-                    brush = SolidColor(labelConfig.textColor),
+                    brush = Brush.linearGradient(labelConfig.textColor.value),
                     topLeft = Offset(
                         x = individualBarTopLeft.x + individualBarRectSize.width / 2 - textLayoutResult.size.width / 2,
                         y = textOffsetY,
@@ -215,7 +212,7 @@ private fun DrawScope.backgroundColorBar(
     cornerRadius: CornerRadius,
 ) {
     drawRoundRect(
-        color = barData.barBackgroundColor,
+        brush = Brush.linearGradient(barData.barBackgroundColor.value),
         topLeft = Offset(
             x = index * barWidth + (barWidth - barWidth / 3) / 2,
             y = backgroundTopLeftY

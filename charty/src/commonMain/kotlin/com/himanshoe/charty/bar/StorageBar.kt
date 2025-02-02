@@ -17,10 +17,11 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.util.fastForEachIndexed
 import com.himanshoe.charty.bar.model.StorageData
+import com.himanshoe.charty.common.ChartColor
+import com.himanshoe.charty.common.asSolidChartColor
 
 /**
  * A composable function that displays a storage bar with a single track color.
@@ -33,13 +34,13 @@ import com.himanshoe.charty.bar.model.StorageData
 @Composable
 fun StorageBar(
     data: () -> List<StorageData>,
-    trackColor: Color = Color(0xD3D3D3DE),
+    trackColor: ChartColor = Color(0xD3D3D3DE).asSolidChartColor(),
     modifier: Modifier = Modifier,
     onClick: (StorageData) -> Unit = {}
 ) {
     StorageBarContent(
         data = data,
-        trackColor = SolidColor(trackColor),
+        trackColorBrush = Brush.linearGradient(trackColor.value),
         modifier = modifier,
         onClick = onClick
     )
@@ -62,7 +63,7 @@ fun StorageBar(
 ) {
     StorageBarContent(
         data = data,
-        trackColor = Brush.linearGradient(trackColors),
+        trackColorBrush = Brush.linearGradient(trackColors),
         modifier = modifier,
         onClick = onClick
     )
@@ -71,7 +72,7 @@ fun StorageBar(
 @Composable
 private fun StorageBarContent(
     data: () -> List<StorageData>,
-    trackColor: Brush,
+    trackColorBrush: Brush,
     modifier: Modifier = Modifier,
     onClick: (StorageData) -> Unit = {}
 ) {
@@ -106,7 +107,7 @@ private fun StorageBarContent(
                     onClick(category)
                 }
             }
-            drawPath(path = path, brush = SolidColor(category.color))
+            drawPath(path = path, brush = Brush.linearGradient(category.color.value))
             currentOffset += categoryWidth
         }
 
@@ -118,7 +119,7 @@ private fun StorageBarContent(
             )
             drawPath(
                 path = backgroundPath,
-                brush = trackColor
+                brush = trackColorBrush
             )
         }
 

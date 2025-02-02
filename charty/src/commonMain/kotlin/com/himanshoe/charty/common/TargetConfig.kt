@@ -1,8 +1,7 @@
-package com.himanshoe.charty.bar.config
+package com.himanshoe.charty.common
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
-import com.himanshoe.charty.common.ChartColor
 
 /**
  * Data class representing the configuration for the target line in a bar chart.

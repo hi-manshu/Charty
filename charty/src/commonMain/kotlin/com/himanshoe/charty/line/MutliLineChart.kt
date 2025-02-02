@@ -8,8 +8,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
-import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.common.LabelConfig
+import com.himanshoe.charty.common.TargetConfig
 import com.himanshoe.charty.common.drawTargetLineIfNeeded
 import com.himanshoe.charty.line.config.LineChartConfig
 import com.himanshoe.charty.line.model.MultiLineData

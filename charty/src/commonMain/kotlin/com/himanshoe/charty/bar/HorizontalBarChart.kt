@@ -32,8 +32,8 @@ import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.config.BarChartConfig
 import com.himanshoe.charty.bar.config.HorizontalBarLabelConfig
 import com.himanshoe.charty.bar.model.BarData
-import com.himanshoe.charty.common.drawRangeLineForHorizontalChart
-import com.himanshoe.charty.common.drawYAxisLineForHorizontalChart
+import com.himanshoe.charty.common.ChartColor
+import com.himanshoe.charty.common.asSolidChartColor
 import kotlin.math.absoluteValue
 
 /**
@@ -52,7 +52,7 @@ fun HorizontalBarChart(
     modifier: Modifier = Modifier,
     barChartConfig: BarChartConfig = BarChartConfig.default(),
     barChartColorConfig: BarChartColorConfig = BarChartColorConfig.default(),
-    horizontalBarLabelConfig: HorizontalBarLabelConfig = HorizontalBarLabelConfig.MultiColorConfig.default(),
+    horizontalBarLabelConfig: HorizontalBarLabelConfig = HorizontalBarLabelConfig.default(),
     onBarClick: (BarData) -> Unit = {}
 ) {
     HorizontalBarChartContent(
@@ -71,7 +71,7 @@ private fun HorizontalBarChartContent(
     modifier: Modifier = Modifier,
     barChartConfig: BarChartConfig = BarChartConfig.default(),
     barChartColorConfig: BarChartColorConfig = BarChartColorConfig.default(),
-    horizontalBarLabelConfig: HorizontalBarLabelConfig = HorizontalBarLabelConfig.MultiColorConfig.default(),
+    horizontalBarLabelConfig: HorizontalBarLabelConfig = HorizontalBarLabelConfig.default(),
     onBarClick: (BarData) -> Unit = {}
 ) {
     val maxValue = remember(data()) { data().maxOfOrNull { it.yValue.absoluteValue } ?: 0f }
@@ -214,15 +214,15 @@ private fun calculateBarDimensions(
     return BarDimensions(barWidth, additionalWidth, topLeftX, topLeftY)
 }
 
-private fun getBarColor(barData: BarData, barChartColorConfig: BarChartColorConfig): List<Color> {
-    return if (barData.barColor == Color.Unspecified) {
+internal fun getBarColor(barData: BarData, barChartColorConfig: BarChartColorConfig): List<Color> {
+    return if (barData.barColor == Color.Unspecified.asSolidChartColor()) {
         if (barData.yValue < 0) {
-            barChartColorConfig.negativeGradientBarColors
+            barChartColorConfig.negativeGradientBarColors.value
         } else {
-            barChartColorConfig.fillGradientColors
+            barChartColorConfig.fillGradientColors.value
         }
     } else {
-        listOf(barData.barColor, barData.barColor)
+        barData.barColor.value
     }
 }
 
@@ -263,14 +263,14 @@ private fun DrawScope.drawLabel(
     )
     rotate(degrees = rotationAngle, pivot = backgroundRect.center) {
         drawRoundRect(
-            brush = Brush.linearGradient(horizontalBarLabelConfig.textBackgroundColors),
+            brush = Brush.linearGradient(horizontalBarLabelConfig.textBackgroundColors.value),
             topLeft = backgroundRect.topLeft,
             size = backgroundRect.size,
             cornerRadius = CornerRadius(x = size.height / 2, y = size.height / 2),
         )
 
         drawText(
-            brush = Brush.linearGradient(horizontalBarLabelConfig.textColors),
+            brush = Brush.linearGradient(horizontalBarLabelConfig.textColors.value),
             textLayoutResult = textLayoutResult,
             topLeft = Offset(textX, textY)
         )
@@ -289,8 +289,8 @@ private fun Modifier.applyAxisAndGridLines(
     allNegativeValues: Boolean,
     allPositiveValues: Boolean,
     hasNegativeValues: Boolean,
-    gridLineColor: Color,
-    axisLineColor: Color,
+    gridLineColor: ChartColor,
+    axisLineColor: ChartColor,
 ): Modifier {
     var modifier = this
 

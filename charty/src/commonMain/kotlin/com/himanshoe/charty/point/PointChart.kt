@@ -23,14 +23,26 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
-import com.himanshoe.charty.bar.config.TargetConfig
 import com.himanshoe.charty.common.LabelConfig
+import com.himanshoe.charty.common.TargetConfig
 import com.himanshoe.charty.common.drawTargetLineIfNeeded
 import com.himanshoe.charty.point.model.PointChartColorConfig
 import com.himanshoe.charty.point.model.PointChartConfig
 import com.himanshoe.charty.point.model.PointData
 import com.himanshoe.charty.point.modifier.drawAxesAndGridLines
 
+/**
+ * Composable function to display a point chart.
+ *
+ * @param data A lambda function that returns a list of PointData objects representing the data points for the chart.
+ * @param modifier The modifier to be applied to the chart.
+ * @param labelConfig The configuration for the labels, including whether to show labels on the axes.
+ * @param colorConfig The color configuration for the chart.
+ * @param chartConfig The configuration for the chart, including line widths and path effects.
+ * @param target An optional target value to be displayed on the chart.
+ * @param targetConfig The configuration for the target line.
+ * @param onPointClick A lambda function to be called when a point is clicked, with the index and data of the clicked point.
+ */
 @Composable
 fun PointChart(
     data: () -> List<PointData>,
