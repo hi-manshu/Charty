@@ -1,8 +1,7 @@
-# Project Title
+# Charty : Elementary Chart library for Compose
 
 ![Banner](img/banner.png)
 
-## Charty : Elementary Chart library for Compose
 
 Chart Library built using Jetpack Compose and is highly customizable. (CMP version coming soon)
 
