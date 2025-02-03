@@ -1,10 +1,17 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.publish)
+}
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.S01)
+    signAllPublications()
 }
 
 kotlin {
@@ -31,7 +38,6 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            // put your multiplatform dependencies here
             implementation(compose.runtime)
             implementation(compose.ui)
             implementation(compose.runtime)

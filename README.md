@@ -18,4 +18,15 @@ _Made with ❤️ for Android Developers by Himanshu_
 ![Charty](https://img.shields.io/maven-central/v/com.himanshoe/charty?color=f4c430&label=Maven%20Central%20%3A%20Charty)
 ![Charty Static Check](https://github.com/hi-manshu/charty/actions/workflows/static-check.yml/badge.svg)
 
+## Getting Started
 
+To use Charty in your project, add the following dependency to your `build.gradle.kts` file:
+
+```kotlin
+dependencies {
+    implementation("com.himanshoe:charty:2.0.1")
+}
+```
+### Few apps using it:
+1. ![NEKO](https://github.com/nekomangaorg/Neko)
+2. ![TimePlanner](https://github.com/v1tzor/TimePlanner)
