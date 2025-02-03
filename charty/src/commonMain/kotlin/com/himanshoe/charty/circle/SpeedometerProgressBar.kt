@@ -21,8 +21,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.himanshoe.charty.circle.config.DotConfig
-import com.himanshoe.charty.common.TextConfig
 import com.himanshoe.charty.common.ChartColor
+import com.himanshoe.charty.common.TextConfig
 import kotlinx.coroutines.delay
 import kotlin.math.PI
 import kotlin.math.cos

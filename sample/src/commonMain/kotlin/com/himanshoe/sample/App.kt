@@ -80,7 +80,7 @@ private fun LazyListScope.addSpeedometerProgressBar() {
             SpeedometerProgressBar(
                 progress = { 0.50f },
                 title = "Temperature",
-                modifier = Modifier.size(200.dp),
+                modifier = Modifier.size(300.dp),
                 trackColor = Color.Gray.copy(alpha = 0.2F).asSolidChartColor(),
                 color = ChartColor.Gradient(
                     listOf(
@@ -90,8 +90,10 @@ private fun LazyListScope.addSpeedometerProgressBar() {
                 ),
                 progressIndicatorColor = ChartColor.Gradient(
                     listOf(
-                        Color(0xFFffafbd),
-                        Color(0xFFffc3a0),
+                        Color(0xFF2193b0),
+                        Color(0xFF6dd5ed),
+                        Color(0xFF1e88e5),
+                        Color(0xFF42a5f5)
                     )
                 )
             )
@@ -118,35 +120,49 @@ private fun LazyListScope.addCircleChart() {
 }
 
 private fun LazyListScope.addPieChart() {
-    item {
-        val data = listOf(
-            PieChartData(
-                25f,
-                listOf(Color(0xFFFFAFBD), Color(0xFFFFC3A0)).asGradientChartColor(),
-                label = "25%"
-            ),
-            PieChartData(
-                35f,
-                listOf(Color(0xFFf12711), Color(0xFFf5af19)).asGradientChartColor(),
-                label = "35%"
-            ),
-            PieChartData(
-                20f,
-                listOf(Color(0xFFbc4e9c), Color(0xFFf80759)).asGradientChartColor(),
-                label = "20%"
-            ),
-            PieChartData(
-                10f,
-                listOf(Color(0xFF11998e), Color(0xFF38ef7d)).asGradientChartColor(),
-                label = "10%"
-            ),
-            PieChartData(
-                10f,
-                listOf(Color(0xFF11998e), Color(0xFF385f7d)).asGradientChartColor(),
-                label = "10%"
-            ),
-        )
+    val data = listOf(
+        PieChartData(
+            25f,
+            listOf(Color(0xFFFFAFBD), Color(0xFFFFC3A0)).asGradientChartColor(),
+            label = "25%"
+        ),
+        PieChartData(
+            35f,
+            listOf(Color(0xFFf12711), Color(0xFFf5af19)).asGradientChartColor(),
+            label = "35%"
+        ),
+        PieChartData(
+            20f,
+            listOf(Color(0xFFbc4e9c), Color(0xFFf80759)).asGradientChartColor(),
+            label = "20%"
+        ),
+        PieChartData(
+            10f,
+            listOf(Color(0xFF11998e), Color(0xFF38ef7d)).asGradientChartColor(),
+            label = "10%"
+        ),
+        PieChartData(
+            10f,
+            listOf(Color(0xFF11998e), Color(0xFF385f7d)).asGradientChartColor(),
+            label = "10%"
+        ),
+    )
 
+    item {
+        Box(
+            modifier = Modifier.fillParentMaxWidth().size(300.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            PieChart(
+                isDonutChart = false,
+                isHalfPieChart = false,
+                backgroundColor = Color.White.asSolidChartColor(),
+                data = { data },
+                modifier = Modifier.size(300.dp).fillParentMaxWidth().padding(4.dp)
+            )
+        }
+    }
+    item {
         Box(
             modifier = Modifier.fillParentMaxWidth().size(300.dp),
             contentAlignment = Alignment.Center
@@ -158,7 +174,20 @@ private fun LazyListScope.addPieChart() {
                 modifier = Modifier.size(300.dp).fillParentMaxWidth().padding(4.dp)
             )
         }
-
+    }
+    item {
+        Box(
+            modifier = Modifier.fillParentMaxWidth().size(300.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            PieChart(
+                isDonutChart = true,
+                isHalfPieChart = true,
+                backgroundColor = Color.White.asSolidChartColor(),
+                data = { data },
+                modifier = Modifier.height(150.dp).fillParentMaxWidth().padding(4.dp)
+            )
+        }
     }
 }
 
