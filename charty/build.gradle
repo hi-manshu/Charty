@@ -65,7 +65,7 @@ dependencies {
     implementation 'androidx.compose.material:material-icons-extended'
 
     //time
-    implementation 'org.jetbrains.kotlinx:kotlinx-datetime:0.4.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-datetime:0.6.1'
     lintChecks('com.slack.lint.compose:compose-lint-checks:1.2.0')
 
     testImplementation 'junit:junit:4.13.2'
