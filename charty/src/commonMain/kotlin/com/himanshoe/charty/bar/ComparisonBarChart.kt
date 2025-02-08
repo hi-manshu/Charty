@@ -158,20 +158,22 @@ private fun ComparisonBarContent(
                 )
             }
 
-            val textCharCount = if (groupCount <= 7) 3 else 1
-            val textSizeFactor = groupCount * if (groupCount <= 5) 20 else 40
-            val textLayoutResult = textMeasurer.measure(
-                text = group.label.take(textCharCount),
-                style = TextStyle(fontSize = (canvasWidth / textSizeFactor).sp)
-            )
-            drawText(
-                textLayoutResult = textLayoutResult,
-                topLeft = Offset(
-                    x = groupStartX + groupWidth / 2 - textLayoutResult.size.width / 2,
-                    y = canvasHeight + (canvasHeight * 0.01f)
-                ),
-                brush = SolidColor(Color.Black)
-            )
+            if (labelConfig.showXLabel) {
+                val textCharCount = if (groupCount <= 7) 3 else 1
+                val textSizeFactor = groupCount * if (groupCount <= 5) 20 else 40
+                val textLayoutResult = textMeasurer.measure(
+                    text = group.label.take(textCharCount),
+                    style = TextStyle(fontSize = (canvasWidth / textSizeFactor).sp)
+                )
+                drawText(
+                    textLayoutResult = textLayoutResult,
+                    topLeft = Offset(
+                        x = groupStartX + groupWidth / 2 - textLayoutResult.size.width / 2,
+                        y = canvasHeight + (canvasHeight * 0.01f)
+                    ),
+                    brush = SolidColor(Color.Black)
+                )
+            }
         }
     }
 }

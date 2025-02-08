@@ -2,7 +2,7 @@
 
 ![Banner](img/banner.png)
 
-Chart Library built using Jetpack Compose and is highly customizable. (CMP version coming soon)
+Chart Library built using Jetpack Compose and is highly customizable. Now with Kotlin Multiplatform (KMP) support!
 
 _Made with ❤️ for Android Developers by Himanshu_
 
@@ -22,9 +22,26 @@ To use Charty in your project, add the following dependency to your `build.gradl
 
 ```kotlin
 dependencies {
-    implementation("com.himanshoe:charty:2.0.1")
+    implementation("com.himanshoe:charty:<version>")
 }
 ```
-### Few apps using it:
+## Few apps using it:
 1. [NEKO](https://github.com/nekomangaorg/Neko)
 2. [TimePlanner](https://github.com/v1tzor/TimePlanner)
+
+### License
+Copyright 2025 The Charty Authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+

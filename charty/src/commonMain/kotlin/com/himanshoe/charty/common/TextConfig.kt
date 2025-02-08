@@ -7,17 +7,17 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
 data class TextConfig(
-    val textSize: TextUnit,
+    val fontSize: TextUnit,
     val textColor: ChartColor,
     val style: TextStyle
 ) {
     companion object {
         fun default(
-            textSize: TextUnit = 12.sp,
+            fontSize: TextUnit = 12.sp,
             color: ChartColor = Color.Gray.asSolidChartColor(),
             style: TextStyle = TextStyle(brush = Brush.linearGradient(color.value))
         ) = TextConfig(
-            textSize = textSize,
+            fontSize = fontSize,
             textColor = color,
             style = style
         )

@@ -4,6 +4,9 @@ complexity:
   TooManyFunctions:
     active: false
   LongMethod:
+    threshold: 90
+    ignoreAnnotated: [ "Composable" ]
+  CyclomaticComplexMethod:
     ignoreAnnotated: [ "Composable" ]
   ComplexCondition:
     active: true

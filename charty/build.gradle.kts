@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.publish)
+    alias(libs.plugins.dokka)
 }
 
 mavenPublishing {
@@ -66,6 +67,7 @@ dependencies {
     detekt(libs.detekt.cli)
     detekt(libs.detekt.formatting)
     debugImplementation(compose.uiTooling)
+    dokkaPlugin(libs.dokka)
 }
 tasks.register<JavaExec>("detekt") {
     mainClass = "io.gitlab.arturbosch.detekt.cli.Main"

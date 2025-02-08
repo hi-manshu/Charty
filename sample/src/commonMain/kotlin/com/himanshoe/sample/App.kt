@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
 import com.himanshoe.charty.bar.BarChart
 import com.himanshoe.charty.bar.ComparisonBarChart
@@ -36,7 +37,7 @@ import com.himanshoe.charty.circle.CircleChart
 import com.himanshoe.charty.circle.SpeedometerProgressBar
 import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.common.ChartColor
-import com.himanshoe.charty.common.LabelConfig
+import com.himanshoe.charty.common.TextConfig
 import com.himanshoe.charty.common.asGradientChartColor
 import com.himanshoe.charty.common.asSolidChartColor
 import com.himanshoe.charty.line.LineChart
@@ -85,6 +86,13 @@ private fun LazyListScope.addSpeedometerProgressBar() {
                 progress = { 0.50f },
                 title = "Temperature",
                 modifier = Modifier.size(300.dp),
+                titleTextConfig = TextConfig.default().copy(
+                    fontSize = 20.sp,
+                ),
+                subTitleTextConfig = TextConfig.default().copy(
+                    fontSize = 30.sp,
+                    textColor = ChartColor.Solid(Color.Black)
+                ),
                 trackColor = Color.Gray.copy(alpha = 0.2F).asSolidChartColor(),
                 color = ChartColor.Gradient(
                     listOf(
@@ -270,7 +278,6 @@ private fun LazyListScope.addPointChart() {
             onPointClick = { index, circleData ->
                 println("Clicked on index: $index with data: $circleData")
             },
-            labelConfig = LabelConfig.default().copy(showXLabel = true, showYLabel = false),
         )
     }
 

@@ -3,7 +3,6 @@ package com.himanshoe.charty.bar.config
 data class StackBarConfig(
     val showAxisLines: Boolean,
     val showGridLines: Boolean,
-    val drawNegativeValueChart: Boolean,
     val showCurvedBar: Boolean,
     val minimumBarCount: Int,
 ) {
@@ -16,8 +15,7 @@ data class StackBarConfig(
         fun default() = StackBarConfig(
             showAxisLines = true,
             showGridLines = true,
-            drawNegativeValueChart = true,
-            showCurvedBar = true,
+            showCurvedBar = false,
             minimumBarCount = 7,
         )
     }

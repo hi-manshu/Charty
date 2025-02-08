@@ -22,8 +22,8 @@ data class LabelConfig(
          */
         fun default() = LabelConfig(
             textColor = Color.Black.asSolidChartColor(),
-            showXLabel = true,
-            showYLabel = true,
+            showXLabel = false,
+            showYLabel = false,
         )
     }
 }

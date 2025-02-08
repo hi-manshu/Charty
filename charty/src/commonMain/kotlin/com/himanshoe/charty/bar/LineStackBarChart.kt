@@ -93,6 +93,7 @@ private fun LineStackBarChartContent(
 
     var clickedOffset by mutableStateOf(Offset.Zero)
     var clickedBarIndex by mutableIntStateOf(-1)
+
     StackBarChartScaffold(
         maxValue = maxValue,
         bottomPadding = bottomPadding,
@@ -103,6 +104,8 @@ private fun LineStackBarChartContent(
         barChartColorConfig = barChartColorConfig,
         labelConfig = labelConfig,
         textMeasurer = textMeasurer,
+        showGridLines = stackBarConfig.showGridLines,
+        showAxisLines = stackBarConfig.showAxisLines,
         onBarClick = { clickedOffset = it }
     ) { canvasWidth, canvasHeight ->
         val gap = canvasWidth / (displayData.size * 10)
@@ -120,7 +123,8 @@ private fun LineStackBarChartContent(
             var accumulatedHeight = 0f
             stackBarData.values.fastForEachIndexed { valueIndex, value ->
                 val height = value.absoluteValue / maxValue * canvasHeight
-                val topLeftY = canvasHeight - accumulatedHeight - height
+                val expandedHeight = if (clickedBarIndex == index) (height * 1.05f) else height
+                val topLeftY = canvasHeight - accumulatedHeight - expandedHeight
                 val color = stackBarData.colors[valueIndex].value
 
                 val (individualBarTopLeft, individualBarRectSize, cornerRadius) = getBarTopLeftSizeAndRadius(
@@ -141,7 +145,7 @@ private fun LineStackBarChartContent(
 
                 getDrawingPath(
                     individualBarTopLeft = individualBarTopLeft,
-                    individualBarRectSize = individualBarRectSize,
+                    individualBarRectSize = individualBarRectSize.copy(height = expandedHeight),
                     cornerRadius = cornerRadius
                 ).let { path ->
                     val brush = Brush.linearGradient(
@@ -149,7 +153,7 @@ private fun LineStackBarChartContent(
                         start = Offset(individualBarTopLeft.x, individualBarTopLeft.y),
                         end = Offset(
                             x = individualBarTopLeft.x + individualBarRectSize.width,
-                            y = individualBarTopLeft.y + individualBarRectSize.height
+                            y = individualBarTopLeft.y + expandedHeight
                         )
                     )
                     drawPath(path = path, brush = brush)
@@ -194,6 +198,8 @@ internal fun StackBarChartScaffold(
     bottomPadding: Dp,
     leftPadding: Dp,
     hasNegativeValues: Boolean,
+    showAxisLines: Boolean,
+    showGridLines: Boolean,
     textMeasurer: TextMeasurer,
     modifier: Modifier = Modifier,
     displayData: List<StackBarData> = emptyList(),
@@ -211,11 +217,20 @@ internal fun StackBarChartScaffold(
             .drawWithCache {
                 val barWidth = size.width * 9 / (dataCount * 10)
                 onDrawBehind {
-                    if (labelConfig.showYLabel && !hasNegativeValues) {
-                        for (i in 0..4) {
-                            val yValue = i * step
-                            val displayValue = yValue.toString().take(4)
-                            val yOffset = size.height - (yValue / maxValue) * size.height
+                    for (i in 0..4) {
+                        val yValue = i * step
+                        val displayValue = yValue.toString().take(4)
+                        val yOffset = size.height - (yValue / maxValue) * size.height
+                        if (showGridLines) {
+                            // Draw horizontal grid line
+                            drawLine(
+                                brush = Brush.linearGradient(barChartColorConfig.gridLineColor.value),
+                                start = Offset(0f, yOffset),
+                                end = Offset(size.width, yOffset),
+                                strokeWidth = 1.dp.toPx()
+                            )
+                        }
+                        if (labelConfig.showYLabel && !hasNegativeValues) {
                             val textLayoutResult = textMeasurer.measure(
                                 text = displayValue,
                                 style = TextStyle(fontSize = (size.width / displayData.count() / 10).sp),
@@ -229,13 +244,6 @@ internal fun StackBarChartScaffold(
                                     -textLayoutResult.size.width - 8f,
                                     y = yOffset - textLayoutResult.size.height / 2,
                                 ),
-                            )
-                            // Draw horizontal grid line
-                            drawLine(
-                                brush = Brush.linearGradient(barChartColorConfig.gridLineColor.value),
-                                start = Offset(0f, yOffset),
-                                end = Offset(size.width, yOffset),
-                                strokeWidth = 1.dp.toPx()
                             )
                         }
                     }
@@ -261,9 +269,15 @@ internal fun StackBarChartScaffold(
                     }
                 }
             }
-            .drawAxisLineForVerticalChart(
-                hasNegativeValues = false,
-                axisLineColor = barChartColorConfig.axisLineColor
+            .then(
+                if (showAxisLines) {
+                    Modifier.drawAxisLineForVerticalChart(
+                        hasNegativeValues = false,
+                        axisLineColor = barChartColorConfig.axisLineColor
+                    )
+                } else {
+                    Modifier
+                }
             )
             .pointerInput(Unit) { detectTapGestures { onBarClick(it) } }
     ) {

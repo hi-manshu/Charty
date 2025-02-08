@@ -406,7 +406,9 @@ internal fun BarChartCanvasScaffold(
             } else {
                 Modifier
             },
-        ).fillMaxSize().pointerInput(Unit) { detectTapGestures { onClick(it) } },
+        )
+            .fillMaxSize()
+            .pointerInput(Unit) { detectTapGestures { onClick(it) } },
     ) {
         val (canvasWidth, canvasHeight) = size
         val gap = canvasWidth / (data().count() * 10)

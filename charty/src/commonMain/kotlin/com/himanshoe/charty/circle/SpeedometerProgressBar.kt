@@ -51,7 +51,7 @@ fun SpeedometerProgressBar(
     modifier: Modifier = Modifier,
     dotConfig: DotConfig = DotConfig.default(),
     titleTextConfig: TextConfig = TextConfig.default(),
-    subTitleTextConfig: TextConfig = TextConfig.default(textSize = 20.sp),
+    subTitleTextConfig: TextConfig = TextConfig.default(fontSize = 20.sp),
 ) {
     val progressAnimator = remember { Animatable(0f) }
     LaunchedEffect(progress()) {
@@ -110,7 +110,7 @@ fun SpeedometerProgressBar(
             Text(
                 text = title,
                 style = titleTextConfig.style.copy(
-                    fontSize = titleTextConfig.textSize,
+                    fontSize = titleTextConfig.fontSize,
                     brush = Brush.linearGradient(
                         colors = titleTextConfig.textColor.value
                     )
@@ -118,7 +118,7 @@ fun SpeedometerProgressBar(
             )
             Text(
                 style = subTitleTextConfig.style.copy(
-                    fontSize = subTitleTextConfig.textSize,
+                    fontSize = subTitleTextConfig.fontSize,
                     brush = Brush.linearGradient(
                         colors = subTitleTextConfig.textColor.value
                     )

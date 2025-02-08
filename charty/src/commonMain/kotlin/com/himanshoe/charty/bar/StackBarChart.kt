@@ -11,6 +11,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
@@ -88,6 +89,8 @@ private fun StackBarChartContent(
         displayData = displayData,
         barChartColorConfig = barChartColorConfig,
         labelConfig = labelConfig,
+        showAxisLines = stackBarConfig.showAxisLines,
+        showGridLines = stackBarConfig.showGridLines,
         textMeasurer = textMeasurer,
         onBarClick = { clickedOffset = it }
     ) { canvasWidth, canvasHeight ->
@@ -109,9 +112,16 @@ private fun StackBarChartContent(
 
         displayData.fastForEachIndexed { index, stackBarData ->
             var accumulatedHeight = 0f
+            // Draw background bar
+            drawRect(
+                color = Color.LightGray,
+                topLeft = Offset((index + 1) * (barWidth + gap) - barWidth, 0f),
+                size = Size(barWidth, canvasHeight)
+            )
             stackBarData.values.fastForEachIndexed { valueIndex, value ->
                 val height = value.absoluteValue / maxValue * canvasHeight
-                val topLeftY = canvasHeight - accumulatedHeight - height
+                val expandedHeight = if (clickedBarIndex == index) (height * 1.05f) else height
+                val topLeftY = canvasHeight - accumulatedHeight - expandedHeight
                 val color = stackBarData.colors[valueIndex].value
 
                 val (individualBarTopLeft, individualBarRectSize, cornerRadius) = getBarTopLeftSizeAndRadius(
@@ -132,7 +142,7 @@ private fun StackBarChartContent(
 
                 getDrawingPath(
                     individualBarTopLeft = individualBarTopLeft,
-                    individualBarRectSize = individualBarRectSize,
+                    individualBarRectSize = individualBarRectSize.copy(height = expandedHeight),
                     cornerRadius = cornerRadius
                 ).let { path ->
                     val brush = Brush.linearGradient(
@@ -140,7 +150,7 @@ private fun StackBarChartContent(
                         start = Offset(individualBarTopLeft.x, individualBarTopLeft.y),
                         end = Offset(
                             individualBarTopLeft.x + individualBarRectSize.width,
-                            individualBarTopLeft.y + individualBarRectSize.height
+                            individualBarTopLeft.y + expandedHeight
                         )
                     )
                     drawPath(path = path, brush = brush)
