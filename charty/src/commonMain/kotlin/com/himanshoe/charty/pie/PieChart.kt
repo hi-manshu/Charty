@@ -76,8 +76,8 @@ private fun PieChartContent(
                     var currentStartAngle = 0f
                     val clickedAngle = (
                             atan2(
-                                offset.y - size.height / 2,
-                                offset.x - size.width / 2
+                                y = offset.y - size.height / 2,
+                                x = offset.x - size.width / 2
                             ) * STRAIGHT_ANGLE / PI + COMPLETE_CIRCLE_DEGREE
                             ) % COMPLETE_CIRCLE_DEGREE
                     angles.fastForEachIndexed { index, sweepAngle ->

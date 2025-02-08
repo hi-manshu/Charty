@@ -103,7 +103,8 @@ private fun ComparisonBarContent(
         val barWidth = groupWidth / (maxBarsCount * 2)
         val cornerRadius = if (comparisonBarChartConfig.showCurvedBar) {
             CornerRadius(
-                barWidth / 2, barWidth / 2
+                x = barWidth / 2,
+                y = barWidth / 2
             )
         } else {
             CornerRadius.Zero
@@ -122,9 +123,9 @@ private fun ComparisonBarContent(
             group.bars.fastForEachIndexed { barIndex, barValue ->
                 val barHeight = (barValue / maxValue) * canvasHeight
 
-                val barX =
-                    groupStartX + (groupWidth - (group.bars.size * (barWidth + barWidth / 4))) / 2 +
-                            barIndex * (barWidth + barWidth / 4)
+                val barX = groupStartX +
+                        (groupWidth - (group.bars.size * (barWidth + barWidth / 4))) / 2 +
+                        barIndex * (barWidth + barWidth / 4)
 
                 val brush = Brush.linearGradient(
                     colors = group.colors[barIndex].value,

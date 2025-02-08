@@ -233,7 +233,8 @@ internal fun getTextYOffsetAndCornerRadius(
     }
     val cornerRadius = if (barChartConfig.showCurvedBar) {
         CornerRadius(
-            barWidth / 2, barWidth / 2
+            x = barWidth / 2,
+            y = barWidth / 2
         )
     } else {
         CornerRadius.Zero
@@ -422,7 +423,9 @@ internal fun BarChartCanvasScaffold(
         val barWidth = (canvasWidth - gap * (data().count() - 1)) / data().count()
 
         content(
-            canvasHeight, gap, barWidth
+            canvasHeight,
+            gap,
+            barWidth
         )
     }
 }

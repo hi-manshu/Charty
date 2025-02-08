@@ -204,7 +204,6 @@ private fun DrawScope.drawPoints(
         val animatedRadius =
             if (index == clickedIndex) circleRadius.value * 1.5f else circleRadius.value
 
-
         val circleCenter = Offset(x, y)
 
         drawCircle(
