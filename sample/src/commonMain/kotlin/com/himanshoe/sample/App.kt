@@ -29,12 +29,14 @@ import com.himanshoe.charty.bar.LineStackedBarChart
 import com.himanshoe.charty.bar.SignalProgressBarChart
 import com.himanshoe.charty.bar.StackedBarChart
 import com.himanshoe.charty.bar.StorageBar
+import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.ComparisonBarData
 import com.himanshoe.charty.bar.model.StackBarData
 import com.himanshoe.charty.bar.model.StorageData
 import com.himanshoe.charty.circle.CircleChart
 import com.himanshoe.charty.circle.SpeedometerProgressBar
+import com.himanshoe.charty.circle.config.DotConfig
 import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.TextConfig
@@ -48,6 +50,8 @@ import com.himanshoe.charty.line.model.MultiLineData
 import com.himanshoe.charty.pie.PieChart
 import com.himanshoe.charty.pie.model.PieChartData
 import com.himanshoe.charty.point.PointChart
+import com.himanshoe.charty.point.model.PointChartColorConfig
+import com.himanshoe.charty.point.model.PointChartConfig
 import com.himanshoe.charty.point.model.PointData
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.random.Random
@@ -57,11 +61,11 @@ import kotlin.random.Random
 @Preview
 fun App() {
     LazyColumn {
+        addComparisonChart()
         addStackBarChart()
         addSpeedometerProgressBar()
         addCircleChart()
         addPieChart()
-        addComparisonChart()
         addLineChart()
         addMultiLineChart()
         addPointChart()
@@ -90,24 +94,23 @@ private fun LazyListScope.addSpeedometerProgressBar() {
                     fontSize = 20.sp,
                 ),
                 subTitleTextConfig = TextConfig.default().copy(
-                    fontSize = 30.sp,
-                    textColor = ChartColor.Solid(Color.Black)
+                    fontSize = 30.sp, textColor = ChartColor.Solid(Color.Black)
                 ),
                 trackColor = Color.Gray.copy(alpha = 0.2F).asSolidChartColor(),
                 color = ChartColor.Gradient(
                     listOf(
-                        Color(0xFF2193b0),
-                        Color(0xFF6dd5ed)
+                        Color(0xFF7AD3FF), Color(0xFF4FBAF0)
                     )
                 ),
-                progressIndicatorColor = ChartColor.Gradient(
-                    listOf(
-                        Color(0xFF2193b0),
-                        Color(0xFF6dd5ed),
-                        Color(0xFF1e88e5),
-                        Color(0xFF42a5f5)
-                    )
-                )
+                dotConfig = DotConfig(
+                    fillDotColor = ChartColor.Gradient(
+                        listOf(
+                            Color(0xFF7AD3FF), Color(0xFF4FBAF0)
+                        )
+                    ),
+                    trackDotColor = Color.Gray.copy(alpha = 0.2F).asSolidChartColor(),
+                ),
+                progressIndicatorColor = ChartColor.Solid(Color.White)
             )
         }
     }
@@ -120,13 +123,11 @@ private fun LazyListScope.addCircleChart() {
             modifier = Modifier.fillParentMaxWidth().size(300.dp),
             contentAlignment = Alignment.Center
         ) {
-            CircleChart(
-                data = data,
+            CircleChart(data = data,
                 modifier = Modifier.size(300.dp),
                 onCircleClick = { circleData ->
                     println("Clicked on circle with data: $circleData")
-                }
-            )
+                })
         }
     }
 }
@@ -134,29 +135,19 @@ private fun LazyListScope.addCircleChart() {
 private fun LazyListScope.addPieChart() {
     val data = listOf(
         PieChartData(
-            25f,
-            listOf(Color(0xFFFFAFBD), Color(0xFFFFC3A0)).asGradientChartColor(),
-            label = "25%"
+            25f, listOf(Color(0xFFFFAFBD), Color(0xFFFFC3A0)).asGradientChartColor(), label = "25%"
         ),
         PieChartData(
-            35f,
-            listOf(Color(0xFFf12711), Color(0xFFf5af19)).asGradientChartColor(),
-            label = "35%"
+            35f, listOf(Color(0xFFf12711), Color(0xFFf5af19)).asGradientChartColor(), label = "35%"
         ),
         PieChartData(
-            20f,
-            listOf(Color(0xFFbc4e9c), Color(0xFFf80759)).asGradientChartColor(),
-            label = "20%"
+            20f, listOf(Color(0xFFbc4e9c), Color(0xFFf80759)).asGradientChartColor(), label = "20%"
         ),
         PieChartData(
-            10f,
-            listOf(Color(0xFF11998e), Color(0xFF38ef7d)).asGradientChartColor(),
-            label = "10%"
+            10f, listOf(Color(0xFF11998e), Color(0xFF38ef7d)).asGradientChartColor(), label = "10%"
         ),
         PieChartData(
-            10f,
-            listOf(Color(0xFF11998e), Color(0xFF385f7d)).asGradientChartColor(),
-            label = "10%"
+            10f, listOf(Color(0xFF11998e), Color(0xFF385f7d)).asGradientChartColor(), label = "10%"
         ),
     )
 
@@ -166,9 +157,10 @@ private fun LazyListScope.addPieChart() {
             contentAlignment = Alignment.Center
         ) {
             PieChart(
+                onPieChartSliceClick = {
+                    println("Clicked on slice with data: $it")
+                },
                 isDonutChart = false,
-                isHalfPieChart = false,
-                backgroundColor = Color.White.asSolidChartColor(),
                 data = { data },
                 modifier = Modifier.size(300.dp).fillParentMaxWidth().padding(4.dp)
             )
@@ -176,28 +168,16 @@ private fun LazyListScope.addPieChart() {
     }
     item {
         Box(
-            modifier = Modifier.fillParentMaxWidth().size(300.dp),
+            modifier = Modifier.fillParentMaxWidth().size(300.dp).padding(12.dp),
             contentAlignment = Alignment.Center
         ) {
             PieChart(
+                onPieChartSliceClick = {
+                    println("Clicked on slice with data: $it")
+                },
                 isDonutChart = true,
-                backgroundColor = Color.White.asSolidChartColor(),
                 data = { data },
                 modifier = Modifier.size(300.dp).fillParentMaxWidth().padding(4.dp)
-            )
-        }
-    }
-    item {
-        Box(
-            modifier = Modifier.fillParentMaxWidth().size(300.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            PieChart(
-                isDonutChart = true,
-                isHalfPieChart = true,
-                backgroundColor = Color.White.asSolidChartColor(),
-                data = { data },
-                modifier = Modifier.height(150.dp).fillParentMaxWidth().padding(4.dp)
             )
         }
     }
@@ -209,35 +189,29 @@ private fun LazyListScope.addComparisonChart() {
         val barColors = listOf(
             ChartColor.Gradient(
                 listOf(
-                    Color(0xFF2193b0),
-                    Color(0xFF6dd5ed)
+                    Color(0xFFddd7fc),
+                    Color(0xFFd8d1fa)
                 )
             ),
             ChartColor.Gradient(
                 listOf(
-                    Color(0xFFCB356B),
-                    Color(0xFFBD3F32),
+                    Color(0xFFB09FFF),
+                    Color(0xFF8D79F6),
                 )
             ),
-            ChartColor.Gradient(
-                listOf(
-                    Color(0xFFF23222),
-                    Color(0xFFff6a00)
-                )
-            )
         )
         val mockData = listOf(
             ComparisonBarData(
-                label = "Category 1", bars = listOf(45f, 70f, 30f), colors = barColors
+                label = "Category 1", bars = listOf(45f, 70f), colors = barColors
             ), ComparisonBarData(
-                label = "Category 2", bars = listOf(80f, 60f, 90f), colors = barColors
+                label = "Category 2", bars = listOf(80f, 60f), colors = barColors
             ), ComparisonBarData(
-                label = "Category 3", bars = listOf(40f, 20f, 50f), colors = barColors
+                label = "Category 3", bars = listOf(40f, 20f), colors = barColors
             ), ComparisonBarData(
                 label = "Category 4", bars = listOf(40f, 20f), colors = barColors.take(2)
 
             ), ComparisonBarData(
-                label = "Category 5", bars = listOf(40f, 20f, 50f), colors = barColors
+                label = "Category 5", bars = listOf(40f, 20f), colors = barColors
             )
         )
 
@@ -257,23 +231,22 @@ private fun LazyListScope.addPointChart() {
             PointData(xValue = "Tue", yValue = 20f),
             PointData(xValue = "Wed", yValue = 15f),
             PointData(xValue = "Thu", yValue = 25f),
-            PointData(xValue = "Fri", yValue = 30f),
-            PointData(xValue = "Mon", yValue = 10f),
-            PointData(xValue = "Tue", yValue = 20f),
-            PointData(xValue = "Wed", yValue = 15f),
-            PointData(xValue = "Thu", yValue = 25f),
-            PointData(xValue = "Fri", yValue = 30f),
-            PointData(xValue = "Fri", yValue = 30f),
-            PointData(xValue = "Mon", yValue = 10f),
-            PointData(xValue = "Tue", yValue = 20f),
-            PointData(xValue = "Wed", yValue = 15f),
-            PointData(xValue = "Thu", yValue = 25f),
-            PointData(xValue = "Fri", yValue = 30f),
+            PointData(xValue = "Thu", yValue = 2f),
+            PointData(xValue = "Thu", yValue = 8f),
+            PointData(xValue = "Fri", yValue = 30f)
         )
 
         PointChart(
             data = { mockData },
             target = 18f,
+            colorConfig = PointChartColorConfig.default().copy(
+                circleColor = ChartColor.Gradient(
+                    listOf(
+                        Color(0xFFFD95D3), Color(0xFFFF5CBE)
+                    )
+                ),
+            ),
+            chartConfig = PointChartConfig(circleRadius = 20F),
             modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
             onPointClick = { index, circleData ->
                 println("Clicked on index: $index with data: $circleData")
@@ -287,15 +260,17 @@ private fun LazyListScope.addMultiLineChart() {
     item {
         val xValues = listOf("Mon", "Tue", "Wed", "Thu", "Fri")
         val yValuesList = listOf(
-            listOf(0F, 5F, 2F, 11F, 3F), listOf(10F, 5F, 12F, 11F, 30F)
+            listOf(0F, 5F, 2F, 11F, 3F), listOf(10F, 15F, 12F, 15F, 30F)
         )
         val colorConfigs = listOf(
             LineChartColorConfig.default().copy(
-                lineColor = ChartColor.Solid(Color.Red), lineFillColor = ChartColor.Gradient(
+                lineColor = ChartColor.Solid(Color(0xFF8D79F6)),
+                lineFillColor = ChartColor.Gradient(
                     listOf(Color(0xFFCB356B), Color(0xFFBD3F32))
                 )
             ), LineChartColorConfig.default().copy(
-                lineColor = ChartColor.Solid(Color.Blue), lineFillColor = ChartColor.Gradient(
+                lineColor = ChartColor.Solid(Color(0xFFF25F33)),
+                lineFillColor = ChartColor.Gradient(
                     listOf(Color(0xFF2193b0), Color(0xFF6dd5ed))
                 )
             )
@@ -306,7 +281,7 @@ private fun LazyListScope.addMultiLineChart() {
             data = { mockData },
             modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
             smoothLineCurve = true,
-            showFilledArea = true,
+            showFilledArea = false,
             showLineStroke = true,
             target = 6F,
         )
@@ -316,6 +291,14 @@ private fun LazyListScope.addMultiLineChart() {
 private fun LazyListScope.addLineChart() {
     item {
         LineChart(
+            colorConfig = LineChartColorConfig.default().copy(
+                lineColor = ChartColor.Solid(Color(0xFF8D79F6)),
+                lineFillColor = ChartColor.Gradient(
+                    listOf(
+                        Color(0x4DB09FFF), Color(0xFFFFFFFF)
+                    )
+                )
+            ),
             data = {
                 listOf(
                     LineData(0F, "Mon"),
@@ -328,7 +311,9 @@ private fun LazyListScope.addLineChart() {
                     LineData(11F, "Thu"),
                     LineData(3F, "Fri")
                 )
-            }, modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp)
+            },
+            showFilledArea = true,
+            modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp)
         )
     }
 }
@@ -336,6 +321,10 @@ private fun LazyListScope.addLineChart() {
 private fun LazyListScope.addHorizontalBarChart() {
     item {
         HorizontalBarChart(
+            barChartColorConfig = BarChartColorConfig.default().copy(
+                fillBarColor = Color(0xFFFF92C1).asSolidChartColor(),
+                negativeBarColors = Color(0xFF4D4D4D).asSolidChartColor()
+            ),
             data = { generateMockBarData(7, useColor = false) },
             modifier = Modifier.fillParentMaxWidth().height(300.dp).padding(all = 20.dp)
 
@@ -343,6 +332,10 @@ private fun LazyListScope.addHorizontalBarChart() {
     }
     item {
         HorizontalBarChart(
+            barChartColorConfig = BarChartColorConfig.default().copy(
+                fillBarColor = Color(0xFFFF92C1).asSolidChartColor(),
+                negativeBarColors = Color(0xFF4D4D4D).asSolidChartColor()
+            ),
             data = { generateMockBarData(7, useColor = false, hasNegative = false) },
             modifier = Modifier.padding(all = 20.dp).fillParentMaxWidth().height(300.dp)
                 .padding(all = 20.dp)
@@ -351,6 +344,10 @@ private fun LazyListScope.addHorizontalBarChart() {
     }
     item {
         HorizontalBarChart(
+            barChartColorConfig = BarChartColorConfig.default().copy(
+                fillBarColor = Color(0xFFFF92C1).asSolidChartColor(),
+                negativeBarColors = Color(0xFFFF92C1).asSolidChartColor()
+            ),
             data = { generateAllNegativeBarData(7, useColor = false) },
             modifier = Modifier.padding(all = 20.dp).fillParentMaxWidth().height(300.dp)
                 .padding(all = 20.dp)
@@ -392,18 +389,32 @@ private fun LazyListScope.addStorageBarChart() {
 
 private fun LazyListScope.addSignalBarChart() {
     item {
-        SignalProgressBarChart(
-            progress = { 79F },
-            modifier = Modifier.padding(all = 12.dp).fillMaxWidth(0.15F).height(300.dp),
-            trackColor = ChartColor.Gradient(listOf(Color.Gray, Color.Black)),
-            progressColor = ChartColor.Gradient(
-                listOf(
-                    Color(0xFFffafbd),
-                    Color(0xFFffc3a0),
-                )
-            ),
-            gapRatio = 0.1F
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .padding(24.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            SignalProgressBarChart(
+                progress = { 79F },
+                totalBlocks = 50,
+                modifier = Modifier.padding(all = 12.dp).fillMaxWidth(0.15F).height(300.dp),
+                trackColor = ChartColor.Gradient(
+                    listOf(
+                        Color(0x4DB09FFF),
+                        Color(0xFFFFFFFF)
+                    )
+                ),
+                progressColor = ChartColor.Gradient(
+                    listOf(
+                        Color(0xFFB09FFF),
+                        Color(0xFF8D79F6),
+                    )
+                ),
+                gapRatio = 0.1F
+            )
+        }
     }
 }
 
@@ -412,6 +423,10 @@ private fun LazyListScope.addLineBarChart(target: Float?, data: () -> List<BarDa
         LineBarChart(target = target,
             modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
             data = data,
+            barChartColorConfig = BarChartColorConfig.default().copy(
+                fillBarColor = Color(0xFFFF92C1).asSolidChartColor(),
+                negativeBarColors = Color(0xFF4D4D4D).asSolidChartColor()
+            ),
             onBarClick = { _, barData: BarData -> })
     }
 }
@@ -420,6 +435,10 @@ private fun LazyListScope.addBarChart(target: Float?, data: List<BarData>) {
     item {
         BarChart(modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
             target = target,
+            barChartColorConfig = BarChartColorConfig.default().copy(
+                fillBarColor = Color(0xFFFF92C1).asSolidChartColor(),
+                negativeBarColors = Color(0xFF4D4D4D).asSolidChartColor()
+            ),
             data = { data },
             onBarClick = { _, barData -> })
     }
@@ -427,69 +446,34 @@ private fun LazyListScope.addBarChart(target: Float?, data: List<BarData>) {
 
 private fun LazyListScope.addStackBarChart() {
     item {
+        val colors = listOf(
+            ChartColor.Gradient(
+                listOf(
+                    Color(0xFFFFD572), Color(0xFFFEBD38)
+                )
+            ),
+            ChartColor.Gradient(
+                listOf(
+                    Color(0xFF99FFA3),
+                    Color(0xFF68EE76),
+                )
+            ),
+        )
         val data = listOf(
             StackBarData(
-                label = "Jan",
-                values = listOf(100f, 30f, 30f),
-                colors = listOf(
-                    ChartColor.Solid(Color.Red),
-                    ChartColor.Solid(Color.Green),
-                    ChartColor.Solid(Color.Blue)
-                )
-            ),
-            StackBarData(
-                label = "Feb",
-                values = listOf(15f, 25f, 35f),
-                colors = listOf(
-                    ChartColor.Solid(Color.Red),
-                    ChartColor.Solid(Color.Green),
-                    ChartColor.Solid(Color.Blue)
-                )
-            ),
-            StackBarData(
-                label = "Mar",
-                values = listOf(20f, 30f, 40f),
-                colors = listOf(
-                    ChartColor.Solid(Color.Red),
-                    ChartColor.Solid(Color.Green),
-                    ChartColor.Solid(Color.Blue)
-                )
-            ),
-            StackBarData(
-                label = "Apr",
-                values = listOf(25f, 35f, 45f),
-                colors = listOf(
-                    ChartColor.Solid(Color.Red),
-                    ChartColor.Solid(Color.Green),
-                    ChartColor.Solid(Color.Blue)
-                )
-            ),
-            StackBarData(
-                label = "May",
-                values = listOf(30f, 40f, 50f),
-                colors = listOf(
-                    ChartColor.Solid(Color.Red),
-                    ChartColor.Solid(Color.Green),
-                    ChartColor.Solid(Color.Blue)
-                )
-            ),
-            StackBarData(
-                label = "Jun",
-                values = listOf(35f, 45f, 55f),
-                colors = listOf(
-                    ChartColor.Solid(Color.Red),
-                    ChartColor.Solid(Color.Green),
-                    ChartColor.Solid(Color.Blue)
-                )
-            ),
-            StackBarData(
-                label = "Jul",
-                values = listOf(40f, 50f, 60f),
-                colors = listOf(
-                    ChartColor.Solid(Color.Red),
-                    ChartColor.Solid(Color.Green),
-                    ChartColor.Solid(Color.Blue)
-                )
+                label = "Jan", values = listOf(50f, 30f), colors = colors
+            ), StackBarData(
+                label = "Feb", values = listOf(15f, 35f), colors = colors
+            ), StackBarData(
+                label = "Mar", values = listOf(30f, 40f), colors = colors
+            ), StackBarData(
+                label = "Apr", values = listOf(25f, 45f), colors = colors
+            ), StackBarData(
+                label = "May", values = listOf(30f, 50f), colors = colors
+            ), StackBarData(
+                label = "Jun", values = listOf(35f, 45f), colors = colors
+            ), StackBarData(
+                label = "Jul", values = listOf(50f, 60f), colors = colors
             )
         )
 
@@ -522,7 +506,13 @@ private fun generateMockBarData(
 ): List<BarData> {
     val days = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
     val colors = listOf(
-        Color.Red, Color.Green, Color.Blue, Color.Yellow, Color.DarkGray, Color.Magenta, Color.Cyan
+        Color.Red,
+        Color.Green,
+        Color.Blue,
+        Color.Yellow,
+        Color.DarkGray,
+        Color.Magenta,
+        Color.Cyan
     )
 
     val number = if (hasNegative) -10 else 0
@@ -546,7 +536,13 @@ private fun generateMockBarData(
 private fun generateAllNegativeBarData(size: Int, useColor: Boolean = false): List<BarData> {
     val days = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
     val colors = listOf(
-        Color.Red, Color.Green, Color.Blue, Color.Yellow, Color.DarkGray, Color.Magenta, Color.Cyan
+        Color.Red,
+        Color.Green,
+        Color.Blue,
+        Color.Yellow,
+        Color.DarkGray,
+        Color.Magenta,
+        Color.Cyan
     )
 
     return List(size) {
@@ -576,7 +572,9 @@ private fun generateMockStorageCategories(): List<StorageData> {
 }
 
 private fun generateMultiLineData(
-    yValuesList: List<List<Float>>, xValues: List<String>, colorConfigs: List<LineChartColorConfig>
+    yValuesList: List<List<Float>>,
+    xValues: List<String>,
+    colorConfigs: List<LineChartColorConfig>
 ): List<MultiLineData> {
     require(yValuesList.all { it.size == xValues.size }) {
         "Each list of Y values must have the same size as the list of X values"
@@ -595,28 +593,17 @@ private fun generateMultiLineData(
 }
 
 fun generateMockCircleData(): List<CircleData> {
-    val colorLists = listOf(
-        listOf(Color(0xFF00FF00), Color(0xFF0000FF)),
-        listOf(Color(0xFFFFFF00), Color(0xFF00FFFF)),
-        listOf(Color(0xFF000000), Color(0xFFFFA500))
-    )
+
     return listOf(
         CircleData(
-            value = 80F, // Random value between 0 and 100
-            color = colorLists.first().asGradientChartColor(),
-            label = "Label 1"
+            value = 80F, color = Color(0XFFfb0f5a).asSolidChartColor(), label = "Label 1"
         ),
         CircleData(
-            value = 90F, // Random value between 0 and 100
-            color = colorLists[1].asGradientChartColor(),
-            label = "Label 2"
+            value = 80F, color = Color(0XFFafff01).asSolidChartColor(), label = "Label 2"
         ),
         CircleData(
-            value = 100F, // Random value between 0 and 100
-            color = colorLists.first().asGradientChartColor(),
-            label = "Label 3"
+            value = 90F, color = Color(0XFF00C4D4).asSolidChartColor(), label = "Label 3"
         ),
 
         )
-
 }

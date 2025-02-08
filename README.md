@@ -2,7 +2,8 @@
 
 ![Banner](img/banner.png)
 
-Chart Library built using Jetpack Compose and is highly customizable. Now with Kotlin Multiplatform (KMP) support!
+Chart Library built using Jetpack Compose and is highly customizable. Now with Kotlin
+Multiplatform (KMP) support!
 
 _Made with ❤️ for Android Developers by Himanshu_
 
@@ -25,7 +26,9 @@ dependencies {
     implementation("com.himanshoe:charty:<version>")
 }
 ```
+
 ## Few apps using it:
+
 1. [NEKO](https://github.com/nekomangaorg/Neko)
 2. [TimePlanner](https://github.com/v1tzor/TimePlanner)
 

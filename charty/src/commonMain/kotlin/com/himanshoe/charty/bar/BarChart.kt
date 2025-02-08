@@ -174,6 +174,7 @@ private fun BarChartContent(
                 backgroundColorBar(
                     barData = barData,
                     index = index,
+                    barBackgroundColor = barChartColorConfig.barBackgroundColor,
                     barWidth = barWidth,
                     gap = gap,
                     backgroundTopLeftY = backgroundTopLeftY,
@@ -304,14 +305,20 @@ private fun DrawScope.backgroundColorBar(
     barData: BarData,
     index: Int,
     barWidth: Float,
+    barBackgroundColor: ChartColor,
     gap: Float,
     backgroundTopLeftY: Float,
     canDrawNegativeChart: Boolean,
     maxHeight: Float,
     cornerRadius: CornerRadius,
 ) {
+    val color = if (barData.barBackgroundColor.value.any { it == Color.Unspecified }) {
+        barBackgroundColor.value
+    } else {
+        barData.barBackgroundColor.value
+    }
     drawRoundRect(
-        brush = Brush.linearGradient(barData.barBackgroundColor.value),
+        brush = Brush.linearGradient(color),
         topLeft = Offset(x = index * (barWidth + gap), y = backgroundTopLeftY),
         size = Size(
             width = barWidth,

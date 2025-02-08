@@ -226,9 +226,9 @@ private fun calculateBarDimensions(
 internal fun getBarColor(barData: BarData, barChartColorConfig: BarChartColorConfig): List<Color> {
     return if (barData.barColor == Color.Unspecified.asSolidChartColor()) {
         if (barData.yValue < 0) {
-            barChartColorConfig.negativeGradientBarColors.value
+            barChartColorConfig.negativeBarColors.value
         } else {
-            barChartColorConfig.fillGradientColors.value
+            barChartColorConfig.fillBarColor.value
         }
     } else {
         barData.barColor.value

@@ -204,15 +204,38 @@ private fun DrawScope.drawPoints(
         val animatedRadius =
             if (index == clickedIndex) circleRadius.value * 1.5f else circleRadius.value
 
+
+        val circleCenter = Offset(x, y)
+
         drawCircle(
-            brush = Brush.linearGradient(colorConfig.circleColor.value),
+            brush = Brush.linearGradient(
+                colors = colorConfig.circleColor.value,
+                start = circleCenter.copy(
+                    x = circleCenter.x - animatedRadius,
+                    y = circleCenter.y - animatedRadius
+                ),
+                end = circleCenter.copy(
+                    x = circleCenter.x + animatedRadius,
+                    y = circleCenter.y + animatedRadius
+                )
+            ),
             radius = animatedRadius,
-            center = Offset(x, y)
+            center = circleCenter
         )
         drawCircle(
-            brush = Brush.linearGradient(colorConfig.strokeColor.value),
+            brush = Brush.linearGradient(
+                colors = colorConfig.strokeColor.value,
+                start = circleCenter.copy(
+                    x = circleCenter.x - animatedRadius * 1.5f,
+                    y = circleCenter.y - animatedRadius * 1.5f
+                ),
+                end = circleCenter.copy(
+                    x = circleCenter.x + animatedRadius * 1.5f,
+                    y = circleCenter.y + animatedRadius * 1.5f
+                )
+            ),
             radius = animatedRadius * 1.5f,
-            center = Offset(x, y)
+            center = circleCenter
         )
     }
 }

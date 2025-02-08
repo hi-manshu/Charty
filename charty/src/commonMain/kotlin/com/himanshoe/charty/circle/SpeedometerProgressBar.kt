@@ -107,25 +107,29 @@ fun SpeedometerProgressBar(
             )
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = title,
-                style = titleTextConfig.style.copy(
-                    fontSize = titleTextConfig.fontSize,
-                    brush = Brush.linearGradient(
-                        colors = titleTextConfig.textColor.value
+            if (titleTextConfig.isVisible) {
+                Text(
+                    text = title,
+                    style = titleTextConfig.style.copy(
+                        fontSize = titleTextConfig.fontSize,
+                        brush = Brush.linearGradient(
+                            colors = titleTextConfig.textColor.value
+                        )
                     )
                 )
-            )
-            Text(
-                style = subTitleTextConfig.style.copy(
-                    fontSize = subTitleTextConfig.fontSize,
-                    brush = Brush.linearGradient(
-                        colors = subTitleTextConfig.textColor.value
-                    )
-                ),
-                modifier = Modifier.padding(top = 8.dp),
-                text = "${progressAnimator.value.times(100).toInt()}%",
-            )
+            }
+            if (subTitleTextConfig.isVisible) {
+                Text(
+                    style = subTitleTextConfig.style.copy(
+                        fontSize = subTitleTextConfig.fontSize,
+                        brush = Brush.linearGradient(
+                            colors = subTitleTextConfig.textColor.value
+                        )
+                    ),
+                    modifier = Modifier.padding(top = 8.dp),
+                    text = "${progressAnimator.value.times(100).toInt()}",
+                )
+            }
         }
     }
 }

@@ -9,7 +9,8 @@ import androidx.compose.ui.unit.sp
 data class TextConfig(
     val fontSize: TextUnit,
     val textColor: ChartColor,
-    val style: TextStyle
+    val style: TextStyle,
+    val isVisible: Boolean
 ) {
     companion object {
         fun default(
@@ -19,7 +20,8 @@ data class TextConfig(
         ) = TextConfig(
             fontSize = fontSize,
             textColor = color,
-            style = style
+            style = style,
+            isVisible = true
         )
     }
 }

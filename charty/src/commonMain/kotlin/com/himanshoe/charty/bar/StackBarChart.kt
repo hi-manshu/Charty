@@ -11,7 +11,6 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
@@ -113,8 +112,9 @@ private fun StackBarChartContent(
         displayData.fastForEachIndexed { index, stackBarData ->
             var accumulatedHeight = 0f
             // Draw background bar
+            val color = barChartColorConfig.barBackgroundColor.value
             drawRect(
-                color = Color.LightGray,
+                brush = Brush.linearGradient(color),
                 topLeft = Offset((index + 1) * (barWidth + gap) - barWidth, 0f),
                 size = Size(barWidth, canvasHeight)
             )

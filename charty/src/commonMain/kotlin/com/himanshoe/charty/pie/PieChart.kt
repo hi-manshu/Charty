@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
@@ -23,8 +22,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEachIndexed
-import com.himanshoe.charty.common.ChartColor
-import com.himanshoe.charty.common.asSolidChartColor
 import com.himanshoe.charty.pie.model.PieChartData
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -40,8 +37,6 @@ internal const val STRAIGHT_ANGLE = 180
  * @param data Lambda function that returns a list of PieChartData representing the slices of the pie chart.
  * @param modifier Modifier to be applied to the Canvas.
  * @param isDonutChart Boolean indicating if the chart should be a donut chart.
- * @param isHalfPieChart Boolean indicating if the chart should be a half pie chart.
- * @param backgroundColor Background color for the donut chart.
  * @param onPieChartSliceClick Lambda function to be called when a slice of the pie chart is clicked.
  */
 @Composable
@@ -49,17 +44,13 @@ fun PieChart(
     data: () -> List<PieChartData>,
     modifier: Modifier = Modifier,
     isDonutChart: Boolean = false,
-    isHalfPieChart: Boolean = false,
-    backgroundColor: ChartColor = Color.Unspecified.asSolidChartColor(),
     onPieChartSliceClick: (PieChartData) -> Unit = {}
 ) {
     PieChartContent(
         data = data,
         isDonutChart = isDonutChart,
-        isHalfPieChart = isHalfPieChart,
         modifier = modifier,
         onPieChartSliceClick = onPieChartSliceClick,
-        backgroundColor = backgroundColor
     )
 }
 
@@ -67,27 +58,22 @@ fun PieChart(
 private fun PieChartContent(
     data: () -> List<PieChartData>,
     isDonutChart: Boolean = false,
-    isHalfPieChart: Boolean = false,
     modifier: Modifier = Modifier,
-    backgroundColor: ChartColor = Color.Unspecified.asSolidChartColor(),
     onPieChartSliceClick: (PieChartData) -> Unit = {}
 ) {
-    require(!isDonutChart || backgroundColor != Color.Unspecified.asSolidChartColor()) {
-        "Background color must be specified when isDonutChart is true"
-    }
     var selectedSlice by remember { mutableStateOf(-1) }
     val totalValue = remember(data) { data().sumOf { it.value.toDouble() }.toFloat() }
     val proportions = remember(data) { data().map { it.value / totalValue } }
-    val angles =
-        remember(proportions) { proportions.map { if (isHalfPieChart) 180 * it else 360 * it } }
+    val angles = remember(proportions) { proportions.map { 360 * it } }
     val textMeasurer = rememberTextMeasurer()
-    var startAngle = if (isHalfPieChart) 180f else 0f
+    var startAngle = 0f
 
     Canvas(
         modifier = modifier
             .padding(16.dp)
             .pointerInput(Unit) {
                 detectTapGestures { offset ->
+                    var currentStartAngle = 0f
                     val clickedAngle = (
                             atan2(
                                 offset.y - size.height / 2,
@@ -95,11 +81,11 @@ private fun PieChartContent(
                             ) * STRAIGHT_ANGLE / PI + COMPLETE_CIRCLE_DEGREE
                             ) % COMPLETE_CIRCLE_DEGREE
                     angles.fastForEachIndexed { index, sweepAngle ->
-                        if (clickedAngle in startAngle..(startAngle + sweepAngle)) {
+                        if (clickedAngle in currentStartAngle..(currentStartAngle + sweepAngle)) {
                             selectedSlice = index
                             onPieChartSliceClick(data()[index])
                         }
-                        startAngle += sweepAngle
+                        currentStartAngle += sweepAngle
                     }
                 }
             }

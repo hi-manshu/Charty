@@ -24,7 +24,7 @@ data class ComparisonBarChartConfig(
             showAxisLines = true,
             showGridLines = true,
             drawNegativeValueChart = true,
-            showCurvedBar = true,
+            showCurvedBar = false,
         )
     }
 }
