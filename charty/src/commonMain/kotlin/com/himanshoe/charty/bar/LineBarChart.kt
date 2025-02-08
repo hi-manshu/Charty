@@ -123,7 +123,7 @@ private fun LineBarChartContent(
                 canvasHeight = canvasHeight,
                 maxHeight = maxHeight
             )
-            val (individualBarTopLeft, individualBarRectSize) = getBarTopLeftAndRectSize(
+            val (singleBarTopLeft, singleBarRectSize) = getBarTopLeftAndRectSize(
                 index = index,
                 barWidth = barWidth,
                 barData = barData,
@@ -143,14 +143,14 @@ private fun LineBarChartContent(
             )
             val (textOffsetY, cornerRadius) = getTextYOffsetAndCornerRadius(
                 barData = barData,
-                individualBarTopLeft = individualBarTopLeft,
+                individualBarTopLeft = singleBarTopLeft,
                 textLayoutResult = textLayoutResult,
-                individualBarRectSize = individualBarRectSize,
+                individualBarRectSize = singleBarRectSize,
                 barChartConfig = barChartConfig,
                 barWidth = barWidth
             )
 
-            if (isClickInsideBar(clickedOffset, individualBarTopLeft, individualBarRectSize)) {
+            if (isClickInsideBar(clickedOffset, singleBarTopLeft, singleBarRectSize)) {
                 clickedBarIndex = index
                 onBarClick(index, barData)
             }
@@ -167,22 +167,25 @@ private fun LineBarChartContent(
                 )
             }
             getDrawingPath(
-                barTopLeft = individualBarTopLeft,
-                barRectSize = individualBarRectSize,
+                barTopLeft = singleBarTopLeft,
+                barRectSize = singleBarRectSize,
                 topLeftCornerRadius = if (barData.yValue >= 0) cornerRadius else CornerRadius.Zero,
                 topRightCornerRadius = if (barData.yValue >= 0) cornerRadius else CornerRadius.Zero,
                 bottomLeftCornerRadius = if (barData.yValue < 0) cornerRadius else CornerRadius.Zero,
                 bottomRightCornerRadius = if (barData.yValue < 0) cornerRadius else CornerRadius.Zero
             ).let {
+                val textOffset = Offset(
+                    x = singleBarTopLeft.x + singleBarRectSize.width.div(2) - textLayoutResult.size.width.div(
+                        2
+                    ),
+                    y = textOffsetY,
+                )
                 drawPath(path = it, brush = Brush.linearGradient(color))
                 if (labelConfig.showXLabel) {
                     drawText(
                         textLayoutResult = textLayoutResult,
                         brush = Brush.linearGradient(labelConfig.textColor.value),
-                        topLeft = Offset(
-                            x = individualBarTopLeft.x + individualBarRectSize.width / 2 - textLayoutResult.size.width / 2,
-                            y = textOffsetY,
-                        ),
+                        topLeft = textOffset,
                     )
                 }
             }

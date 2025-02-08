@@ -22,9 +22,13 @@ naming:
     functionPattern: '^[a-z][A-Za-z0-9]*$'
     ignoreAnnotated: [ "Composable" ]
 
+formatting:
+  Indentation:
+    active: false
+
 style:
   MaxLineLength:
-    active: false
+    active: true
     maxLineLength: 166
   MagicNumber:
     active: false
