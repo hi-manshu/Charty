@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="sample-desktop">
+    <output-path>$PROJECT_DIR$/sample/build/libs</output-path>
+    <root id="archive" name="sample-desktop.jar">
+      <element id="module-output" name="chartyKMP.sample.desktopMain" />
+    </root>
+  </artifact>
+</component>
