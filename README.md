@@ -27,6 +27,10 @@ dependencies {
 }
 ```
 
+| **Android**                  | **iOS**                          |
+|------------------------------|----------------------------------|
+| [ios.mp4](img/video/ios.mp4) | [ios.mp4](img/video/android.mp4) |
+
 ## Few apps using it:
 
 1. [NEKO](https://github.com/nekomangaorg/Neko)
