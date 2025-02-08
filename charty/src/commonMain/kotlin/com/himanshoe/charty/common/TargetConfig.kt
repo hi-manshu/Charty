@@ -21,16 +21,15 @@ data class TargetConfig(
          *
          * @return A `TargetConfig` object with default values.
          */
-        fun default() =
-            TargetConfig(
-                targetLineBarColors = ChartColor.Gradient(
-                    listOf(
-                        Color(0xFFffafbd),
-                        Color(0xFFffc3a0),
-                    )
-                ),
-                targetStrokeWidth = 3F,
-                pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-            )
+        fun default() = TargetConfig(
+            targetLineBarColors = ChartColor.Gradient(
+                listOf(
+                    Color(0xFFffafbd),
+                    Color(0xFFffc3a0),
+                )
+            ),
+            targetStrokeWidth = 3F,
+            pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+        )
     }
 }

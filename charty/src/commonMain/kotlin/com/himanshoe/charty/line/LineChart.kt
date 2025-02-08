@@ -54,7 +54,8 @@ fun LineChart(
     labelConfig: LabelConfig = LabelConfig.default(),
     target: Float? = null,
     targetConfig: TargetConfig = TargetConfig.default(),
-    chartConfig: LineChartConfig = LineChartConfig()
+    chartConfig: LineChartConfig = LineChartConfig(),
+    onClick: (LineData) -> Unit = {}
 ) {
     require(showFilledArea || showLineStroke) {
         "Both showFilledArea and showLineStroke cannot be false at the same time"
@@ -69,6 +70,7 @@ fun LineChart(
         chartConfig = chartConfig,
         smoothLineCurve = smoothLineCurve,
         target = target,
+        onClick = onClick,
         targetConfig = targetConfig,
     )
 }
@@ -127,14 +129,13 @@ private fun LineChartContent(
     ) {
         val (canvasWidth, canvasHeight) = size
         val xStep = canvasWidth / (lineData.size - 1)
-        drawTargetLineIfNeeded(
-            target = target,
-            minValue = minValue,
-            yScale = canvasHeight / yRange,
-            canvasHeight = canvasHeight,
-            canvasWidth = canvasWidth,
-            targetConfig = targetConfig
-        )
+        target?.let {
+            drawTargetLineIfNeeded(
+                canvasWidth = canvasWidth,
+                targetConfig = targetConfig,
+                yPoint = canvasHeight - (target - minValue) * canvasHeight / yRange
+            )
+        }
 
         drawLineCurve(
             data = { lineData },
@@ -208,9 +209,12 @@ internal fun DrawScope.drawLineCurve(
             path.lineTo(0f, size.height)
             path.close()
             drawPath(
-                path = path, brush = Brush.linearGradient(fillColor.value.map {
-                    it.copy(alpha = 0.2f)
-                })
+                path = path,
+                brush = Brush.linearGradient(
+                    fillColor.value.map {
+                        it.copy(alpha = 0.2f)
+                    }
+                )
             )
         }
 

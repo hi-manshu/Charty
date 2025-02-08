@@ -13,11 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.input.pointer.pointerInput
@@ -34,6 +32,7 @@ import com.himanshoe.charty.bar.config.HorizontalBarLabelConfig
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.asSolidChartColor
+import com.himanshoe.charty.common.getDrawingPath
 import kotlin.math.absoluteValue
 
 /**
@@ -183,28 +182,38 @@ private fun DrawScope.drawBar(
 ) {
     val cornerRadius = if (showCurvedBar) {
         CornerRadius(
-            x = size.height / 2, y = size.height / 2
+            x = size.height / 2,
+            y = size.height / 2
         )
     } else {
         CornerRadius.Zero
     }
-    val path = Path().apply {
-        addRoundRect(
-            RoundRect(
-                rect = Rect(topLeft, size),
-                topLeft = if (isNegative && !allNegativeValues) cornerRadius else CornerRadius.Zero,
-                bottomLeft = if (isNegative && !allNegativeValues) cornerRadius else CornerRadius.Zero,
-                topRight = if (!isNegative || allPositiveValues || allNegativeValues) cornerRadius else CornerRadius.Zero,
-                bottomRight = if (!isNegative || allPositiveValues || allNegativeValues) cornerRadius else CornerRadius.Zero
-            )
-        )
+    val rightCornerRadius =
+        if (!isNegative || allPositiveValues || allNegativeValues) cornerRadius else CornerRadius.Zero
+    val leftCornerRadius =
+        if (isNegative && !allNegativeValues) cornerRadius else CornerRadius.Zero
+    getDrawingPath(
+        barTopLeft = topLeft,
+        barRectSize = size,
+        topLeftCornerRadius = leftCornerRadius,
+        topRightCornerRadius = rightCornerRadius,
+        bottomLeftCornerRadius = leftCornerRadius,
+        bottomRightCornerRadius = rightCornerRadius,
+    ).let { path ->
+        drawPath(path = path, brush = brush)
     }
-    drawPath(path = path, brush = brush)
 }
 
 private fun calculateBarDimensions(
-    barData: BarData, maxValue: Float, centerX: Float, barHeight: Float, gap: Float,
-    clickedBarIndex: Int, index: Int, size: Size, allNegativeValues: Boolean
+    barData: BarData,
+    maxValue: Float,
+    centerX: Float,
+    barHeight: Float,
+    gap: Float,
+    clickedBarIndex: Int,
+    index: Int,
+    size: Size,
+    allNegativeValues: Boolean
 ): BarDimensions {
     val barWidth = (barData.yValue.absoluteValue / maxValue) * (size.width / 2)
     val additionalWidth = if (clickedBarIndex == index) barWidth * 0.02F else 0F
@@ -227,9 +236,16 @@ internal fun getBarColor(barData: BarData, barChartColorConfig: BarChartColorCon
 }
 
 private fun DrawScope.drawLabel(
-    barData: BarData, textMeasurer: TextMeasurer, barWidth: Float, topLeftX: Float, topLeftY: Float,
-    barHeight: Float, gap: Float, horizontalBarLabelConfig: HorizontalBarLabelConfig,
-    allNegativeValues: Boolean, allPositiveValues: Boolean
+    barData: BarData,
+    textMeasurer: TextMeasurer,
+    barWidth: Float,
+    topLeftX: Float,
+    topLeftY: Float,
+    barHeight: Float,
+    gap: Float,
+    horizontalBarLabelConfig: HorizontalBarLabelConfig,
+    allNegativeValues: Boolean,
+    allPositiveValues: Boolean
 ) {
     val textLayoutResult = textMeasurer.measure(
         text = barData.xValue.toString(),
@@ -316,34 +332,4 @@ private fun Modifier.applyAxisAndGridLines(
     }
 
     return modifier
-}
-
-private fun DrawScope.drawBar(
-    topLeft: Offset,
-    size: Size,
-    colors: List<Color>,
-    isNegative: Boolean,
-    allNegativeValues: Boolean,
-    allPositiveValues: Boolean,
-    showCurvedBar: Boolean,
-) {
-    val cornerRadius = if (showCurvedBar) {
-        CornerRadius(
-            x = size.height / 2, y = size.height / 2
-        )
-    } else {
-        CornerRadius.Zero
-    }
-    val path = Path().apply {
-        addRoundRect(
-            RoundRect(
-                rect = Rect(topLeft, size),
-                topLeft = if (isNegative && !allNegativeValues) cornerRadius else CornerRadius.Zero,
-                bottomLeft = if (isNegative && !allNegativeValues) cornerRadius else CornerRadius.Zero,
-                topRight = if (!isNegative || allPositiveValues || allNegativeValues) cornerRadius else CornerRadius.Zero,
-                bottomRight = if (!isNegative || allPositiveValues || allNegativeValues) cornerRadius else CornerRadius.Zero
-            )
-        )
-    }
-    drawPath(path = path, brush = Brush.linearGradient(colors))
 }

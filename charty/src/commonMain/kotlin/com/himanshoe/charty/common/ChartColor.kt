@@ -2,7 +2,6 @@ package com.himanshoe.charty.common
 
 import androidx.compose.ui.graphics.Color
 
-
 /**
  * A sealed class representing different types of chart colors.
  *

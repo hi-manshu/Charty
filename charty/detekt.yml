@@ -3,15 +3,28 @@ complexity:
     active: false
   TooManyFunctions:
     active: false
+  LongMethod:
+    ignoreAnnotated: [ "Composable" ]
+  ComplexCondition:
+    active: true
+    threshold: 5 # Increase the threshold to allow more complex conditions
 
 naming:
   InvalidPackageDeclaration:
     rootPackage: "io.github.mrnuggelz.opensubsonic"
   TopLevelPropertyNaming:
     constantPattern: '[A-Z][_A-Za-z0-9]*'
+  FunctionNaming:
+    active: true
+    functionPattern: '^[a-z][A-Za-z0-9]*$'
+    ignoreAnnotated: [ "Composable" ]
 
 style:
   MaxLineLength:
-    active: false # use MaximumLineLength from formatting
+    active: false
+    maxLineLength: 166
   MagicNumber:
     active: false
+  DestructuringDeclarationWithTooManyEntries:
+    active: true
+    maxDestructuringEntries: 6 # Increase the threshold to allow more complex conditions

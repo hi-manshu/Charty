@@ -17,7 +17,9 @@ data class TextConfig(
             color: ChartColor = Color.Gray.asSolidChartColor(),
             style: TextStyle = TextStyle(brush = Brush.linearGradient(color.value))
         ) = TextConfig(
-            textSize = textSize, textColor = color, style = style
+            textSize = textSize,
+            textColor = color,
+            style = style
         )
     }
 }

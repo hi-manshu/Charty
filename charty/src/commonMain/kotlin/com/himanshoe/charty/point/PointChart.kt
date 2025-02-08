@@ -127,14 +127,12 @@ private fun PointChartContent(
         val (canvasWidth, canvasHeight) = size
         val xStep = canvasWidth / circleData.size
         val yScale = canvasHeight / yRange
+        val yPoint = canvasHeight - ((target?.minus(minValue))?.times(yScale) ?: 0F)
 
         drawTargetLineIfNeeded(
-            target = target,
-            targetConfig = targetConfig,
-            minValue = minValue,
-            yScale = yScale,
-            canvasHeight = canvasHeight,
             canvasWidth = canvasWidth,
+            targetConfig = targetConfig,
+            yPoint = yPoint
         )
         drawClickedBarIfNeeded(
             chartConfig = chartConfig,

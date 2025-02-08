@@ -35,7 +35,6 @@ internal fun Modifier.drawAxesAndGridLines(
     showAxisLines: Boolean,
     showGridLines: Boolean
 ) = this.drawWithCache {
-
     val canvasWidth = size.width
     val canvasHeight = size.height
     onDrawBehind {

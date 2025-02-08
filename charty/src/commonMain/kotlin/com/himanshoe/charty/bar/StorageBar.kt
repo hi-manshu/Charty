@@ -11,8 +11,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -22,6 +20,7 @@ import androidx.compose.ui.util.fastForEachIndexed
 import com.himanshoe.charty.bar.model.StorageData
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.asSolidChartColor
+import com.himanshoe.charty.common.getDrawingPath
 
 /**
  * A composable function that displays a storage bar with a single track color.
@@ -78,10 +77,12 @@ private fun StorageBarContent(
 ) {
     var clickedOffSet by mutableStateOf<Offset?>(null)
     var clickedBarIndex by mutableIntStateOf(-1)
-    Canvas(modifier = modifier.fillMaxWidth()
-        .pointerInput(data) {
-            detectTapGestures { offset -> clickedOffSet = offset }
-        }
+    Canvas(
+        modifier = modifier
+            .fillMaxWidth()
+            .pointerInput(data) {
+                detectTapGestures { offset -> clickedOffSet = offset }
+            }
     ) {
         val totalWidth = size.width
         val totalHeight = size.height
@@ -122,7 +123,6 @@ private fun StorageBarContent(
                 brush = trackColorBrush
             )
         }
-
     }
 }
 
@@ -133,15 +133,12 @@ private fun calculatePath(
     isLast: Boolean = false
 ): Path {
     val cornerRadius = CornerRadius(10F, 10F)
-    return Path().apply {
-        addRoundRect(
-            RoundRect(
-                rect = Rect(offset = offset, size = size),
-                topLeft = if (isFirst) cornerRadius else CornerRadius.Zero,
-                topRight = if (isLast) cornerRadius else CornerRadius.Zero,
-                bottomLeft = if (isFirst) cornerRadius else CornerRadius.Zero,
-                bottomRight = if (isLast) cornerRadius else CornerRadius.Zero,
-            )
-        )
-    }
+    return getDrawingPath(
+        barTopLeft = offset,
+        barRectSize = size,
+        topLeftCornerRadius = if (isFirst) cornerRadius else CornerRadius.Zero,
+        topRightCornerRadius = if (isLast) cornerRadius else CornerRadius.Zero,
+        bottomLeftCornerRadius = if (isFirst) cornerRadius else CornerRadius.Zero,
+        bottomRightCornerRadius = if (isLast) cornerRadius else CornerRadius.Zero,
+    )
 }

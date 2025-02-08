@@ -16,9 +16,11 @@ data class PointChartColorConfig(
     val axisColor: ChartColor,
     val gridLineColor: ChartColor,
     val circleColor: ChartColor,
-    val strokeColor: ChartColor = ChartColor.Gradient(circleColor.value.map {
-        it.copy(alpha = 0.5f)
-    }),
+    val strokeColor: ChartColor = ChartColor.Gradient(
+        circleColor.value.map {
+            it.copy(alpha = 0.5f)
+        }
+    ),
     val selectionBarColor: ChartColor
 ) {
     companion object {

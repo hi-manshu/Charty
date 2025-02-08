@@ -79,30 +79,30 @@ internal fun Modifier.drawAxesAndGridLines(
                 style = TextStyle(fontSize = (canvasWidth / textSizeFactor).sp),
             )
             drawText(
-                textLayoutResult = textLayoutResult, topLeft = Offset(
+                textLayoutResult = textLayoutResult,
+                topLeft = Offset(
                     x = (index + 0.5f) * xStep - textLayoutResult.size.width / 2,
                     y = canvasHeight + 4.dp.toPx() // Position below the X-axis
-                ), brush = Brush.linearGradient(labelConfig.textColor.value)
+                ),
+                brush = Brush.linearGradient(labelConfig.textColor.value)
             )
         }
     }
 
     if (labelConfig.showYLabel) {
-        (0..4).forEach { i ->
-            val value = if (minValue >= 0) {
-                i * yRange / 4
-            } else {
-                minValue + i * yRange / 4
-            }
+        for (i in 0..4) {
+            val value = if (minValue >= 0) i * yRange / 4 else minValue + i * yRange / 4
             val textLayoutResult = textMeasurer.measure(
                 text = value.toString(),
-                style = TextStyle(fontSize = (canvasWidth / 70).sp),
+                style = TextStyle(fontSize = (canvasWidth / 70).sp)
             )
             drawText(
-                textLayoutResult = textLayoutResult, topLeft = Offset(
+                textLayoutResult = textLayoutResult,
+                topLeft = Offset(
                     x = -textLayoutResult.size.width - 8f,
                     y = canvasHeight - i * yStep - textLayoutResult.size.height / 2
-                ), brush = Brush.linearGradient(labelConfig.textColor.value)
+                ),
+                brush = Brush.linearGradient(labelConfig.textColor.value)
             )
         }
     }

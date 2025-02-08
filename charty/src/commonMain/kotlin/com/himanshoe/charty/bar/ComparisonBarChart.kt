@@ -12,12 +12,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.pointerInput
@@ -31,6 +28,7 @@ import com.himanshoe.charty.bar.config.ComparisonBarChartConfig
 import com.himanshoe.charty.bar.model.ComparisonBarData
 import com.himanshoe.charty.bar.modifier.drawAxesAndGridLines
 import com.himanshoe.charty.common.LabelConfig
+import com.himanshoe.charty.common.getDrawingPath
 
 /**
  * A composable function that displays a comparison bar chart.
@@ -39,7 +37,7 @@ import com.himanshoe.charty.common.LabelConfig
  * @param modifier A `Modifier` for customizing the layout or drawing behavior of the chart.
  * @param labelConfig A `LabelConfig` object for configuring the labels on the chart.
  * @param comparisonBarChartConfig A `ComparisonBarChartConfig` object for configuring the chart's appearance and behavior.
- * @param onBarClick A lambda function to handle click events on the bars. It receives the index of the clicked bar as a parameter.
+ * @param onGroupClicked A lambda function to handle click events on the bars. It receives the index of the clicked bar as a parameter.
  */
 @Composable
 fun ComparisonBarChart(
@@ -47,14 +45,14 @@ fun ComparisonBarChart(
     modifier: Modifier = Modifier,
     labelConfig: LabelConfig = LabelConfig.default(),
     comparisonBarChartConfig: ComparisonBarChartConfig = ComparisonBarChartConfig.default(),
-    onBarClick: (Int) -> Unit = {}
+    onGroupClicked: (Int) -> Unit = {}
 ) {
     ComparisonBarContent(
         labelConfig = labelConfig,
         modifier = modifier,
         data = data,
         comparisonBarChartConfig = comparisonBarChartConfig,
-        onBarClick = onBarClick
+        onGroupClicked = onGroupClicked
     )
 }
 
@@ -64,7 +62,7 @@ private fun ComparisonBarContent(
     labelConfig: LabelConfig,
     comparisonBarChartConfig: ComparisonBarChartConfig,
     modifier: Modifier = Modifier,
-    onBarClick: (Int) -> Unit = {}
+    onGroupClicked: (Int) -> Unit = {}
 ) {
     var selectedCategory by remember { mutableStateOf(-1) }
     val textMeasurer = rememberTextMeasurer()
@@ -76,78 +74,87 @@ private fun ComparisonBarContent(
     val groupCount = dataList.size
     val maxBarsCount = dataList.maxOf { it.bars.size }
 
-    Canvas(modifier = modifier
-        .padding(bottom = bottomPadding, start = leftPadding)
-        .fillMaxSize()
-        .drawAxesAndGridLines(
-            maxValue = maxValue,
-            step = maxValue / 4,
-            textMeasurer = textMeasurer,
-            labelConfig = labelConfig,
-            showAxisLines = comparisonBarChartConfig.showAxisLines,
-            showGridLines = comparisonBarChartConfig.showGridLines
-        )
-        .pointerInput(Unit) {
-            detectTapGestures { offset ->
-                val groupWidth = size.width / groupCount
-                val clickedGroupIndex = (offset.x / groupWidth).toInt()
-                if (clickedGroupIndex in dataList.indices) {
-                    selectedCategory = clickedGroupIndex
-                    onBarClick(clickedGroupIndex)
+    Canvas(
+        modifier = modifier
+            .padding(bottom = bottomPadding, start = leftPadding)
+            .fillMaxSize()
+            .drawAxesAndGridLines(
+                maxValue = maxValue,
+                step = maxValue / 4,
+                textMeasurer = textMeasurer,
+                labelConfig = labelConfig,
+                showAxisLines = comparisonBarChartConfig.showAxisLines,
+                showGridLines = comparisonBarChartConfig.showGridLines
+            )
+            .pointerInput(Unit) {
+                detectTapGestures { offset ->
+                    val groupWidth = size.width / groupCount
+                    val clickedGroupIndex = (offset.x / groupWidth).toInt()
+                    if (clickedGroupIndex in dataList.indices) {
+                        selectedCategory = clickedGroupIndex
+                        onGroupClicked(clickedGroupIndex)
+                    }
                 }
             }
-        }
     ) {
         val canvasWidth = size.width
         val canvasHeight = size.height
         val groupWidth = canvasWidth / groupCount
         val barWidth = groupWidth / (maxBarsCount * 2)
-        val cornerRadius = if (comparisonBarChartConfig.showCurvedBar) CornerRadius(
-            barWidth / 2, barWidth / 2
-        ) else CornerRadius.Zero
+        val cornerRadius = if (comparisonBarChartConfig.showCurvedBar) {
+            CornerRadius(
+                barWidth / 2, barWidth / 2
+            )
+        } else {
+            CornerRadius.Zero
+        }
 
         dataList.fastForEachIndexed { groupIndex, group ->
             val groupStartX = groupIndex * groupWidth
             if (groupIndex == selectedCategory) {
                 drawBar(
                     cornerRadius = cornerRadius,
-                    x = groupStartX,
-                    y = 0f,
-                    width = groupWidth,
-                    height = canvasHeight,
+                    offset = Offset(groupStartX, 0f),
+                    size = Size(width = groupWidth, height = canvasHeight),
                     brush = SolidColor(Color.Gray.copy(alpha = 0.1F))
                 )
             }
             group.bars.fastForEachIndexed { barIndex, barValue ->
                 val barHeight = (barValue / maxValue) * canvasHeight
+
                 val barX =
-                    groupStartX + (groupWidth - (group.bars.size * (barWidth + barWidth / 4))) / 2 + barIndex * (barWidth + barWidth / 4)
+                    groupStartX + (groupWidth - (group.bars.size * (barWidth + barWidth / 4))) / 2 +
+                            barIndex * (barWidth + barWidth / 4)
+
                 val brush = Brush.linearGradient(
                     colors = group.colors[barIndex].value,
-                    start = Offset(barX, canvasHeight - barHeight),
-                    end = Offset(barX + barWidth, canvasHeight)
+                    start = Offset(
+                        x = barX,
+                        y = canvasHeight - barHeight
+                    ),
+                    end = Offset(
+                        x = barX + barWidth,
+                        y = canvasHeight
+                    )
                 )
 
                 drawBar(
-                    x = barX,
-                    y = canvasHeight - barHeight,
-                    width = barWidth,
-                    height = barHeight,
                     brush = brush,
-                    cornerRadius = cornerRadius
+                    size = Size(width = barWidth, height = barHeight),
+                    cornerRadius = cornerRadius,
+                    offset = Offset(barX, canvasHeight - barHeight)
                 )
             }
 
             for (barIndex in group.bars.size until maxBarsCount) {
-                val barX =
-                    groupStartX + (groupWidth - (group.bars.size * (barWidth + barWidth / 4))) / 2 + barIndex * (barWidth + barWidth / 4)
+                val totalBarWidth = barWidth + barWidth / 4
+                val groupOffset = (groupWidth - (group.bars.size * totalBarWidth)) / 2
+                val barX = groupStartX + groupOffset + barIndex * totalBarWidth
                 drawBar(
-                    x = barX,
-                    y = canvasHeight,
-                    width = barWidth,
-                    height = 0f,
+                    size = Size(width = barWidth, height = 0F),
                     brush = SolidColor(Color.Transparent),
-                    cornerRadius = cornerRadius
+                    cornerRadius = cornerRadius,
+                    offset = Offset(barX, canvasHeight)
                 )
             }
 
@@ -170,18 +177,16 @@ private fun ComparisonBarContent(
 }
 
 private fun DrawScope.drawBar(
-    x: Float, y: Float, width: Float, height: Float, brush: Brush, cornerRadius: CornerRadius
+    size: Size,
+    brush: Brush,
+    cornerRadius: CornerRadius,
+    offset: Offset
 ) {
-    val path = Path().apply {
-        addRoundRect(
-            RoundRect(
-                rect = Rect(Offset(x, y), Size(width, height)),
-                topLeft = cornerRadius,
-                topRight = cornerRadius,
-                bottomLeft = CornerRadius.Zero,
-                bottomRight = CornerRadius.Zero
-            )
-        )
+    getDrawingPath(
+        individualBarTopLeft = offset,
+        individualBarRectSize = size,
+        cornerRadius = cornerRadius
+    ).let { path ->
+        drawPath(path = path, brush = brush)
     }
-    drawPath(path = path, brush = brush)
 }

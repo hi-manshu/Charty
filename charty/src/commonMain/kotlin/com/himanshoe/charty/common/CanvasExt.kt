@@ -1,35 +1,69 @@
 package com.himanshoe.charty.common
 
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.RoundRect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 
-/**
- * Draws a target line on the canvas if the target value is provided.
- *
- * @param target The target value to be drawn as a line on the canvas. If null, no line is drawn.
- * @param minValue The minimum value of the y-axis.
- * @param yScale The scale factor for the y-axis.
- * @param canvasHeight The height of the canvas.
- * @param canvasWidth The width of the canvas.
- * @param targetConfig The configuration for the target line, including color, stroke width, and path effect.
- */
 internal fun DrawScope.drawTargetLineIfNeeded(
-    target: Float?,
-    minValue: Float,
-    yScale: Float,
-    canvasHeight: Float,
     canvasWidth: Float,
-    targetConfig: TargetConfig
+    targetConfig: TargetConfig,
+    yPoint: Float,
 ) {
-    target?.let { targetValue ->
-        val y = canvasHeight - (targetValue - minValue) * yScale
-        drawLine(
-            brush = Brush.linearGradient(targetConfig.targetLineBarColors.value),
-            start = Offset(0f, y),
-            end = Offset(canvasWidth, y),
-            pathEffect = targetConfig.pathEffect,
-            strokeWidth = targetConfig.targetStrokeWidth
+    drawLine(
+        brush = Brush.linearGradient(targetConfig.targetLineBarColors.value),
+        start = Offset(0f, yPoint),
+        end = Offset(canvasWidth, yPoint),
+        pathEffect = targetConfig.pathEffect,
+        strokeWidth = targetConfig.targetStrokeWidth
+    )
+}
+
+internal fun getDrawingPath(
+    individualBarTopLeft: Offset,
+    individualBarRectSize: Size,
+    cornerRadius: CornerRadius
+): Path {
+    return Path().apply {
+        addRoundRect(
+            RoundRect(
+                rect = Rect(
+                    offset = individualBarTopLeft,
+                    size = individualBarRectSize,
+                ),
+                topLeft = cornerRadius,
+                topRight = cornerRadius,
+                bottomLeft = CornerRadius.Zero,
+                bottomRight = CornerRadius.Zero
+            )
+        )
+    }
+}
+
+internal fun getDrawingPath(
+    barTopLeft: Offset,
+    barRectSize: Size,
+    topLeftCornerRadius: CornerRadius,
+    topRightCornerRadius: CornerRadius,
+    bottomLeftCornerRadius: CornerRadius,
+    bottomRightCornerRadius: CornerRadius,
+): Path {
+    return Path().apply {
+        addRoundRect(
+            RoundRect(
+                rect = Rect(
+                    offset = barTopLeft,
+                    size = barRectSize,
+                ),
+                topLeft = topLeftCornerRadius,
+                topRight = topRightCornerRadius,
+                bottomLeft = bottomLeftCornerRadius,
+                bottomRight = bottomRightCornerRadius
+            )
         )
     }
 }

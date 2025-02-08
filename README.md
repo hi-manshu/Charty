@@ -2,7 +2,6 @@
 
 ![Banner](img/banner.png)
 
-
 Chart Library built using Jetpack Compose and is highly customizable. (CMP version coming soon)
 
 _Made with ❤️ for Android Developers by Himanshu_
@@ -27,5 +26,5 @@ dependencies {
 }
 ```
 ### Few apps using it:
-1. ![NEKO](https://github.com/nekomangaorg/Neko)
-2. ![TimePlanner](https://github.com/v1tzor/TimePlanner)
+1. [NEKO](https://github.com/nekomangaorg/Neko)
+2. [TimePlanner](https://github.com/v1tzor/TimePlanner)

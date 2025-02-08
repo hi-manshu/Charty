@@ -80,7 +80,8 @@ internal fun Modifier.drawAxesAndGridLines(
             )
 
             drawText(
-                textLayoutResult = textLayoutResult, topLeft = Offset(
+                textLayoutResult = textLayoutResult,
+                topLeft = Offset(
                     x = index * xStep - textLayoutResult.size.width / 2,
                     y = canvasHeight + 4.dp.toPx() // Position below the X-axis
                 ),
@@ -90,14 +91,15 @@ internal fun Modifier.drawAxesAndGridLines(
     }
 
     if (labelConfig.showYLabel) {
-        (0..4).forEach { i ->
+        for (i in 0..4) {
             val value = minValue + i * yRange / 4
             val textLayoutResult = textMeasurer.measure(
                 text = value.toString(),
                 style = TextStyle(fontSize = (canvasWidth / 70).sp),
             )
             drawText(
-                textLayoutResult = textLayoutResult, topLeft = Offset(
+                textLayoutResult = textLayoutResult,
+                topLeft = Offset(
                     x = -textLayoutResult.size.width - 8f,
                     y = canvasHeight - i * yStep - textLayoutResult.size.height / 2
                 ),
@@ -105,5 +107,4 @@ internal fun Modifier.drawAxesAndGridLines(
             )
         }
     }
-
 }

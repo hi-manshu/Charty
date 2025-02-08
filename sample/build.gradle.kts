@@ -59,8 +59,8 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(compose.runtime)
-//            implementation(project(":charty"))
-            implementation("com.himanshoe:charty:2.0.1")
+            implementation(project(":charty"))
+//            implementation("com.himanshoe:charty:2.0.1")
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.ui)

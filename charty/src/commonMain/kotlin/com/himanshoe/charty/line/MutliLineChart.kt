@@ -110,13 +110,12 @@ private fun MultiLineChartContent(
                 smoothLineCurve = smoothLineCurve
             )
         }
+        val yPoint = canvasHeight - ((target?.minus(minValue))?.times(canvasHeight / yRange) ?: 0F)
+
         drawTargetLineIfNeeded(
-            target = target,
-            minValue = minValue,
-            yScale = canvasHeight / yRange,
-            canvasHeight = canvasHeight,
-            canvasWidth = size.width,
-            targetConfig = targetConfig
+            canvasWidth = canvasWidth,
+            targetConfig = targetConfig,
+            yPoint = yPoint
         )
     }
 }

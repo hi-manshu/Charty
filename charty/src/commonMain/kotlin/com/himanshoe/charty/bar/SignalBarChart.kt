@@ -15,7 +15,6 @@ import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.asSolidChartColor
 import kotlinx.coroutines.delay
 
-
 /**
  * A composable function that displays a signal bar chart with solid colors.
  *
@@ -63,7 +62,6 @@ private fun SignalBarChartContent(
     totalBlocks: Int,
     modifier: Modifier = Modifier,
 ) {
-
     val alphaAnimation = remember { Animatable(0f) }
     LaunchedEffect(progress()) {
         delay(200)

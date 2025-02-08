@@ -24,10 +24,13 @@ import com.himanshoe.charty.bar.BarChart
 import com.himanshoe.charty.bar.ComparisonBarChart
 import com.himanshoe.charty.bar.HorizontalBarChart
 import com.himanshoe.charty.bar.LineBarChart
+import com.himanshoe.charty.bar.LineStackedBarChart
 import com.himanshoe.charty.bar.SignalProgressBarChart
+import com.himanshoe.charty.bar.StackedBarChart
 import com.himanshoe.charty.bar.StorageBar
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.ComparisonBarData
+import com.himanshoe.charty.bar.model.StackBarData
 import com.himanshoe.charty.bar.model.StorageData
 import com.himanshoe.charty.circle.CircleChart
 import com.himanshoe.charty.circle.SpeedometerProgressBar
@@ -53,6 +56,7 @@ import kotlin.random.Random
 @Preview
 fun App() {
     LazyColumn {
+        addStackBarChart()
         addSpeedometerProgressBar()
         addCircleChart()
         addPieChart()
@@ -196,15 +200,21 @@ private fun LazyListScope.addComparisonChart() {
     item {
         val barColors = listOf(
             ChartColor.Gradient(
-                listOf(Color(0xFF2193b0).copy(0.1F), Color(0xFF6dd5ed))
-            ), ChartColor.Gradient(
                 listOf(
-                    Color(0xFFCB356B).copy(0.1F),
+                    Color(0xFF2193b0),
+                    Color(0xFF6dd5ed)
+                )
+            ),
+            ChartColor.Gradient(
+                listOf(
+                    Color(0xFFCB356B),
                     Color(0xFFBD3F32),
                 )
-            ), ChartColor.Gradient(
+            ),
+            ChartColor.Gradient(
                 listOf(
-                    Color(0xFFFFFFFF).copy(alpha = 0.3f), Color(0xFFff6a00).copy(alpha = 0.3f)
+                    Color(0xFFF23222),
+                    Color(0xFFff6a00)
                 )
             )
         )
@@ -225,7 +235,7 @@ private fun LazyListScope.addComparisonChart() {
 
         ComparisonBarChart(data = { mockData },
             modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
-            onBarClick = { index ->
+            onGroupClicked = { index ->
                 println("Category $index clicked")
             })
     }
@@ -405,6 +415,88 @@ private fun LazyListScope.addBarChart(target: Float?, data: List<BarData>) {
             target = target,
             data = { data },
             onBarClick = { _, barData -> })
+    }
+}
+
+private fun LazyListScope.addStackBarChart() {
+    item {
+        val data = listOf(
+            StackBarData(
+                label = "Jan",
+                values = listOf(100f, 30f, 30f),
+                colors = listOf(
+                    ChartColor.Solid(Color.Red),
+                    ChartColor.Solid(Color.Green),
+                    ChartColor.Solid(Color.Blue)
+                )
+            ),
+            StackBarData(
+                label = "Feb",
+                values = listOf(15f, 25f, 35f),
+                colors = listOf(
+                    ChartColor.Solid(Color.Red),
+                    ChartColor.Solid(Color.Green),
+                    ChartColor.Solid(Color.Blue)
+                )
+            ),
+            StackBarData(
+                label = "Mar",
+                values = listOf(20f, 30f, 40f),
+                colors = listOf(
+                    ChartColor.Solid(Color.Red),
+                    ChartColor.Solid(Color.Green),
+                    ChartColor.Solid(Color.Blue)
+                )
+            ),
+            StackBarData(
+                label = "Apr",
+                values = listOf(25f, 35f, 45f),
+                colors = listOf(
+                    ChartColor.Solid(Color.Red),
+                    ChartColor.Solid(Color.Green),
+                    ChartColor.Solid(Color.Blue)
+                )
+            ),
+            StackBarData(
+                label = "May",
+                values = listOf(30f, 40f, 50f),
+                colors = listOf(
+                    ChartColor.Solid(Color.Red),
+                    ChartColor.Solid(Color.Green),
+                    ChartColor.Solid(Color.Blue)
+                )
+            ),
+            StackBarData(
+                label = "Jun",
+                values = listOf(35f, 45f, 55f),
+                colors = listOf(
+                    ChartColor.Solid(Color.Red),
+                    ChartColor.Solid(Color.Green),
+                    ChartColor.Solid(Color.Blue)
+                )
+            ),
+            StackBarData(
+                label = "Jul",
+                values = listOf(40f, 50f, 60f),
+                colors = listOf(
+                    ChartColor.Solid(Color.Red),
+                    ChartColor.Solid(Color.Green),
+                    ChartColor.Solid(Color.Blue)
+                )
+            )
+        )
+
+        LineStackedBarChart(
+            data = { data },
+            target = 100f,
+            modifier = Modifier.fillMaxWidth().height(300.dp).padding(24.dp)
+        )
+
+        StackedBarChart(
+            data = { data },
+            target = 100f,
+            modifier = Modifier.fillMaxWidth().height(300.dp).padding(24.dp)
+        )
     }
 }
 

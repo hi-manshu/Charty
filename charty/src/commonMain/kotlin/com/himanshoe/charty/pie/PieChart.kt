@@ -78,32 +78,36 @@ private fun PieChartContent(
     var selectedSlice by remember { mutableStateOf(-1) }
     val totalValue = remember(data) { data().sumOf { it.value.toDouble() }.toFloat() }
     val proportions = remember(data) { data().map { it.value / totalValue } }
-    val angles = remember(proportions) { proportions.map { if (isHalfPieChart) 180 * it else 360 * it } }
+    val angles =
+        remember(proportions) { proportions.map { if (isHalfPieChart) 180 * it else 360 * it } }
     val textMeasurer = rememberTextMeasurer()
+    var startAngle = if (isHalfPieChart) 180f else 0f
 
-    Canvas(modifier = modifier
-        .padding(16.dp)
-        .pointerInput(Unit) {
-            detectTapGestures { offset ->
-                val clickedAngle = (atan2(
-                    offset.y - size.height / 2,
-                    offset.x - size.width / 2
-                ) * STRAIGHT_ANGLE / PI + COMPLETE_CIRCLE_DEGREE) % COMPLETE_CIRCLE_DEGREE
-                var startAngle = if (isHalfPieChart) 180f else 0f
-                angles.fastForEachIndexed { index, sweepAngle ->
-                    if (clickedAngle in startAngle..(startAngle + sweepAngle)) {
-                        selectedSlice = index
-                        onPieChartSliceClick(data()[index])
+    Canvas(
+        modifier = modifier
+            .padding(16.dp)
+            .pointerInput(Unit) {
+                detectTapGestures { offset ->
+                    val clickedAngle = (
+                            atan2(
+                                offset.y - size.height / 2,
+                                offset.x - size.width / 2
+                            ) * STRAIGHT_ANGLE / PI + COMPLETE_CIRCLE_DEGREE
+                            ) % COMPLETE_CIRCLE_DEGREE
+                    angles.fastForEachIndexed { index, sweepAngle ->
+                        if (clickedAngle in startAngle..(startAngle + sweepAngle)) {
+                            selectedSlice = index
+                            onPieChartSliceClick(data()[index])
+                        }
+                        startAngle += sweepAngle
                     }
-                    startAngle += sweepAngle
                 }
             }
-        }) {
+    ) {
         val radius = size.minDimension / 2
         val strokeWidth = radius / 3
         val center = Offset(size.width / 2, size.height / 2)
 
-        var startAngle = if (isHalfPieChart) 180f else 0f
         angles.fastForEachIndexed { index, sweepAngle ->
             val scale = if (index == selectedSlice) 1.05f else 1.0f
             val scaledRadius = radius * scale
@@ -113,7 +117,6 @@ private fun PieChartContent(
                 center.y + (scaledRadius - radius) * sin(angle).toFloat()
             )
 
-            // Draw the outer arc with specified stroke width
             // Draw the outer arc with specified stroke width
             drawArc(
                 brush = Brush.linearGradient(data()[index].color.value),

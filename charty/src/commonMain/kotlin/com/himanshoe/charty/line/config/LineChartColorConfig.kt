@@ -16,9 +16,11 @@ data class LineChartColorConfig(
     val axisColor: ChartColor,
     val gridLineColor: ChartColor,
     val lineColor: ChartColor,
-    val lineFillColor: ChartColor = ChartColor.Gradient(lineColor.value.map {
-        it.copy(alpha = 0.2f)
-    }),
+    val lineFillColor: ChartColor = ChartColor.Gradient(
+        lineColor.value.map {
+            it.copy(alpha = 0.2f)
+        }
+    ),
     val selectionBarColor: ChartColor
 ) {
     companion object {

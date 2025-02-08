@@ -87,7 +87,8 @@ fun SpeedometerProgressBar(
             )
 
             if (dotConfig.showDots) {
-                drawDots(dotConfig = dotConfig,
+                drawDots(
+                    dotConfig = dotConfig,
                     radius = radius,
                     strokeWidth = strokeWidth,
                     center = center,

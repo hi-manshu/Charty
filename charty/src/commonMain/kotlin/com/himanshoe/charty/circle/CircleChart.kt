@@ -54,24 +54,26 @@ private fun CircleChartContent(
     var clickedCircleIndex by remember { mutableStateOf(-1) }
     val circleData = remember(data) { data() }
 
+    Canvas(
+        modifier = modifier
+            .pointerInput(Unit) {
+                detectTapGestures { offset ->
+                    val maxRadius = min(size.width, size.height) / 2
+                    val center = Offset((size.width / 2).toFloat(), (size.height / 2).toFloat())
+                    val radiusFactor = if (circleData.count() == 2) 1.55F else 1.45F
+                    val strokeWidth = maxRadius / (radiusFactor * circleData.size)
+                    val radiusStep = (maxRadius - strokeWidth) / circleData.size
 
-    Canvas(modifier = modifier.pointerInput(Unit) {
-        detectTapGestures { offset ->
-            val maxRadius = min(size.width, size.height) / 2
-            val center = Offset((size.width / 2).toFloat(), (size.height / 2).toFloat())
-            val radiusFactor = if (circleData.count() == 2) 1.55F else 1.45F
-            val strokeWidth = maxRadius / (radiusFactor * circleData.size)
-            val radiusStep = (maxRadius - strokeWidth) / circleData.size
-
-            circleData.fastForEachIndexed { index, _ ->
-                val currentRadius = maxRadius - (index * radiusStep) - strokeWidth
-                val distance = (offset - center).getDistance()
-                if (distance in (currentRadius - strokeWidth / 2)..(currentRadius + strokeWidth / 2)) {
-                    clickedCircleIndex = index
+                    circleData.fastForEachIndexed { index, _ ->
+                        val currentRadius = maxRadius - (index * radiusStep) - strokeWidth
+                        val distance = (offset - center).getDistance()
+                        if (distance in (currentRadius - strokeWidth / 2)..(currentRadius + strokeWidth / 2)) {
+                            clickedCircleIndex = index
+                        }
+                    }
                 }
             }
-        }
-    }) {
+    ) {
         val maxRadius = min(size.width, size.height) / 2
         val center = Offset(size.width / 2, size.height / 2)
         val radiusFactor = if (circleData.count() == 2) 1.55F else 1.45F
@@ -87,9 +89,11 @@ private fun CircleChartContent(
 
             // Draw the background circle
             drawCircle(
-                brush = Brush.linearGradient(item.trackColor.value.map {
-                    it.copy(alpha = 0.1F)
-                }),
+                brush = Brush.linearGradient(
+                    item.trackColor.value.map {
+                        it.copy(alpha = 0.1F)
+                    }
+                ),
                 radius = scaledRadius,
                 center = center,
                 style = Stroke(width = scaledStrokeWidth)
