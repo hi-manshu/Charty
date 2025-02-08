@@ -2,7 +2,7 @@
 agp = "8.7.3"
 detektCli = "1.23.7"
 detektFormatting = "1.23.7"
-kotlin = "2.1.0"
+kotlin = "2.1.10"
 jetbrain-compose = "1.7.3"
 androidx-activityCompose = "1.10.0"
 publish = "0.30.0"
