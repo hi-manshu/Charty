@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEachIndexed
+import androidx.compose.ui.util.fastMap
 import com.himanshoe.charty.pie.model.PieChartData
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -61,10 +62,11 @@ private fun PieChartContent(
     modifier: Modifier = Modifier,
     onPieChartSliceClick: (PieChartData) -> Unit = {}
 ) {
+    val pieData = data()
     var selectedSlice by remember { mutableStateOf(-1) }
-    val totalValue = remember(data) { data().sumOf { it.value.toDouble() }.toFloat() }
-    val proportions = remember(data) { data().map { it.value / totalValue } }
-    val angles = remember(proportions) { proportions.map { 360 * it } }
+    val totalValue = remember(pieData) { pieData.sumOf { it.value.toDouble() }.toFloat() }
+    val proportions = remember(pieData) { pieData.fastMap { it.value / totalValue } }
+    val angles = remember(proportions) { proportions.fastMap { 360 * it } }
     val textMeasurer = rememberTextMeasurer()
     var startAngle = 0f
 
@@ -83,7 +85,7 @@ private fun PieChartContent(
                     angles.fastForEachIndexed { index, sweepAngle ->
                         if (clickedAngle in currentStartAngle..(currentStartAngle + sweepAngle)) {
                             selectedSlice = index
-                            onPieChartSliceClick(data()[index])
+                            onPieChartSliceClick(pieData[index])
                         }
                         currentStartAngle += sweepAngle
                     }
@@ -105,7 +107,7 @@ private fun PieChartContent(
 
             // Draw the outer arc with specified stroke width
             drawArc(
-                brush = Brush.linearGradient(data()[index].color.value),
+                brush = Brush.linearGradient(pieData[index].color.value),
                 startAngle = startAngle,
                 sweepAngle = sweepAngle,
                 useCenter = !isDonutChart,
@@ -121,14 +123,14 @@ private fun PieChartContent(
                 val labelY = center.y + labelRadius * sin(labelAngle).toFloat()
                 val fontSize = if (index == selectedSlice) 16.sp else 12.sp
                 val textLayoutResult = textMeasurer.measure(
-                    text = data()[index].label,
+                    text = pieData[index].label,
                     style = TextStyle(fontSize = fontSize),
                     overflow = TextOverflow.Clip,
                     maxLines = 1,
                 )
                 drawText(
                     textLayoutResult = textLayoutResult,
-                    brush = Brush.linearGradient(data()[index].labelColor.value),
+                    brush = Brush.linearGradient(pieData[index].labelColor.value),
                     topLeft = Offset(
                         x = labelX - textLayoutResult.size.width / 2,
                         y = labelY - textLayoutResult.size.height / 2,

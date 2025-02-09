@@ -1,6 +1,7 @@
 package com.himanshoe.charty.point.model
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.util.fastMap
 import com.himanshoe.charty.common.ChartColor
 
 /**
@@ -17,7 +18,7 @@ data class PointChartColorConfig(
     val gridLineColor: ChartColor,
     val circleColor: ChartColor,
     val strokeColor: ChartColor = ChartColor.Gradient(
-        circleColor.value.map {
+        circleColor.value.fastMap {
             it.copy(alpha = 0.5f)
         }
     ),

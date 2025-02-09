@@ -78,7 +78,7 @@ private fun PointChartContent(
     onPointClick: (Int, PointData) -> Unit = { _, _ -> }
 ) {
     val circleRadius = remember { Animatable(0F) }
-    val circleData = remember(data) { data() }
+    val circleData = data()
     val textMeasurer = rememberTextMeasurer()
     val (minValue, maxValue) = remember(circleData) {
         val min = circleData.minOfOrNull { it.yValue }?.takeIf { it < 0 } ?: 0f

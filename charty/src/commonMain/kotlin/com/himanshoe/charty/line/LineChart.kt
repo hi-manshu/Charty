@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastMap
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.common.TargetConfig
@@ -211,7 +212,7 @@ internal fun DrawScope.drawLineCurve(
             drawPath(
                 path = path,
                 brush = Brush.linearGradient(
-                    fillColor.value.map {
+                    fillColor.value.fastMap {
                         it.copy(alpha = 0.2f)
                     }
                 )

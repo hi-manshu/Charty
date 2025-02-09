@@ -18,7 +18,9 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastForEachIndexed
+import androidx.compose.ui.util.fastMaxOfOrNull
 import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.config.BarChartConfig
 import com.himanshoe.charty.bar.model.BarData
@@ -74,10 +76,12 @@ private fun LineBarChartContent(
     barChartColorConfig: BarChartColorConfig = BarChartColorConfig.default(),
     onBarClick: (Int, BarData) -> Unit = { _, _ -> },
 ) {
-    val minValue = data().minOfOrNull { it.yValue.absoluteValue } ?: 0f
-    val maxValue = data().maxOfOrNull { it.yValue.absoluteValue } ?: 0f
-    val hasNegativeValues = data().any { it.yValue < 0 }
-    val displayData = remember(data()) { getDisplayData(data(), barChartConfig.minimumBarCount) }
+    val listData = data()
+    val minValue = remember(listData) { listData.minOfOrNull { it.yValue.absoluteValue } ?: 0f }
+    val maxValue = remember(listData) { listData.fastMaxOfOrNull { it.yValue.absoluteValue } ?: 0f }
+    val hasNegativeValues = remember(listData) { listData.fastAny { it.yValue < 0 } }
+    val displayData =
+        remember(listData) { getDisplayData(listData, barChartConfig.minimumBarCount) }
     val canDrawNegativeChart = hasNegativeValues && barChartConfig.drawNegativeValueChart
     val textMeasurer = rememberTextMeasurer()
     val bottomPadding = if (labelConfig.showXLabel && !hasNegativeValues) 8.dp else 0.dp

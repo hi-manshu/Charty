@@ -25,7 +25,9 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastForEachIndexed
+import androidx.compose.ui.util.fastMaxOfOrNull
 import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.config.BarChartConfig
 import com.himanshoe.charty.bar.model.BarData
@@ -86,10 +88,11 @@ private fun BarChartContent(
     barChartColorConfig: BarChartColorConfig = BarChartColorConfig.default(),
     onBarClick: (Int, BarData) -> Unit = { _, _ -> },
 ) {
-    val maxValue = remember(data()) { data().maxOfOrNull { it.yValue.absoluteValue } ?: 0f }
-    val minValue = remember(data()) { data().minOfOrNull { it.yValue.absoluteValue } ?: 0f }
-    val hasNegativeValues = remember(data()) { data().any { it.yValue < 0 } }
-    val displayData = remember(data) { getDisplayData(data(), barChartConfig.minimumBarCount) }
+    val barData = data()
+    val maxValue = remember(barData) { barData.fastMaxOfOrNull { it.yValue.absoluteValue } ?: 0f }
+    val minValue = remember(barData) { barData.minOfOrNull { it.yValue.absoluteValue } ?: 0f }
+    val hasNegativeValues = remember(barData) { barData.fastAny { it.yValue < 0 } }
+    val displayData = remember(barData) { getDisplayData(barData, barChartConfig.minimumBarCount) }
     val canDrawNegativeChart = hasNegativeValues && barChartConfig.drawNegativeValueChart
     val textMeasurer = rememberTextMeasurer()
     val bottomPadding = if (labelConfig.showXLabel && !hasNegativeValues) 8.dp else 0.dp
@@ -313,7 +316,7 @@ private fun DrawScope.backgroundColorBar(
     maxHeight: Float,
     cornerRadius: CornerRadius,
 ) {
-    val color = if (barData.barBackgroundColor.value.any { it == Color.Unspecified }) {
+    val color = if (barData.barBackgroundColor.value.fastAny { it == Color.Unspecified }) {
         barBackgroundColor.value
     } else {
         barData.barBackgroundColor.value
@@ -377,9 +380,10 @@ internal fun BarChartCanvasScaffold(
     onClick: (Offset) -> Unit = {},
     content: DrawScope.(Float, Float, Float) -> Unit = { _, _, _ -> },
 ) {
+    val barData = data()
     val textMeasurer = rememberTextMeasurer()
-    val maxValue = data().maxOfOrNull { it.yValue } ?: 0f
-    val minValue = if (canDrawNegativeChart) data().minOfOrNull { it.yValue } ?: 0f else 0f
+    val maxValue = barData.fastMaxOfOrNull { it.yValue } ?: 0f
+    val minValue = if (canDrawNegativeChart) barData.minOfOrNull { it.yValue } ?: 0f else 0f
     val step = (maxValue - minValue) / 4
 
     Canvas(
@@ -400,7 +404,7 @@ internal fun BarChartCanvasScaffold(
                     maxValue = maxValue,
                     labelColor = labelConfig.textColor,
                     textMeasurer = textMeasurer,
-                    count = data().count()
+                    count = barData.count()
                 )
             } else {
                 Modifier
@@ -419,8 +423,8 @@ internal fun BarChartCanvasScaffold(
             .pointerInput(Unit) { detectTapGestures { onClick(it) } },
     ) {
         val (canvasWidth, canvasHeight) = size
-        val gap = canvasWidth / (data().count() * 10)
-        val barWidth = (canvasWidth - gap * (data().count() - 1)) / data().count()
+        val gap = canvasWidth / (barData.count() * 10)
+        val barWidth = (canvasWidth - gap * (barData.count() - 1)) / barData.count()
 
         content(
             canvasHeight,

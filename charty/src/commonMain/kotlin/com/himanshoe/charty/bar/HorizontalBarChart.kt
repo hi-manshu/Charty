@@ -25,7 +25,10 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.fastAll
+import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastForEachIndexed
+import androidx.compose.ui.util.fastMaxOfOrNull
 import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.config.BarChartConfig
 import com.himanshoe.charty.bar.config.HorizontalBarLabelConfig
@@ -73,12 +76,13 @@ private fun HorizontalBarChartContent(
     horizontalBarLabelConfig: HorizontalBarLabelConfig = HorizontalBarLabelConfig.default(),
     onBarClick: (BarData) -> Unit = {}
 ) {
-    val maxValue = remember(data()) { data().maxOfOrNull { it.yValue.absoluteValue } ?: 0f }
-    val hasNegativeValues = remember(data()) { data().any { it.yValue < 0 } }
-    val allNegativeValues = remember(data()) { data().all { it.yValue < 0 } }
-    val allPositiveValues = remember(data()) { data().all { it.yValue >= 0 } }
+    val listData = data()
+    val maxValue = remember(listData) { listData.fastMaxOfOrNull { it.yValue.absoluteValue } ?: 0f }
+    val hasNegativeValues = remember(listData) { listData.fastAny { it.yValue < 0 } }
+    val allNegativeValues = remember(listData) { listData.fastAll { it.yValue < 0 } }
+    val allPositiveValues = remember(listData) { listData.fastAll { it.yValue >= 0 } }
 
-    val displayData = remember(data) { getDisplayData(data(), barChartConfig.minimumBarCount) }
+    val displayData = remember(data) { getDisplayData(listData, barChartConfig.minimumBarCount) }
     var clickedOffSet by remember { mutableStateOf<Offset?>(null) }
     var clickedBarIndex by remember { mutableStateOf(-1) }
     val textMeasurer = rememberTextMeasurer()

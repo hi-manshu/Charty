@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastFlatMap
 import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.common.TargetConfig
 import com.himanshoe.charty.common.drawTargetLineIfNeeded
@@ -71,8 +72,8 @@ private fun MultiLineChartContent(
     val multiLineData = data()
     val textMeasurer = rememberTextMeasurer()
     val (minValue, maxValue) = remember(multiLineData) {
-        val min = multiLineData.flatMap { it.data }.minOfOrNull { it.yValue } ?: 0f
-        val max = multiLineData.flatMap { it.data }.maxOfOrNull { it.yValue } ?: 0f
+        val min = multiLineData.fastFlatMap { it.data }.minOfOrNull { it.yValue } ?: 0f
+        val max = multiLineData.fastFlatMap { it.data }.maxOfOrNull { it.yValue } ?: 0f
         min to max
     }
     val yRange = maxValue - minValue
@@ -83,7 +84,7 @@ private fun MultiLineChartContent(
             .fillMaxSize()
             .padding(bottom = bottomPadding, start = leftPadding)
             .drawAxesAndGridLines(
-                data = multiLineData.flatMap { it.data },
+                data = multiLineData.fastFlatMap { it.data },
                 colorConfig = multiLineData.first().colorConfig,
                 chartConfig = chartConfig,
                 textMeasurer = textMeasurer,

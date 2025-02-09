@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.util.fastForEachIndexed
+import androidx.compose.ui.util.fastMap
 import com.himanshoe.charty.bar.model.StorageData
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.asSolidChartColor
@@ -77,19 +78,20 @@ private fun StorageBarContent(
 ) {
     var clickedOffSet by mutableStateOf<Offset?>(null)
     var clickedBarIndex by mutableIntStateOf(-1)
+    val storageData = data()
     Canvas(
         modifier = modifier
             .fillMaxWidth()
-            .pointerInput(data) {
+            .pointerInput(storageData) {
                 detectTapGestures { offset -> clickedOffSet = offset }
             }
     ) {
         val totalWidth = size.width
         val totalHeight = size.height
         var currentOffset = 0f
-        val categoryWidths = data().map { it.value * totalWidth }
+        val categoryWidths = storageData.fastMap { it.value * totalWidth }
 
-        data().fastForEachIndexed { index, category ->
+        storageData.fastForEachIndexed { index, category ->
             val categoryWidth = categoryWidths[index]
             val isFirst = index == 0
             val additionalHeight = if (clickedBarIndex == index) totalHeight * 0.05F else 0F
