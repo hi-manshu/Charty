@@ -1,4 +1,4 @@
-# Charty : Elementary Chart library for Compose
+# Charty : Elementary Chart library for Compose with KMP support!
 
 ![Banner](img/banner.png)
 
