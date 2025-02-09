@@ -110,7 +110,7 @@
     <h1 class="cover"><span>Line</span><wbr></wbr><span>Chart</span><wbr></wbr><span>Color</span><wbr></wbr><span><span>Config</span></span></h1>
   </div>
   <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":charty:dokkaHtml/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">axisColor<span class="token operator">: </span><a href="../../com.himanshoe.charty.common/-chart-color/index.html">ChartColor</a><span class="token punctuation">, </span></span><span class="parameter ">gridLineColor<span class="token operator">: </span><a href="../../com.himanshoe.charty.common/-chart-color/index.html">ChartColor</a><span class="token punctuation">, </span></span><span class="parameter ">lineColor<span class="token operator">: </span><a href="../../com.himanshoe.charty.common/-chart-color/index.html">ChartColor</a><span class="token punctuation">, </span></span><span class="parameter ">lineFillColor<span class="token operator">: </span><a href="../../com.himanshoe.charty.common/-chart-color/index.html">ChartColor</a><span class="token operator"> = </span>ChartColor.Gradient(
-        lineColor.value.map {
+        lineColor.value.fastMap {
             it.copy(alpha = 0.2f)
         }
     )<span class="token punctuation">, </span></span><span class="parameter ">selectionBarColor<span class="token operator">: </span><a href="../../com.himanshoe.charty.common/-chart-color/index.html">ChartColor</a></span></span><span class="token punctuation">)</span></div></div></div>
