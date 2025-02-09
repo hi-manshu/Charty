@@ -13,7 +13,10 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastAny
+import androidx.compose.ui.util.fastFlatMap
 import androidx.compose.ui.util.fastForEachIndexed
+import androidx.compose.ui.util.fastMaxOfOrNull
 import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.config.StackBarConfig
 import com.himanshoe.charty.bar.model.StackBarData
@@ -68,10 +71,11 @@ private fun StackBarChartContent(
     labelConfig: LabelConfig = LabelConfig.default(),
     onBarClick: (Int, StackBarData) -> Unit = { _, _ -> },
 ) {
-    val displayData = remember(data()) { getDisplayData(data(), stackBarConfig.minimumBarCount) }
+    val stackBarData = data()
+    val displayData = remember(stackBarData) { getDisplayData(stackBarData, stackBarConfig.minimumBarCount) }
     val maxValue =
-        remember(displayData) { displayData.maxOfOrNull { it.values.sum().absoluteValue } ?: 0f }
-    val hasNegativeValues = remember(data()) { displayData.flatMap { it.values }.any { it < 0 } }
+        remember(displayData) { displayData.fastMaxOfOrNull { it.values.sum().absoluteValue } ?: 0f }
+    val hasNegativeValues = remember(stackBarData) { displayData.fastFlatMap { it.values }.fastAny { it < 0 } }
     val textMeasurer = rememberTextMeasurer()
     val bottomPadding = if (labelConfig.showXLabel && !hasNegativeValues) 8.dp else 0.dp
     val leftPadding = if (labelConfig.showYLabel) 24.dp else 0.dp

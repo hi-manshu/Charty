@@ -23,6 +23,7 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.fastFlatMap
 import androidx.compose.ui.util.fastForEachIndexed
 import com.himanshoe.charty.bar.config.ComparisonBarChartConfig
 import com.himanshoe.charty.bar.model.ComparisonBarData
@@ -70,10 +71,9 @@ private fun ComparisonBarContent(
     val leftPadding = if (labelConfig.showYLabel) 24.dp else 0.dp
 
     val dataList = data()
-    val maxValue = dataList.flatMap { it.bars }.maxOf { it }
+    val maxValue = remember(dataList) { dataList.fastFlatMap { it.bars }.maxOf { it } }
     val groupCount = dataList.size
-    val maxBarsCount = dataList.maxOf { it.bars.size }
-
+    val maxBarsCount = remember(dataList) { dataList.maxOf { it.bars.size } }
     Canvas(
         modifier = modifier
             .padding(bottom = bottomPadding, start = leftPadding)

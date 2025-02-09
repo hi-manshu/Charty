@@ -1,5 +1,6 @@
 package com.himanshoe.charty.circle.model
 
+import androidx.compose.ui.util.fastMap
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.asGradientChartColor
 
@@ -13,6 +14,6 @@ import com.himanshoe.charty.common.asGradientChartColor
 data class CircleData(
     val value: Float,
     val color: ChartColor,
-    val trackColor: ChartColor = color.value.map { it.copy(alpha = 0.5F) }.asGradientChartColor(),
+    val trackColor: ChartColor = color.value.fastMap { it.copy(alpha = 0.5F) }.asGradientChartColor(),
     val label: String,
 )

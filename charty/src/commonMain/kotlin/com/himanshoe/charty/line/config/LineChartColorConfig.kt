@@ -1,6 +1,7 @@
 package com.himanshoe.charty.line.config
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.util.fastMap
 import com.himanshoe.charty.common.ChartColor
 
 /**
@@ -17,7 +18,7 @@ data class LineChartColorConfig(
     val gridLineColor: ChartColor,
     val lineColor: ChartColor,
     val lineFillColor: ChartColor = ChartColor.Gradient(
-        lineColor.value.map {
+        lineColor.value.fastMap {
             it.copy(alpha = 0.2f)
         }
     ),

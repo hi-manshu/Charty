@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.util.fastForEachIndexed
+import androidx.compose.ui.util.fastMap
 import com.himanshoe.charty.circle.model.CircleData
 import kotlin.math.PI
 import kotlin.math.cos
@@ -52,7 +53,7 @@ private fun CircleChartContent(
     onCircleClick: (CircleData) -> Unit = {}
 ) {
     var clickedCircleIndex by remember { mutableStateOf(-1) }
-    val circleData = remember(data) { data() }
+    val circleData = data()
 
     Canvas(
         modifier = modifier
@@ -90,7 +91,7 @@ private fun CircleChartContent(
             // Draw the background circle
             drawCircle(
                 brush = Brush.linearGradient(
-                    item.trackColor.value.map {
+                    item.trackColor.value.fastMap {
                         it.copy(alpha = 0.1F)
                     }
                 ),
