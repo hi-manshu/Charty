@@ -26,6 +26,15 @@ dependencies {
     implementation("com.himanshoe:charty:<version>")
 }
 ```
+Find the latest release version [here](https://github.com/hi-manshu/Charty/releases)
+
+### You can find videos  iOS and Android [here](img/video)
+
+### Photos / Screenshots
+
+| 1                          | 2                          | 3                          | 4                          | 5                          | 6                          |
+|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|----------------------------|
+| ![1.png](img/photos/1.png) | ![2.png](img/photos/2.png) | ![3.png](img/photos/3.png) | ![4.png](img/photos/4.png) | ![5.png](img/photos/5.png) | ![6.png](img/photos/6.png) |
 
 ## Few apps using it:
 
