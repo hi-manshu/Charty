@@ -137,15 +137,16 @@ private fun LineBarChartContent(
                 canDrawNegativeChart = canDrawNegativeChart
             )
 
-            val textCharCount = if (displayData.count() <= 7) 3 else 1
+            val textCharCount = getTextCharCount(labelConfig, barData, displayData)
             val textSizeFactor = if (displayData.count() <= 13) 4 else 2
+
             val textLayoutResult = textMeasurer.measure(
                 text = barData.xValue.toString().take(textCharCount),
                 style = TextStyle(fontSize = (barWidth / textSizeFactor).toSp()),
                 overflow = TextOverflow.Clip,
                 maxLines = 1,
             )
-            val (textOffsetY, cornerRadius) = getTextYOffsetAndCornerRadius(
+            val (textOffsetY, calculatedCornerRadius) = getTextYOffsetAndCornerRadius(
                 barData = barData,
                 individualBarTopLeft = singleBarTopLeft,
                 textLayoutResult = textLayoutResult,
@@ -153,6 +154,8 @@ private fun LineBarChartContent(
                 barChartConfig = barChartConfig,
                 barWidth = barWidth
             )
+            val cornerRadius = getCornerRadius(barChartConfig, calculatedCornerRadius)
+
 
             if (isClickInsideBar(clickedOffset, singleBarTopLeft, singleBarRectSize)) {
                 clickedBarIndex = index
@@ -196,6 +199,20 @@ private fun LineBarChartContent(
         }
     }
 }
+private fun getCornerRadius(
+    barChartConfig: BarChartConfig,
+    cornerRadius: CornerRadius
+) = barChartConfig.cornerRadius ?: cornerRadius
+
+private fun getTextCharCount(
+    labelConfig: LabelConfig,
+    barData: BarData,
+    displayData: List<BarData>
+) = labelConfig.xAxisCharCount ?: if (barData.xValue.toString().length >= 3) {
+    if (displayData.count() <= 7) 3 else 1
+} else {
+    1
+}
 
 private fun getBarTopLeftAndRectSize(
     index: Int,
@@ -204,7 +221,7 @@ private fun getBarTopLeftAndRectSize(
     topLeftY: Float,
     clickedBarIndex: Int,
     height: Float,
-    canDrawNegativeChart: Boolean
+    canDrawNegativeChart: Boolean,
 ): Pair<Offset, Size> {
     val individualBarTopLeft = Offset(
         x = index * barWidth + (barWidth - barWidth / 3) / 2,

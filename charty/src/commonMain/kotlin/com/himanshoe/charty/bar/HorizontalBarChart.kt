@@ -67,6 +67,7 @@ fun HorizontalBarChart(
     )
 }
 
+
 @Composable
 private fun HorizontalBarChartContent(
     data: () -> List<BarData>,
@@ -144,6 +145,7 @@ private fun HorizontalBarChartContent(
                 brush = brush,
                 showCurvedBar = barChartConfig.showCurvedBar,
                 isNegative = barData.yValue < 0,
+                barChartConfig = barChartConfig,
                 allNegativeValues = allNegativeValues,
                 allPositiveValues = allPositiveValues
             )
@@ -183,8 +185,9 @@ private fun DrawScope.drawBar(
     allNegativeValues: Boolean,
     allPositiveValues: Boolean,
     showCurvedBar: Boolean,
+    barChartConfig: BarChartConfig,
 ) {
-    val cornerRadius = if (showCurvedBar) {
+    val calculatedCornerRadius = if (showCurvedBar) {
         CornerRadius(
             x = size.height / 2,
             y = size.height / 2
@@ -192,6 +195,10 @@ private fun DrawScope.drawBar(
     } else {
         CornerRadius.Zero
     }
+    val cornerRadius = getCornerRadius(
+        barChartConfig = barChartConfig,
+        cornerRadius = calculatedCornerRadius
+    )
     val rightCornerRadius =
         if (!isNegative || allPositiveValues || allNegativeValues) cornerRadius else CornerRadius.Zero
     val leftCornerRadius =
@@ -296,6 +303,11 @@ private fun DrawScope.drawLabel(
         )
     }
 }
+
+private fun getCornerRadius(
+    barChartConfig: BarChartConfig,
+    cornerRadius: CornerRadius
+) = barChartConfig.cornerRadius ?: cornerRadius
 
 private data class BarDimensions(
     val barWidth: Float,

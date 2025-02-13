@@ -17,7 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
@@ -30,6 +32,7 @@ import com.himanshoe.charty.bar.SignalProgressBarChart
 import com.himanshoe.charty.bar.StackedBarChart
 import com.himanshoe.charty.bar.StorageBar
 import com.himanshoe.charty.bar.config.BarChartColorConfig
+import com.himanshoe.charty.bar.config.BarChartConfig
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.ComparisonBarData
 import com.himanshoe.charty.bar.model.StackBarData
@@ -39,6 +42,7 @@ import com.himanshoe.charty.circle.SpeedometerProgressBar
 import com.himanshoe.charty.circle.config.DotConfig
 import com.himanshoe.charty.circle.model.CircleData
 import com.himanshoe.charty.common.ChartColor
+import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.common.TextConfig
 import com.himanshoe.charty.common.asGradientChartColor
 import com.himanshoe.charty.common.asSolidChartColor
@@ -61,6 +65,7 @@ import kotlin.random.Random
 @Preview
 fun App() {
     LazyColumn {
+        addBarChart(null, generateMockBarData(7, false, false))
         addComparisonChart()
         addStackBarChart()
         addSpeedometerProgressBar()
@@ -69,7 +74,6 @@ fun App() {
         addLineChart()
         addMultiLineChart()
         addPointChart()
-        addBarChart(null, generateMockBarData(7, false, false))
         addHorizontalBarChart()
         addStorageBarChart()
         addSignalBarChart()
@@ -127,7 +131,8 @@ private fun LazyListScope.addCircleChart() {
                 modifier = Modifier.size(300.dp),
                 onCircleClick = { circleData ->
                     println("Clicked on circle with data: $circleData")
-                })
+                }
+            )
         }
     }
 }
@@ -435,12 +440,19 @@ private fun LazyListScope.addBarChart(target: Float?, data: List<BarData>) {
     item {
         BarChart(modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
             target = target,
+            labelConfig = LabelConfig.default().copy(
+                showXLabel = true, xAxisCharCount = 4,
+                textColor = Color(0xFFFF92C1).asSolidChartColor()
+            ),
             barChartColorConfig = BarChartColorConfig.default().copy(
                 fillBarColor = Color(0xFFFF92C1).asSolidChartColor(),
                 negativeBarColors = Color(0xFF4D4D4D).asSolidChartColor()
             ),
             data = { data },
-            onBarClick = { _, barData -> })
+            barChartConfig = BarChartConfig.default().copy(
+                cornerRadius = CornerRadius(40F, 40F),
+            ),
+            onBarClick = { index, barData -> println("click in bar with $index index and data $barData") })
     }
 }
 
@@ -504,7 +516,7 @@ private fun generateSampleData(): List<BarData> {
 private fun generateMockBarData(
     size: Int, useColor: Boolean = false, hasNegative: Boolean = true
 ): List<BarData> {
-    val days = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+    val years = listOf("2021", "2022", "2023", "2024", "2025", "2026", "2027")
     val colors = listOf(
         Color.Red,
         Color.Green,
@@ -519,7 +531,7 @@ private fun generateMockBarData(
     val data = List(size) {
         BarData(
             yValue = Random.nextFloat() * 20 + number, // Random value between -10 and 10
-            xValue = days[it % days.size],
+            xValue = years[it % years.size],
             barColor = if (useColor) colors[it % colors.size].asSolidChartColor() else Color.Unspecified.asSolidChartColor()
         )
     }.toMutableList()

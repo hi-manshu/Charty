@@ -1,5 +1,7 @@
 package com.himanshoe.charty.bar.config
 
+import androidx.compose.ui.geometry.CornerRadius
+
 /**
  * Configuration class for bar chart settings.
  *
@@ -15,6 +17,7 @@ data class BarChartConfig(
     val drawNegativeValueChart: Boolean,
     val showCurvedBar: Boolean,
     val minimumBarCount: Int,
+    val cornerRadius: CornerRadius?
 ) {
     companion object {
         /**
@@ -22,13 +25,13 @@ data class BarChartConfig(
          *
          * @return A `BarChartConfig` object with default settings.
          */
-        fun default() =
-            BarChartConfig(
-                showAxisLines = true,
-                showGridLines = true,
-                drawNegativeValueChart = true,
-                showCurvedBar = false,
-                minimumBarCount = 7,
-            )
+        fun default() = BarChartConfig(
+            showAxisLines = true,
+            showGridLines = true,
+            drawNegativeValueChart = true,
+            showCurvedBar = false,
+            minimumBarCount = 7,
+            cornerRadius = null
+        )
     }
 }

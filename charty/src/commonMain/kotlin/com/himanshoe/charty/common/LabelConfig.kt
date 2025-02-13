@@ -1,6 +1,7 @@
 package com.himanshoe.charty.common
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 
 /**
  * Data class representing the configuration for labels in a chart.
@@ -13,6 +14,9 @@ data class LabelConfig(
     val textColor: ChartColor,
     val showXLabel: Boolean,
     val showYLabel: Boolean,
+    val showTooltip: Boolean,
+    val xAxisCharCount: Int?,
+    val labelTextStyle: TextStyle?,
 ) {
     companion object {
         /**
@@ -23,7 +27,10 @@ data class LabelConfig(
         fun default() = LabelConfig(
             textColor = Color.Black.asSolidChartColor(),
             showXLabel = false,
+            xAxisCharCount = null,
+            labelTextStyle = null,
             showYLabel = false,
+            showTooltip = false,
         )
     }
 }
