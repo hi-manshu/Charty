@@ -13,7 +13,8 @@ $dokka.location:com.himanshoe.charty.bar.config/BarChartColorConfig/negativeBarC
 $dokka.location:com.himanshoe.charty.bar.config/BarChartConfig.Companion///PointingToDeclaration/charty/com.himanshoe.charty.bar.config/-bar-chart-config/-companion/index.html
 $dokka.location:com.himanshoe.charty.bar.config/BarChartConfig.Companion/default/#/PointingToDeclaration/charty/com.himanshoe.charty.bar.config/-bar-chart-config/-companion/default.html
 $dokka.location:com.himanshoe.charty.bar.config/BarChartConfig///PointingToDeclaration/charty/com.himanshoe.charty.bar.config/-bar-chart-config/index.html
-$dokka.location:com.himanshoe.charty.bar.config/BarChartConfig/BarChartConfig/#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Int/PointingToDeclaration/charty/com.himanshoe.charty.bar.config/-bar-chart-config/-bar-chart-config.html
+$dokka.location:com.himanshoe.charty.bar.config/BarChartConfig/BarChartConfig/#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Int#androidx.compose.ui.geometry.CornerRadius?/PointingToDeclaration/charty/com.himanshoe.charty.bar.config/-bar-chart-config/-bar-chart-config.html
+$dokka.location:com.himanshoe.charty.bar.config/BarChartConfig/cornerRadius/#/PointingToDeclaration/charty/com.himanshoe.charty.bar.config/-bar-chart-config/corner-radius.html
 $dokka.location:com.himanshoe.charty.bar.config/BarChartConfig/drawNegativeValueChart/#/PointingToDeclaration/charty/com.himanshoe.charty.bar.config/-bar-chart-config/draw-negative-value-chart.html
 $dokka.location:com.himanshoe.charty.bar.config/BarChartConfig/minimumBarCount/#/PointingToDeclaration/charty/com.himanshoe.charty.bar.config/-bar-chart-config/minimum-bar-count.html
 $dokka.location:com.himanshoe.charty.bar.config/BarChartConfig/showAxisLines/#/PointingToDeclaration/charty/com.himanshoe.charty.bar.config/-bar-chart-config/show-axis-lines.html
@@ -108,10 +109,13 @@ $dokka.location:com.himanshoe.charty.common/ChartColor/value/#/PointingToDeclara
 $dokka.location:com.himanshoe.charty.common/LabelConfig.Companion///PointingToDeclaration/charty/com.himanshoe.charty.common/-label-config/-companion/index.html
 $dokka.location:com.himanshoe.charty.common/LabelConfig.Companion/default/#/PointingToDeclaration/charty/com.himanshoe.charty.common/-label-config/-companion/default.html
 $dokka.location:com.himanshoe.charty.common/LabelConfig///PointingToDeclaration/charty/com.himanshoe.charty.common/-label-config/index.html
-$dokka.location:com.himanshoe.charty.common/LabelConfig/LabelConfig/#com.himanshoe.charty.common.ChartColor#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/charty/com.himanshoe.charty.common/-label-config/-label-config.html
+$dokka.location:com.himanshoe.charty.common/LabelConfig/LabelConfig/#com.himanshoe.charty.common.ChartColor#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Int?#androidx.compose.ui.text.TextStyle?/PointingToDeclaration/charty/com.himanshoe.charty.common/-label-config/-label-config.html
+$dokka.location:com.himanshoe.charty.common/LabelConfig/labelTextStyle/#/PointingToDeclaration/charty/com.himanshoe.charty.common/-label-config/label-text-style.html
+$dokka.location:com.himanshoe.charty.common/LabelConfig/showTooltip/#/PointingToDeclaration/charty/com.himanshoe.charty.common/-label-config/show-tooltip.html
 $dokka.location:com.himanshoe.charty.common/LabelConfig/showXLabel/#/PointingToDeclaration/charty/com.himanshoe.charty.common/-label-config/show-x-label.html
 $dokka.location:com.himanshoe.charty.common/LabelConfig/showYLabel/#/PointingToDeclaration/charty/com.himanshoe.charty.common/-label-config/show-y-label.html
 $dokka.location:com.himanshoe.charty.common/LabelConfig/textColor/#/PointingToDeclaration/charty/com.himanshoe.charty.common/-label-config/text-color.html
+$dokka.location:com.himanshoe.charty.common/LabelConfig/xAxisCharCount/#/PointingToDeclaration/charty/com.himanshoe.charty.common/-label-config/x-axis-char-count.html
 $dokka.location:com.himanshoe.charty.common/TargetConfig.Companion///PointingToDeclaration/charty/com.himanshoe.charty.common/-target-config/-companion/index.html
 $dokka.location:com.himanshoe.charty.common/TargetConfig.Companion/default/#/PointingToDeclaration/charty/com.himanshoe.charty.common/-target-config/-companion/default.html
 $dokka.location:com.himanshoe.charty.common/TargetConfig///PointingToDeclaration/charty/com.himanshoe.charty.common/-target-config/index.html
