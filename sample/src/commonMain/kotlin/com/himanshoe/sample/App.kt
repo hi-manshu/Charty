@@ -33,6 +33,7 @@ import com.himanshoe.charty.bar.StackedBarChart
 import com.himanshoe.charty.bar.StorageBar
 import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.config.BarChartConfig
+import com.himanshoe.charty.bar.config.BarTooltip
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.model.ComparisonBarData
 import com.himanshoe.charty.bar.model.StackBarData
@@ -440,8 +441,11 @@ private fun LazyListScope.addBarChart(target: Float?, data: List<BarData>) {
     item {
         BarChart(modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
             target = target,
+            barTooltip = BarTooltip.GraphTop,
             labelConfig = LabelConfig.default().copy(
-                showXLabel = true, xAxisCharCount = 4,
+                showXLabel = true,
+                xAxisCharCount = 4,
+                showYLabel = true,
                 textColor = Color(0xFFFF92C1).asSolidChartColor()
             ),
             barChartColorConfig = BarChartColorConfig.default().copy(

@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
@@ -30,6 +31,7 @@ import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.util.fastMaxOfOrNull
 import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.config.BarChartConfig
+import com.himanshoe.charty.bar.config.BarTooltip
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.bar.modifier.drawAxisLineForVerticalChart
 import com.himanshoe.charty.bar.modifier.drawRangeLinesForVerticalChart
@@ -62,6 +64,7 @@ fun BarChart(
     targetConfig: TargetConfig = TargetConfig.default(),
     barChartConfig: BarChartConfig = BarChartConfig.default(),
     labelConfig: LabelConfig = LabelConfig.default(),
+    barTooltip: BarTooltip? = null,
     barChartColorConfig: BarChartColorConfig = BarChartColorConfig.default(),
     onBarClick: (Int, BarData) -> Unit = { _, _ -> },
 ) {
@@ -72,6 +75,7 @@ fun BarChart(
         targetConfig = targetConfig,
         barChartConfig = barChartConfig,
         labelConfig = labelConfig,
+        barTooltip = barTooltip,
         barChartColorConfig = barChartColorConfig,
         onBarClick = onBarClick
     )
@@ -81,6 +85,7 @@ fun BarChart(
 private fun BarChartContent(
     data: () -> List<BarData>,
     modifier: Modifier = Modifier,
+    barTooltip: BarTooltip? = null,
     target: Float? = null,
     targetConfig: TargetConfig = TargetConfig.default(),
     barChartConfig: BarChartConfig = BarChartConfig.default(),
@@ -97,7 +102,7 @@ private fun BarChartContent(
     val textMeasurer = rememberTextMeasurer()
     val bottomPadding = if (labelConfig.showXLabel && !hasNegativeValues) 8.dp else 0.dp
     val leftPadding = if (labelConfig.showYLabel) 24.dp else 0.dp
-    val topPadding = if (labelConfig.showTooltip) 24.dp else 0.dp
+    val topPadding = if (barTooltip != null) 24.dp else 0.dp
 
     var clickedOffset by mutableStateOf(Offset.Zero)
     var clickedBarIndex by mutableIntStateOf(-1)
@@ -227,46 +232,55 @@ private fun BarChartContent(
                         ),
                     )
                 }
-                if (labelConfig.showYLabel) {
-                    val yLabelTextLayoutResult = textMeasurer.measure(
-                        text = barData.yValue.toString(),
-                        style = labelConfig.labelTextStyle ?: TextStyle(
-                            fontSize = (barWidth / textSizeFactor).toSp(),
-                            brush = Brush.linearGradient(labelConfig.textColor.value)
-                        ),
-                        overflow = TextOverflow.Clip,
-                        maxLines = 1,
-                    )
-                    drawText(
-                        textLayoutResult = yLabelTextLayoutResult,
-                        topLeft = Offset(
-                            x = individualBarTopLeft.x + barWidth / 2 - yLabelTextLayoutResult.size.width / 2,
-                            y = individualBarTopLeft.y - yLabelTextLayoutResult.size.height,
-                        ),
-                    )
-                }
-
-                if (labelConfig.showTooltip) {
-                    val yValueTextLayoutResult = textMeasurer.measure(
-                        text = barData.yValue.toInt().toString(),
-                        style = labelConfig.labelTextStyle ?: TextStyle(
-                            fontSize = (barWidth / textSizeFactor).toSp(),
-                            brush = Brush.linearGradient(labelConfig.textColor.value)
-                        ),
-                        overflow = TextOverflow.Clip,
-                        maxLines = 1,
-                    )
-                    drawText(
-                        textLayoutResult = yValueTextLayoutResult,
-                        topLeft = Offset(
-                            x = individualBarTopLeft.x + barWidth / 2 - yValueTextLayoutResult.size.width / 2,
-                            y = backgroundTopLeftY - yValueTextLayoutResult.size.height - gap,
-                        ),
+                if (barTooltip != null) {
+                    drawTooltip(
+                        textMeasurer = textMeasurer,
+                        barData = barData,
+                        labelConfig = labelConfig,
+                        barWidth = barWidth,
+                        textSizeFactor = textSizeFactor,
+                        barTooltip = barTooltip,
+                        individualBarTopLeft = individualBarTopLeft,
+                        gap = gap,
+                        backgroundTopLeftY = backgroundTopLeftY
                     )
                 }
             }
         }
     }
+}
+
+private fun DrawScope.drawTooltip(
+    textMeasurer: TextMeasurer,
+    barData: BarData,
+    labelConfig: LabelConfig,
+    barWidth: Float,
+    textSizeFactor: Int,
+    barTooltip: BarTooltip,
+    individualBarTopLeft: Offset,
+    gap: Float,
+    backgroundTopLeftY: Float
+) {
+    val tooltipTextLayoutResult = textMeasurer.measure(
+        text = barData.yValue.toInt().toString(),
+        style = labelConfig.labelTextStyle ?: TextStyle(
+            fontSize = (barWidth / textSizeFactor).toSp(),
+            brush = Brush.linearGradient(labelConfig.textColor.value)
+        ),
+        overflow = TextOverflow.Clip,
+        maxLines = 1,
+    )
+    val tooltipYOffset = when (barTooltip) {
+        BarTooltip.Default -> individualBarTopLeft.y - tooltipTextLayoutResult.size.height - gap
+        BarTooltip.GraphTop -> backgroundTopLeftY - tooltipTextLayoutResult.size.height - gap
+    }
+    drawText(
+        textLayoutResult = tooltipTextLayoutResult,
+        topLeft = Offset(
+            x = individualBarTopLeft.x + barWidth / 2 - tooltipTextLayoutResult.size.width / 2,
+            y = tooltipYOffset
+        ),
+    )
 }
 
 private fun getCornerRadius(

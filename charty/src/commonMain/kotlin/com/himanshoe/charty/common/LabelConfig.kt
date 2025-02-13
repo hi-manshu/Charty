@@ -14,7 +14,6 @@ data class LabelConfig(
     val textColor: ChartColor,
     val showXLabel: Boolean,
     val showYLabel: Boolean,
-    val showTooltip: Boolean,
     val xAxisCharCount: Int?,
     val labelTextStyle: TextStyle?,
 ) {
@@ -30,7 +29,6 @@ data class LabelConfig(
             xAxisCharCount = null,
             labelTextStyle = null,
             showYLabel = false,
-            showTooltip = false,
         )
     }
 }
