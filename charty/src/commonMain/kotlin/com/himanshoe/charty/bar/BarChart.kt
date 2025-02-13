@@ -97,21 +97,29 @@ private fun BarChartContent(
     val textMeasurer = rememberTextMeasurer()
     val bottomPadding = if (labelConfig.showXLabel && !hasNegativeValues) 8.dp else 0.dp
     val leftPadding = if (labelConfig.showYLabel) 24.dp else 0.dp
+    val topPadding = if (labelConfig.showTooltip) 24.dp else 0.dp
 
     var clickedOffset by mutableStateOf(Offset.Zero)
     var clickedBarIndex by mutableIntStateOf(-1)
 
     BarChartCanvasScaffold(
-        modifier = modifier.padding(bottom = bottomPadding, start = leftPadding),
+        modifier = modifier.padding(
+            bottom = bottomPadding,
+            start = leftPadding,
+            top = topPadding,
+        ),
         showAxisLines = barChartConfig.showAxisLines,
         showRangeLines = barChartConfig.showGridLines,
         axisLineColor = barChartColorConfig.axisLineColor,
         rangeLineColor = barChartColorConfig.gridLineColor,
         canDrawNegativeChart = canDrawNegativeChart,
         labelConfig = labelConfig,
-        onClick = { clickedOffset = it },
+        onClick = { offset ->
+            clickedOffset = offset.copy(y = offset.y)
+        },
         data = { displayData },
     ) { canvasHeight, gap, barWidth ->
+
         target?.let {
             require(it in minValue..maxValue) { "Target value should be between $minValue and $maxValue" }
             val targetLineY = if (hasNegativeValues) canvasHeight / 2 else canvasHeight
@@ -133,7 +141,7 @@ private fun BarChartContent(
                 yAxis = yAxis,
                 height = height,
                 canvasHeight = canvasHeight,
-                maxHeight = maxHeight
+                maxHeight = maxHeight,
             )
             val color = getBarColor(
                 barData = barData,
@@ -150,16 +158,20 @@ private fun BarChartContent(
                 canDrawNegativeChart = canDrawNegativeChart
             )
 
-            val textCharCount =
-                if (barData.xValue.toString().length >= 3) if (displayData.count() <= 7) 3 else 1 else 1
+            val textCharCount = getTextCharCount(labelConfig, barData, displayData)
+
             val textSizeFactor = if (displayData.count() <= 13) 4 else 2
             val textLayoutResult = textMeasurer.measure(
                 text = barData.xValue.toString().take(textCharCount),
-                style = TextStyle(fontSize = (barWidth / textSizeFactor).toSp()),
+                style = labelConfig.labelTextStyle ?: TextStyle(
+                    fontSize = (barWidth / textSizeFactor).toSp(),
+                    brush = Brush.linearGradient(labelConfig.textColor.value)
+                ),
                 overflow = TextOverflow.Clip,
                 maxLines = 1,
             )
-            val (textOffsetY, cornerRadius) = getTextYOffsetAndCornerRadius(
+
+            val (textOffsetY, calculatedCornerRadius) = getTextYOffsetAndCornerRadius(
                 barData = barData,
                 individualBarTopLeft = individualBarTopLeft,
                 textLayoutResult = textLayoutResult,
@@ -167,7 +179,7 @@ private fun BarChartContent(
                 barChartConfig = barChartConfig,
                 barWidth = barWidth
             )
-
+            val cornerRadius = getCornerRadius(barChartConfig, calculatedCornerRadius)
             if (isClickInsideBar(clickedOffset, individualBarTopLeft, individualBarRectSize)) {
                 clickedBarIndex = index
                 onBarClick(index, barData)
@@ -209,16 +221,67 @@ private fun BarChartContent(
                     ) { "X value should not be empty" }
                     drawText(
                         textLayoutResult = textLayoutResult,
-                        brush = Brush.linearGradient(labelConfig.textColor.value),
                         topLeft = Offset(
                             x = individualBarTopLeft.x + barWidth / 2 - textLayoutResult.size.width / 2,
                             y = textOffsetY,
                         ),
                     )
                 }
+                if (labelConfig.showYLabel) {
+                    val yLabelTextLayoutResult = textMeasurer.measure(
+                        text = barData.yValue.toString(),
+                        style = labelConfig.labelTextStyle ?: TextStyle(
+                            fontSize = (barWidth / textSizeFactor).toSp(),
+                            brush = Brush.linearGradient(labelConfig.textColor.value)
+                        ),
+                        overflow = TextOverflow.Clip,
+                        maxLines = 1,
+                    )
+                    drawText(
+                        textLayoutResult = yLabelTextLayoutResult,
+                        topLeft = Offset(
+                            x = individualBarTopLeft.x + barWidth / 2 - yLabelTextLayoutResult.size.width / 2,
+                            y = individualBarTopLeft.y - yLabelTextLayoutResult.size.height,
+                        ),
+                    )
+                }
+
+                if (labelConfig.showTooltip) {
+                    val yValueTextLayoutResult = textMeasurer.measure(
+                        text = barData.yValue.toInt().toString(),
+                        style = labelConfig.labelTextStyle ?: TextStyle(
+                            fontSize = (barWidth / textSizeFactor).toSp(),
+                            brush = Brush.linearGradient(labelConfig.textColor.value)
+                        ),
+                        overflow = TextOverflow.Clip,
+                        maxLines = 1,
+                    )
+                    drawText(
+                        textLayoutResult = yValueTextLayoutResult,
+                        topLeft = Offset(
+                            x = individualBarTopLeft.x + barWidth / 2 - yValueTextLayoutResult.size.width / 2,
+                            y = backgroundTopLeftY - yValueTextLayoutResult.size.height - gap,
+                        ),
+                    )
+                }
             }
         }
     }
+}
+
+private fun getCornerRadius(
+    barChartConfig: BarChartConfig,
+    cornerRadius: CornerRadius
+) = barChartConfig.cornerRadius ?: cornerRadius
+
+private fun getTextCharCount(
+    labelConfig: LabelConfig,
+    barData: BarData,
+    displayData: List<BarData>
+) = labelConfig.xAxisCharCount ?: if (barData.xValue.toString().length >= 3) {
+    if (displayData.count() <= 7) 3 else 1
+} else {
+    1
 }
 
 internal fun getTextYOffsetAndCornerRadius(
@@ -260,8 +323,9 @@ private fun getBarTopLeftAndRectSize(
     val heightAdjustment =
         if (isClickedBar) height.absoluteValue * 0.02F / (if (canDrawNegativeChart) 2 else 1) else 0f
 
+    val xOffset = index * (barWidth + gap) - barWidthAdjustment / 2
     val individualBarTopLeft = Offset(
-        x = index * (barWidth + gap) - barWidthAdjustment / 2,
+        x = xOffset,
         y = if (barData.yValue < 0) {
             topLeftY
         } else {
@@ -290,7 +354,7 @@ internal fun getBarAndBackgroundBarTopLeft(
     yAxis: Float,
     height: Float,
     canvasHeight: Float,
-    maxHeight: Float
+    maxHeight: Float,
 ): Pair<Float, Float> {
     val topLeftY = if (canDrawNegativeChart) {
         if (barData.yValue < 0) yAxis else yAxis - height / 2
@@ -361,7 +425,6 @@ internal fun isClickInsideBar(
  * @param showAxisLines A boolean indicating whether to show axis lines.
  * @param showRangeLines A boolean indicating whether to show range lines.
  * @param canDrawNegativeChart A boolean indicating whether the chart can draw negative values.
- * @param displayDataCount The number of data points to be displayed.
  * @param axisLineColor The color of the axis lines.
  * @param rangeLineColor The color of the range lines.
  * @param onClick A lambda function to handle click events on the canvas.
@@ -402,6 +465,7 @@ internal fun BarChartCanvasScaffold(
                     minValue = minValue,
                     step = step,
                     maxValue = maxValue,
+                    labelTextStyle = labelConfig.labelTextStyle,
                     labelColor = labelConfig.textColor,
                     textMeasurer = textMeasurer,
                     count = barData.count()

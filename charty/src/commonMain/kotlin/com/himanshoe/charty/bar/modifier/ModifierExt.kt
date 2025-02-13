@@ -146,6 +146,7 @@ internal fun Modifier.drawYAxisLabel(
     textMeasurer: TextMeasurer,
     count: Int,
     labelColor: ChartColor = Color.Black.asSolidChartColor(),
+    labelTextStyle: TextStyle?,
 ): Modifier =
     this.drawWithCache {
         onDrawBehind {
@@ -155,7 +156,10 @@ internal fun Modifier.drawYAxisLabel(
                 val y = size.height - ((value - minValue) / (maxValue - minValue)) * size.height
                 val textLayoutResult = textMeasurer.measure(
                     text = displayValue,
-                    style = TextStyle(fontSize = (size.width / count / 10).sp),
+                    style = labelTextStyle ?: TextStyle(
+                        brush = Brush.linearGradient(labelColor.value),
+                        fontSize = (size.width / count / 10).sp
+                    ),
                     overflow = TextOverflow.Clip,
                     maxLines = 1,
                 )
@@ -165,8 +169,8 @@ internal fun Modifier.drawYAxisLabel(
                         -textLayoutResult.size.width - 8f,
                         y - textLayoutResult.size.height / 2
                     ),
-                    brush = Brush.linearGradient(labelColor.value)
-                )
+
+                    )
             }
         }
     }
