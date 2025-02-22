@@ -1,6 +1,6 @@
 [versions]
 agp = "8.7.3"
-detektCli = "1.23.7"
+detektCli = "1.23.8"
 detektFormatting = "1.23.7"
 kotlin = "2.1.0"
 jetbrain-compose = "1.7.3"
