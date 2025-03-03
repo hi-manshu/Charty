@@ -26,6 +26,7 @@ import androidx.compose.ui.util.fastForEach
 import com.himanshoe.charty.bar.BarChart
 import com.himanshoe.charty.bar.ComparisonBarChart
 import com.himanshoe.charty.bar.HorizontalBarChart
+import com.himanshoe.charty.bar.ImpulseProgressBar
 import com.himanshoe.charty.bar.LineBarChart
 import com.himanshoe.charty.bar.LineStackedBarChart
 import com.himanshoe.charty.bar.SignalProgressBarChart
@@ -66,6 +67,8 @@ import kotlin.random.Random
 @Preview
 fun App() {
     LazyColumn {
+        addImpluseBarChart()
+        addSignalBarChart()
         addBarChart(null, generateMockBarData(7, false, false))
         addComparisonChart()
         addStackBarChart()
@@ -77,7 +80,6 @@ fun App() {
         addPointChart()
         addHorizontalBarChart()
         addStorageBarChart()
-        addSignalBarChart()
         addLineBarChart(3F, { generateMockBarData(7) })
         addLineBarChart(null, { generateMockBarData(7) })
         addBarChart(2F, generateMockBarData(11))
@@ -393,6 +395,29 @@ private fun LazyListScope.addStorageBarChart() {
     }
 }
 
+private fun LazyListScope.addImpluseBarChart() {
+    item {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .padding(24.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            ImpulseProgressBar(
+                progress = { 21F },
+                impulse = { 30F },
+                totalBlocks = 20,
+                maxProgress = 100F,
+                modifier = Modifier.padding(all = 12.dp).fillMaxWidth().height(20.dp),
+                trackColor = Color(0xFFBABABC).asSolidChartColor(),
+                progressColor = Color(0xFF7CF129).asSolidChartColor()
+            )
+
+        }
+    }
+}
+
 private fun LazyListScope.addSignalBarChart() {
     item {
         Box(
@@ -403,8 +428,9 @@ private fun LazyListScope.addSignalBarChart() {
             contentAlignment = Alignment.Center
         ) {
             SignalProgressBarChart(
-                progress = { 79F },
+                progress = { 149F },
                 totalBlocks = 50,
+                maxProgress = 150F,
                 modifier = Modifier.padding(all = 12.dp).fillMaxWidth(0.15F).height(300.dp),
                 trackColor = ChartColor.Gradient(
                     listOf(

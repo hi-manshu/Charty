@@ -67,7 +67,6 @@ fun HorizontalBarChart(
     )
 }
 
-
 @Composable
 private fun HorizontalBarChartContent(
     data: () -> List<BarData>,

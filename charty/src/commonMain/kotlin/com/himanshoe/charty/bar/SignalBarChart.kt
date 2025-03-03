@@ -27,6 +27,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun SignalProgressBarChart(
     progress: () -> Float,
+    maxProgress: Float = 100F,
     modifier: Modifier = Modifier,
     totalBlocks: Int = 10,
     trackColor: ChartColor = Color.Gray.asSolidChartColor(),
@@ -39,6 +40,28 @@ fun SignalProgressBarChart(
         trackColorBrush = Brush.linearGradient(trackColor.value),
         progressColorBrush = Brush.linearGradient(progressColor.value),
         gapRatio = gapRatio,
+        maxProgress = maxProgress,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun SignalProgressBarChart(
+    progress: () -> Int,
+    maxProgress: Int,
+    modifier: Modifier = Modifier,
+    totalBlocks: Int = 10,
+    trackColor: ChartColor = Color.Gray.asSolidChartColor(),
+    progressColor: ChartColor = Color.Green.asSolidChartColor(),
+    gapRatio: Float = 0.1F
+) {
+    SignalBarChartContent(
+        progress = { progress.invoke().toFloat() },
+        totalBlocks = totalBlocks,
+        trackColorBrush = Brush.linearGradient(trackColor.value),
+        progressColorBrush = Brush.linearGradient(progressColor.value),
+        gapRatio = gapRatio,
+        maxProgress = maxProgress.toFloat(),
         modifier = modifier
     )
 }
@@ -56,6 +79,7 @@ fun SignalProgressBarChart(
 @Composable
 private fun SignalBarChartContent(
     progress: () -> Float,
+    maxProgress: Float,
     trackColorBrush: Brush,
     progressColorBrush: Brush,
     gapRatio: Float,
@@ -68,19 +92,19 @@ private fun SignalBarChartContent(
         alphaAnimation.animateTo(progress())
     }
     Canvas(modifier = modifier) {
-        val filledBlocks = (alphaAnimation.value / 100 * totalBlocks).toInt()
-        val partialBlockFraction = (alphaAnimation.value / 100 * totalBlocks) - filledBlocks
+        val filledBlocks = (alphaAnimation.value / maxProgress * totalBlocks).toInt()
+        val partialBlockFraction = (alphaAnimation.value / maxProgress * totalBlocks) - filledBlocks
         val blockHeight = size.height / (totalBlocks + (totalBlocks - 1) * gapRatio)
         val gap = blockHeight * gapRatio
         val blockWidth = size.width
 
-        for (i in 0 until totalBlocks) {
-            val yOffset = size.height - (i + 1) * (blockHeight + gap)
+        for (index in 0 until totalBlocks) {
+            val yOffset = size.height - (index + 1) * (blockHeight + gap)
             val topLeft = Offset(gap, yOffset)
             val blockSize = Size(blockWidth, blockHeight)
             val cornerRadius = CornerRadius(5F)
             when {
-                i < filledBlocks -> {
+                index < filledBlocks -> {
                     drawRoundRect(
                         brush = progressColorBrush,
                         topLeft = topLeft,
@@ -89,7 +113,7 @@ private fun SignalBarChartContent(
                     )
                 }
 
-                i == filledBlocks -> {
+                index == filledBlocks -> {
                     drawRoundRect(
                         brush = progressColorBrush,
                         cornerRadius = cornerRadius,

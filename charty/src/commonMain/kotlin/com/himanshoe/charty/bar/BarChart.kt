@@ -100,11 +100,11 @@ private fun BarChartContent(
     val displayData = remember(barData) { getDisplayData(barData, barChartConfig.minimumBarCount) }
     val canDrawNegativeChart = hasNegativeValues && barChartConfig.drawNegativeValueChart
     val textMeasurer = rememberTextMeasurer()
-    val bottomPadding = if (labelConfig.showXLabel && !hasNegativeValues) 8.dp else 0.dp
+    val bottomLabelPadding = if (labelConfig.showXLabel && !hasNegativeValues) 8.dp else 0.dp
     val leftPadding = if (labelConfig.showYLabel) 24.dp else 0.dp
     val topPadding = if (barTooltip != null) 24.dp else 0.dp
-
-    var clickedOffset by mutableStateOf(Offset.Zero)
+    val bottomPadding = if (canDrawNegativeChart) 24.dp else bottomLabelPadding
+    var clickedOffset by mutableStateOf<Offset?>(null)
     var clickedBarIndex by mutableIntStateOf(-1)
 
     BarChartCanvasScaffold(
@@ -120,7 +120,7 @@ private fun BarChartContent(
         canDrawNegativeChart = canDrawNegativeChart,
         labelConfig = labelConfig,
         onClick = { offset ->
-            clickedOffset = offset.copy(y = offset.y)
+            clickedOffset = offset
         },
         data = { displayData },
     ) { canvasHeight, gap, barWidth ->
@@ -152,6 +152,7 @@ private fun BarChartContent(
                 barData = barData,
                 barChartColorConfig = barChartColorConfig,
             )
+
             val (individualBarTopLeft, individualBarRectSize) = getBarTopLeftAndRectSize(
                 index = index,
                 barWidth = barWidth,
@@ -162,7 +163,13 @@ private fun BarChartContent(
                 height = height,
                 canDrawNegativeChart = canDrawNegativeChart
             )
-
+            clickedOffset?.let { offset ->
+                println("is clicked inside ${isClickInsideBar(offset, individualBarTopLeft, individualBarRectSize)}")
+                if (isClickInsideBar(offset, individualBarTopLeft, individualBarRectSize)) {
+                    clickedBarIndex = index
+                    onBarClick(index, barData)
+                }
+            }
             val textCharCount = getTextCharCount(labelConfig, barData, displayData)
 
             val textSizeFactor = if (displayData.count() <= 13) 4 else 2
@@ -185,10 +192,6 @@ private fun BarChartContent(
                 barWidth = barWidth
             )
             val cornerRadius = getCornerRadius(barChartConfig, calculatedCornerRadius)
-            if (isClickInsideBar(clickedOffset, individualBarTopLeft, individualBarRectSize)) {
-                clickedBarIndex = index
-                onBarClick(index, barData)
-            }
 
             if (barData.yValue != 0F) {
                 backgroundColorBar(
@@ -242,6 +245,7 @@ private fun BarChartContent(
                         barTooltip = barTooltip,
                         individualBarTopLeft = individualBarTopLeft,
                         gap = gap,
+                        individualBarRectSize = individualBarRectSize,
                         backgroundTopLeftY = backgroundTopLeftY
                     )
                 }
@@ -258,6 +262,7 @@ private fun DrawScope.drawTooltip(
     textSizeFactor: Int,
     barTooltip: BarTooltip,
     individualBarTopLeft: Offset,
+    individualBarRectSize: Size,
     gap: Float,
     backgroundTopLeftY: Float
 ) {
@@ -271,8 +276,17 @@ private fun DrawScope.drawTooltip(
         maxLines = 1,
     )
     val tooltipYOffset = when (barTooltip) {
-        BarTooltip.Default -> individualBarTopLeft.y - tooltipTextLayoutResult.size.height - gap
-        BarTooltip.GraphTop -> backgroundTopLeftY - tooltipTextLayoutResult.size.height - gap
+        BarTooltip.BarTop -> if (barData.yValue >= 0) {
+            individualBarTopLeft.y - tooltipTextLayoutResult.size.height - gap
+        } else {
+            individualBarTopLeft.y + individualBarRectSize.height + gap
+        }
+
+        BarTooltip.GraphTop -> if (barData.yValue >= 0) {
+            backgroundTopLeftY - tooltipTextLayoutResult.size.height - gap
+        } else {
+            backgroundTopLeftY + individualBarRectSize.height + gap
+        }
     }
     drawText(
         textLayoutResult = tooltipTextLayoutResult,
@@ -333,11 +347,10 @@ private fun getBarTopLeftAndRectSize(
     canDrawNegativeChart: Boolean
 ): Pair<Offset, Size> {
     val isClickedBar = clickedBarIndex == index
-    val barWidthAdjustment = if (isClickedBar) barWidth * 0.02F else 0f
     val heightAdjustment =
         if (isClickedBar) height.absoluteValue * 0.02F / (if (canDrawNegativeChart) 2 else 1) else 0f
 
-    val xOffset = index * (barWidth + gap) - barWidthAdjustment / 2
+    val xOffset = index * (barWidth + gap)
     val individualBarTopLeft = Offset(
         x = xOffset,
         y = if (barData.yValue < 0) {
@@ -348,11 +361,7 @@ private fun getBarTopLeftAndRectSize(
     )
 
     val individualBarRectSize = Size(
-        width = if (isClickedBar) {
-            barWidth * 1.02F
-        } else {
-            barWidth
-        },
+        width = barWidth,
         height = if (isClickedBar) {
             height.absoluteValue * 1.02F / (if (canDrawNegativeChart) 2 else 1)
         } else {

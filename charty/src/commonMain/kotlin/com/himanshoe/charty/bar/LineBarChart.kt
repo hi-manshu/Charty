@@ -156,7 +156,6 @@ private fun LineBarChartContent(
             )
             val cornerRadius = getCornerRadius(barChartConfig, calculatedCornerRadius)
 
-
             if (isClickInsideBar(clickedOffset, singleBarTopLeft, singleBarRectSize)) {
                 clickedBarIndex = index
                 onBarClick(index, barData)
