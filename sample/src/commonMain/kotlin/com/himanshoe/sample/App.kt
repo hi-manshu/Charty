@@ -19,14 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
 import com.himanshoe.charty.bar.BarChart
 import com.himanshoe.charty.bar.ComparisonBarChart
 import com.himanshoe.charty.bar.HorizontalBarChart
-import com.himanshoe.charty.bar.ImpulseProgressBar
 import com.himanshoe.charty.bar.LineBarChart
 import com.himanshoe.charty.bar.LineStackedBarChart
 import com.himanshoe.charty.bar.SignalProgressBarChart
@@ -67,7 +65,6 @@ import kotlin.random.Random
 @Preview
 fun App() {
     LazyColumn {
-        addImpluseBarChart()
         addSignalBarChart()
         addBarChart(null, generateMockBarData(7, false, false))
         addComparisonChart()
@@ -391,29 +388,6 @@ private fun LazyListScope.addStorageBarChart() {
                     )
                 }
             }
-        }
-    }
-}
-
-private fun LazyListScope.addImpluseBarChart() {
-    item {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp)
-                .padding(24.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            ImpulseProgressBar(
-                progress = { 21F },
-                impulse = { 30F },
-                totalBlocks = 20,
-                maxProgress = 100F,
-                modifier = Modifier.padding(all = 12.dp).fillMaxWidth().height(20.dp),
-                trackColor = Color(0xFFBABABC).asSolidChartColor(),
-                progressColor = Color(0xFF7CF129).asSolidChartColor()
-            )
-
         }
     }
 }
