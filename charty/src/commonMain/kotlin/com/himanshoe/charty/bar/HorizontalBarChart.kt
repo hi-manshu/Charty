@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
@@ -32,6 +31,7 @@ import androidx.compose.ui.util.fastMaxOfOrNull
 import com.himanshoe.charty.bar.config.BarChartColorConfig
 import com.himanshoe.charty.bar.config.BarChartConfig
 import com.himanshoe.charty.bar.config.HorizontalBarLabelConfig
+import com.himanshoe.charty.bar.config.getTetStyle
 import com.himanshoe.charty.bar.model.BarData
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.asSolidChartColor
@@ -154,6 +154,7 @@ private fun HorizontalBarChartContent(
             ) {
                 drawLabel(
                     barData = barData,
+                    labelConfig = horizontalBarLabelConfig,
                     textMeasurer = textMeasurer,
                     barWidth = barWidth,
                     topLeftX = topLeftX,
@@ -255,11 +256,12 @@ private fun DrawScope.drawLabel(
     gap: Float,
     horizontalBarLabelConfig: HorizontalBarLabelConfig,
     allNegativeValues: Boolean,
-    allPositiveValues: Boolean
+    allPositiveValues: Boolean,
+    labelConfig: HorizontalBarLabelConfig
 ) {
     val textLayoutResult = textMeasurer.measure(
         text = barData.xValue.toString(),
-        style = TextStyle(fontSize = 12.sp),
+        style = labelConfig.getTetStyle(fontSize = 12.sp),
         overflow = TextOverflow.Clip,
         maxLines = 1,
     )
@@ -296,7 +298,7 @@ private fun DrawScope.drawLabel(
         )
 
         drawText(
-            brush = Brush.linearGradient(horizontalBarLabelConfig.textColors.value),
+            brush = Brush.linearGradient(horizontalBarLabelConfig.textColor.value),
             textLayoutResult = textLayoutResult,
             topLeft = Offset(textX, textY)
         )

@@ -36,7 +36,7 @@ internal const val STRAIGHT_ANGLE = 180
  * Composable function to draw a Pie Chart.
  *
  * @param data Lambda function that returns a list of PieChartData representing the slices of the pie chart.
- * @param modifier Modifier to be applied to the Canvas.
+ * @param modifier optional Modifier to be applied to the PieChart.
  * @param isDonutChart Boolean indicating if the chart should be a donut chart.
  * @param onPieChartSliceClick Lambda function to be called when a slice of the pie chart is clicked.
  */

@@ -1,7 +1,9 @@
 package com.himanshoe.charty.common
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.TextUnit
 
 /**
  * Data class representing the configuration for labels in a chart.
@@ -32,3 +34,19 @@ data class LabelConfig(
         )
     }
 }
+
+internal fun LabelConfig.getXLabelTextCharCount(
+    xValue: Any,
+    displayDataCount: Int
+) = xAxisCharCount ?: if (xValue.toString().length >= 3) {
+    if (displayDataCount <= 7) 3 else 1
+} else {
+    1
+}
+
+internal fun LabelConfig.getTetStyle(
+    fontSize: TextUnit,
+) = labelTextStyle ?: TextStyle(
+    fontSize = fontSize,
+    brush = Brush.linearGradient(textColor.value)
+)

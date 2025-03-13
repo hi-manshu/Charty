@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
@@ -42,6 +41,8 @@ import com.himanshoe.charty.common.TargetConfig
 import com.himanshoe.charty.common.asSolidChartColor
 import com.himanshoe.charty.common.drawTargetLineIfNeeded
 import com.himanshoe.charty.common.getDrawingPath
+import com.himanshoe.charty.common.getTetStyle
+import com.himanshoe.charty.common.getXLabelTextCharCount
 import kotlin.math.absoluteValue
 
 /**
@@ -164,21 +165,29 @@ private fun BarChartContent(
                 canDrawNegativeChart = canDrawNegativeChart
             )
             clickedOffset?.let { offset ->
-                println("is clicked inside ${isClickInsideBar(offset, individualBarTopLeft, individualBarRectSize)}")
+                println(
+                    "is clicked inside ${
+                        isClickInsideBar(
+                            offset,
+                            individualBarTopLeft,
+                            individualBarRectSize
+                        )
+                    }"
+                )
                 if (isClickInsideBar(offset, individualBarTopLeft, individualBarRectSize)) {
                     clickedBarIndex = index
                     onBarClick(index, barData)
                 }
             }
-            val textCharCount = getTextCharCount(labelConfig, barData, displayData)
+            val textCharCount = labelConfig.getXLabelTextCharCount(
+                xValue = barData.xValue,
+                displayDataCount = displayData.count()
+            )
 
             val textSizeFactor = if (displayData.count() <= 13) 4 else 2
             val textLayoutResult = textMeasurer.measure(
                 text = barData.xValue.toString().take(textCharCount),
-                style = labelConfig.labelTextStyle ?: TextStyle(
-                    fontSize = (barWidth / textSizeFactor).toSp(),
-                    brush = Brush.linearGradient(labelConfig.textColor.value)
-                ),
+                style = labelConfig.getTetStyle(fontSize = (barWidth / textSizeFactor).toSp()),
                 overflow = TextOverflow.Clip,
                 maxLines = 1,
             )
@@ -268,10 +277,7 @@ private fun DrawScope.drawTooltip(
 ) {
     val tooltipTextLayoutResult = textMeasurer.measure(
         text = barData.yValue.toInt().toString(),
-        style = labelConfig.labelTextStyle ?: TextStyle(
-            fontSize = (barWidth / textSizeFactor).toSp(),
-            brush = Brush.linearGradient(labelConfig.textColor.value)
-        ),
+        style = labelConfig.getTetStyle(fontSize = (barWidth / textSizeFactor).toSp()),
         overflow = TextOverflow.Clip,
         maxLines = 1,
     )
@@ -301,16 +307,6 @@ private fun getCornerRadius(
     barChartConfig: BarChartConfig,
     cornerRadius: CornerRadius
 ) = barChartConfig.cornerRadius ?: cornerRadius
-
-private fun getTextCharCount(
-    labelConfig: LabelConfig,
-    barData: BarData,
-    displayData: List<BarData>
-) = labelConfig.xAxisCharCount ?: if (barData.xValue.toString().length >= 3) {
-    if (displayData.count() <= 7) 3 else 1
-} else {
-    1
-}
 
 internal fun getTextYOffsetAndCornerRadius(
     barData: BarData,
@@ -488,8 +484,7 @@ internal fun BarChartCanvasScaffold(
                     minValue = minValue,
                     step = step,
                     maxValue = maxValue,
-                    labelTextStyle = labelConfig.labelTextStyle,
-                    labelColor = labelConfig.textColor,
+                    labelConfig = labelConfig,
                     textMeasurer = textMeasurer,
                     count = barData.count()
                 )

@@ -48,7 +48,10 @@ import com.himanshoe.charty.common.asGradientChartColor
 import com.himanshoe.charty.common.asSolidChartColor
 import com.himanshoe.charty.line.LineChart
 import com.himanshoe.charty.line.MultiLineChart
+import com.himanshoe.charty.line.config.InteractionTooltipConfig
 import com.himanshoe.charty.line.config.LineChartColorConfig
+import com.himanshoe.charty.line.config.LineChartConfig
+import com.himanshoe.charty.line.config.LineConfig
 import com.himanshoe.charty.line.model.LineData
 import com.himanshoe.charty.line.model.MultiLineData
 import com.himanshoe.charty.pie.PieChart
@@ -65,6 +68,9 @@ import kotlin.random.Random
 @Preview
 fun App() {
     LazyColumn {
+        addMultiLineChart()
+        addLineChart()
+
         addSignalBarChart()
         addBarChart(null, generateMockBarData(7, false, false))
         addComparisonChart()
@@ -72,8 +78,6 @@ fun App() {
         addSpeedometerProgressBar()
         addCircleChart()
         addPieChart()
-        addLineChart()
-        addMultiLineChart()
         addPointChart()
         addHorizontalBarChart()
         addStorageBarChart()
@@ -127,7 +131,8 @@ private fun LazyListScope.addCircleChart() {
             modifier = Modifier.fillParentMaxWidth().size(300.dp),
             contentAlignment = Alignment.Center
         ) {
-            CircleChart(data = data,
+            CircleChart(
+                data = data,
                 modifier = Modifier.size(300.dp),
                 onCircleClick = { circleData ->
                     println("Clicked on circle with data: $circleData")
@@ -220,7 +225,8 @@ private fun LazyListScope.addComparisonChart() {
             )
         )
 
-        ComparisonBarChart(data = { mockData },
+        ComparisonBarChart(
+            data = { mockData },
             modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
             onGroupClicked = { index ->
                 println("Category $index clicked")
@@ -263,9 +269,9 @@ private fun LazyListScope.addPointChart() {
 
 private fun LazyListScope.addMultiLineChart() {
     item {
-        val xValues = listOf("Mon", "Tue", "Wed", "Thu", "Fri")
+        val xValues = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
         val yValuesList = listOf(
-            listOf(0F, 5F, 2F, 11F, 3F), listOf(10F, 15F, 12F, 15F, 30F)
+            listOf(0F, 5F, 2F, 11F, 3F, 10F, 15F), listOf(10F, 15F, 12F, 15F, 30F, 11F, 3F)
         )
         val colorConfigs = listOf(
             LineChartColorConfig.default().copy(
@@ -273,7 +279,8 @@ private fun LazyListScope.addMultiLineChart() {
                 lineFillColor = ChartColor.Gradient(
                     listOf(Color(0xFFCB356B), Color(0xFFBD3F32))
                 )
-            ), LineChartColorConfig.default().copy(
+            ),
+            LineChartColorConfig.default().copy(
                 lineColor = ChartColor.Solid(Color(0xFFF25F33)),
                 lineFillColor = ChartColor.Gradient(
                     listOf(Color(0xFF2193b0), Color(0xFF6dd5ed))
@@ -285,10 +292,16 @@ private fun LazyListScope.addMultiLineChart() {
         MultiLineChart(
             data = { mockData },
             modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
-            smoothLineCurve = true,
+            smoothLineCurve = false,
             showFilledArea = false,
             showLineStroke = true,
             target = 6F,
+            chartConfig = LineChartConfig(
+                lineConfig = LineConfig(showValueOnLine = true),
+                interactionTooltipConfig = InteractionTooltipConfig(
+                    isLongPressDragEnabled = true,
+                )
+            ),
         )
     }
 }
@@ -316,6 +329,15 @@ private fun LazyListScope.addLineChart() {
                     LineData(11F, "Thu"),
                     LineData(3F, "Fri")
                 )
+            },
+            chartConfig = LineChartConfig(
+                lineConfig = LineConfig(showValueOnLine = true),
+                interactionTooltipConfig = InteractionTooltipConfig(
+                    isLongPressDragEnabled = true,
+                )
+            ),
+            onValueChange = {
+                println("Value changed to $it")
             },
             showFilledArea = true,
             modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp)
@@ -426,7 +448,8 @@ private fun LazyListScope.addSignalBarChart() {
 
 private fun LazyListScope.addLineBarChart(target: Float?, data: () -> List<BarData>) {
     item {
-        LineBarChart(target = target,
+        LineBarChart(
+            target = target,
             modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
             data = data,
             barChartColorConfig = BarChartColorConfig.default().copy(
@@ -439,7 +462,8 @@ private fun LazyListScope.addLineBarChart(target: Float?, data: () -> List<BarDa
 
 private fun LazyListScope.addBarChart(target: Float?, data: List<BarData>) {
     item {
-        BarChart(modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
+        BarChart(
+            modifier = Modifier.padding(10.dp).fillMaxWidth().height(300.dp),
             target = target,
             barTooltip = BarTooltip.GraphTop,
             labelConfig = LabelConfig.default().copy(
@@ -620,6 +644,5 @@ fun generateMockCircleData(): List<CircleData> {
         CircleData(
             value = 90F, color = Color(0XFF00C4D4).asSolidChartColor(), label = "Label 3"
         ),
-
-        )
+    )
 }

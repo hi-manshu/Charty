@@ -29,6 +29,7 @@ sealed class ChartColor(open val value: List<Color> = emptyList()) {
  * @return A Solid ChartColor with the given color.
  */
 fun Color.asSolidChartColor() = ChartColor.Solid(this)
+fun Color.asGradientChartColor() = ChartColor.Gradient(listOf(this, this))
 
 /**
  * Extension function to convert a list of Colors to a Gradient ChartColor.

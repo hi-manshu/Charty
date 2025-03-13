@@ -1,6 +1,9 @@
 package com.himanshoe.charty.bar.config
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.TextUnit
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.asGradientChartColor
 
@@ -9,14 +12,16 @@ import com.himanshoe.charty.common.asGradientChartColor
  *
  * @property showLabel Indicates whether the label should be shown.
  * @property hasOverlappingLabel Indicates whether the label has overlapping.
- * @property textColors List of colors for the text.
+ * @property textColor List of colors for the text.
  * @property textBackgroundColors List of background colors for the text.
  */
 data class HorizontalBarLabelConfig(
     val showLabel: Boolean,
     val hasOverlappingLabel: Boolean,
-    val textColors: ChartColor,
-    val textBackgroundColors: ChartColor
+    val textColor: ChartColor,
+    val textBackgroundColors: ChartColor,
+    val xAxisCharCount: Int?,
+    val labelTextStyle: TextStyle?,
 ) {
     companion object {
         /**
@@ -27,10 +32,12 @@ data class HorizontalBarLabelConfig(
         fun default() = HorizontalBarLabelConfig(
             showLabel = false,
             hasOverlappingLabel = true,
-            textColors = listOf(
+            textColor = listOf(
                 Color(0xffFFAFBD),
                 Color(0xffffc3a0)
             ).asGradientChartColor(),
+            xAxisCharCount = null,
+            labelTextStyle = null,
             textBackgroundColors = listOf(
                 Color(0xff0f0c29),
                 Color(0xff302b63),
@@ -39,3 +46,9 @@ data class HorizontalBarLabelConfig(
         )
     }
 }
+
+internal fun HorizontalBarLabelConfig.getTetStyle(
+    fontSize: TextUnit,
+) = labelTextStyle ?: TextStyle(
+    fontSize = fontSize, brush = Brush.linearGradient(textColor.value)
+)
