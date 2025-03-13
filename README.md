@@ -16,7 +16,6 @@ _Made with ❤️ for Android Developers by Himanshu_
 ![GitHub Repo stars](https://img.shields.io/github/stars/hi-manshu/charty)
 ![Charty](https://img.shields.io/maven-central/v/com.himanshoe/charty?color=f4c430&label=Maven%20Central%20%3A%20Charty)
 ![Charty Static Check](https://github.com/hi-manshu/charty/actions/workflows/static-check.yml/badge.svg)
-![Maven Central Version](https://img.shields.io/maven-central/v/com.himanshoe/charty)
 
 ### Version Catalog
 
