@@ -17,6 +17,9 @@ import com.himanshoe.charty.line.config.LineChartConfig
 import com.himanshoe.charty.line.model.LineData
 import com.himanshoe.charty.line.model.MultiLineData
 
+/**
+ * Draws a line curve on the canvas.
+ */
 internal fun DrawScope.drawLineCurve(
     data: () -> List<LineData>,
     canvasHeight: Float,
@@ -100,6 +103,9 @@ internal fun DrawScope.drawLineCurve(
     }
 }
 
+/**
+ * Draws values on the line.
+ */
 internal fun DrawScope.drawValueOnLine(
     lineData: List<LineData>,
     xStep: Float,
@@ -130,6 +136,9 @@ internal fun DrawScope.drawValueOnLine(
     }
 }
 
+/**
+ * Draws an indicator line on the canvas.
+ */
 internal fun DrawScope.drawIndicatorLine(
     xTooltipPosition: Float,
     canvasHeight: Float,
@@ -145,6 +154,9 @@ internal fun DrawScope.drawIndicatorLine(
     )
 }
 
+/**
+ * Draws a tooltip on the canvas.
+ */
 private fun DrawScope.drawTooltip(
     lineData: List<LineData>,
     yValue: Float,
@@ -188,6 +200,9 @@ private fun DrawScope.drawTooltip(
     )
 }
 
+/**
+ * Draws tooltips for multiple lines on the canvas.
+ */
 internal fun DrawScope.drawMultiLineChartTooltip(
     multiLineData: List<MultiLineData>,
     xTooltipPosition: Float,
@@ -217,6 +232,9 @@ internal fun DrawScope.drawMultiLineChartTooltip(
     }
 }
 
+/**
+ * Draws a tooltip for a single line on the canvas.
+ */
 internal fun DrawScope.drawLineChartTooltip(
     lineData: List<LineData>,
     xTooltipPosition: Float,
