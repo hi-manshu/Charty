@@ -165,15 +165,6 @@ private fun BarChartContent(
                 canDrawNegativeChart = canDrawNegativeChart
             )
             clickedOffset?.let { offset ->
-                println(
-                    "is clicked inside ${
-                        isClickInsideBar(
-                            offset,
-                            individualBarTopLeft,
-                            individualBarRectSize
-                        )
-                    }"
-                )
                 if (isClickInsideBar(offset, individualBarTopLeft, individualBarRectSize)) {
                     clickedBarIndex = index
                     onBarClick(index, barData)
