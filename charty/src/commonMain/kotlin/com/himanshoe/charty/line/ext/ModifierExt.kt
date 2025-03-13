@@ -1,4 +1,4 @@
-package com.himanshoe.charty.line.modifier
+package com.himanshoe.charty.line.ext
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEachIndexed
 import com.himanshoe.charty.common.LabelConfig
+import com.himanshoe.charty.common.getTetStyle
+import com.himanshoe.charty.common.getXLabelTextCharCount
 import com.himanshoe.charty.line.config.LineChartColorConfig
 import com.himanshoe.charty.line.config.LineChartConfig
 import com.himanshoe.charty.line.model.LineData
@@ -47,13 +49,13 @@ internal fun Modifier.drawAxesAndGridLines(
         brush = Brush.linearGradient(colorConfig.axisColor.value),
         start = Offset(0f, canvasHeight),
         end = Offset(canvasWidth, canvasHeight),
-        strokeWidth = chartConfig.axisLineWidth
+        strokeWidth = chartConfig.axisConfig.axisLineWidth
     )
     drawLine(
         brush = Brush.linearGradient(colorConfig.axisColor.value),
         start = Offset(0f, 0f),
         end = Offset(0f, canvasHeight),
-        strokeWidth = chartConfig.axisLineWidth
+        strokeWidth = chartConfig.axisConfig.axisLineWidth
     )
 
     // Draw parallel lines to X axis
@@ -62,16 +64,18 @@ internal fun Modifier.drawAxesAndGridLines(
         drawLine(
             brush = Brush.linearGradient(colorConfig.gridLineColor.value),
             start = Offset(0f, yOffset),
-            pathEffect = chartConfig.gridLinePathEffect,
+            pathEffect = chartConfig.gridConfig.gridLinePathEffect,
             end = Offset(canvasWidth, yOffset),
-            strokeWidth = chartConfig.gridLineWidth
+            strokeWidth = chartConfig.gridConfig.gridLineWidth
         )
     }
     // Draw labels
     if (labelConfig.showXLabel) {
         data.fastForEachIndexed { index, lineData ->
-            val textCharCount =
-                if (lineData.xValue.toString().length >= 3) if (data.count() <= 7) 3 else 1 else 1
+            val textCharCount = labelConfig.getXLabelTextCharCount(
+                xValue = lineData.xValue,
+                displayDataCount = data.count()
+            )
             val textSizeFactor = if (data.count() <= 13) 70 else 90
 
             val textLayoutResult = textMeasurer.measure(
@@ -95,7 +99,7 @@ internal fun Modifier.drawAxesAndGridLines(
             val value = minValue + i * yRange / 4
             val textLayoutResult = textMeasurer.measure(
                 text = value.toString(),
-                style = TextStyle(fontSize = (canvasWidth / 70).sp),
+                style = labelConfig.getTetStyle(fontSize = (canvasWidth / 70).sp),
             )
             drawText(
                 textLayoutResult = textLayoutResult,

@@ -6,15 +6,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import com.himanshoe.charty.common.ChartColor
 import com.himanshoe.charty.common.LabelConfig
-import com.himanshoe.charty.common.asSolidChartColor
+import com.himanshoe.charty.common.getTetStyle
 
 /**
  * Extension function to draw axes and grid lines on a canvas.
@@ -74,15 +72,14 @@ internal fun Modifier.drawAxesAndGridLines(
                 val yOffset = canvasHeight - (yValue / maxValue) * canvasHeight
                 val textLayoutResult = textMeasurer.measure(
                     text = yValue.toString(),
-                    style = TextStyle(fontSize = 12.sp)
+                    style = labelConfig.getTetStyle(fontSize = 12.sp)
                 )
                 drawText(
                     textLayoutResult = textLayoutResult,
                     topLeft = Offset(
                         x = (-textLayoutResult.size.width - 4).toFloat(),
-                        y = yOffset - textLayoutResult.size.height / 2 + 4 // Adjusted yOffset
+                        y = yOffset - textLayoutResult.size.height / 2 + 4
                     ),
-                    brush = SolidColor(Color.Black)
                 )
             }
         }
@@ -136,7 +133,6 @@ internal fun Modifier.drawAxisLineForVerticalChart(
  * @param maxValue The maximum value on the y-axis.
  * @param textMeasurer The text measurer for drawing text.
  * @param count The number of labels to draw.
- * @param labelColor The color of the labels.
  * @return A Modifier with the y-axis labels drawn.
  */
 internal fun Modifier.drawYAxisLabel(
@@ -145,8 +141,7 @@ internal fun Modifier.drawYAxisLabel(
     maxValue: Float,
     textMeasurer: TextMeasurer,
     count: Int,
-    labelColor: ChartColor = Color.Black.asSolidChartColor(),
-    labelTextStyle: TextStyle?,
+    labelConfig: LabelConfig,
 ): Modifier =
     this.drawWithCache {
         onDrawBehind {
@@ -156,10 +151,7 @@ internal fun Modifier.drawYAxisLabel(
                 val y = size.height - ((value - minValue) / (maxValue - minValue)) * size.height
                 val textLayoutResult = textMeasurer.measure(
                     text = displayValue,
-                    style = labelTextStyle ?: TextStyle(
-                        brush = Brush.linearGradient(labelColor.value),
-                        fontSize = (size.width / count / 10).sp
-                    ),
+                    style = labelConfig.getTetStyle(fontSize = (size.width / count / 10).sp),
                     overflow = TextOverflow.Clip,
                     maxLines = 1,
                 )
@@ -169,8 +161,7 @@ internal fun Modifier.drawYAxisLabel(
                         -textLayoutResult.size.width - 8f,
                         y - textLayoutResult.size.height / 2
                     ),
-
-                    )
+                )
             }
         }
     }

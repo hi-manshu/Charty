@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,6 +36,7 @@ import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.common.TargetConfig
 import com.himanshoe.charty.common.drawTargetLineIfNeeded
 import com.himanshoe.charty.common.getDrawingPath
+import com.himanshoe.charty.common.getTetStyle
 import kotlin.math.absoluteValue
 
 /**
@@ -236,7 +236,7 @@ internal fun StackBarChartScaffold(
                         if (labelConfig.showYLabel && !hasNegativeValues) {
                             val textLayoutResult = textMeasurer.measure(
                                 text = displayValue,
-                                style = TextStyle(fontSize = (size.width / displayData.count() / 10).sp),
+                                style = labelConfig.getTetStyle(fontSize = (size.width / displayData.count() / 10).sp),
                                 overflow = TextOverflow.Clip,
                                 maxLines = 1,
                             )
@@ -256,7 +256,7 @@ internal fun StackBarChartScaffold(
                             val gap = size.width / (displayData.size * 10)
                             val textLayoutResult = textMeasurer.measure(
                                 text = stackBarData.label,
-                                style = TextStyle(fontSize = (barWidth / 4).toSp()),
+                                style = labelConfig.getTetStyle(fontSize = (barWidth / 4).toSp()),
                                 overflow = TextOverflow.Clip,
                                 maxLines = 1,
                             )

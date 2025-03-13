@@ -1,20 +1,30 @@
 package com.himanshoe.charty.line
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastFlatMap
+import androidx.compose.ui.util.fastForEach
 import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.common.TargetConfig
 import com.himanshoe.charty.common.drawTargetLineIfNeeded
 import com.himanshoe.charty.line.config.LineChartConfig
+import com.himanshoe.charty.line.ext.drawAxesAndGridLines
+import com.himanshoe.charty.line.ext.drawIndicatorLine
+import com.himanshoe.charty.line.ext.drawLineCurve
+import com.himanshoe.charty.line.ext.drawMultiLineChartTooltip
+import com.himanshoe.charty.line.ext.drawValueOnLine
+import com.himanshoe.charty.line.model.LineData
 import com.himanshoe.charty.line.model.MultiLineData
-import com.himanshoe.charty.line.modifier.drawAxesAndGridLines
 
 /**
  * A composable function that renders a multi-line chart.
@@ -39,7 +49,8 @@ fun MultiLineChart(
     targetConfig: TargetConfig = TargetConfig.default(),
     showLineStroke: Boolean = true,
     labelConfig: LabelConfig = LabelConfig.default(),
-    chartConfig: LineChartConfig = LineChartConfig()
+    chartConfig: LineChartConfig = LineChartConfig(),
+    onValueChange: (List<LineData>) -> Unit = {}
 ) {
     require(showFilledArea || showLineStroke) {
         "Both showFilledArea and showLineStroke cannot be false at the same time"
@@ -53,6 +64,7 @@ fun MultiLineChart(
         showLineStroke = showLineStroke,
         showFilledArea = showFilledArea,
         chartConfig = chartConfig,
+        onValueChange = onValueChange,
         smoothLineCurve = smoothLineCurve
     )
 }
@@ -66,6 +78,7 @@ private fun MultiLineChartContent(
     showLineStroke: Boolean = true,
     labelConfig: LabelConfig = LabelConfig.default(),
     target: Float? = null,
+    onValueChange: (List<LineData>) -> Unit = {},
     targetConfig: TargetConfig = TargetConfig.default(),
     chartConfig: LineChartConfig = LineChartConfig(),
 ) {
@@ -76,6 +89,7 @@ private fun MultiLineChartContent(
         val max = multiLineData.fastFlatMap { it.data }.maxOfOrNull { it.yValue } ?: 0f
         min to max
     }
+    val dragPosition = remember { mutableStateOf<Offset?>(null) }
     val yRange = maxValue - minValue
     val bottomPadding = if (labelConfig.showXLabel) 24.dp else 0.dp
     val leftPadding = if (labelConfig.showYLabel) 24.dp else 0.dp
@@ -83,6 +97,16 @@ private fun MultiLineChartContent(
         modifier = modifier
             .fillMaxSize()
             .padding(bottom = bottomPadding, start = leftPadding)
+            .pointerInput(Unit) {
+                detectDragGesturesAfterLongPress(
+                    onDrag = { change, _ ->
+                        dragPosition.value = change.position
+                    },
+                    onDragEnd = {
+                        dragPosition.value = null
+                    }
+                )
+            }
             .drawAxesAndGridLines(
                 data = multiLineData.fastFlatMap { it.data },
                 colorConfig = multiLineData.first().colorConfig,
@@ -96,7 +120,18 @@ private fun MultiLineChartContent(
         val (canvasWidth, canvasHeight) = size
         val xStep = canvasWidth / (multiLineData.first().data.size - 1)
 
-        multiLineData.forEach { lineData ->
+        target?.let {
+            val yPoint =
+                canvasHeight - (target.minus(minValue)).times(canvasHeight / yRange)
+
+            drawTargetLineIfNeeded(
+                canvasWidth = canvasWidth,
+                targetConfig = targetConfig,
+                yPoint = yPoint
+            )
+        }
+
+        multiLineData.fastForEach { lineData ->
             drawLineCurve(
                 data = { lineData.data },
                 canvasHeight = canvasHeight,
@@ -108,15 +143,46 @@ private fun MultiLineChartContent(
                 chartConfig = chartConfig,
                 lineColor = lineData.colorConfig.lineColor,
                 fillColor = lineData.colorConfig.lineFillColor,
-                smoothLineCurve = smoothLineCurve
+                smoothLineCurve = smoothLineCurve,
             )
+            if (chartConfig.lineConfig.showValueOnLine) {
+                drawValueOnLine(
+                    lineData = lineData.data,
+                    xStep = xStep,
+                    minValue = minValue,
+                    yRange = yRange,
+                    canvasHeight = canvasHeight,
+                    textMeasurer = textMeasurer,
+                    valueTextColor = chartConfig.lineConfig.valueTextColor,
+                    valueTextStyle = chartConfig.lineConfig.valueTextStyle
+                )
+            }
         }
-        val yPoint = canvasHeight - ((target?.minus(minValue))?.times(canvasHeight / yRange) ?: 0F)
 
-        drawTargetLineIfNeeded(
-            canvasWidth = canvasWidth,
-            targetConfig = targetConfig,
-            yPoint = yPoint
-        )
+        if (chartConfig.interactionTooltipConfig.isLongPressDragEnabled) {
+            dragPosition.value?.let { position ->
+                val xTooltipPosition = when {
+                    position.x < leftPadding.toPx() -> leftPadding.toPx()
+                    position.x > size.width -> size.width
+                    else -> position.x
+                }
+                drawIndicatorLine(
+                    xTooltipPosition = xTooltipPosition,
+                    canvasHeight = canvasHeight,
+                    interactionTooltipConfig = chartConfig.interactionTooltipConfig
+                )
+                drawMultiLineChartTooltip(
+                    multiLineData = multiLineData,
+                    xTooltipPosition = xTooltipPosition,
+                    xScaleFactor = xStep,
+                    minValue = minValue,
+                    yRange = yRange,
+                    canvasHeight = canvasHeight,
+                    textMeasurer = textMeasurer,
+                    onValueChange = onValueChange,
+                    interactionTooltipConfig = chartConfig.interactionTooltipConfig
+                )
+            }
+        }
     }
 }

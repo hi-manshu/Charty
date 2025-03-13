@@ -13,7 +13,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,6 +27,8 @@ import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.common.TargetConfig
 import com.himanshoe.charty.common.drawTargetLineIfNeeded
 import com.himanshoe.charty.common.getDrawingPath
+import com.himanshoe.charty.common.getTetStyle
+import com.himanshoe.charty.common.getXLabelTextCharCount
 import kotlin.math.absoluteValue
 
 /**
@@ -137,12 +138,15 @@ private fun LineBarChartContent(
                 canDrawNegativeChart = canDrawNegativeChart
             )
 
-            val textCharCount = getTextCharCount(labelConfig, barData, displayData)
+            val textCharCount = labelConfig.getXLabelTextCharCount(
+                xValue = barData.xValue,
+                displayDataCount = displayData.count()
+            )
             val textSizeFactor = if (displayData.count() <= 13) 4 else 2
 
             val textLayoutResult = textMeasurer.measure(
                 text = barData.xValue.toString().take(textCharCount),
-                style = TextStyle(fontSize = (barWidth / textSizeFactor).toSp()),
+                style = labelConfig.getTetStyle(fontSize = (barWidth / textSizeFactor).toSp()),
                 overflow = TextOverflow.Clip,
                 maxLines = 1,
             )
@@ -155,7 +159,6 @@ private fun LineBarChartContent(
                 barWidth = barWidth
             )
             val cornerRadius = getCornerRadius(barChartConfig, calculatedCornerRadius)
-
 
             if (isClickInsideBar(clickedOffset, singleBarTopLeft, singleBarRectSize)) {
                 clickedBarIndex = index
@@ -199,20 +202,11 @@ private fun LineBarChartContent(
         }
     }
 }
+
 private fun getCornerRadius(
     barChartConfig: BarChartConfig,
     cornerRadius: CornerRadius
 ) = barChartConfig.cornerRadius ?: cornerRadius
-
-private fun getTextCharCount(
-    labelConfig: LabelConfig,
-    barData: BarData,
-    displayData: List<BarData>
-) = labelConfig.xAxisCharCount ?: if (barData.xValue.toString().length >= 3) {
-    if (displayData.count() <= 7) 3 else 1
-} else {
-    1
-}
 
 private fun getBarTopLeftAndRectSize(
     index: Int,

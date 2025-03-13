@@ -35,7 +35,7 @@ import com.himanshoe.charty.point.modifier.drawAxesAndGridLines
  * Composable function to display a point chart.
  *
  * @param data A lambda function that returns a list of PointData objects representing the data points for the chart.
- * @param modifier The modifier to be applied to the chart.
+ * @param modifier The optional modifier to be applied to the chart.
  * @param labelConfig The configuration for the labels, including whether to show labels on the axes.
  * @param colorConfig The color configuration for the chart.
  * @param chartConfig The configuration for the chart, including line widths and path effects.
@@ -125,7 +125,7 @@ private fun PointChartContent(
             }
     ) {
         val (canvasWidth, canvasHeight) = size
-        val xStep = canvasWidth / circleData.size
+        val xStepFactor = canvasWidth / circleData.size
         val yScale = canvasHeight / yRange
         val yPoint = canvasHeight - ((target?.minus(minValue))?.times(yScale) ?: 0F)
 
@@ -137,14 +137,14 @@ private fun PointChartContent(
         drawClickedBarIfNeeded(
             chartConfig = chartConfig,
             clickedIndex = clickedIndex,
-            xStep = xStep,
+            xStepFactor = xStepFactor,
             canvasHeight = canvasHeight,
             colorConfig = colorConfig
         )
 
         drawPoints(
             circleData = circleData,
-            xStep = xStep,
+            xStepFactor = xStepFactor,
             yScale = yScale,
             minValue = minValue,
             canvasHeight = canvasHeight,
@@ -163,16 +163,16 @@ private fun PointChartContent(
 private fun DrawScope.drawClickedBarIfNeeded(
     chartConfig: PointChartConfig,
     clickedIndex: Int,
-    xStep: Float,
+    xStepFactor: Float,
     canvasHeight: Float,
     colorConfig: PointChartColorConfig
 ) {
     if (chartConfig.showClickedBar && clickedIndex != -1) {
-        val barX = (clickedIndex + 0.5f) * xStep - xStep / 2
+        val barX = (clickedIndex + 0.5f) * xStepFactor - xStepFactor / 2
         drawRoundRect(
             brush = Brush.linearGradient(colorConfig.selectionBarColor.value),
             topLeft = Offset(barX, 0f),
-            size = Size(width = xStep, height = canvasHeight),
+            size = Size(width = xStepFactor, height = canvasHeight),
             cornerRadius = CornerRadius(15F)
         )
     }
@@ -180,7 +180,7 @@ private fun DrawScope.drawClickedBarIfNeeded(
 
 private fun DrawScope.drawPoints(
     circleData: List<PointData>,
-    xStep: Float,
+    xStepFactor: Float,
     yScale: Float,
     minValue: Float,
     canvasHeight: Float,
@@ -191,11 +191,11 @@ private fun DrawScope.drawPoints(
     colorConfig: PointChartColorConfig,
 ) {
     circleData.fastForEachIndexed { index, data ->
-        val x = (index + 0.5f) * xStep
+        val x = (index + 0.5f) * xStepFactor
         val y = canvasHeight - (data.yValue - minValue) * yScale
         tapOffset?.let { offset ->
-            val barStartX = x - xStep / 2
-            val barEndX = x + xStep / 2
+            val barStartX = x - xStepFactor / 2
+            val barEndX = x + xStepFactor / 2
             if (offset.x in barStartX..barEndX) {
                 onPointClick(index, data)
             }

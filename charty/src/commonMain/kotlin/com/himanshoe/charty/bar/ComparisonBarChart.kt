@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
@@ -30,6 +29,8 @@ import com.himanshoe.charty.bar.model.ComparisonBarData
 import com.himanshoe.charty.bar.modifier.drawAxesAndGridLines
 import com.himanshoe.charty.common.LabelConfig
 import com.himanshoe.charty.common.getDrawingPath
+import com.himanshoe.charty.common.getTetStyle
+import com.himanshoe.charty.common.getXLabelTextCharCount
 
 /**
  * A composable function that displays a comparison bar chart.
@@ -160,11 +161,14 @@ private fun ComparisonBarContent(
             }
 
             if (labelConfig.showXLabel) {
-                val textCharCount = if (groupCount <= 7) 3 else 1
+                val textCharCount = labelConfig.getXLabelTextCharCount(
+                    xValue = group.label,
+                    displayDataCount = groupCount
+                )
                 val textSizeFactor = groupCount * if (groupCount <= 5) 20 else 40
                 val textLayoutResult = textMeasurer.measure(
                     text = group.label.take(textCharCount),
-                    style = TextStyle(fontSize = (canvasWidth / textSizeFactor).sp)
+                    style = labelConfig.getTetStyle(fontSize = (canvasWidth / textSizeFactor).sp)
                 )
                 drawText(
                     textLayoutResult = textLayoutResult,

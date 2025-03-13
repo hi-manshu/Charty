@@ -17,7 +17,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.util.fastMap
+import com.himanshoe.charty.circle.config.CircleChartConfig
 import com.himanshoe.charty.circle.model.CircleData
+import com.himanshoe.charty.circle.model.StartingPosition
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
@@ -28,29 +30,32 @@ import kotlin.math.sin
  *
  * @param data A lambda function that returns a list of CircleData objects representing the data to be displayed.
  * @param modifier A Modifier to be applied to the Canvas.
+ * @param circleChartConfig Configuration for the circle chart, including whether to show the end indicator and the starting position.
  * @param onCircleClick A lambda function to handle click events on the circle. It receives the corresponding `CircleData` as parameters.
  */
 @Composable
 fun CircleChart(
     data: () -> List<CircleData>,
     modifier: Modifier = Modifier,
-    showEndIndicator: Boolean = true,
+    circleChartConfig: CircleChartConfig = CircleChartConfig.default(),
     onCircleClick: (CircleData) -> Unit = {}
 ) {
     CircleChartContent(
         modifier = modifier,
         onCircleClick = onCircleClick,
         data = data,
-        showEndIndicator = showEndIndicator,
+        showEndIndicator = circleChartConfig.showEndIndicator,
+        startingPosition = circleChartConfig.startingPosition,
     )
 }
 
 @Composable
 private fun CircleChartContent(
     data: () -> List<CircleData>,
+    startingPosition: StartingPosition,
     modifier: Modifier = Modifier,
     showEndIndicator: Boolean = true,
-    onCircleClick: (CircleData) -> Unit = {}
+    onCircleClick: (CircleData) -> Unit = {},
 ) {
     var clickedCircleIndex by remember { mutableStateOf(-1) }
     val circleData = data()
@@ -91,9 +96,7 @@ private fun CircleChartContent(
             // Draw the background circle
             drawCircle(
                 brush = Brush.linearGradient(
-                    item.trackColor.value.fastMap {
-                        it.copy(alpha = 0.1F)
-                    }
+                    item.trackColor.value.fastMap { it.copy(alpha = 0.1F) }
                 ),
                 radius = scaledRadius,
                 center = center,
@@ -103,7 +106,7 @@ private fun CircleChartContent(
             // Draw the foreground arc
             drawArc(
                 brush = Brush.linearGradient(item.color.value),
-                startAngle = -90f,
+                startAngle = startingPosition.angle,
                 sweepAngle = sweepAngle,
                 useCenter = false,
                 topLeft = Offset(center.x - scaledRadius, center.y - scaledRadius),
@@ -113,7 +116,7 @@ private fun CircleChartContent(
 
             if (showEndIndicator) {
                 // Draw the shadow at the end of the tip
-                val endAngle = -90f + sweepAngle
+                val endAngle = startingPosition.angle + sweepAngle
                 val endX = center.x + scaledRadius * cos(endAngle.toRadians())
                 val endY = center.y + scaledRadius * sin(endAngle.toRadians())
                 drawCircle(

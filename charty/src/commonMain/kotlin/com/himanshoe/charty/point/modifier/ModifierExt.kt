@@ -5,12 +5,13 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEachIndexed
 import com.himanshoe.charty.common.LabelConfig
+import com.himanshoe.charty.common.getTetStyle
+import com.himanshoe.charty.common.getXLabelTextCharCount
 import com.himanshoe.charty.point.model.PointChartColorConfig
 import com.himanshoe.charty.point.model.PointChartConfig
 import com.himanshoe.charty.point.model.PointData
@@ -70,19 +71,18 @@ internal fun Modifier.drawAxesAndGridLines(
     // Draw labels
     if (labelConfig.showXLabel) {
         data.fastForEachIndexed { index, circleData ->
-            val textCharCount =
-                if (circleData.xValue.toString().length >= 3) if (data.count() <= 7) 3 else 1 else 1
+            val textCharCount = labelConfig.getXLabelTextCharCount(circleData.xValue, data.count())
             val textSizeFactor = if (data.count() <= 13) 70 else 90
 
             val textLayoutResult = textMeasurer.measure(
                 text = circleData.xValue.toString().take(textCharCount),
-                style = TextStyle(fontSize = (canvasWidth / textSizeFactor).sp),
+                style = labelConfig.getTetStyle(fontSize = (canvasWidth / textSizeFactor).sp),
             )
             drawText(
                 textLayoutResult = textLayoutResult,
                 topLeft = Offset(
                     x = (index + 0.5f) * xStep - textLayoutResult.size.width / 2,
-                    y = canvasHeight + 4.dp.toPx() // Position below the X-axis
+                    y = canvasHeight + 4.dp.toPx()
                 ),
                 brush = Brush.linearGradient(labelConfig.textColor.value)
             )
@@ -94,7 +94,7 @@ internal fun Modifier.drawAxesAndGridLines(
             val value = if (minValue >= 0) i * yRange / 4 else minValue + i * yRange / 4
             val textLayoutResult = textMeasurer.measure(
                 text = value.toString(),
-                style = TextStyle(fontSize = (canvasWidth / 70).sp)
+                style = labelConfig.getTetStyle(fontSize = (canvasWidth / 70).sp),
             )
             drawText(
                 textLayoutResult = textLayoutResult,

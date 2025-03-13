@@ -28,7 +28,7 @@ import com.himanshoe.charty.common.getDrawingPath
  *
  * @param data A list of StorageData representing the categories and their values.
  * @param trackColor The color of the track. Default is a light gray color.
- * @param modifier The modifier to be applied to the Canvas.
+ * @param modifier The optional modifier to be applied to the StorageBar.
  * @param onClick A lambda function to be invoked when a category is clicked.
  */
 @Composable
@@ -41,29 +41,6 @@ fun StorageBar(
     StorageBarContent(
         data = data,
         trackColorBrush = Brush.linearGradient(trackColor.value),
-        modifier = modifier,
-        onClick = onClick
-    )
-}
-
-/**
- * A composable function that displays a storage bar with a gradient track color.
- *
- * @param data A list of StorageData representing the categories and their values.
- * @param trackColors A list of colors to be used in the gradient of the track.
- * @param modifier The modifier to be applied to the Canvas.
- * @param onClick A lambda function to be invoked when a category is clicked.
- */
-@Composable
-fun StorageBar(
-    data: () -> List<StorageData>,
-    trackColors: List<Color>,
-    modifier: Modifier = Modifier,
-    onClick: (StorageData) -> Unit = {}
-) {
-    StorageBarContent(
-        data = data,
-        trackColorBrush = Brush.linearGradient(trackColors),
         modifier = modifier,
         onClick = onClick
     )

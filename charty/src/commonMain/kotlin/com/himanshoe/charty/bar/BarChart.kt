@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
@@ -42,6 +41,8 @@ import com.himanshoe.charty.common.TargetConfig
 import com.himanshoe.charty.common.asSolidChartColor
 import com.himanshoe.charty.common.drawTargetLineIfNeeded
 import com.himanshoe.charty.common.getDrawingPath
+import com.himanshoe.charty.common.getTetStyle
+import com.himanshoe.charty.common.getXLabelTextCharCount
 import kotlin.math.absoluteValue
 
 /**
@@ -100,11 +101,11 @@ private fun BarChartContent(
     val displayData = remember(barData) { getDisplayData(barData, barChartConfig.minimumBarCount) }
     val canDrawNegativeChart = hasNegativeValues && barChartConfig.drawNegativeValueChart
     val textMeasurer = rememberTextMeasurer()
-    val bottomPadding = if (labelConfig.showXLabel && !hasNegativeValues) 8.dp else 0.dp
+    val bottomLabelPadding = if (labelConfig.showXLabel && !hasNegativeValues) 8.dp else 0.dp
     val leftPadding = if (labelConfig.showYLabel) 24.dp else 0.dp
     val topPadding = if (barTooltip != null) 24.dp else 0.dp
-
-    var clickedOffset by mutableStateOf(Offset.Zero)
+    val bottomPadding = if (canDrawNegativeChart) 24.dp else bottomLabelPadding
+    var clickedOffset by mutableStateOf<Offset?>(null)
     var clickedBarIndex by mutableIntStateOf(-1)
 
     BarChartCanvasScaffold(
@@ -120,7 +121,7 @@ private fun BarChartContent(
         canDrawNegativeChart = canDrawNegativeChart,
         labelConfig = labelConfig,
         onClick = { offset ->
-            clickedOffset = offset.copy(y = offset.y)
+            clickedOffset = offset
         },
         data = { displayData },
     ) { canvasHeight, gap, barWidth ->
@@ -152,6 +153,7 @@ private fun BarChartContent(
                 barData = barData,
                 barChartColorConfig = barChartColorConfig,
             )
+
             val (individualBarTopLeft, individualBarRectSize) = getBarTopLeftAndRectSize(
                 index = index,
                 barWidth = barWidth,
@@ -162,16 +164,21 @@ private fun BarChartContent(
                 height = height,
                 canDrawNegativeChart = canDrawNegativeChart
             )
-
-            val textCharCount = getTextCharCount(labelConfig, barData, displayData)
+            clickedOffset?.let { offset ->
+                if (isClickInsideBar(offset, individualBarTopLeft, individualBarRectSize)) {
+                    clickedBarIndex = index
+                    onBarClick(index, barData)
+                }
+            }
+            val textCharCount = labelConfig.getXLabelTextCharCount(
+                xValue = barData.xValue,
+                displayDataCount = displayData.count()
+            )
 
             val textSizeFactor = if (displayData.count() <= 13) 4 else 2
             val textLayoutResult = textMeasurer.measure(
                 text = barData.xValue.toString().take(textCharCount),
-                style = labelConfig.labelTextStyle ?: TextStyle(
-                    fontSize = (barWidth / textSizeFactor).toSp(),
-                    brush = Brush.linearGradient(labelConfig.textColor.value)
-                ),
+                style = labelConfig.getTetStyle(fontSize = (barWidth / textSizeFactor).toSp()),
                 overflow = TextOverflow.Clip,
                 maxLines = 1,
             )
@@ -185,10 +192,6 @@ private fun BarChartContent(
                 barWidth = barWidth
             )
             val cornerRadius = getCornerRadius(barChartConfig, calculatedCornerRadius)
-            if (isClickInsideBar(clickedOffset, individualBarTopLeft, individualBarRectSize)) {
-                clickedBarIndex = index
-                onBarClick(index, barData)
-            }
 
             if (barData.yValue != 0F) {
                 backgroundColorBar(
@@ -242,6 +245,7 @@ private fun BarChartContent(
                         barTooltip = barTooltip,
                         individualBarTopLeft = individualBarTopLeft,
                         gap = gap,
+                        individualBarRectSize = individualBarRectSize,
                         backgroundTopLeftY = backgroundTopLeftY
                     )
                 }
@@ -258,21 +262,28 @@ private fun DrawScope.drawTooltip(
     textSizeFactor: Int,
     barTooltip: BarTooltip,
     individualBarTopLeft: Offset,
+    individualBarRectSize: Size,
     gap: Float,
     backgroundTopLeftY: Float
 ) {
     val tooltipTextLayoutResult = textMeasurer.measure(
         text = barData.yValue.toInt().toString(),
-        style = labelConfig.labelTextStyle ?: TextStyle(
-            fontSize = (barWidth / textSizeFactor).toSp(),
-            brush = Brush.linearGradient(labelConfig.textColor.value)
-        ),
+        style = labelConfig.getTetStyle(fontSize = (barWidth / textSizeFactor).toSp()),
         overflow = TextOverflow.Clip,
         maxLines = 1,
     )
     val tooltipYOffset = when (barTooltip) {
-        BarTooltip.Default -> individualBarTopLeft.y - tooltipTextLayoutResult.size.height - gap
-        BarTooltip.GraphTop -> backgroundTopLeftY - tooltipTextLayoutResult.size.height - gap
+        BarTooltip.BarTop -> if (barData.yValue >= 0) {
+            individualBarTopLeft.y - tooltipTextLayoutResult.size.height - gap
+        } else {
+            individualBarTopLeft.y + individualBarRectSize.height + gap
+        }
+
+        BarTooltip.GraphTop -> if (barData.yValue >= 0) {
+            backgroundTopLeftY - tooltipTextLayoutResult.size.height - gap
+        } else {
+            backgroundTopLeftY + individualBarRectSize.height + gap
+        }
     }
     drawText(
         textLayoutResult = tooltipTextLayoutResult,
@@ -287,16 +298,6 @@ private fun getCornerRadius(
     barChartConfig: BarChartConfig,
     cornerRadius: CornerRadius
 ) = barChartConfig.cornerRadius ?: cornerRadius
-
-private fun getTextCharCount(
-    labelConfig: LabelConfig,
-    barData: BarData,
-    displayData: List<BarData>
-) = labelConfig.xAxisCharCount ?: if (barData.xValue.toString().length >= 3) {
-    if (displayData.count() <= 7) 3 else 1
-} else {
-    1
-}
 
 internal fun getTextYOffsetAndCornerRadius(
     barData: BarData,
@@ -333,11 +334,10 @@ private fun getBarTopLeftAndRectSize(
     canDrawNegativeChart: Boolean
 ): Pair<Offset, Size> {
     val isClickedBar = clickedBarIndex == index
-    val barWidthAdjustment = if (isClickedBar) barWidth * 0.02F else 0f
     val heightAdjustment =
         if (isClickedBar) height.absoluteValue * 0.02F / (if (canDrawNegativeChart) 2 else 1) else 0f
 
-    val xOffset = index * (barWidth + gap) - barWidthAdjustment / 2
+    val xOffset = index * (barWidth + gap)
     val individualBarTopLeft = Offset(
         x = xOffset,
         y = if (barData.yValue < 0) {
@@ -348,11 +348,7 @@ private fun getBarTopLeftAndRectSize(
     )
 
     val individualBarRectSize = Size(
-        width = if (isClickedBar) {
-            barWidth * 1.02F
-        } else {
-            barWidth
-        },
+        width = barWidth,
         height = if (isClickedBar) {
             height.absoluteValue * 1.02F / (if (canDrawNegativeChart) 2 else 1)
         } else {
@@ -479,8 +475,7 @@ internal fun BarChartCanvasScaffold(
                     minValue = minValue,
                     step = step,
                     maxValue = maxValue,
-                    labelTextStyle = labelConfig.labelTextStyle,
-                    labelColor = labelConfig.textColor,
+                    labelConfig = labelConfig,
                     textMeasurer = textMeasurer,
                     count = barData.count()
                 )
