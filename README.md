@@ -16,16 +16,47 @@ _Made with ❤️ for Android Developers by Himanshu_
 ![GitHub Repo stars](https://img.shields.io/github/stars/hi-manshu/charty)
 ![Charty](https://img.shields.io/maven-central/v/com.himanshoe/charty?color=f4c430&label=Maven%20Central%20%3A%20Charty)
 ![Charty Static Check](https://github.com/hi-manshu/charty/actions/workflows/static-check.yml/badge.svg)
+![Maven Central Version](https://img.shields.io/maven-central/v/com.himanshoe/charty)
 
-## Getting Started
+### Version Catalog
 
-To use Charty in your project, add the following dependency to your `build.gradle.kts` file:
+If you're using Version Catalog, you can configure the dependency by adding it to your
+`libs.versions.toml` file as follows:
 
-```kotlin
+```toml
+[versions]
+#...
+charty = "<version>"
+
+[libraries]
+#...
+charty = { module = "com.himanshoe:charty", version.ref = "charty" }
+```
+
+### Gradle
+
+Add the dependency below to your **module**'s `build.gradle.kts` file:
+
+```gradle
 dependencies {
-    implementation("com.himanshoe:charty:<version>")
+    implementation("com.himanshoe:charty:$version")
+    
+    // if you're using Version Catalog
+    implementation(libs.charty)
 }
 ```
+
+For Kotlin Multiplatform, add the dependency below to your commonMain source set's
+`build.gradle.kts` file:
+
+```gradle
+sourceSets {
+    commonMain.dependencies {
+            implementation(libs.charty)
+     }
+}
+```
+
 Find the latest release version [here](https://github.com/hi-manshu/Charty/releases)
 
 ### You can find videos  iOS and Android [here](img/video)
@@ -40,6 +71,9 @@ Find the latest release version [here](https://github.com/hi-manshu/Charty/relea
 
 1. [NEKO](https://github.com/nekomangaorg/Neko)
 2. [TimePlanner](https://github.com/v1tzor/TimePlanner)
+
+## Find this repository useful? :heart:
+Support it by joining __[stargazers](https://github.com/hi-manshu/charty/stargazers)__ for this repository. :star: <br>
 
 ### License
 
