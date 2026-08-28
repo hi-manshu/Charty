@@ -91,13 +91,18 @@ The chart attaches a generated summary ("Radar chart, 1 dataset, 5 axes each. St
 
 ### `RadarLabelConfig`
 
-| Property | Type | Default |
-| --- | --- | --- |
-| `showLabels` | `Boolean` | `true` |
-| `showValues` | `Boolean` | `false` |
-| `labelDistanceMultiplier` | `Float` | `1.15f` (must be positive) |
-| `labelTextStyle` | `TextStyle` | 12 sp, black |
-| `valueTextStyle` | `TextStyle` | 10 sp, black |
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `showLabels` | `Boolean` | `true` | Axis names, placed outside the grid |
+| `showValues` | `Boolean` | `false` | Each axis's value, drawn just outside its data point |
+| `labelDistanceMultiplier` | `Float` | `1.15f` | How far out the axis names sit; must be positive |
+| `labelTextStyle` | `TextStyle` | 12 sp, black | Style for the axis names |
+| `valueTextStyle` | `TextStyle` | 10 sp, black | Style for the values |
+
+Values follow the data points rather than the axis names, so they stay attached to what they report
+while the entry animation grows the shape. Their distance from each point is derived from the point
+radius and the text's own size, so raising `valueTextStyle`'s font size keeps the same clearance
+instead of overlapping the shape.
 
 ### `RadarGridConfig`
 

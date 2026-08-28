@@ -159,3 +159,14 @@ data class RadarChartConfig(
         require(paddingFraction in 0f..0.5f) { "Padding fraction must be between 0 and 0.5" }
     }
 }
+
+/**
+ * How much room the plotted shape takes at a vertex, which is what a value label has to clear: the
+ * data point when points are drawn, and half the stroke when they are not.
+ */
+internal fun RadarChartConfig.valueLabelClearance(): Float =
+    if (showDataPoints) {
+        dataPointRadius
+    } else {
+        dataLineWidth / 2f
+    }

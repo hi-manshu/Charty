@@ -44,10 +44,13 @@ import com.himanshoe.charty.common.accessibility.generateRadarChartDescription
 import com.himanshoe.charty.common.animation.isAnimated
 import com.himanshoe.charty.common.animation.rememberChartAnimation
 import com.himanshoe.charty.common.config.Animation
+import com.himanshoe.charty.common.util.toChartLabel
 import com.himanshoe.charty.radar.config.LegendPosition
 import com.himanshoe.charty.radar.config.MultipleRadarChartConfig
 import com.himanshoe.charty.radar.config.RadarGridStyle
+import com.himanshoe.charty.radar.config.valueLabelClearance
 import com.himanshoe.charty.radar.data.RadarDataSet
+import com.himanshoe.charty.radar.internal.drawRadarAxisValues
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
@@ -444,6 +447,26 @@ private fun RadarChartContent(
 ) {
     val animationProgress = rememberRadarAnimation(config.radarConfig.animation)
     val textMeasurer = rememberTextMeasurer()
+    val measuredAxisValues =
+        remember(
+            dataSetsList,
+            textMeasurer,
+            config.radarConfig.labelConfig.showValues,
+            config.radarConfig.labelConfig.valueTextStyle,
+        ) {
+            if (!config.radarConfig.labelConfig.showValues) {
+                emptyList()
+            } else {
+                dataSetsList.fastMap { dataSet ->
+                    dataSet.axes.fastMap { axis ->
+                        textMeasurer.measure(
+                            text = axis.value.toChartLabel(),
+                            style = config.radarConfig.labelConfig.valueTextStyle,
+                        )
+                    }
+                }
+            }
+        }
     val measuredAxisLabels =
         remember(dataSetsList, textMeasurer, config.radarConfig.labelConfig.labelTextStyle) {
             dataSetsList.first().axes.fastMap { axis ->
@@ -515,6 +538,7 @@ private fun RadarChartContent(
                         dataSet = dataSet,
                         config = config,
                         animationProgress = datasetAnimationProgress,
+                        measuredValues = measuredAxisValues.getOrNull(index).orEmpty(),
                     )
 
                 if (onDataSetClick != null) {
@@ -641,15 +665,18 @@ private fun DrawScope.drawRadarDataSet(
     dataSet: RadarDataSet,
     config: MultipleRadarChartConfig,
     animationProgress: Float,
+    measuredValues: List<TextLayoutResult>,
 ): List<Offset> {
     val numberOfAxes = dataSet.axes.size
     val path = Path()
     val points = mutableListOf<Offset>()
+    val angles = mutableListOf<Float>()
 
     dataSet.axes.fastForEachIndexed { index, axisData ->
         val baseAngle = config.radarConfig.startAngleDegrees
         val sweepPerAxis = FULL_CIRCLE_DEGREES * index / numberOfAxes
         val angle = (baseAngle + sweepPerAxis) * DEGREES_TO_RADIANS
+        angles.add(angle)
         val normalizedValue = axisData.getNormalizedValue()
         val radius = maxRadius * normalizedValue * animationProgress
 
@@ -707,6 +734,13 @@ private fun DrawScope.drawRadarDataSet(
             }
         }
     }
+
+    drawRadarAxisValues(
+        points = points,
+        angles = angles,
+        measuredValues = measuredValues,
+        shapeClearance = config.radarConfig.valueLabelClearance(),
+    )
 
     return points
 }

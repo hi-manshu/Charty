@@ -3,6 +3,17 @@
 Notable changes to Charty. Versions follow [semantic versioning](https://semver.org); breaking
 changes are listed first in each release and say what to do about them.
 
+## Unreleased
+
+### Fixed
+
+- **`RadarLabelConfig.showValues` draws the values.** It never had. The property and its companion
+  `valueTextStyle` were declared, documented, and read by nothing, so a caller who asked for values
+  got labels, no values and no error. Both radar charts now draw each axis's value just outside its
+  data point, where the distance is derived from the point radius and the text's own measured size
+  rather than a fixed number of pixels — raising the font size keeps the clearance instead of
+  overlapping the shape. Reported as [#179](https://github.com/hi-manshu/charty/issues/179).
+
 ## 3.1.0
 
 Fixes to the zoom and pan path and to the crosshair label, one new parameter with a default, and two
