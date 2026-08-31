@@ -50,6 +50,7 @@ import com.himanshoe.charty.radar.config.RadarChartConfig
 import com.himanshoe.charty.radar.config.RadarGridConfig
 import com.himanshoe.charty.radar.config.RadarGridStyle
 import com.himanshoe.charty.radar.config.RadarLabelConfig
+import com.himanshoe.charty.radar.config.RadarValuePlacement
 import com.himanshoe.charty.radar.data.RadarAxisData
 import com.himanshoe.charty.radar.data.RadarDataSet
 import kotlin.random.Random
@@ -215,6 +216,8 @@ internal fun RadarPlayground() {
     var showAxisLines by remember { mutableStateOf(true) }
     var showLabels by remember { mutableStateOf(true) }
     var showValues by remember { mutableStateOf(false) }
+    var valuePlacement by remember { mutableStateOf(RadarValuePlacement.DATA_POINT) }
+    var valueGapFraction by remember { mutableFloatStateOf(0.25f) }
     var startAngle by remember { mutableFloatStateOf(-90f) }
     var paddingFraction by remember { mutableFloatStateOf(0.15f) }
     var scaleToFit by remember { mutableStateOf(true) }
@@ -260,7 +263,9 @@ internal fun RadarPlayground() {
                 startAngleDegrees = ${fc(startAngle)},
                 scaleToFit = $scaleToFit,
                 paddingFraction = ${fc(paddingFraction)},
-                labelConfig = RadarLabelConfig(showLabels = $showLabels, showValues = $showValues),
+                labelConfig = RadarLabelConfig(showLabels = $showLabels, showValues = $showValues, valuePlacement = RadarValuePlacement.${valuePlacement.name}, valueGapFraction = ${fc(
+            valueGapFraction,
+        )}),
                 gridConfig = RadarGridConfig(
                     gridStyle = RadarGridStyle.${gridStyle.name},
                     numberOfGridLevels = $gridLevels,
@@ -285,7 +290,13 @@ internal fun RadarPlayground() {
                         startAngleDegrees = startAngle,
                         scaleToFit = scaleToFit,
                         paddingFraction = paddingFraction,
-                        labelConfig = RadarLabelConfig(showLabels = showLabels, showValues = showValues),
+                        labelConfig =
+                            RadarLabelConfig(
+                                showLabels = showLabels,
+                                showValues = showValues,
+                                valuePlacement = valuePlacement,
+                                valueGapFraction = valueGapFraction,
+                            ),
                         gridConfig =
                             RadarGridConfig(
                                 gridStyle = gridStyle,
@@ -339,6 +350,29 @@ internal fun RadarPlayground() {
             ControlSection(title = "Labels & layout")
             SwitchRow(label = "Axis labels", checked = showLabels, onCheckedChange = { showLabels = it })
             SwitchRow(label = "Axis values", checked = showValues, onCheckedChange = { showValues = it })
+            if (showValues) {
+                ChoiceRow(
+                    label = "Value placement",
+                    options = RadarValuePlacement.entries.toList(),
+                    selected = valuePlacement,
+                    labelOf = { placement ->
+                        when (placement) {
+                            RadarValuePlacement.DATA_POINT -> "On data points"
+                            RadarValuePlacement.BELOW_AXIS_LABEL -> "Under labels"
+                        }
+                    },
+                    onSelect = { valuePlacement = it },
+                )
+                if (valuePlacement == RadarValuePlacement.BELOW_AXIS_LABEL) {
+                    SliderRow(
+                        label = "Value gap",
+                        value = valueGapFraction,
+                        valueRange = 0f..1f,
+                        onValueChange = { valueGapFraction = it },
+                        decimals = 2,
+                    )
+                }
+            }
             SwitchRow(label = "Scale to fit", checked = scaleToFit, onCheckedChange = { scaleToFit = it })
             SliderRow(
                 label = "Padding fraction",

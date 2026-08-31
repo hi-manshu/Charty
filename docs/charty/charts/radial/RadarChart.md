@@ -94,15 +94,33 @@ The chart attaches a generated summary ("Radar chart, 1 dataset, 5 axes each. St
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
 | `showLabels` | `Boolean` | `true` | Axis names, placed outside the grid |
-| `showValues` | `Boolean` | `false` | Each axis's value, drawn just outside its data point |
+| `showValues` | `Boolean` | `false` | Each axis's value, styled by `valueTextStyle`, placed by `valuePlacement` |
+| `valuePlacement` | `RadarValuePlacement` | `DATA_POINT` | `DATA_POINT` or `BELOW_AXIS_LABEL` |
+| `valueGapFraction` | `Float` | `0.25f` | Gap between a label and the value beneath it, as a fraction of the value's line height; non-negative |
 | `labelDistanceMultiplier` | `Float` | `1.15f` | How far out the axis names sit; must be positive |
 | `labelTextStyle` | `TextStyle` | 12 sp, black | Style for the axis names |
 | `valueTextStyle` | `TextStyle` | 10 sp, black | Style for the values |
 
-Values follow the data points rather than the axis names, so they stay attached to what they report
-while the entry animation grows the shape. Their distance from each point is derived from the point
-radius and the text's own size, so raising `valueTextStyle`'s font size keeps the same clearance
-instead of overlapping the shape.
+With `RadarValuePlacement.DATA_POINT` (the default) values follow the data points, so they stay
+attached to what they report while the entry animation grows the shape. Their distance from each
+point is derived from the point radius and the text's own size, so raising `valueTextStyle`'s font
+size keeps the same clearance instead of overlapping the shape.
+
+`RadarValuePlacement.BELOW_AXIS_LABEL` centres each value beneath its axis name instead, outside the
+plot. Prefer it when the values are part of the labelling — a dashboard listing this week's numbers —
+or when many values sit at or near zero: a zero's vertex *is* the centre of the chart, so at
+`DATA_POINT` every zero stacks onto the same point, while under the labels each one reads beside its
+own axis.
+
+```kotlin
+config = RadarChartConfig(
+    labelConfig = RadarLabelConfig(
+        showValues = true,
+        valuePlacement = RadarValuePlacement.BELOW_AXIS_LABEL,
+        valueTextStyle = TextStyle(color = Color(0xFFCE3DF3), fontSize = 12.sp),
+    ),
+)
+```
 
 ### `RadarGridConfig`
 

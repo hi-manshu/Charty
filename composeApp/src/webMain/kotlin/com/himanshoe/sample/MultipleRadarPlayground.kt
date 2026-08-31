@@ -23,6 +23,9 @@ import androidx.compose.ui.Modifier
 import com.himanshoe.charty.color.ChartyColor
 import com.himanshoe.charty.radar.MultipleRadarChart
 import com.himanshoe.charty.radar.config.MultipleRadarChartConfig
+import com.himanshoe.charty.radar.config.RadarChartConfig
+import com.himanshoe.charty.radar.config.RadarLabelConfig
+import com.himanshoe.charty.radar.config.RadarValuePlacement
 import com.himanshoe.charty.radar.data.RadarAxisData
 import com.himanshoe.charty.radar.data.RadarDataSet
 import kotlin.random.Random
@@ -51,6 +54,8 @@ private fun radarSets(
 internal fun MultipleRadarPlayground() {
     var setCount by remember { mutableIntStateOf(2) }
     var showLegend by remember { mutableStateOf(true) }
+    var showValues by remember { mutableStateOf(false) }
+    var valuePlacement by remember { mutableStateOf(RadarValuePlacement.DATA_POINT) }
     var lineWidth by remember { mutableIntStateOf(2) }
     var pointRadius by remember { mutableIntStateOf(4) }
     var innerCircle by remember { mutableStateOf(true) }
@@ -65,7 +70,13 @@ internal fun MultipleRadarPlayground() {
         // Several profiles on one set of axes — the comparison a single radar cannot make.
         MultipleRadarChart(
             dataSets = { dataSets },            // List<RadarDataSet>(label, axes, color)
-            config = MultipleRadarChartConfig(showLegend = $showLegend),
+            config = MultipleRadarChartConfig(
+                showLegend = $showLegend,
+                radarConfig = RadarChartConfig(
+                    paddingFraction = 0.22f,
+                    labelConfig = RadarLabelConfig(showValues = $showValues, valuePlacement = RadarValuePlacement.${valuePlacement.name}),
+                ),
+            ),
             onDataSetClick = { set, index -> /* ${clicked ?: "tap a profile"} */ },
         )
         """.trimIndent()
@@ -84,6 +95,15 @@ internal fun MultipleRadarPlayground() {
                         datasetPointRadius = pointRadius.toFloat(),
                         showPointInnerCircle = innerCircle,
                         staggerAnimation = stagger,
+                        radarConfig =
+                            RadarChartConfig(
+                                paddingFraction = 0.22f,
+                                labelConfig =
+                                    RadarLabelConfig(
+                                        showValues = showValues,
+                                        valuePlacement = valuePlacement,
+                                    ),
+                            ),
                     ),
                 onDataSetClick = { set, index -> clicked = "${set.label} (#$index)" },
             )
@@ -102,6 +122,21 @@ internal fun MultipleRadarPlayground() {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             SwitchRow(label = "Legend", checked = showLegend, onCheckedChange = { showLegend = it })
+            SwitchRow(label = "Axis values", checked = showValues, onCheckedChange = { showValues = it })
+            if (showValues) {
+                ChoiceRow(
+                    label = "Value placement",
+                    options = RadarValuePlacement.entries.toList(),
+                    selected = valuePlacement,
+                    labelOf = { placement ->
+                        when (placement) {
+                            RadarValuePlacement.DATA_POINT -> "On data points"
+                            RadarValuePlacement.BELOW_AXIS_LABEL -> "Under labels"
+                        }
+                    },
+                    onSelect = { valuePlacement = it },
+                )
+            }
             ControlSection(title = "Outline")
             IntSliderRow(label = "Line width", value = lineWidth, valueRange = 1..8, onValueChange = { lineWidth = it })
             IntSliderRow(

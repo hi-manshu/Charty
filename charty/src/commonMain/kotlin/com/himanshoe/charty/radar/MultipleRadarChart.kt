@@ -48,9 +48,12 @@ import com.himanshoe.charty.common.util.toChartLabel
 import com.himanshoe.charty.radar.config.LegendPosition
 import com.himanshoe.charty.radar.config.MultipleRadarChartConfig
 import com.himanshoe.charty.radar.config.RadarGridStyle
+import com.himanshoe.charty.radar.config.RadarValuePlacement
 import com.himanshoe.charty.radar.config.valueLabelClearance
 import com.himanshoe.charty.radar.data.RadarDataSet
+import com.himanshoe.charty.radar.internal.drawMultipleRadarValuesBelowLabels
 import com.himanshoe.charty.radar.internal.drawRadarAxisValues
+import com.himanshoe.charty.radar.internal.radarLabelBoxAlignment
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
@@ -63,11 +66,6 @@ private const val LEGEND_ITEM_SPACING = 4
 private const val LEGEND_ICON_SIZE = 12
 private const val LEGEND_ICON_TEXT_SPACING = 6
 private const val POINT_INNER_CIRCLE_FRACTION = 0.5f
-private const val LABEL_OFFSET_HALF = 2f
-private const val ANGLE_QUARTER = PI / 4
-private const val ANGLE_THREE_QUARTERS = 3 * PI / 4
-private const val ANGLE_MINUS_QUARTER = -PI / 4
-private const val ANGLE_MINUS_THREE_QUARTERS = -3 * PI / 4
 private const val DEFAULT_ANIMATION_START = 0f
 private const val DEFAULT_ANIMATION_END = 1f
 private const val MIN_STAGGER_DIVISOR = 0.01f
@@ -538,7 +536,12 @@ private fun RadarChartContent(
                         dataSet = dataSet,
                         config = config,
                         animationProgress = datasetAnimationProgress,
-                        measuredValues = measuredAxisValues.getOrNull(index).orEmpty(),
+                        measuredValues =
+                            if (config.radarConfig.labelConfig.valuePlacement == RadarValuePlacement.DATA_POINT) {
+                                measuredAxisValues.getOrNull(index).orEmpty()
+                            } else {
+                                emptyList()
+                            },
                     )
 
                 if (onDataSetClick != null) {
@@ -551,6 +554,20 @@ private fun RadarChartContent(
                     center = center,
                     maxRadius = maxRadius,
                     measuredLabels = measuredAxisLabels,
+                    numberOfAxes = numberOfAxes,
+                    config = config,
+                    startAngle = config.radarConfig.startAngleDegrees,
+                )
+            }
+
+            if (config.radarConfig.labelConfig.showValues &&
+                config.radarConfig.labelConfig.valuePlacement == RadarValuePlacement.BELOW_AXIS_LABEL
+            ) {
+                drawMultipleRadarValuesBelowLabels(
+                    center = center,
+                    maxRadius = maxRadius,
+                    measuredLabels = measuredAxisLabels,
+                    measuredValues = measuredAxisValues,
                     numberOfAxes = numberOfAxes,
                     config = config,
                     startAngle = config.radarConfig.startAngleDegrees,
@@ -763,30 +780,16 @@ private fun DrawScope.drawAxisLabels(
         val x = center.x + labelDistance * cos(angle)
         val y = center.y + labelDistance * sin(angle)
 
-        val textWidth = textLayoutResult.size.width
-        val textHeight = textLayoutResult.size.height
-
-        val isBottom = angle > ANGLE_QUARTER && angle < ANGLE_THREE_QUARTERS
-        val isTop = angle > ANGLE_MINUS_THREE_QUARTERS && angle < ANGLE_MINUS_QUARTER
-        val isRight = angle >= ANGLE_MINUS_QUARTER && angle <= ANGLE_QUARTER
-
-        val offsetX =
-            when {
-                isBottom || isTop -> -textWidth / LABEL_OFFSET_HALF
-                isRight -> 0f
-                else -> -textWidth.toFloat()
-            }
-
-        val offsetY =
-            when {
-                isBottom -> 0f
-                isTop -> -textHeight.toFloat()
-                else -> -textHeight / LABEL_OFFSET_HALF
-            }
+        val alignment =
+            radarLabelBoxAlignment(
+                angle = angle,
+                textWidth = textLayoutResult.size.width.toFloat(),
+                textHeight = textLayoutResult.size.height.toFloat(),
+            )
 
         drawText(
             textLayoutResult = textLayoutResult,
-            topLeft = Offset(x + offsetX, y + offsetY),
+            topLeft = Offset(x + alignment.x, y + alignment.y),
         )
     }
 }

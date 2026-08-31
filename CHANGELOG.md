@@ -3,6 +3,20 @@
 Notable changes to Charty. Versions follow [semantic versioning](https://semver.org); breaking
 changes are listed first in each release and say what to do about them.
 
+## Unreleased
+
+### Added
+
+- **`RadarLabelConfig.valuePlacement`.** `showValues` gained a second placement:
+  `RadarValuePlacement.BELOW_AXIS_LABEL` centres each value beneath its axis name, outside the plot,
+  where `DATA_POINT` (the default, unchanged) keeps them on the vertices. On-vertex placement
+  degrades honestly but unhelpfully when values sit at zero — a zero's vertex is the centre, so every
+  zero lands on the same point. Under the labels, each value keeps a stable position whatever the
+  data does. With several data sets the values stack beneath the label in data-set order. The gap
+  between label and value is `valueGapFraction`, a fraction of the value's own line height, so it
+  scales with `valueTextStyle` rather than being a fixed number of pixels. Requested in
+  [#179](https://github.com/hi-manshu/charty/issues/179).
+
 ## 3.1.1
 
 ### Fixed

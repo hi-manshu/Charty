@@ -136,6 +136,7 @@ import com.himanshoe.charty.radar.MultipleRadarChart
 import com.himanshoe.charty.radar.RadarChart
 import com.himanshoe.charty.radar.config.RadarChartConfig
 import com.himanshoe.charty.radar.config.RadarLabelConfig
+import com.himanshoe.charty.radar.config.RadarValuePlacement
 import com.himanshoe.charty.radar.data.RadarAxisData
 import com.himanshoe.charty.radar.data.RadarDataSet
 import com.himanshoe.charty3d.bar.Bar3DChart
@@ -1868,7 +1869,15 @@ private fun buildGalleryDemos(): List<ChartDemo> {
                                 ),
                             )
                         },
-                        config = RadarChartConfig(labelConfig = RadarLabelConfig(showLabels = true, showValues = true)),
+                        config =
+                            RadarChartConfig(
+                                labelConfig =
+                                    RadarLabelConfig(
+                                        showLabels = true,
+                                        showValues = true,
+                                        valuePlacement = RadarValuePlacement.BELOW_AXIS_LABEL,
+                                    ),
+                            ),
                         modifier = chartFill,
                     )
                 },

@@ -16,6 +16,7 @@ private const val DEFAULT_POINT_RADIUS = 4f
 private const val DEFAULT_LABEL_DISTANCE_MULTIPLIER = 1.15f
 private const val DEFAULT_LABEL_TEXT_SIZE_SP = 12f
 private const val DEFAULT_VALUE_TEXT_SIZE_SP = 10f
+private const val DEFAULT_VALUE_GAP_FRACTION = 0.25f
 private const val DEFAULT_CENTER_ICON_SIZE = 40f
 private const val DEFAULT_PADDING_FRACTION = 0.15f
 private const val DEFAULT_START_ANGLE = -90f
@@ -36,14 +37,44 @@ enum class RadarGridStyle {
 }
 
 /**
+ * Where a radar chart draws each axis's value when [RadarLabelConfig.showValues] is on.
+ */
+enum class RadarValuePlacement {
+    /**
+     * Just outside the data point, so the number sits on the vertex it reports. Reads well when the
+     * values are spread across the range; values near zero sit near the centre, because that is
+     * where their vertices are.
+     */
+    DATA_POINT,
+
+    /**
+     * Centred beneath the axis label, outside the plot. The value keeps a stable position whatever
+     * the data does — a zero reads at the rim next to its name rather than collapsing onto the
+     * centre — which suits dashboards where the numbers are part of the labelling rather than
+     * annotations on the shape. With more than one data set, values stack beneath the label in
+     * data-set order.
+     */
+    BELOW_AXIS_LABEL,
+}
+
+/**
  * Configuration for radar chart labels
  *
  * @property showLabels Whether to show axis labels. Defaults to `true` — radar axes are hard to read
  *   without their names; set to `false` to hide them.
- * @property showValues Whether to show values on data points
+ * @property showValues Whether to draw each axis's value, styled by [valueTextStyle] and placed by
+ *   [valuePlacement].
  * @property labelDistanceMultiplier Distance multiplier for label positioning (1.0 = at edge, >1.0 = outside)
  * @property labelTextStyle TextStyle for axis labels - allows full customization of text appearance
  * @property valueTextStyle TextStyle for value labels - allows full customization of text appearance
+ * @property valuePlacement Where the values sit: on the data points, or beneath the axis labels.
+ *   The new parameters sit last so that positional calls written against earlier releases keep
+ *   compiling.
+ * @property valueGapFraction The breathing room between an axis label and the value beneath it — and
+ *   between stacked values when there are several data sets — as a fraction of the value's own line
+ *   height, so it scales with [valueTextStyle] instead of being a fixed number of pixels. Used by
+ *   [RadarValuePlacement.BELOW_AXIS_LABEL]; at [RadarValuePlacement.DATA_POINT] the clearance is
+ *   derived from the data-point radius and the text's measured size.
  */
 @Stable
 data class RadarLabelConfig(
@@ -52,9 +83,12 @@ data class RadarLabelConfig(
     val labelDistanceMultiplier: Float = DEFAULT_LABEL_DISTANCE_MULTIPLIER,
     val labelTextStyle: TextStyle = TextStyle(color = Color.Black, fontSize = DEFAULT_LABEL_TEXT_SIZE_SP.sp),
     val valueTextStyle: TextStyle = TextStyle(color = Color.Black, fontSize = DEFAULT_VALUE_TEXT_SIZE_SP.sp),
+    val valuePlacement: RadarValuePlacement = RadarValuePlacement.DATA_POINT,
+    val valueGapFraction: Float = DEFAULT_VALUE_GAP_FRACTION,
 ) {
     init {
         require(labelDistanceMultiplier > 0f) { "Label distance multiplier must be positive" }
+        require(valueGapFraction >= 0f) { "Value gap fraction must be non-negative, got: $valueGapFraction" }
     }
 }
 

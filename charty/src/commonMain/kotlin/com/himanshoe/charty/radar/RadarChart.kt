@@ -18,6 +18,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.util.fastAll
@@ -31,10 +32,15 @@ import com.himanshoe.charty.common.animation.rememberChartAnimation
 import com.himanshoe.charty.common.util.toChartLabel
 import com.himanshoe.charty.radar.config.RadarChartConfig
 import com.himanshoe.charty.radar.config.RadarGridStyle
+import com.himanshoe.charty.radar.config.RadarLabelConfig
+import com.himanshoe.charty.radar.config.RadarValuePlacement
 import com.himanshoe.charty.radar.config.valueLabelClearance
 import com.himanshoe.charty.radar.data.RadarAxisData
 import com.himanshoe.charty.radar.data.RadarDataSet
 import com.himanshoe.charty.radar.internal.drawRadarAxisValues
+import com.himanshoe.charty.radar.internal.drawRadarValuesBelowLabel
+import com.himanshoe.charty.radar.internal.radarAxisAngleRadians
+import com.himanshoe.charty.radar.internal.radarValueStackCenteredAnchor
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -139,20 +145,11 @@ fun RadarChart(
             }
         }
     val measuredAxisValues =
-        remember(dataSets, textMeasurer, config.labelConfig.showValues, config.labelConfig.valueTextStyle) {
-            if (!config.labelConfig.showValues) {
-                emptyList()
-            } else {
-                dataSets.fastMap { dataSet ->
-                    dataSet.axes.fastMap { axis ->
-                        textMeasurer.measure(
-                            text = axis.value.toChartLabel(),
-                            style = config.labelConfig.valueTextStyle,
-                        )
-                    }
-                }
-            }
-        }
+        rememberMeasuredAxisValues(
+            dataSets = dataSets,
+            labelConfig = config.labelConfig,
+            textMeasurer = textMeasurer,
+        )
 
     val clickModifier =
         if (onAxisClick != null) {
@@ -209,7 +206,12 @@ fun RadarChart(
                     dataSet = dataSet,
                     config = config,
                     animationProgress = animationProgress.value,
-                    measuredValues = measuredAxisValues.getOrNull(dataSetIndex).orEmpty(),
+                    measuredValues =
+                        if (config.labelConfig.valuePlacement == RadarValuePlacement.DATA_POINT) {
+                            measuredAxisValues.getOrNull(dataSetIndex).orEmpty()
+                        } else {
+                            emptyList()
+                        },
                 )
             }
 
@@ -218,6 +220,20 @@ fun RadarChart(
                     center = Offset(centerX, centerY),
                     maxRadius = maxRadius,
                     measuredLabels = measuredAxisLabels,
+                    numberOfAxes = numberOfAxes,
+                    config = config,
+                    startAngle = config.startAngleDegrees,
+                )
+            }
+
+            if (config.labelConfig.showValues &&
+                config.labelConfig.valuePlacement == RadarValuePlacement.BELOW_AXIS_LABEL
+            ) {
+                drawValuesBelowLabels(
+                    center = Offset(centerX, centerY),
+                    maxRadius = maxRadius,
+                    measuredLabels = measuredAxisLabels,
+                    measuredValues = measuredAxisValues,
                     numberOfAxes = numberOfAxes,
                     config = config,
                     startAngle = config.startAngleDegrees,
@@ -468,3 +484,81 @@ private fun DrawScope.drawAxisLabels(
         )
     }
 }
+
+/**
+ * Draws each axis's values stacked beneath its label, at the label ring rather than on the data.
+ *
+ * Runs whether or not the labels themselves are shown: a hidden label leaves its position behind,
+ * and the values centre themselves on it instead of hanging below text that is not there. Placement
+ * at the vertex is the other mode, drawn inside the data-set pass where the vertices are known.
+ */
+private fun DrawScope.drawValuesBelowLabels(
+    center: Offset,
+    maxRadius: Float,
+    measuredLabels: List<TextLayoutResult>,
+    measuredValues: List<List<TextLayoutResult>>,
+    numberOfAxes: Int,
+    config: RadarChartConfig,
+    startAngle: Float,
+) {
+    val labelDistance = maxRadius * config.labelConfig.labelDistanceMultiplier
+    for (index in 0 until numberOfAxes) {
+        val valuesForAxis =
+            measuredValues.mapNotNull { datasetValues ->
+                datasetValues.getOrNull(index)
+            }
+        if (valuesForAxis.isEmpty()) {
+            continue
+        }
+        val angle =
+            radarAxisAngleRadians(
+                startAngleDegrees = startAngle,
+                axisIndex = index,
+                numberOfAxes = numberOfAxes,
+            )
+        val x = center.x + labelDistance * cos(angle)
+        val y = center.y + labelDistance * sin(angle)
+        val labelHalfHeight = (measuredLabels.getOrNull(index)?.size?.height ?: 0) / 2f
+        val labelBottom =
+            if (config.labelConfig.showLabels) {
+                y + labelHalfHeight
+            } else {
+                radarValueStackCenteredAnchor(
+                    centerY = y,
+                    valuesForAxis = valuesForAxis,
+                    gapFraction = config.labelConfig.valueGapFraction,
+                )
+            }
+        drawRadarValuesBelowLabel(
+            labelCenterX = x,
+            labelBottom = labelBottom,
+            valuesForAxis = valuesForAxis,
+            gapFraction = config.labelConfig.valueGapFraction,
+        )
+    }
+}
+
+/**
+ * Measures every data set's values once per data or style change, or nothing at all when values are
+ * off — measuring text the chart will never draw is work the draw loop would repeat every frame.
+ */
+@Composable
+private fun rememberMeasuredAxisValues(
+    dataSets: List<RadarDataSet>,
+    labelConfig: RadarLabelConfig,
+    textMeasurer: TextMeasurer,
+): List<List<TextLayoutResult>> =
+    remember(dataSets, textMeasurer, labelConfig.showValues, labelConfig.valueTextStyle) {
+        if (!labelConfig.showValues) {
+            emptyList()
+        } else {
+            dataSets.fastMap { dataSet ->
+                dataSet.axes.fastMap { axis ->
+                    textMeasurer.measure(
+                        text = axis.value.toChartLabel(),
+                        style = labelConfig.valueTextStyle,
+                    )
+                }
+            }
+        }
+    }

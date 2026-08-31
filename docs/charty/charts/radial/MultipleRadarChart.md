@@ -111,3 +111,23 @@ The chart attaches a generated summary ("Multiple radar chart, 2 datasets, 5 axe
 
 - Not a Cartesian chart: no `visibleWindow`, no `markers`, no `animateValueChanges`, no crosshair, no tooltip slot.
 - There is no per-axis click callback here; that is on [RadarChart](RadarChart.md) as `onAxisClick`.
+
+## Values
+
+`RadarLabelConfig.showValues` draws each axis's value for every data set. With
+`RadarValuePlacement.DATA_POINT` (the default) each value sits just outside its own vertex, so it
+follows the shape it belongs to. With `RadarValuePlacement.BELOW_AXIS_LABEL` the values stack
+beneath each axis name in data-set order — one row per data set, all styled by the shared
+`valueTextStyle`. Give the label ring room for the stack with `paddingFraction` (the goldens use
+`0.22f` for two data sets); the chart does not yet reserve that space itself.
+
+```kotlin
+config = MultipleRadarChartConfig(
+    radarConfig = RadarChartConfig(
+        labelConfig = RadarLabelConfig(
+            showValues = true,
+            valuePlacement = RadarValuePlacement.BELOW_AXIS_LABEL,
+        ),
+    ),
+)
+```
