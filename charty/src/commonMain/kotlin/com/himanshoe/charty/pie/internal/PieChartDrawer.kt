@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -16,6 +19,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.drawText
@@ -37,6 +41,16 @@ private const val CHART_SIZE_MULTIPLIER = 0.8f
 private const val PIE_LABEL_RADIUS_MULTIPLIER = 0.65f
 private const val DONUT_LABEL_RADIUS_DIVISOR = 2f
 private const val LABEL_ANIMATION_THRESHOLD = 0.5f
+
+/**
+ * Where outside labels sit, as a multiple of the pie's radius. The pie itself is drawn at
+ * [CHART_SIZE_MULTIPLIER] of the available half-extent, so the ring at 1.12 of that still lands
+ * inside the canvas with room for the text's own height.
+ */
+private const val OUTSIDE_LABEL_RADIUS_MULTIPLIER = 1.12f
+
+/** How much a hovered slice grows: enough to read as live, small enough not to jostle neighbours. */
+private const val HOVER_SCALE_MULTIPLIER = 1.03f
 private const val PERCENTAGE_PRECISION_MULTIPLIER = 10.0
 private const val FULL_CIRCLE_DEGREES = 360f
 private const val HALF_DIVIDER = 2f
@@ -94,6 +108,7 @@ internal data class PieSliceDrawParams(
     val animationProgress: Float,
     val selectedSliceIndex: Int?,
     val selectedScale: Float,
+    val hoveredSliceIndex: Int?,
     val textMeasurer: TextMeasurer,
 )
 
@@ -126,6 +141,7 @@ internal fun PieChartContent(
 ) {
     val textMeasurer = rememberTextMeasurer()
     val sliceBrushes = remember(params.sliceColors) { params.sliceColors.map { it.toDiagonalBrush() } }
+    var hoveredSliceIndex by remember { mutableStateOf<Int?>(null) }
 
     Box(
         modifier = modifier,
@@ -135,7 +151,41 @@ internal fun PieChartContent(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .pointerInput(params.dataList, params.config.interactionConfig.isEnabled) {
+                    .pointerInput(params.dataList, params.config.interactionConfig.enableHoverEffect) {
+                        if (params.config.interactionConfig.enableHoverEffect) {
+                            awaitPointerEventScope {
+                                while (true) {
+                                    val event = awaitPointerEvent()
+                                    when (event.type) {
+                                        PointerEventType.Move -> {
+                                            if (event.changes.none { change -> change.pressed }) {
+                                                val position = event.changes.first().position
+                                                hoveredSliceIndex =
+                                                    findClickedSlice(
+                                                        touchPosition = position,
+                                                        center =
+                                                            Offset(
+                                                                size.width / HALF_DIVIDER,
+                                                                size.height / HALF_DIVIDER,
+                                                            ),
+                                                        radius =
+                                                            minOf(size.width, size.height) / HALF_DIVIDER *
+                                                                CHART_SIZE_MULTIPLIER,
+                                                        dataList = params.dataList,
+                                                        total = params.total,
+                                                        config = params.config,
+                                                    )
+                                            }
+                                        }
+
+                                        PointerEventType.Exit -> {
+                                            hoveredSliceIndex = null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }.pointerInput(params.dataList, params.config.interactionConfig.isEnabled) {
                         if (params.config.interactionConfig.isEnabled) {
                             detectTapGestures { offset ->
                                 val center = Offset(size.width / HALF_DIVIDER, size.height / HALF_DIVIDER)
@@ -171,6 +221,7 @@ internal fun PieChartContent(
                         animationProgress = params.animationProgress.value,
                         selectedSliceIndex = params.selectedSliceIndex,
                         selectedScale = params.selectedScale.value,
+                        hoveredSliceIndex = hoveredSliceIndex,
                         textMeasurer = textMeasurer,
                     ),
             )
@@ -207,11 +258,11 @@ private fun DrawScope.drawPieSlices(params: PieSliceDrawParams) {
         if (sweepAngle > 0) {
             val isSelected = index == params.selectedSliceIndex
             val scale =
-                if (isSelected) {
-                    params.selectedScale
-                } else {
-                    1f
-                }
+                sliceScale(
+                    isSelected = isSelected,
+                    selectedScale = params.selectedScale,
+                    isHovered = index == params.hoveredSliceIndex,
+                )
             val alpha =
                 if (params.selectedSliceIndex != null && !isSelected) {
                     params.config.interactionConfig.unselectedSliceOpacity
@@ -320,9 +371,13 @@ private fun DrawScope.drawSliceLabel(
 
     val textLayoutResult = textMeasurer.measure(labelText, config.labelConfig.labelTextStyle)
     val labelRadius =
-        when (config.style) {
-            PieChartStyle.PIE -> radius * PIE_LABEL_RADIUS_MULTIPLIER
-            PieChartStyle.DONUT -> radius * (1f - config.donutHoleRatio / DONUT_LABEL_RADIUS_DIVISOR)
+        if (config.labelConfig.shouldShowLabelsOutside) {
+            radius * OUTSIDE_LABEL_RADIUS_MULTIPLIER
+        } else {
+            when (config.style) {
+                PieChartStyle.PIE -> radius * PIE_LABEL_RADIUS_MULTIPLIER
+                PieChartStyle.DONUT -> radius * (1f - config.donutHoleRatio / DONUT_LABEL_RADIUS_DIVISOR)
+            }
         }
 
     val angleRad = angle * DEGREES_TO_RADIANS
@@ -406,3 +461,18 @@ internal fun generateSliceColors(
 }
 
 /** Resolves a [ChartyColor] to a [Brush] for filling a slice (solid or gradient). */
+
+/**
+ * The scale one slice draws at. Selection wins over hover: a slice the reader has committed to
+ * should not shrink back to the hover size while the pointer is still on it.
+ */
+internal fun sliceScale(
+    isSelected: Boolean,
+    selectedScale: Float,
+    isHovered: Boolean,
+): Float =
+    when {
+        isSelected -> selectedScale
+        isHovered -> HOVER_SCALE_MULTIPLIER
+        else -> 1f
+    }

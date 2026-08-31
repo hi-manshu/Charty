@@ -3,6 +3,26 @@
 Notable changes to Charty. Versions follow [semantic versioning](https://semver.org); breaking
 changes are listed first in each release and say what to do about them.
 
+## Unreleased
+
+### Fixed
+
+- **`LabelConfig.shouldShowLabelsOutside` places pie labels outside the rim.** Declared and
+  documented since it shipped, read by nothing — the playground even offered it as a toggle that did
+  nothing. Labels now sit just outside the pie on their slice's angle. Mind your `labelTextStyle`:
+  the default is white, chosen for text on coloured slices.
+- **`InteractionConfig.enableHoverEffect` exists now.** On hover-capable platforms the slice under
+  the pointer grows slightly (less than a selection does, and selection wins). It was another
+  documented no-op.
+
+### Changed
+
+- **`RadarCenterConfig.showCenterIcon` and `centerIconSize` are deprecated.** They never drew
+  anything and never could: there has never been an icon for the flag to show, nor a way to supply
+  one. The real feature arrives instead — `RadarChart` gains a `centerContent` composable slot,
+  rendered over the chart's centre above the `centerBackgroundRadius` backdrop, mirroring
+  `PieChart`'s slot of the same name.
+
 ## 3.2.0
 
 ### Added

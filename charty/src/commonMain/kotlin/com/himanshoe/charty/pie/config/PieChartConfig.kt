@@ -48,7 +48,8 @@ enum class PieChartStyle {
  * @property shouldShowPercentage Whether to display percentage values
  * @property shouldShowValue Whether to display actual numeric values
  * @property minimumPercentageToShowLabel Minimum percentage threshold to display a label
- * @property shouldShowLabelsOutside Whether to show labels outside the chart
+ * @property shouldShowLabelsOutside Draws each slice's label just outside the rim, on its slice's
+ *   angle, instead of inside the slice. Use it when slices are thin enough that inside labels crowd.
  * @property labelTextStyle TextStyle for customizing label appearance
  */
 @Stable
@@ -82,7 +83,9 @@ data class LabelConfig(
  * @property selectedScaleMultiplier Scale multiplier applied when a slice is selected
  * @property selectedSlicePullOutDistance Distance in pixels to pull out selected slice from center
  * @property selectionAnimationDurationMs Duration of selection animation in milliseconds
- * @property enableHoverEffect Whether to enable hover effects (useful for desktop/web)
+ * @property enableHoverEffect Grows the slice under the pointer slightly on hover, so desktop and
+ *   web readers can see what a click would select. Touch platforms never hover, so this costs them
+ *   nothing.
  * @property unselectedSliceOpacity Opacity for non-selected slices when one is selected
  */
 @Stable

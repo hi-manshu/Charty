@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -70,6 +71,8 @@ private const val DEGREES_TO_RADIANS = PI.toFloat() / 180f
  *   `null` (default) a built-in "No data" state is used.
  * @param config The configuration for the radar chart's appearance, defined by a [RadarChartConfig].
  * @param accessibilityDescription Overrides the auto-generated screen-reader description. Pass an empty string to suppress it.
+ * @param centerContent Optional composable rendered over the centre of the radar — a score, an
+ *   icon, a summary. Pairs with [RadarCenterConfig.centerBackgroundRadius] for a backdrop behind it.
  * @param onAxisClick Invoked with the [RadarAxisData] and index of the axis nearest the tap (a tap
  *   anywhere along an axis selects it). Pass `null` (default) to disable click handling.
  *
@@ -110,6 +113,7 @@ fun RadarChart(
     config: RadarChartConfig = RadarChartConfig(),
     accessibilityDescription: String? = null,
     onAxisClick: ((axis: RadarAxisData, index: Int) -> Unit)? = null,
+    centerContent: (@Composable () -> Unit)? = null,
 ) {
     val dataSets by remember(data) { derivedStateOf { data() } }
     if (dataSets.isEmpty()) {
@@ -152,25 +156,17 @@ fun RadarChart(
         )
 
     val clickModifier =
-        if (onAxisClick != null) {
-            Modifier.pointerInput(dataSets, onAxisClick) {
-                detectTapGestures { offset ->
-                    val index =
-                        nearestRadarAxisIndex(
-                            offset = offset,
-                            width = size.width.toFloat(),
-                            height = size.height.toFloat(),
-                            startAngleDegrees = config.startAngleDegrees,
-                            numberOfAxes = numberOfAxes,
-                        )
-                    onAxisClick(dataSets.first().axes[index], index)
-                }
-            }
-        } else {
-            Modifier
-        }
+        radarAxisClickModifier(
+            dataSets = dataSets,
+            numberOfAxes = numberOfAxes,
+            startAngleDegrees = config.startAngleDegrees,
+            onAxisClick = onAxisClick,
+        )
 
-    BoxWithConstraints(modifier = modifier.then(semanticsModifier).then(clickModifier)) {
+    BoxWithConstraints(
+        modifier = modifier.then(semanticsModifier).then(clickModifier),
+        contentAlignment = Alignment.Center,
+    ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             val centerX = size.width / 2f
             val centerY = size.height / 2f
@@ -247,6 +243,9 @@ fun RadarChart(
                     center = Offset(centerX, centerY),
                 )
             }
+        }
+        if (centerContent != null) {
+            centerContent()
         }
     }
 }
@@ -561,4 +560,32 @@ private fun rememberMeasuredAxisValues(
                 }
             }
         }
+    }
+
+/**
+ * The tap handler for axis clicks, or an inert modifier when the chart has no listener — an inert
+ * chart should not pay for a pointer pipeline it will never use.
+ */
+private fun radarAxisClickModifier(
+    dataSets: List<RadarDataSet>,
+    numberOfAxes: Int,
+    startAngleDegrees: Float,
+    onAxisClick: ((axis: RadarAxisData, index: Int) -> Unit)?,
+): Modifier =
+    if (onAxisClick != null) {
+        Modifier.pointerInput(dataSets, onAxisClick) {
+            detectTapGestures { offset ->
+                val index =
+                    nearestRadarAxisIndex(
+                        offset = offset,
+                        width = size.width.toFloat(),
+                        height = size.height.toFloat(),
+                        startAngleDegrees = startAngleDegrees,
+                        numberOfAxes = numberOfAxes,
+                    )
+                onAxisClick(dataSets.first().axes[index], index)
+            }
+        }
+    } else {
+        Modifier
     }

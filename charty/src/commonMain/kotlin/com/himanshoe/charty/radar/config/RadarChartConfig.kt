@@ -145,13 +145,22 @@ data class RadarGridConfig(
  */
 @Stable
 data class RadarCenterConfig(
+    @Deprecated(
+        message =
+            "Never drawn: there has never been an icon for this flag to show, and no way to supply " +
+                "one. Pass a composable to RadarChart's centerContent parameter instead.",
+    )
     val showCenterIcon: Boolean = false,
+    @Deprecated(
+        message =
+            "Never read, for the same reason as showCenterIcon: size a centerContent composable " +
+                "yourself instead.",
+    )
     val centerIconSize: Float = DEFAULT_CENTER_ICON_SIZE,
     val centerBackgroundColor: ChartyColor = ChartyColor.Solid(Color.Transparent),
     val centerBackgroundRadius: Float = 0f,
 ) {
     init {
-        require(centerIconSize > 0f) { "Center icon size must be positive" }
         require(centerBackgroundRadius >= 0f) { "Center background radius must be non-negative" }
     }
 }
