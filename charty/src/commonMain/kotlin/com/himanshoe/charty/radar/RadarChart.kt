@@ -39,14 +39,15 @@ import com.himanshoe.charty.radar.config.valueLabelClearance
 import com.himanshoe.charty.radar.data.RadarAxisData
 import com.himanshoe.charty.radar.data.RadarDataSet
 import com.himanshoe.charty.radar.internal.drawRadarAxisValues
+import com.himanshoe.charty.radar.internal.drawRadarCenterBackdrop
 import com.himanshoe.charty.radar.internal.drawRadarValuesBelowLabel
 import com.himanshoe.charty.radar.internal.radarAxisAngleRadians
+import com.himanshoe.charty.radar.internal.radarChartFitRadius
 import com.himanshoe.charty.radar.internal.radarValueStackCenteredAnchor
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
-import kotlin.math.min
 import kotlin.math.sin
 
 private const val FULL_CIRCLE_DEGREES = 360f
@@ -170,7 +171,13 @@ fun RadarChart(
         Canvas(modifier = Modifier.fillMaxSize()) {
             val centerX = size.width / 2f
             val centerY = size.height / 2f
-            val maxRadius = min(centerX, centerY) * (1f - config.paddingFraction)
+            val maxRadius =
+                radarChartFitRadius(
+                    config = config,
+                    measuredLabels = measuredAxisLabels,
+                    measuredValues = measuredAxisValues,
+                    numberOfAxes = numberOfAxes,
+                )
             if (config.gridConfig.showGridLines) {
                 drawRadarGrid(
                     center = Offset(centerX, centerY),
@@ -236,13 +243,7 @@ fun RadarChart(
                 )
             }
 
-            if (config.centerConfig.centerBackgroundRadius > 0f) {
-                drawCircle(
-                    brush = Brush.linearGradient(config.centerConfig.centerBackgroundColor.value),
-                    radius = config.centerConfig.centerBackgroundRadius,
-                    center = Offset(centerX, centerY),
-                )
-            }
+            drawRadarCenterBackdrop(centerConfig = config.centerConfig, center = Offset(centerX, centerY))
         }
         if (centerContent != null) {
             centerContent()

@@ -7,6 +7,12 @@ changes are listed first in each release and say what to do about them.
 
 ### Fixed
 
+- **`RadarChartConfig.scaleToFit` fits.** The last of the four dead flags, and the one whose
+  absence users could see: labels near the canvas edge simply clipped. Both radar charts now solve
+  for the largest radius at which every label — and any value stack beneath it — stays inside the
+  canvas, capped at the padding-derived radius and floored at 40% of it. A chart whose labels
+  already fit renders byte-for-byte as before, because fitting only ever shrinks; every existing
+  doc image is unchanged.
 - **`LabelConfig.shouldShowLabelsOutside` places pie labels outside the rim.** Declared and
   documented since it shipped, read by nothing — the playground even offered it as a toggle that did
   nothing. Labels now sit just outside the pie on their slice's angle. Mind your `labelTextStyle`:

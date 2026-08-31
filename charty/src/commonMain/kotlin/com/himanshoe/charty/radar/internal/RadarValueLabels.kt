@@ -1,11 +1,13 @@
 package com.himanshoe.charty.radar.internal
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.util.fastForEachIndexed
 import com.himanshoe.charty.radar.config.MultipleRadarChartConfig
+import com.himanshoe.charty.radar.config.RadarCenterConfig
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
@@ -166,5 +168,22 @@ internal fun DrawScope.drawMultipleRadarValuesBelowLabels(
                 gapFraction = gapFraction,
             )
         }
+    }
+}
+
+/**
+ * The optional backdrop circle behind the radar's centre, drawn when the config gives it a radius.
+ * Both radar charts drew this identical block themselves.
+ */
+internal fun DrawScope.drawRadarCenterBackdrop(
+    centerConfig: RadarCenterConfig,
+    center: Offset,
+) {
+    if (centerConfig.centerBackgroundRadius > 0f) {
+        drawCircle(
+            brush = Brush.linearGradient(centerConfig.centerBackgroundColor.value),
+            radius = centerConfig.centerBackgroundRadius,
+            center = center,
+        )
     }
 }

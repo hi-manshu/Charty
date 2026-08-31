@@ -53,10 +53,11 @@ import com.himanshoe.charty.radar.config.valueLabelClearance
 import com.himanshoe.charty.radar.data.RadarDataSet
 import com.himanshoe.charty.radar.internal.drawMultipleRadarValuesBelowLabels
 import com.himanshoe.charty.radar.internal.drawRadarAxisValues
+import com.himanshoe.charty.radar.internal.drawRadarCenterBackdrop
+import com.himanshoe.charty.radar.internal.multipleRadarFitRadius
 import com.himanshoe.charty.radar.internal.radarLabelBoxAlignment
 import kotlin.math.PI
 import kotlin.math.cos
-import kotlin.math.min
 import kotlin.math.sin
 
 private const val FULL_CIRCLE_DEGREES = 360f
@@ -497,7 +498,13 @@ private fun RadarChartContent(
                     ),
         ) {
             val center = Offset(size.width / 2f, size.height / 2f)
-            val maxRadius = min(size.width / 2f, size.height / 2f) * (1f - config.radarConfig.paddingFraction)
+            val maxRadius =
+                multipleRadarFitRadius(
+                    config = config,
+                    measuredLabels = measuredAxisLabels,
+                    measuredValues = measuredAxisValues,
+                    numberOfAxes = numberOfAxes,
+                )
 
             if (config.radarConfig.gridConfig.showGridLines) {
                 drawRadarGrid(
@@ -574,13 +581,7 @@ private fun RadarChartContent(
                 )
             }
 
-            if (config.radarConfig.centerConfig.centerBackgroundRadius > 0f) {
-                drawCircle(
-                    brush = Brush.linearGradient(config.radarConfig.centerConfig.centerBackgroundColor.value),
-                    radius = config.radarConfig.centerConfig.centerBackgroundRadius,
-                    center = center,
-                )
-            }
+            drawRadarCenterBackdrop(centerConfig = config.radarConfig.centerConfig, center = center)
         }
     }
 }

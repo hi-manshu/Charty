@@ -86,7 +86,7 @@ The chart attaches a generated summary ("Radar chart, 1 dataset, 5 axes each. St
 | `gridConfig` | `RadarGridConfig` | `RadarGridConfig()` | Grid and axis lines |
 | `centerConfig` | `RadarCenterConfig` | `RadarCenterConfig()` | Optional centre icon and backdrop |
 | `animation` | `Animation` | `Animation.Default` | Grow-from-centre entry animation |
-| `scaleToFit` | `Boolean` | `true` | Shrinks the radar so labels stay inside the bounds |
+| `scaleToFit` | `Boolean` | `true` | Shrinks the radar just enough that labels (and value stacks) stay inside the canvas; floored at 40% of the padded radius so a pathological label cannot shrink the chart to a dot |
 | `paddingFraction` | `Float` | `0.15f` | Padding around the radar; `0f..0.5f` |
 
 ### `RadarLabelConfig`
