@@ -3,7 +3,7 @@
 Notable changes to Charty. Versions follow [semantic versioning](https://semver.org); breaking
 changes are listed first in each release and say what to do about them.
 
-## Unreleased
+## 3.2.0
 
 ### Added
 
